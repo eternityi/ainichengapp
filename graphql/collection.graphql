@@ -1,0 +1,106 @@
+query collectionQuery($id: Int!) {
+	collection(id: $id) {
+		id
+		name
+		logo
+		user {
+			id
+			name
+			avatar
+			count_words
+			count_likes
+		}
+		followed
+		count_articles
+		count_follows
+	}
+}
+
+query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
+	articles(collection_id: $id, order: HOT, offset: $offset) {
+		id
+		title
+		description
+		image_url
+		time_ago
+		status
+		user {
+			id
+			name
+			avatar
+		}
+		hits
+		count_replies
+		count_tips
+		count_likes
+	}
+}
+
+query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
+	articles(collection_id: $id, order: COMMENTED, offset: $offset) {
+		id
+		title
+		description
+		image_url
+		time_ago
+		status
+		user {
+			id
+			name
+			avatar
+		}
+		hits
+		count_replies
+		count_tips
+		count_likes
+	}
+}
+
+query collectionArticlesByLatestQuery($id: Int!, $offset: Int) {
+	articles(collection_id: $id, order: LATEST, offset: $offset) {
+		id
+		title
+		description
+		image_url
+		time_ago
+		status
+		user {
+			id
+			name
+			avatar
+		}
+		hits
+		count_replies
+		count_tips
+		count_likes
+	}
+}
+
+query collectionFollowersQuery($id: Int!, $offset: Int) {
+	users(collection_id: $id, offset: $offset) {
+		id
+		name
+		avatar
+	}
+}
+
+mutation createCollectionMutation($name: String!) {
+	createCollection(name: $name) {
+		id
+		name
+	}
+}
+
+mutation editCollectionMutation($id: Int!, $name: String!) {
+	editCollection(id: $id, name: $name) {
+		id
+		name
+	}
+}
+
+mutation deleteCollectionMutation($id: Int!) {
+	deleteCollection(id: $id) {
+		id
+		name
+	}
+}

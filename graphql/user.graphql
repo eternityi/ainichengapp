@@ -1,0 +1,604 @@
+# 浏览记录
+query visitsQuery($visit: VisitFilter) {
+    visits(offset: 0, limit: 15, filter: $visit) {
+        time_ago
+        type
+        visited {
+            id
+            title
+        }
+    }
+}
+
+# 阅读量
+query myReadsQuery {
+    user {
+        today_read_num
+        today_read_rate
+    }
+}
+
+mutation reportUserMutation($id: Int!, $type: String, $reason: String) {
+    reportUser(id: $id, type: $type, reason: $reason) {
+        id
+    }
+}
+
+mutation reportUserCommentMutation($id: Int!, $type: String, $reason: String, $comment_id: Int!) {
+    reportUser(id: $id, type: $type, reason: $reason, comment_id: $comment_id) {
+        id
+    }
+}
+
+mutation blockUserMutation($user_id: Int!) {
+    blockUser(user_id: $user_id) {
+        id
+        name
+        avatar
+    }
+}
+
+query blockedUsersQuery {
+    user {
+        id
+        blockedUsers {
+            id
+            name
+            avatar
+        }
+    }
+}
+
+query userFriendsQuery($offset: Int) {
+    user {
+        id
+        friends(offset: $offset) {
+            id
+            name
+            avatar
+        }
+    }
+}
+
+mutation removeArticleMutation($id: Int!) {
+    removeArticle(id: $id) {
+        id
+    }
+}
+
+mutation restoreArticleMutation($id: Int!) {
+    restoreArticle(id: $id) {
+        id
+    }
+}
+
+mutation deleteArticleMutation($id: Int!) {
+    deleteArticle(id: $id) {
+        id
+    }
+}
+
+query userTrashQuery($offset: Int) {
+    user {
+        id
+        articles(filter: TRASH, offset: $offset) {
+            id
+            title
+            updated_at
+        }
+    }
+}
+
+mutation signInMutation($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+        id
+        name
+        email
+        avatar
+        token
+        introduction
+        count_words
+        count_likes
+        count_articles
+        count_follows
+        count_followers
+        count_followings
+        count_drafts
+        count_favorites
+        count_categories
+        count_collections
+        balance
+    }
+}
+
+mutation signUpMutation($email: String!, $password: String!, $name: String!) {
+    signup(email: $email, password: $password, name: $name) {
+        id
+        name
+        email
+        avatar
+        token
+        introduction
+        count_words
+        count_likes
+        count_articles
+        count_follows
+        count_followers
+        count_followings
+        count_drafts
+        count_favorites
+        count_categories
+        count_collections
+        balance
+    }
+}
+
+mutation updateUserNameMutation($name: String!) {
+    updateUserName(name: $name) {
+        id
+        name
+    }
+}
+
+mutation updateUserIntroductionMutation($introduction: String!) {
+    updateUserIntroduction(introduction: $introduction) {
+        id
+        introduction
+    }
+}
+
+query recommendAuthors($offset: Int) {
+    users(filter: RECOMMEND, offset: $offset) {
+        id
+        name
+        avatar
+        followed_status
+        followings(offset: 1) {
+            followed_id
+            name
+            avatar
+        }
+    }
+}
+
+query userDetailQuery($id: Int!) {
+    user(id: $id) {
+        id
+        name
+        avatar
+        introduction
+        count_words
+        count_likes
+        count_articles
+        count_follows
+        count_followers
+        count_followings
+        count_drafts
+        count_favorites
+        count_categories
+        count_collections
+        followed_status
+    }
+}
+
+query userArticlesQuery($offset: Int, $user_id: Int!) {
+    articles(offset: $offset, user_id: $user_id) {
+        id
+        title
+        description
+        image_url
+        updated_at
+        time_ago
+        hits
+        count_likes
+        count_replies
+        count_tips
+        user {
+            id
+            name
+            avatar
+        }
+    }
+}
+
+query draftsQuery($offset: Int) {
+    user {
+        id
+        articles(offset: $offset, filter: DRAFTS) {
+            id
+            title
+            updated_at
+            time_ago
+        }
+    }
+}
+
+query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
+    articles(offset: $offset, user_id: $user_id, filter: LIKED) {
+        id
+        title
+        time_ago
+        user {
+            id
+            name
+        }
+        hits
+        count_likes
+        count_replies
+        count_tips
+    }
+}
+
+query removedArticlesQuery {
+    user {
+        articles(filter: TRASH) {
+            id
+            title
+            time_ago
+        }
+    }
+}
+
+query favoritedArticlesQuery($offset: Int) {
+    user {
+        id
+        articles(offset: $offset, filter: FAVED) {
+            id
+            title
+            time_ago
+            user {
+                id
+                name
+            }
+            hits
+            count_likes
+            count_replies
+            count_tips
+        }
+    }
+}
+
+query userCategoriesQuery($user_id: Int!) {
+    categories(user_id: $user_id, limit: 100) {
+        id
+        name
+        logo
+        description
+        count_follows
+        count_articles
+        # followed_status
+        user {
+            id
+            name
+        }
+        followed
+        allow_submit
+        need_approve
+    }
+}
+
+query userAdminCategoriesQuery($user_id: Int!) {
+    categories(user_id: $user_id, limit: 100, filter: ADMIN) {
+        id
+        name
+        logo
+        count_follows
+        count_articles
+        user {
+            id
+            name
+        }
+        followed
+    }
+}
+
+query userFollowedCategoriesQuery($user_id: Int!) {
+    categories(user_id: $user_id, limit: 100, filter: FOLLOWED) {
+        id
+        name
+        logo
+        count_follows
+        count_articles
+        # followed_status
+        user {
+            id
+            name
+        }
+        followed
+    }
+}
+
+query myCollectionsQuery {
+    user {
+        id
+        collections {
+            id
+            name
+            logo
+            count_articles
+            count_follows
+            user {
+                id
+                name
+            }
+        }
+    }
+}
+
+query userCollectionsQuery($user_id: Int!) {
+    collections(user_id: $user_id) {
+        id
+        name
+        logo
+        count_articles
+        count_follows
+        # followed_status
+        user {
+            id
+            name
+        }
+    }
+}
+
+query userFollowedCollectionsQuery($user_id: Int!) {
+    collections(user_id: $user_id, limit: 100, filter: FOLLOWED) {
+        id
+        name
+        logo
+        count_articles
+        count_follows
+        # followed_status
+        user {
+            id
+            name
+        }
+    }
+}
+
+query userFollowingsQuery($user_id: Int!, $offset: Int) {
+    users(user_id: $user_id, offset: $offset, filter: FOLLOWINGS) {
+        id
+        name
+        avatar
+        count_words
+        count_likes
+        followed_status
+    }
+}
+
+query userFollowersQuery($user_id: Int!, $offset: Int) {
+    users(user_id: $user_id, offset: $offset, filter: FOLLOWERS) {
+        id
+        name
+        avatar
+        count_words
+        count_likes
+        followed_status
+    }
+}
+
+query actionsQuery($offset: Int, $user_id: Int!) {
+    actions(offset: $offset, user_id: $user_id) {
+        id
+        type
+        time_ago
+        signUp {
+            name
+        }
+        tiped {
+            id
+            article {
+                id
+                title
+                image_url
+            }
+        }
+        postedArticle {
+            id
+            title
+            image_url
+        }
+        postedComment {
+            id
+            body
+            atUser {
+                id
+                name
+            }
+            article {
+                id
+                title
+                image_url
+            }
+        }
+        liked {
+            id
+            article {
+                id
+                title
+                image_url
+            }
+            comment {
+                id
+                body
+                time_ago
+                user {
+                    id
+                    name
+                    avatar
+                }
+                article {
+                    id
+                    title
+                }
+            }
+        }
+        followed {
+            id
+            user {
+                id
+                name
+                avatar
+            }
+            category {
+                id
+                name
+                logo
+            }
+            collection {
+                id
+                name
+                logo
+            }
+        }
+    }
+}
+
+query userArticlesSubmitStatusQuery($category_id: Int!) {
+    user {
+        id
+        articles(filter: CATE_SUBMIT_STATUS, category_id: $category_id) {
+            id
+            title
+            submit_status
+        }
+    }
+}
+
+query recommendFollowsQuery($user_id: Int!, $offset: Int) {
+    follows(user_id: $user_id, filter: USER_CATEGORY, offset: $offset) {
+        id
+        user {
+            id
+            name
+            avatar
+            introduction
+            articles(limit: 2) {
+                id
+                title
+            }
+        }
+        category {
+            id
+            name
+            logo
+            description
+            count_articles
+            count_follows
+            articles(filter: ALL, limit: 2) {
+                id
+                title
+            }
+        }
+    }
+}
+
+query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
+    follows(user_id: $user_id, filter: USER, offset: $offset) {
+        id
+        user {
+            id
+            name
+            avatar
+            introduction
+            articles(limit: 2) {
+                id
+                title
+            }
+        }
+        category {
+            id
+            name
+            logo
+            description
+            count_articles
+            count_follows
+            articles(filter: ALL, limit: 2) {
+                id
+                title
+            }
+        }
+    }
+}
+
+query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
+    follows(user_id: $user_id, filter: CATEGORY, offset: $offset) {
+        id
+        user {
+            id
+            name
+            avatar
+            introduction
+            articles(limit: 2) {
+                id
+                title
+            }
+        }
+        category {
+            id
+            name
+            logo
+            description
+            count_articles
+            count_follows
+            articles(filter: ALL, limit: 2) {
+                id
+                title
+            }
+        }
+    }
+}
+
+mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
+    submitArticle(article_id: $article_id, category_id: $category_id) {
+        id
+        submit_status
+    }
+}
+
+mutation approveArticleMutation($article_id: Int!, $category_id: Int!, $is_reject: Boolean!) {
+    approveArticle(article_id: $article_id, category_id: $category_id, is_reject: $is_reject) {
+        id
+        pivot_status
+    }
+}
+
+mutation likeArticleMutation($article_id: Int!, $undo: Boolean) {
+    likeArticle(article_id: $article_id, undo: $undo) {
+        id
+        liked
+        count_likes
+    }
+}
+
+mutation likeCommentMutation($comment_id: Int!, $undo: Boolean) {
+    likeComment(comment_id: $comment_id, undo: $undo) {
+        id
+        liked
+        likes
+    }
+}
+
+mutation followUserMutation($user_id: Int!, $undo: Boolean) {
+    followUser(user_id: $user_id, undo: $undo) {
+        id
+        count_follows
+        followed_status
+    }
+}
+
+mutation followCollectionMutation($collection_id: Int!, $undo: Boolean) {
+    followCollection(collection_id: $collection_id, undo: $undo) {
+        id
+        count_follows
+        followed
+    }
+}
+
+mutation followCategoryMutation($category_id: Int!, $undo: Boolean) {
+    followCategory(category_id: $category_id, undo: $undo) {
+        id
+        count_follows
+        followed
+    }
+}

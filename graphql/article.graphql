@@ -1,0 +1,153 @@
+query RankingArticleQuery($hot_time: Int!) {
+	articles(hot_time: $hot_time) {
+		id
+		title
+		status
+		hits
+		body
+		time_ago
+		has_image
+		image_url
+		hits
+		count_likes
+		count_comments
+		count_tips
+		user {
+			id
+			name
+			avatar
+		}
+		category {
+			id
+			name
+			logo
+		}
+	}
+}
+
+query trashQuery($id: Int!) {
+	article(id: $id) {
+		id
+		title
+		body
+	}
+}
+
+mutation reportArticleMutation($id: Int!, $type: String!, $reason: String) {
+	reportArticle(id: $id, type: $type, reason: $reason) {
+		id
+	}
+}
+
+query articleQuery($id: Int!) {
+	article(id: $id) {
+		id
+		title
+		body
+		user {
+			id
+			name
+			avatar
+			introduction
+			tip_words
+			followed_status
+		}
+		time_ago
+		count_words
+		hits
+		liked
+		count_likes
+		count_tips
+		count_comments
+		count_replies
+		collection {
+			id
+			name
+		}
+		categories {
+			id
+			name
+		}
+		tipedUsers {
+			id
+			name
+			avatar
+		}
+	}
+}
+
+query articleLikesQuery($id: Int!) {
+	article(id: $id) {
+		id
+		liked
+		count_likes
+	}
+}
+
+query draftQuery($id: Int!) {
+	article(id: $id) {
+		id
+		title
+		body
+		time_ago
+		count_words
+	}
+}
+
+query topArticleWithImagesQuery {
+	articles(filter: TOP, limit: 7) {
+		id
+		title
+		top_image
+	}
+}
+
+query hotArticlesQuery($offset: Int) {
+	articles(offset: $offset) {
+		id
+		title
+		has_image
+		image_url
+		description
+		time_ago
+		user {
+			id
+			name
+			avatar
+		}
+		category {
+			id
+			name
+			logo
+		}
+		hits
+		count_likes
+		count_comments
+		count_tips
+	}
+}
+
+query recommendArticlesQuery($offset: Int) {
+	articles(offset: $offset) {
+		id
+		title
+		has_image
+		image_url
+		description
+		time_ago
+		user {
+			avatar
+			name
+			id
+		}
+		category {
+			id
+			name
+			logo
+		}
+		hits
+		count_likes
+		count_comments
+		count_tips
+	}
+}
