@@ -10,6 +10,7 @@ import Screen from "../../Screen";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 import { userArticlesQuery, removeArticleMutation } from "../../../graphql/user.graphql";
+import { unpublishArticleMutation } from "../../../graphql/article.graphql";
 import { Mutation, Query } from "react-apollo";
 
 class OpenArticlesScreen extends Component {

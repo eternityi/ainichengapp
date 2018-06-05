@@ -27,14 +27,7 @@ class PlainArticleItem extends Component {
 					</View>
 					<View>
 						<Text numberOfLines={1} style={styles.meta}>
-							{"阅读 · " +
-								article.hits +
-								" 喜欢 · " +
-								article.count_likes +
-								" 评论 · " +
-								article.count_comments +
-								"  赞赏 · " +
-								article.count_tips}
+							{"阅读 · " + article.hits + " 喜欢 · " + article.count_likes + " 评论 · " + article.count_comments + "  赞赏 · " + article.count_tips}
 						</Text>
 					</View>
 				</View>

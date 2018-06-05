@@ -1,29 +1,9 @@
 import React from "react";
-import {
-  ScrollView,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-  RefreshControl
-} from "react-native";
+import { ScrollView, FlatList, StyleSheet, Text, View, Button, TextInput, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Color from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import {
-  Avatar,
-  DivisionLine,
-  ContentEnd,
-  Badge,
-  LoadingError,
-  SpinnerLoading,
-  BlankContent
-} from "../../components/Pure";
+import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
@@ -52,97 +32,80 @@ class HomeScreen extends React.Component {
     var { chats, user } = this.props.users;
     return (
       <Screen>
-        <View style={styles.container}>
-          <Header navigation={navigation} goBack={false} notification search />
-          <ScrollView
-            style={styles.container}
-            removeClippedSubviews={true}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={this._onRefresh}
-              />
-            }
-          >
-            <View style={styles.menuWrap}>
-              <Query query={unreadsQuery}>
-                {({ loading, error, data }) => {
-                  if (!(data && data.user)) {
-                    data = {};
-                    data.user = {};
-                  }
-                  return (
-                    <View style={styles.menuList}>
-                      {this._renderMessageMenu({
-                        name: "评论",
-                        iconName: "comment-outline",
-                        unreads: data.user.unread_comments
-                      })}
-                      {this._renderMessageMenu({
-                        name: "喜欢和赞",
-                        iconName: "like-outline",
-                        unreads: data.user.unread_likes
-                      })}
-                      {this._renderMessageMenu({
-                        name: "新的关注",
-                        iconName: "follow-person",
-                        unreads: data.user.unread_follows
-                      })}
-                      {this._renderMessageMenu({
-                        name: "投稿请求",
-                        iconName: "contribute",
-                        unreads: data.user.unread_requests
-                      })}
-                      {this._renderMessageMenu({
-                        name: "赞赏和付费",
-                        iconName: "coin",
-                        unreads: data.user.unread_tips
-                      })}
-                      {this._renderMessageMenu({
-                        name: "其它提醒",
-                        iconName: "more",
-                        unreads: data.user.unread_others
-                      })}
-                    </View>
-                  );
-                }}
-              </Query>
-            </View>
-            <DivisionLine height={18} />
-            <View>
-              <View style={styles.chatsTitle}>
-                <Text style={styles.chatsTitleText}>消息</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("新消息")}>
-                  <Text
-                    style={[styles.chatsTitleText, { color: Color.themeColor }]}
-                  >
-                    新消息
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <Query query={chatsQuery} pollInterval={20000}>
-                {({ loading, error, data, refetch }) => {
-                  if (error) return <LoadingError reload={() => refetch()} />;
-                  if (!(data && data.user)) return <SpinnerLoading />;
-                  if (!(data.user.chats.length > 0)) return <BlankContent />;
-                  return (
-                    <FlatList
-                      data={data.user.chats}
-                      keyExtractor={this._keyExtractor}
-                      getItemLayout={(data, index) => ({
-                        length: 68,
-                        offset: 68 * index,
-                        index
-                      })}
-                      renderItem={this._renderChatItem}
-                      ListFooterComponent={() => <ContentEnd />}
-                    />
-                  );
-                }}
-              </Query>
-            </View>
-          </ScrollView>
-        </View>
+        <Header navigation={navigation} goBack={false} notification search />
+        <ScrollView style={styles.container} removeClippedSubviews={true} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}>
+          <View style={styles.menuWrap}>
+            <Query query={unreadsQuery}>
+              {({ loading, error, data }) => {
+                if (!(data && data.user)) {
+                  data = {};
+                  data.user = {};
+                }
+                return (
+                  <View style={styles.menuList}>
+                    {this._renderMessageMenu({
+                      name: "评论",
+                      iconName: "comment-outline",
+                      unreads: data.user.unread_comments
+                    })}
+                    {this._renderMessageMenu({
+                      name: "喜欢和赞",
+                      iconName: "like-outline",
+                      unreads: data.user.unread_likes
+                    })}
+                    {this._renderMessageMenu({
+                      name: "新的关注",
+                      iconName: "follow-person",
+                      unreads: data.user.unread_follows
+                    })}
+                    {this._renderMessageMenu({
+                      name: "投稿请求",
+                      iconName: "contribute",
+                      unreads: data.user.unread_requests
+                    })}
+                    {this._renderMessageMenu({
+                      name: "赞赏和付费",
+                      iconName: "coin",
+                      unreads: data.user.unread_tips
+                    })}
+                    {this._renderMessageMenu({
+                      name: "其它提醒",
+                      iconName: "more",
+                      unreads: data.user.unread_others
+                    })}
+                  </View>
+                );
+              }}
+            </Query>
+          </View>
+          <DivisionLine height={18} />
+          <View style={styles.chatsTitle}>
+            <Text style={styles.chatsTitleText}>消息</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("新消息")}>
+              <Text style={[styles.chatsTitleText, { color: Color.themeColor }]}>新消息</Text>
+            </TouchableOpacity>
+          </View>
+          <Query query={chatsQuery} pollInterval={20000}>
+            {({ loading, error, data, refetch }) => {
+              if (error) return <LoadingError reload={() => refetch()} />;
+              if (!(data && data.user)) return <SpinnerLoading />;
+              if (data.user.chats.length < 1) return <BlankContent />;
+              return (
+                <FlatList
+                  data={data.user.chats}
+                  keyExtractor={this._keyExtractor}
+                  getItemLayout={(data, index) => ({
+                    length: 68,
+                    offset: 68 * index,
+                    index
+                  })}
+                  renderItem={this._renderChatItem}
+                  ListFooterComponent={() => <ContentEnd />}
+                />
+              );
+            }}
+          </Query>
+        </ScrollView>
       </Screen>
     );
   }
@@ -150,10 +113,7 @@ class HomeScreen extends React.Component {
   _onRefresh = () => {
     this.setState({ refreshing: true });
     let _this = this;
-    Promise.all([
-      this.props.client.query({ query: unreadsQuery }),
-      this.props.client.query({ query: chatsQuery })
-    ])
+    Promise.all([this.props.client.query({ query: unreadsQuery }), this.props.client.query({ query: chatsQuery })])
       .then(fulfilled => {
         this.setState({
           refreshing: false
@@ -172,17 +132,9 @@ class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={{ width: (width - 30) / 3 }}>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => navigate(item.name, { user })}
-        >
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigate(item.name, { user })}>
           <View style={{ position: "relative" }}>
-            <Iconfont
-              name={item.iconName}
-              size={24}
-              color={Color.themeColor}
-              style={{ marginBottom: 6 }}
-            />
+            <Iconfont name={item.iconName} size={24} color={Color.themeColor} style={{ marginBottom: 6 }} />
             <View style={styles.badge}>
               <Badge radius={9} count={item.unreads} />
             </View>
@@ -198,19 +150,13 @@ class HomeScreen extends React.Component {
     let chat = item;
     return (
       <View style={styles.chatItem}>
-        <TouchableOpacity
-          style={styles.chatUser}
-          onPress={() => navigate("用户详情", { user: chat.withUser })}
-        >
+        <TouchableOpacity style={styles.chatUser} onPress={() => navigate("用户详情", { user: chat.withUser })}>
           <Avatar uri={chat.withUser.avatar} size={32} />
           <View style={styles.chatBadge}>
             <Badge radius={9} count={chat.unreads} />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.chatContent}
-          onPress={() => navigate("聊天页", { chat })}
-        >
+        <TouchableOpacity style={styles.chatContent} onPress={() => navigate("聊天页", { chat })}>
           <View style={styles.chatInfo}>
             <Text style={styles.chatName}>{chat.withUser.name}</Text>
             <Text style={styles.chatTime}>{chat.updated_at}</Text>
@@ -310,6 +256,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ users: store.users }))(
-  withApollo(HomeScreen)
-);
+export default connect(store => ({ users: store.users }))(withApollo(HomeScreen));

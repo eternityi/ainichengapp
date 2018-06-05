@@ -1,31 +1,16 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	TouchableOpacity,
-	FlatList,
-	Text,
-	Dimensions
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList, Text, Dimensions } from "react-native";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 
 import Colors from "../../../constants/Colors";
-import {
-	CustomScrollTabBar,
-	ContentEnd,
-	LoadingMore,
-	SpinnerLoading
-} from "../../../components/Pure";
+import { CustomScrollTabBar, ContentEnd, LoadingMore, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { CategoryGroup } from "../../../components/MediaGroup";
 import { OperationModal } from "../../../components/Modal";
 import Screen from "../../Screen";
 
 import { Query, Mutation } from "react-apollo";
-import {
-	userCategoriesQuery,
-	userAdminCategoriesQuery
-} from "../../../graphql/user.graphql";
+import { userCategoriesQuery, userAdminCategoriesQuery } from "../../../graphql/user.graphql";
 import { deleteCategoryMutation } from "../../../graphql/category.graphql";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
@@ -59,17 +44,10 @@ class ListScreen extends Component {
 				<View style={styles.container}>
 					<Header
 						navigation={navigation}
-						leftComponent={
-							<HeaderLeft
-								navigation={navigation}
-								routeName={"专题"}
-							/>
-						}
+						leftComponent={<HeaderLeft navigation={navigation} routeName={"专题"} />}
 						rightComponent={
 							is_self ? (
-								<TouchableOpacity
-									onPress={() => navigation.navigate("新建专题")}
-								>
+								<TouchableOpacity onPress={() => navigation.navigate("新建专题")}>
 									<Text
 										style={{
 											fontSize: 17,
@@ -85,11 +63,7 @@ class ListScreen extends Component {
 					<ScrollableTabView
 						renderTabBar={() => (
 							<CustomScrollTabBar
-								tabNames={
-									is_self
-										? ["我创建的", "我管理的"]
-										: ["他创建的", "他管理的"]
-								}
+								tabNames={is_self ? ["我创建的", "我管理的"] : ["他创建的", "他管理的"]}
 								tabBarStyle={{ borderTopColor: "transparent" }}
 								tabItemWrapStyle={{
 									paddingHorizontal: 10,
@@ -99,32 +73,15 @@ class ListScreen extends Component {
 						)}
 					>
 						<View tabLabel="创建的" style={{ flex: 1 }}>
-							<Query
-								query={userCategoriesQuery}
-								variables={{ user_id: user.id }}
-							>
-								{({
-									loading,
-									error,
-									data,
-									refetch,
-									fetchMore
-								}) => {
-									if (error)
-										return (
-											<LoadingError
-												reload={() => refetch()}
-											/>
-										);
-									if (!(data && data.categories))
-										return <SpinnerLoading />;
-									if (!(data.categories.length > 0))
-										return <BlankContent />;
+							<Query query={userCategoriesQuery} variables={{ user_id: user.id }}>
+								{({ loading, error, data, refetch, fetchMore }) => {
+									if (error) return <LoadingError reload={() => refetch()} />;
+									if (!(data && data.categories)) return <SpinnerLoading />;
+									if (data.categories.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.categories}
-											keyExtractor={item =>
-												item.id.toString()}
+											keyExtractor={item => item.id.toString()}
 											getItemLayout={(data, index) => ({
 												length: 85,
 												offset: 85 * index,
@@ -134,12 +91,9 @@ class ListScreen extends Component {
 												<TouchableOpacity
 													style={styles.categoryItem}
 													onPress={() =>
-														navigation.navigate(
-															"专题详情",
-															{
-																category: item
-															}
-														)}
+														navigation.navigate("专题详情", {
+															category: item
+														})}
 													onLongPress={() => {
 														if (is_self) {
 															this.setState({
@@ -161,41 +115,22 @@ class ListScreen extends Component {
 													/>
 												</TouchableOpacity>
 											)}
-											ListFooterComponent={() => (
-												<ContentEnd />
-											)}
+											ListFooterComponent={() => <ContentEnd />}
 										/>
 									);
 								}}
 							</Query>
 						</View>
 						<View tabLabel="管理的" style={{ flex: 1 }}>
-							<Query
-								query={userAdminCategoriesQuery}
-								variables={{ user_id: user.id }}
-							>
-								{({
-									loading,
-									error,
-									data,
-									refetch,
-									fetchMore
-								}) => {
-									if (error)
-										return (
-											<LoadingError
-												reload={() => refetch()}
-											/>
-										);
-									if (!(data && data.categories))
-										return <SpinnerLoading />;
-									if (!(data.categories.length > 0))
-										return <BlankContent />;
+							<Query query={userAdminCategoriesQuery} variables={{ user_id: user.id }}>
+								{({ loading, error, data, refetch, fetchMore }) => {
+									if (error) return <LoadingError reload={() => refetch()} />;
+									if (!(data && data.categories)) return <SpinnerLoading />;
+									if (!(data.categories.length > 0)) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.categories}
-											keyExtractor={item =>
-												item.id.toString()}
+											keyExtractor={item => item.id.toString()}
 											getItemLayout={(data, index) => ({
 												length: 85,
 												offset: 85 * index,
@@ -205,12 +140,9 @@ class ListScreen extends Component {
 												<TouchableOpacity
 													style={styles.categoryItem}
 													onPress={() =>
-														navigation.navigate(
-															"专题详情",
-															{
-																category: item
-															}
-														)}
+														navigation.navigate("专题详情", {
+															category: item
+														})}
 												>
 													<CategoryGroup
 														navigation={navigation}
@@ -224,9 +156,7 @@ class ListScreen extends Component {
 													/>
 												</TouchableOpacity>
 											)}
-											ListFooterComponent={() => (
-												<ContentEnd />
-											)}
+											ListFooterComponent={() => <ContentEnd />}
 										/>
 									);
 								}}

@@ -98,5 +98,13 @@
   "more-rail": 58989,
   "radio-check": 60612,
   "radio-uncheck": 60613,
-  "food": 58894
+  "food": 58894,
+  "play": 58901,
+  "paused": 58902,
+  "play-circle": 58923,
+  "paused-circle": 58883,
+  "fullscreen": 58902,
+  "game": 59008,
+  "rocker": 58962,
+  "share-square": 58966
 }

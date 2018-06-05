@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions } from "
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
 import PlainArticleItem from "../../../components/Article/PlainArticleItem";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import { OperationModal } from "../../../components/Modal";
 import Screen from "../../Screen";
 

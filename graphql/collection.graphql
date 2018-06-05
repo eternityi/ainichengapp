@@ -30,7 +30,7 @@ query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}
@@ -50,7 +50,7 @@ query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}
@@ -70,7 +70,7 @@ query collectionArticlesByLatestQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}

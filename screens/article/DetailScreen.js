@@ -1,18 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  ScrollView,
-  WebView,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Platform,
-  PixelRatio,
-  FlatList
-} from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList } from "react-native";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -49,8 +36,8 @@ let css_fix = `
     <style>
     article {
       word-break: break-all!important;
-      font-size: 16px;
-      line-height: 26px;
+      font-size: 20px;
+      line-height: 30px;
     }
     article img {
       max-width: 100%;
@@ -111,12 +98,7 @@ class DetailScreen extends Component {
             return (
               <View style={styles.container}>
                 <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} />
-                <ScrollView
-                  style={styles.container}
-                  onScroll={this._onScroll.bind(this)}
-                  ref={ref => (this.scrollRef = ref)}
-                  removeClippedSubviews={true}
-                >
+                <ScrollView style={styles.container} onScroll={this._onScroll.bind(this)} ref={ref => (this.scrollRef = ref)} removeClippedSubviews={true}>
                   <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
                     <View>
                       <Text style={styles.title} NumberOfLines={2}>
@@ -167,12 +149,7 @@ class DetailScreen extends Component {
                   <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
                     <BeSelectedCategory categories={article.categories} navigation={navigation} />
                     <MetaBottom article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
-                    <RewardPanel
-                      navigation={navigation}
-                      rewardUsers={article.tipedUsers}
-                      rewardDescrib={article.user.tip_words}
-                      handleRewardVisible={this.handleRewardVisible}
-                    />
+                    <RewardPanel navigation={navigation} rewardUsers={article.tipedUsers} rewardDescrib={article.user.tip_words} handleRewardVisible={this.handleRewardVisible} />
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
                   <View style={{ height: 8, backgroundColor: Colors.lightGray }} />

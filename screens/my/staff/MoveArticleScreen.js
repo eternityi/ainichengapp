@@ -9,9 +9,10 @@ import { WriteModal, OperationModal } from "../../../components/Modal";
 import { CustomScrollTabBar, ContentEnd, LoadingMore, SpinnerLoading } from "../../../components/Pure";
 import Screen from "../../Screen";
 
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation, graphql } from "react-apollo";
 import { userCollectionsQuery } from "../../../graphql/user.graphql";
 import { createCollectionMutation } from "../../../graphql/collection.graphql";
+import { moveArticleMutation } from "../../../graphql/article.graphql";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
@@ -35,7 +36,7 @@ class SelectScreen extends Component {
 	}
 
 	render() {
-		let { navigation, user } = this.props;
+		let { navigation, user, moveArticle } = this.props;
 		let article = navigation.getParam("article");
 		let { createModalVisible, selectCollection, collectionName } = this.state;
 		console.log("render", selectCollection);
@@ -72,6 +73,12 @@ class SelectScreen extends Component {
 											this.setState(prevState => ({
 												selectCollection: index
 											}));
+											moveArticle({
+												variables: {
+													article_id: article.id,
+													collection_id: item.id
+												}
+											});
 										}}
 									>
 										<Text>{item.name}</Text>
@@ -80,14 +87,6 @@ class SelectScreen extends Component {
 										) : (
 											<Iconfont name="radio-uncheck" size={22} color={Colors.themeColor} />
 										)}
-										{
-											// changeCollection({
-											// 	variables: {
-											// 		article_id:article.id
-											// 		collection_id:item.id
-											// 	}
-											// })
-										}
 									</TouchableOpacity>
 								);
 							});
@@ -158,4 +157,4 @@ const styles = StyleSheet.create({
 export default connect(store => ({
 	user: store.users.user,
 	collections: store.categories.collections
-}))(SelectScreen);
+}))(graphql(moveArticleMutation, { name: "moveArticle" })(SelectScreen));

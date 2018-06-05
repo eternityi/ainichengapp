@@ -56,7 +56,7 @@ query categoryArticlesByHotQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}
@@ -75,7 +75,7 @@ query categoryArticlesByCommentedQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}
@@ -94,7 +94,7 @@ query categoryArticlesByLatestQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_replies
+		count_comments
 		count_tips
 		count_likes
 	}
@@ -124,22 +124,8 @@ query categoryFollowersQuery($id: Int!, $offset: Int) {
 	}
 }
 
-mutation createCategoryMutation(
-	$name: String!
-	$logo: String!
-	$description: String!
-	$allow_submit: Boolean!
-	$need_approve: Boolean!
-	$admin_uids: String
-) {
-	createCategory(
-		name: $name
-		logo: $logo
-		description: $description
-		allow_submit: $allow_submit
-		need_approve: $need_approve
-		admin_uids: $admin_uids
-	) {
+mutation createCategoryMutation($name: String!, $logo: String!, $description: String!, $allow_submit: Boolean!, $need_approve: Boolean!, $admin_uids: String) {
+	createCategory(name: $name, logo: $logo, description: $description, allow_submit: $allow_submit, need_approve: $need_approve, admin_uids: $admin_uids) {
 		id
 		name
 		name_en

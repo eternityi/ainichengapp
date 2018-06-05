@@ -191,7 +191,7 @@ query userArticlesQuery($offset: Int, $user_id: Int!) {
         time_ago
         hits
         count_likes
-        count_replies
+        count_comments
         count_tips
         user {
             id
@@ -224,7 +224,7 @@ query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
         }
         hits
         count_likes
-        count_replies
+        count_comments
         count_tips
     }
 }
@@ -252,7 +252,7 @@ query favoritedArticlesQuery($offset: Int) {
             }
             hits
             count_likes
-            count_replies
+            count_comments
             count_tips
         }
     }

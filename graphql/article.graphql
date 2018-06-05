@@ -1,3 +1,77 @@
+mutation createArticleMutation($title: String!, $body: String!, $collection_id: Int) {
+	createArticle(title: $title, body: $body, collection_id: $collection_id) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
+mutation editArticleMutation($id: Int!, $title: String!, $body: String!) {
+	editArticle(id: $id, title: $title, body: $body) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
+mutation publishArticleMutation($id: Int!) {
+	publishArticle(id: $id) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
+mutation unpublishArticleMutation($id: Int!) {
+	unpublishArticle(id: $id) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
+mutation moveArticleMutation($article_id: Int!, $collection_id: Int!) {
+	moveArticle(article_id: $article_id, collection_id: $collection_id) {
+		id
+		title
+		status
+		body
+		time_ago
+		collection {
+			id
+			name
+		}
+	}
+}
+
+mutation favoriteArticleMutation($article_id: Int!, $undo: Boolean) {
+	favoriteArticle(article_id: $article_id, undo: $undo) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
+query articleContentQuery($id: Int!) {
+	article(id: $id) {
+		id
+		title
+		status
+		body
+		time_ago
+	}
+}
+
 query RankingArticleQuery($hot_time: Int!) {
 	articles(hot_time: $hot_time) {
 		id
@@ -59,7 +133,6 @@ query articleQuery($id: Int!) {
 		count_likes
 		count_tips
 		count_comments
-		count_replies
 		collection {
 			id
 			name

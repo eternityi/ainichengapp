@@ -52,6 +52,7 @@ import OpenArticlesScreen from "../screens/my/staff/OpenArticlesScreen";
 import FavoritedArticlesScreen from "../screens/my/staff/FavoritedArticlesScreen";
 import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
 import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
+import MoveArticleScreen from "../screens/my/staff/MoveArticleScreen";
 
 //my wallet
 import WalletScreen from "../screens/my/wallet/WalletScreen";
@@ -75,7 +76,6 @@ import CategoryEditorsScreen from "../screens/user/category/AddAdminsScreen";
 import CollectionsScreen from "../screens/user/collection/ListScreen";
 import CollectionEditScreen from "../screens/user/collection/EditScreen";
 import CollectionRankScreen from "../screens/user/collection/RankScreen";
-import CollectionSelectScreen from "../screens/user/collection/SelectScreen";
 
 //user follows
 import FollowersScreen from "../screens/user/follows/FollowersScreen";
@@ -90,6 +90,9 @@ import ArticleDetailScreen from "../screens/article/DetailScreen";
 import CommentDetail from "../screens/article/comment/CommentDetailScreen";
 import CommentList from "../screens/article/comment/CommentListScreen";
 import ArticleRankingScreen from "../screens/article/ranking/ArticleRankingScreen";
+
+//video
+import VideoDetailScreen from "../screens/video/DetailScreen";
 
 //category
 import CategoryHomeScreen from "../screens/category/HomeScreen";
@@ -150,6 +153,9 @@ export default {
   },
   文章详情: {
     screen: ArticleDetailScreen
+  },
+  视频详情: {
+    screen: VideoDetailScreen
   },
   聊天页: {
     screen: ChatScreen
@@ -232,9 +238,6 @@ export default {
   文集排序: {
     screen: CollectionRankScreen
   },
-  选择文集: {
-    screen: CollectionSelectScreen
-  },
   编辑文集: {
     screen: CollectionEditScreen
   },
@@ -288,6 +291,9 @@ export default {
   },
   全部关注: {
     screen: AllFollowsScreen
+  },
+  选择文集: {
+    screen: MoveArticleScreen
   },
   排行榜: {
     screen: ArticleRankingScreen
