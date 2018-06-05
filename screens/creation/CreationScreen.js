@@ -1,11 +1,10 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, Button, TextInput, Dimensions, View } from "react-native";
+import { FlatList, StyleSheet, Text, Button, TextInput, Dimensions, View,YellowBox } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import Header from "../../components/Header/Header";
-// import ImagePicker from "react-native-image-crop-picker";
-const ImagePicker = null;
+import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
 import Screen from "../Screen";
 
@@ -23,6 +22,10 @@ export default class CreationScreen extends React.Component {
     super(props);
   }
 
+  componentWillMount() {
+    YellowBox.ignoreWarnings(["Warning:"]);
+  }
+
   onEditorInitialized() {}
 
   render() {
@@ -31,7 +34,6 @@ export default class CreationScreen extends React.Component {
       <Screen>
         <View style={styles.container}>
           <Header navigation={navigation} />
-          {/*
           <RichTextEditor
             ref={r => (this.richtext = r)}
             initialTitleHTML={"Title!!"}
@@ -47,8 +49,6 @@ export default class CreationScreen extends React.Component {
             selectedButtonStyle={{ backgroundColor: Colors.tintGray }}
             onPressAddImage={() => {
               ImagePicker.openPicker({
-                width: 400,
-                height: 400,
                 cropping: true
               })
                 .then(image => {
@@ -57,13 +57,12 @@ export default class CreationScreen extends React.Component {
                     src: image.path,
                     width: width,
                     height: 100,
-                    resizeMode: "cover" 
+                    resizeMode: "cover"
                   });
                 })
                 .catch(error => {});
             }}
           />
-          **/}
         </View>
       </Screen>
     );

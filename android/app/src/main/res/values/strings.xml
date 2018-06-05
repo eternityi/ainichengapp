@@ -1,4 +1,4 @@
 <resources>
-    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey"></string>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">LBKQkMDudSGtEkztFYXUMjgupUQW44729bcd-65c1-4f12-8e60-bc400cd168b8</string>
     <string name="app_name">ainicheng</string>
 </resources>

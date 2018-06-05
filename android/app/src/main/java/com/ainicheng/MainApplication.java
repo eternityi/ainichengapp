@@ -38,7 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new RNSpinkitPackage(),
             new PickerPackage(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG)
+            new CodePush(getApplicationContext().getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG)
       );
     }
 
