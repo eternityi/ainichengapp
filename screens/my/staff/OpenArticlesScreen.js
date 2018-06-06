@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 import { userArticlesQuery, removeArticleMutation } from "../../../graphql/user.graphql";
 import { unpublishArticleMutation } from "../../../graphql/article.graphql";
-import { Mutation, Query } from "react-apollo";
+import { Mutation, Query, graphql } from "react-apollo";
 
 class OpenArticlesScreen extends Component {
 	static navigationOptions = {
@@ -30,7 +30,7 @@ class OpenArticlesScreen extends Component {
 
 	render() {
 		let { fetchingMore, modalVisible, article } = this.state;
-		const { navigation } = this.props;
+		const { navigation, unpublishArticle } = this.props;
 		const { user } = navigation.state.params;
 		return (
 			<Screen>
@@ -114,13 +114,20 @@ class OpenArticlesScreen extends Component {
 									this.handleModal();
 									switch (index) {
 										case 0:
+											navigation.navigate("创作", { article });
 											break;
 										case 1:
 											removeArticle();
 											break;
 										case 2:
+											navigation.navigate("投稿管理", { article });
 											break;
 										case 3:
+											unpublishArticle({
+												variables: {
+													id: article.id
+												}
+											});
 											break;
 										case 4:
 											navigation.navigate("选择文集", { article });
@@ -151,4 +158,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
 	open_articles: store.users.open_articles
-}))(OpenArticlesScreen);
+}))(graphql(unpublishArticleMutation, { name: "unpublishArticle" })(OpenArticlesScreen));

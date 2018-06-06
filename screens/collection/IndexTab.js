@@ -9,6 +9,14 @@ import { collectionArticlesByHotQuery } from "../../graphql/collection.graphql";
 import { Mutation, Query } from "react-apollo";
 
 class IndexTab extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			fetchingMore: true
+		};
+	}
+
 	render() {
 		const { navigation, scrollEnabled, onScroll, collection } = this.props;
 		return (
@@ -53,12 +61,20 @@ class IndexTab extends Component {
 												offset: data.articles.length
 											},
 											updateQuery: (prev, { fetchMoreResult }) => {
-												if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0))
+												if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+													this.setState({
+														fetchingMore: false
+													});
 													return prev;
+												}
 												return Object.assign({}, prev, {
 													articles: [...prev.articles, ...fetchMoreResult.articles]
 												});
 											}
+										});
+									} else {
+										this.setState({
+											fetchingMore: false
 										});
 									}
 								}}

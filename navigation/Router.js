@@ -3,6 +3,7 @@ import MainTabNavigator from "./MainTabNavigator";
 //creation
 import CreationScreen from "../screens/creation/CreationScreen";
 import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
+import PublishedScreen from "../screens/creation/PublishedScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -120,6 +121,9 @@ export default {
   },
   创作封面: {
     screen: CreationIntroduceScreen
+  },
+  发布分享: {
+    screen: PublishedScreen
   },
   设置: {
     screen: SettingsScreen

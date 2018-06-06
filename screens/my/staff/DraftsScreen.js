@@ -1,14 +1,28 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	FlatList,
+	TouchableOpacity
+} from "react-native";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, OperationModal } from "../../../components/Modal";
 import { Header, HeaderLeft } from "../../../components/Header";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../../components/Pure";
+import {
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading
+} from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query, Mutation, graphql, compose } from "react-apollo";
-import { draftsQuery, removeArticleMutation } from "../../../graphql/user.graphql";
+import {
+	draftsQuery,
+	removeArticleMutation
+} from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 
 class DraftsScreen extends Component {
@@ -68,9 +82,14 @@ class DraftsScreen extends Component {
 					/>
 					<Query query={draftsQuery}>
 						{({ loading, error, data, refetch, fetchMore }) => {
-							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.user && data.user.articles)) return <SpinnerLoading />;
-							if (!(data.user.articles.length > 0)) return <BlankContent />;
+							if (error)
+								return (
+									<LoadingError reload={() => refetch()} />
+								);
+							if (!(data && data.user && data.user.articles))
+								return <SpinnerLoading />;
+							if (!(data.user.articles.length > 0))
+								return <BlankContent />;
 							return (
 								<FlatList
 									data={data.user.articles}
@@ -78,7 +97,8 @@ class DraftsScreen extends Component {
 									onRefresh={() => {
 										refetch();
 									}}
-									keyExtractor={(item, index) => index.toString()}
+									keyExtractor={(item, index) =>
+										index.toString()}
 									renderItem={this._renderItem.bind(this)}
 									getItemLayout={(data, index) => ({
 										length: 90,
@@ -90,20 +110,49 @@ class DraftsScreen extends Component {
 										if (data.user.articles) {
 											fetchMore({
 												variables: {
-													offset: data.user.articles.length
+													offset:
+														data.user.articles
+															.length
 												},
-												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.user.articles && fetchMoreResult.user.articles.length > 0)) {
+												updateQuery: (
+													prev,
+													{ fetchMoreResult }
+												) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user
+																.articles &&
+															fetchMoreResult.user
+																.articles
+																.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
 														return prev;
 													}
-													return Object.assign({}, prev, {
-														user: Object.assign({}, prev.user, {
-															articles: [...prev.user.articles, ...fetchMoreResult.user.articles]
-														})
-													});
+													return Object.assign(
+														{},
+														prev,
+														{
+															user: Object.assign(
+																{},
+																prev.user,
+																{
+																	articles: [
+																		...prev
+																			.user
+																			.articles,
+																		...fetchMoreResult
+																			.user
+																			.articles
+																	]
+																}
+															)
+														}
+													);
 												}
 											});
 										} else {
@@ -113,14 +162,21 @@ class DraftsScreen extends Component {
 										}
 									}}
 									ListFooterComponent={() => {
-										return fetchingMore ? <LoadingMore /> : <ContentEnd />;
+										return fetchingMore ? (
+											<LoadingMore />
+										) : (
+											<ContentEnd />
+										);
 									}}
 								/>
 							);
 						}}
 					</Query>
 				</View>
-				<Mutation mutation={removeArticleMutation} variables={{ id: article_id }}>
+				<Mutation
+					mutation={removeArticleMutation}
+					variables={{ id: article_id }}
+				>
 					{removeArticle => {
 						return (
 							<OperationModal
@@ -164,7 +220,7 @@ class DraftsScreen extends Component {
 				<View style={styles.draftsItem}>
 					<View>
 						<Text numberOfLines={1} style={styles.timeAgo}>
-							{item.time_ago}
+							未公开 最后更新 {item.time_ago}
 						</Text>
 					</View>
 					<View>
@@ -208,4 +264,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ drafts: store.articles.drafts }))(DraftsScreen);
+export default connect(store => ({ drafts: store.articles.drafts }))(
+	DraftsScreen
+);

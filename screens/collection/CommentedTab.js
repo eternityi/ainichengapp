@@ -61,11 +61,20 @@ class CommentedTab extends Component {
                         offset: data.articles.length
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) return prev;
+                        if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                          this.setState({
+                            fetchingMore: false
+                          });
+                          return prev;
+                        }
                         return Object.assign({}, prev, {
                           articles: [...prev.articles, ...fetchMoreResult.articles]
                         });
                       }
+                    });
+                  } else {
+                    this.setState({
+                      fetchingMore: false
                     });
                   }
                 }}
