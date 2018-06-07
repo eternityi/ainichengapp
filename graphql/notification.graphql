@@ -96,11 +96,11 @@ query followersNotificationsQuery($offset: Int) {
     }
 }
 
-query categoryPendingArticlesQuery($category_id: Int!, $all: Boolean) {
+query categoryPendingArticlesQuery($category_id: Int!, $filter: ArticleFilter) {
     category(id: $category_id) {
         id
         name
-        articles(all: $all) {
+        articles(filter: $filter) {
             id
             title
             user {

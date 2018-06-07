@@ -6,7 +6,7 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Header } from "../../components/Header";
 import { Avatar } from "../../components/Pure";
-import { ShareMenuModal } from "../../components/Modal";
+import { ShareModal } from "../../components/Modal";
 import Screen from "../Screen";
 
 import actions from "../../store/actions";
@@ -41,11 +41,7 @@ class IntroduceScreen extends Component {
 						let user = data.user;
 						return (
 							<View style={styles.container}>
-								<Header
-									navigation={navigation}
-									customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
-									lightTabBar
-								/>
+								<Header navigation={navigation} customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }} lightTabBar />
 								<ScrollView style={styles.visitingCardContainer}>
 									<View style={styles.visitingCard}>
 										<View>
@@ -76,14 +72,9 @@ class IntroduceScreen extends Component {
 												</Text>
 											</View>
 											<View style={styles.QRcodeRow}>
-												<Image
-													style={styles.QRcode}
-													source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }}
-												/>
+												<Image style={styles.QRcode} source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }} />
 												<View style={styles.QRcodeInfo}>
-													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
-														长按识别图中二维码，查看TA的{Config.AppName}主页
-													</Text>
+													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>长按识别图中二维码，查看TA的{Config.AppName}主页</Text>
 												</View>
 											</View>
 										</View>
@@ -98,10 +89,7 @@ class IntroduceScreen extends Component {
 											<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
 										</TouchableOpacity>
 										<TouchableOpacity>
-											<Image
-												style={{ width: 32, height: 32, resizeMode: "contain" }}
-												source={require("../../assets/images/pengyouquan.png")}
-											/>
+											<Image style={{ width: 32, height: 32, resizeMode: "contain" }} source={require("../../assets/images/pengyouquan.png")} />
 										</TouchableOpacity>
 										<TouchableOpacity onPress={this.toggleModalVisible}>
 											<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />
@@ -112,7 +100,7 @@ class IntroduceScreen extends Component {
 						);
 					}}
 				</Query>
-				<ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}

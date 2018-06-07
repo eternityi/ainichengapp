@@ -5,7 +5,6 @@ import SortableListView from "react-native-sortable-listview";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { Header, HeaderLeft } from "../../../components/Header";
-import { FullScreenModal } from "../../../components/Modal";
 import Screen from "../../Screen";
 
 import { Query } from "react-apollo";

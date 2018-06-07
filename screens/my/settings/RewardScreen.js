@@ -37,7 +37,7 @@ class ResetPasswordScreen extends Component {
 								<View style={{ marginLeft: 10 }}>
 									<Switch
 										value={rewarding}
-										onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+										onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 										tintColor={"#ccc"}
 										thumbTintColor={rewarding ? Colors.themeColor : Colors.tintGray}
 										onValueChange={value => {
@@ -61,7 +61,7 @@ class ResetPasswordScreen extends Component {
 								<View style={{ marginLeft: 10 }}>
 									<Switch
 										value={loose}
-										onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+										onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 										tintColor={"#ccc"}
 										thumbTintColor={loose ? Colors.themeColor : Colors.tintGray}
 										onValueChange={value => {
@@ -77,10 +77,7 @@ class ResetPasswordScreen extends Component {
 					<View style={styles.settingStateWrap}>
 						<Text style={styles.settingState}>{loose ? "已启用,低于10.00元的支付不用输入密码" : "开启后,低于10.00元的支付不用输入密码"}</Text>
 					</View>
-					<TouchableOpacity
-						style={{ borderBottomWidth: 1, borderBottomColor: Colors.lightBorderColor }}
-						onPress={() => navigation.navigate("更改赞赏描述")}
-					>
+					<TouchableOpacity style={{ borderBottomWidth: 1, borderBottomColor: Colors.lightBorderColor }} onPress={() => navigation.navigate("更改赞赏描述")}>
 						<SettingItem endItem itemName="更改赞赏描述" />
 					</TouchableOpacity>
 				</View>

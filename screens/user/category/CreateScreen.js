@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity, ScrollView, FlatList, Text, Image, TextInput, Switch, Platform, Dimensions } from "react-native";
-// import ImagePicker from "react-native-image-crop-picker";
-const ImagePicker = null;
+import ImagePicker from "react-native-image-crop-picker";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
 import Colors from "../../../constants/Colors";
 import Config from "../../../constants/Config";
-import { CustomSlideMenu } from "../../../components/Modal";
+import { SlideInUpModal } from "../../../components/Modal";
 import Screen from "../../Screen";
 
 import { Query, Mutation, compose, graphql } from "react-apollo";
@@ -28,22 +27,22 @@ class CreateScreen extends Component {
 		super(props);
 		//清空category admin_uids
 		props.dispatch(actions.editCategoryAdmins([]));
-		let { params = {} } = this.props.navigation.state;
-		let { category } = params;
-		console.log(category);
+		let category = props.navigation.getParam("category", null);
+		this.toggleVisible = this.toggleVisible.bind(this);
 		this.state = {
 			id: category ? category.id : null,
 			logo: category ? category.logo : null,
 			name: category ? category.name : "",
 			description: category ? category.description : "",
 			allow_submit: category ? category.allow_submit : true,
-			need_approve: category ? category.need_approve : true
+			need_approve: category ? category.need_approve : true,
+			modalVisible: false
 		};
 	}
 
 	render() {
 		let { createCategoryMutation, editCategoryMutation, navigation, user, admin_uids } = this.props;
-		let { id, logo, name, description, allow_submit, need_approve } = this.state;
+		let { id, logo, name, description, allow_submit, need_approve, modalVisible } = this.state;
 		return (
 			<Screen>
 				<Header
@@ -101,11 +100,7 @@ class CreateScreen extends Component {
 				<ScrollView style={styles.container} bounces={false}>
 					<View style={styles.uploadWrap}>
 						<TouchableOpacity style={styles.uploadLogo} onPress={this._uploadLogo.bind(this)}>
-							{logo ? (
-								<Image source={{ uri: logo }} style={styles.categoryLogo} />
-							) : (
-								<Iconfont name={"camera"} size={25} color={"#fff"} />
-							)}
+							{logo ? <Image source={{ uri: logo }} style={styles.categoryLogo} /> : <Iconfont name={"camera"} size={25} color={"#fff"} />}
 						</TouchableOpacity>
 						<Text
 							style={{
@@ -144,7 +139,7 @@ class CreateScreen extends Component {
 					</View>
 					<KeyboardSpacer />
 					<View style={styles.settings}>
-						<TouchableOpacity style={[styles.settingItem, { marginRight: 7 }]} onPress={() => this.settingMenu.open()}>
+						<TouchableOpacity style={[styles.settingItem, { marginRight: 7 }]} onPress={this.toggleVisible}>
 							<Iconfont name={"fill-setting"} size={14} color={Colors.tintFontColor} style={{ marginRight: 6 }} />
 							<Text style={styles.settingText}>投稿需要审核</Text>
 						</TouchableOpacity>
@@ -153,7 +148,7 @@ class CreateScreen extends Component {
 							<Iconfont name={"right"} size={14} color={Colors.tintFontColor} style={{ marginLeft: 6 }} />
 						</TouchableOpacity>
 					</View>
-					<CustomSlideMenu menuRef={ref => (this.settingMenu = ref)}>
+					<SlideInUpModal visible={modalVisible} toggleVisible={this.toggleVisible}>
 						<View style={styles.settingMenu}>
 							<View style={styles.settingMenuItem}>
 								<Text
@@ -166,7 +161,7 @@ class CreateScreen extends Component {
 								</Text>
 								<Switch
 									value={allow_submit}
-									onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+									onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 									tintColor={"#ccc"}
 									thumbTintColor={allow_submit ? Colors.themeColor : Colors.tintGray}
 									onValueChange={value => {
@@ -194,7 +189,7 @@ class CreateScreen extends Component {
 								</Text>
 								<Switch
 									value={need_approve}
-									onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+									onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 									tintColor={"#ccc"}
 									thumbTintColor={need_approve ? Colors.themeColor : Colors.tintGray}
 									onValueChange={value => {
@@ -204,7 +199,7 @@ class CreateScreen extends Component {
 									}}
 								/>
 							</View>
-							<TouchableOpacity style={styles.close} onPress={() => this.settingMenu.close()}>
+							<TouchableOpacity style={styles.close} onPress={this.toggleVisible}>
 								<Text
 									style={{
 										fontSize: 16,
@@ -215,7 +210,7 @@ class CreateScreen extends Component {
 								</Text>
 							</TouchableOpacity>
 						</View>
-					</CustomSlideMenu>
+					</SlideInUpModal>
 				</ScrollView>
 			</Screen>
 		);
@@ -268,6 +263,10 @@ class CreateScreen extends Component {
 			.catch(error => {
 				console.log(err);
 			});
+	}
+
+	toggleVisible() {
+		this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
 	}
 }
 
@@ -350,7 +349,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({ user: store.users.user, admin_uids: store.categories.admin_uids }))(
-	compose(graphql(createCategoryMutation, { name: "createCategoryMutation" }), graphql(editCategoryMutation, { name: "editCategoryMutation" }))(
-		CreateScreen
-	)
+	compose(graphql(createCategoryMutation, { name: "createCategoryMutation" }), graphql(editCategoryMutation, { name: "editCategoryMutation" }))(CreateScreen)
 );

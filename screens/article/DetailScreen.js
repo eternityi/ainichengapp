@@ -17,7 +17,7 @@ import ArticleBottomTools from "./ArticleBottomTools";
 import Comments from "./comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
 import AuthorCard from "../../components/Card/AuthorCard";
-import { RewardModal, AddCommentModal, ReplyCommentModal, ShareMenuModal } from "../../components/Modal";
+import { RewardModal, AddCommentModal, ReplyCommentModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 const { width, height } = Dimensions.get("window");
@@ -281,7 +281,7 @@ class DetailScreen extends Component {
             );
           }}
         </Query>
-        <ShareMenuModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
+        <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
   }

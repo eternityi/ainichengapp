@@ -97,10 +97,7 @@ class WalletScreen extends Component {
 						</View>
 						<View style={styles.walletItemWrap}>
 							<Iconfont name={"modification"} size={26} color={Colors.linkColor} />
-							<TouchableOpacity
-								style={[styles.walletItem, { borderBottomColor: "transparent" }]}
-								onPress={() => navigation.navigate("交易记录")}
-							>
+							<TouchableOpacity style={[styles.walletItem, { borderBottomColor: "transparent" }]} onPress={() => navigation.navigate("交易记录")}>
 								<Text style={styles.walletItemName}>交易记录</Text>
 							</TouchableOpacity>
 						</View>
@@ -135,7 +132,7 @@ class WalletScreen extends Component {
 		});
 		setTimeout(function() {
 			Toast.hide(toast);
-		}, 1500);
+		}, 2000);
 	}
 }
 
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		backgroundColor: `rgba(${Colors.rgbThemeColor},0.8)`,
+		backgroundColor: Colors.themeColor,
 		borderRadius: 4
 	},
 	walletMark: {

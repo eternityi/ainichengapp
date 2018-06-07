@@ -1,22 +1,27 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Dimensions, ScrollView, FlatList } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Avatar, ContentEnd } from "../../components/Pure";
 import UserListHorizontal from "../../components/User/UserListHorizontal";
-import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Dimensions, ScrollView, FlatList } from "react-native";
-import { MenuOption } from "react-native-popup-menu";
-import { CustomSlideMenu } from "../../components/Modal";
+import { SlideInUpModal } from "../../components/Modal";
 
 const { width, height } = Dimensions.get("window");
 
 class RewardPanel extends Component {
   constructor(props) {
     super(props);
+    this.toggleVisible = this.toggleVisible.bind(this);
+    this.state = {
+      modalVisible: false
+    };
   }
 
   render() {
     const { rewardUsers, rewardDescrib, handleRewardVisible } = this.props;
+    let { modalVisible } = this.state;
     return (
       <View style={{ alignItems: "center" }}>
         <View style={{ marginVertical: 20 }}>
@@ -25,27 +30,22 @@ class RewardPanel extends Component {
         <TouchableOpacity style={styles.rewardButton} onPress={handleRewardVisible}>
           <Text style={styles.rewardButtonText}>赞赏支持</Text>
         </TouchableOpacity>
-        <CustomSlideMenu
-          selectHandler={() => null}
-          triggerComponent={
-            <View style={styles.rewardUsers}>
-              <UserListHorizontal users={rewardUsers} radius={18} />
-              {rewardUsers.length > 6 && (
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: Colors.tintFontColor,
-                    marginHorizontal: 6
-                  }}
-                >
-                  等{rewardUsers.length}人
-                </Text>
-              )}
-              {rewardUsers.length > 6 && <Iconfont name={"right"} size={13} color={Colors.tintFontColor} />}
-            </View>
-          }
-          menuRef={ref => (this.slideRewardUsers = ref)}
-        >
+        <TouchableOpacity style={styles.rewardUsers} onPress={this.toggleVisible}>
+          <UserListHorizontal users={rewardUsers} radius={18} />
+          {rewardUsers.length > 6 && (
+            <Text
+              style={{
+                fontSize: 14,
+                color: Colors.tintFontColor,
+                marginHorizontal: 6
+              }}
+            >
+              等{rewardUsers.length}人
+            </Text>
+          )}
+          {rewardUsers.length > 6 && <Iconfont name={"right"} size={13} color={Colors.tintFontColor} />}
+        </TouchableOpacity>
+        <SlideInUpModal visible={modalVisible} toggleVisible={this.toggleVisible}>
           <FlatList
             style={{ height: height * 0.6 }}
             data={rewardUsers}
@@ -53,62 +53,60 @@ class RewardPanel extends Component {
             renderItem={this._rewardUserItem.bind(this)}
             ListFooterComponent={() => <ContentEnd />}
           />
-        </CustomSlideMenu>
+        </SlideInUpModal>
       </View>
     );
   }
 
   _rewardUserItem({ item, index }) {
     let { navigation } = this.props;
+    let user = item;
     return (
-      <MenuOption value={index}>
-        <View
-          style={{
-            justifyContent: "center",
-            paddingHorizontal: 20,
-            height: 90,
-            borderBottomWidth: 1,
-            borderBottomColor: Colors.lightBorderColor
-          }}
-        >
-          <View style={{ flexDirection: "row" }}>
-            {/*关闭当前slideMenu并且跳转页面**/}
-            <TouchableOpacity
-              onPress={() => {
-                this.slideRewardUsers.close();
-                navigation.navigate("用户详情", { user: item });
-              }}
-            >
-              <Avatar uri={item.avatar} size={36} />
-            </TouchableOpacity>
-            <View style={{ flex: 1, marginLeft: 10 }}>
-              <View>
-                <Text numberOfLines={1} style={{ fontSize: 16, color: "#666" }}>
-                  {item.name} 赞赏了文章
-                  <Text style={{ color: Colors.themeColor }}>
-                    {}
-                    <Iconfont name={"RMB"} size={16} color={Colors.themeColor} />
-                    {item.money}
-                  </Text>
-                </Text>
-              </View>
-              {item.leave_message && (
-                <View style={{ marginTop: 8 }}>
-                  <Text numberOfLines={1} style={{ fontSize: 12, color: Colors.lightFontColor }}>
-                    {item.leave_message}
-                  </Text>
-                </View>
-              )}
+      <View
+        style={{
+          justifyContent: "center",
+          paddingHorizontal: 20,
+          height: 90,
+          borderBottomWidth: 1,
+          borderBottomColor: Colors.lightBorderColor
+        }}
+      >
+        <View style={{ flexDirection: "row" }}>
+          {/*关闭当前slideMenu并且跳转页面**/}
+          <TouchableOpacity
+            onPress={() => {
+              this.toggleVisible();
+              navigation.navigate("用户详情", { user });
+            }}
+          >
+            <Avatar uri={user.avatar} size={36} />
+          </TouchableOpacity>
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <View>
+              <Text numberOfLines={1} style={{ fontSize: 16, color: "#666" }}>
+                {user.name} 赞赏了文章
+              </Text>
+            </View>
+            {user.leave_message && (
               <View style={{ marginTop: 8 }}>
-                <Text numberOfLines={1} style={{ fontSize: 13, color: "#969696" }}>
-                  {item.time_ago}
+                <Text numberOfLines={1} style={{ fontSize: 12, color: Colors.lightFontColor }}>
+                  {user.leave_message}
                 </Text>
               </View>
+            )}
+            <View style={{ marginTop: 8 }}>
+              <Text numberOfLines={1} style={{ fontSize: 13, color: "#969696" }}>
+                {user.time_ago}
+              </Text>
             </View>
           </View>
         </View>
-      </MenuOption>
+      </View>
     );
+  }
+
+  toggleVisible() {
+    this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
   }
 }
 

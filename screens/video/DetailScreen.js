@@ -69,9 +69,7 @@ class DetailScreen extends Component {
 							// onEnterFullscreen={()=>{
 							// 	navigation.navigate("视频全屏")
 							// }}
-							navigator={() => {
-								navigation.goBack();
-							}}
+							navigator={navigation}
 							source={{ uri: "https://www.ainicheng.com/storage/video/236.mp4" }}
 							// poster="https://www.ainicheng.com/storage/video/236.jpg"
 							// posterResizeMode="cover"

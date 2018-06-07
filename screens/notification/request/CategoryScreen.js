@@ -35,16 +35,10 @@ class CategoryScreen extends Component {
 				<View style={styles.container}>
 					<Header navigation={navigation} routeName={navigation.state.params.category.name} />
 					<ScrollableTabView
-						renderTabBar={() => (
-							<CustomScrollTabBar
-								tabNames={["全部", "未处理"]}
-								tabBarStyle={{ borderTopColor: "transparent" }}
-								tabItemWrapStyle={{ width: 90 }}
-							/>
-						)}
+						renderTabBar={() => <CustomScrollTabBar tabNames={["全部", "未处理"]} tabBarStyle={{ borderTopColor: "transparent" }} tabItemWrapStyle={{ width: 90 }} />}
 					>
 						<View style={styles.container}>
-							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, all: true }}>
+							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "ALL" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
@@ -63,7 +57,8 @@ class CategoryScreen extends Component {
 							</Query>
 						</View>
 						<View style={styles.container}>
-							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id }}>
+							{/*PEDING（pending） 后端参数单词错误**/}
+							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "PEDING" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;

@@ -6,17 +6,11 @@ import Modal from "react-native-modal";
 
 const { width, height } = Dimensions.get("window");
 
-class ShareMenuModal extends Component {
+class ShareModal extends Component {
   render() {
     const { visible, plain = false, toggleVisible } = this.props;
     return (
-      <Modal
-        isVisible={visible}
-        onBackButtonPress={toggleVisible}
-        onBackdropPress={toggleVisible}
-        backdropOpacity={0.4}
-        style={{ justifyContent: "flex-end", margin: 0 }}
-      >
+      <Modal isVisible={visible} onBackButtonPress={toggleVisible} onBackdropPress={toggleVisible} backdropOpacity={0.4} style={{ justifyContent: "flex-end", margin: 0 }}>
         <View style={styles.shareSlide}>
           {!plain && (
             <View style={styles.shareSlideItemWrap}>
@@ -106,4 +100,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ShareMenuModal;
+export default ShareModal;

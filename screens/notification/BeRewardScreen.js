@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import { ShareMenuModal } from "../../components/Modal";
+import { ShareModal } from "../../components/Modal";
 import { Avatar, CommentContainer, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
@@ -40,8 +40,7 @@ class BeRewardScreen extends Component {
 								onPress={() =>
 									navigation.navigate("文章详情", {
 										article: { id: 1 }
-									})
-								}
+									})}
 							>
 								<Text
 									style={{
@@ -75,7 +74,7 @@ class BeRewardScreen extends Component {
 						}}
 					</Query>
 				</View>
-				<ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}
@@ -94,8 +93,7 @@ class BeRewardScreen extends Component {
 							onPress={() =>
 								navigation.navigate("聊天页", {
 									chat: { with_user: notification.user }
-								})
-							}
+								})}
 						>
 							<Text style={{ fontSize: 14, color: "#717171" }}>回复</Text>
 						</TouchableOpacity>
@@ -121,8 +119,7 @@ class BeRewardScreen extends Component {
 							onPress={() =>
 								navigation.navigate("文章详情", {
 									article: notification.article
-								})
-							}
+								})}
 						>
 							{" 《" + notification.article.title + "》 "}
 						</Text>

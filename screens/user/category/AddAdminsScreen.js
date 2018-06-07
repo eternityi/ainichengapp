@@ -6,7 +6,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
 import { UserMetaGroup } from "../../../components/MediaGroup";
 import { SearchUserModal } from "../../../components/Modal";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, SpinnerLoading } from "../../../components/Pure";
+import { CustomScrollTabBar, ContentEnd, LoadingMore, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query, Mutation, graphql } from "react-apollo";
@@ -22,7 +22,7 @@ class AddAdminsScreen extends Component {
   constructor(props) {
     super(props);
     let { category } = this.props.navigation.state.params;
-    this.handleVisible = this.handleVisible.bind(this);
+    this.toggleVisible = this.toggleVisible.bind(this);
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.admin_uids = [];
     this.state = {
@@ -41,7 +41,7 @@ class AddAdminsScreen extends Component {
           <Header
             navigation={navigation}
             rightComponent={
-              <TouchableOpacity onPress={this.handleVisible}>
+              <TouchableOpacity onPress={this.toggleVisible}>
                 <Text
                   style={{
                     fontSize: 17,
@@ -58,7 +58,7 @@ class AddAdminsScreen extends Component {
               {({ loading, error, data }) => {
                 if (error) return <LoadingError reload={() => refetch()} />;
                 if (!(data && data.users)) return <SpinnerLoading />;
-                if (!(data.users.length > 0)) return <BlankContent />;
+                if (data.users.length < 1) return <BlankContent />;
                 //mutation接收一个user id的数组
                 this.admin_uids = data.users.map((elem, index) => {
                   return elem.id;
@@ -78,7 +78,7 @@ class AddAdminsScreen extends Component {
                 );
               }}
             </Query>
-          ) : (
+          ) : admin_users.length > 0 ? (
             <FlatList
               data={admin_users}
               keyExtractor={(item, index) => index.toString()}
@@ -90,10 +90,15 @@ class AddAdminsScreen extends Component {
               renderItem={this._renderUserItem}
               ListFooterComponent={() => <ContentEnd />}
             />
+          ) : (
+            <View style={{ flex: 1 }}>
+              <BlankContent />
+            </View>
           )}
           <SearchUserModal
+            navigation={navigation}
             visible={modalVisible}
-            handleVisible={this.handleVisible}
+            toggleVisible={this.toggleVisible}
             handleSelectedUser={user => {
               if (category.id) {
                 this.admin_uids.push(user.id);
@@ -111,7 +116,7 @@ class AddAdminsScreen extends Component {
                     }
                   ]
                 });
-                this.handleVisible();
+                this.toggleVisible();
               } else {
                 this.handleSelectedUser(user);
                 //首次创建专题，选择的管理员先存在redux中，待确认创建的时候一起返回给服务端
@@ -165,7 +170,7 @@ class AddAdminsScreen extends Component {
     }
   }
 
-  handleVisible() {
+  toggleVisible() {
     this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
   }
 
@@ -174,7 +179,7 @@ class AddAdminsScreen extends Component {
     admin_users.push(user);
     this.admin_uids.push(user.id);
     this.setState({ admin_users });
-    this.handleVisible();
+    this.toggleVisible();
   }
 }
 

@@ -5,7 +5,7 @@ import Colors from "../../../constants/Colors";
 import Header from "../../../components/Header/Header";
 import HeaderLeft from "../../../components/Header/HeaderLeft";
 import HTML from "react-native-render-html";
-import { ShareMenuModal } from "../../../components/Modal";
+import { ShareModal } from "../../../components/Modal";
 import Screen from "../../Screen";
 
 import { Query } from "react-apollo";
@@ -139,7 +139,7 @@ class DraftDetailScreen extends Component {
 						);
 					}}
 				</Query>
-				<ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}

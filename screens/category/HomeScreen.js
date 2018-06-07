@@ -5,7 +5,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import { Header, HeaderLeft, Search } from "../../components/Header";
-import { CustomPopoverMenu, ShareMenuModal } from "../../components/Modal";
+import { CustomPopoverMenu, ShareModal } from "../../components/Modal";
 import CategoryTopInfo from "./CategoryTopInfo";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 import CustomScrollTabBar from "../../components/Pure/CustomScrollTabBar";
@@ -127,13 +127,7 @@ class HomeScreen extends Component {
 									}
 								/>
 
-								<ScrollView
-									style={styles.container}
-									onScroll={this._outerScroll}
-									scrollEnabled={scrollEnabled}
-									bounces={false}
-									scrollEventThrottle={20}
-								>
+								<ScrollView style={styles.container} onScroll={this._outerScroll} scrollEnabled={scrollEnabled} bounces={false} scrollEventThrottle={20}>
 									<View onLayout={this._mainTopLayout}>
 										<CategoryTopInfo category={data.category} navigation={navigation} />
 									</View>
@@ -150,9 +144,7 @@ class HomeScreen extends Component {
 												: null
 										]}
 									>
-										<ScrollableTabView
-											renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabBarStyle={{ paddingHorizontal: 20 }} />}
-										>
+										<ScrollableTabView renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabBarStyle={{ paddingHorizontal: 20 }} />}>
 											<LatestTab
 												tabLabel="最新收录"
 												scrollEnabled={!scrollEnabled}
@@ -167,20 +159,8 @@ class HomeScreen extends Component {
 												navigation={navigation}
 												category={data.category}
 											/>
-											<HotTab
-												tabLabel="热门"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												category={data.category}
-											/>
-											<MembersTab
-												tabLabel="成员"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												category={data.category}
-											/>
+											<HotTab tabLabel="热门" scrollEnabled={!scrollEnabled} onScroll={this.innerScroll} navigation={navigation} category={data.category} />
+											<MembersTab tabLabel="成员" scrollEnabled={!scrollEnabled} onScroll={this.innerScroll} navigation={navigation} category={data.category} />
 										</ScrollableTabView>
 									</View>
 								</ScrollView>
@@ -188,7 +168,7 @@ class HomeScreen extends Component {
 						);
 					}}
 				</Query>
-				<ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}

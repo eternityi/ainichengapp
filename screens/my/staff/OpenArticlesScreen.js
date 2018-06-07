@@ -23,13 +23,12 @@ class OpenArticlesScreen extends Component {
 		this.handleModal = this.handleModal.bind(this);
 		this.state = {
 			fetchingMore: true,
-			modalVisible: false,
-			article: {}
+			modalVisible: false
 		};
 	}
 
 	render() {
-		let { fetchingMore, modalVisible, article } = this.state;
+		let { fetchingMore, modalVisible } = this.state;
 		const { navigation, unpublishArticle } = this.props;
 		const { user } = navigation.state.params;
 		return (
@@ -46,98 +45,118 @@ class OpenArticlesScreen extends Component {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.articles)) return null;
 							return (
-								<FlatList
-									data={data.articles}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item }) => (
-										<View>
-											<TouchableOpacity
-												onPress={() =>
-													navigation.navigate("文章详情", {
-														article: item
-													})}
-												onLongPress={() => {
-													this.setState({
-														article: item
-													});
-													this.handleModal();
-												}}
-											>
-												<PlainArticleItem article={item} />
-											</TouchableOpacity>
-										</View>
-									)}
-									getItemLayout={(data, index) => ({
-										length: 130,
-										offset: 130 * index,
-										index
-									})}
-									onEndReachedThreshold={0.3}
-									onEndReached={() => {
-										if (data.articles) {
-											fetchMore({
-												variables: {
-													offset: data.articles.length
-												},
-												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
-														this.setState({
-															fetchingMore: false
+								<View>
+									<FlatList
+										data={data.articles}
+										keyExtractor={(item, index) => index.toString()}
+										renderItem={({ item }) => (
+											<View>
+												<TouchableOpacity
+													onPress={() =>
+														navigation.navigate("文章详情", {
+															article: item
+														})}
+													onLongPress={() => {
+														this.article = item;
+														this.handleModal();
+													}}
+												>
+													<PlainArticleItem article={item} />
+												</TouchableOpacity>
+											</View>
+										)}
+										getItemLayout={(data, index) => ({
+											length: 130,
+											offset: 130 * index,
+											index
+										})}
+										onEndReachedThreshold={0.3}
+										onEndReached={() => {
+											if (data.articles) {
+												fetchMore({
+													variables: {
+														offset: data.articles.length
+													},
+													updateQuery: (prev, { fetchMoreResult }) => {
+														if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+															this.setState({
+																fetchingMore: false
+															});
+															return prev;
+														}
+														return Object.assign({}, prev, {
+															articles: [...prev.articles, ...fetchMoreResult.articles]
 														});
-														return prev;
 													}
-													return Object.assign({}, prev, {
-														articles: [...prev.articles, ...fetchMoreResult.articles]
-													});
-												}
-											});
-										} else {
-											this.setState({
-												fetchingMore: false
-											});
-										}
-									}}
-									ListFooterComponent={fetchingMore ? <LoadingMore /> : <ContentEnd />}
-								/>
+												});
+											} else {
+												this.setState({
+													fetchingMore: false
+												});
+											}
+										}}
+										ListFooterComponent={fetchingMore ? <LoadingMore /> : <ContentEnd />}
+									/>
+									<Mutation mutation={removeArticleMutation}>
+										{removeArticle => {
+											return (
+												<OperationModal
+													operation={["编辑", "删除文章", "投稿管理", "转为私密", "文集设置"]}
+													visible={modalVisible}
+													handleVisible={this.handleModal}
+													handleOperation={index => {
+														this.handleModal();
+														switch (index) {
+															case 0:
+																navigation.navigate("创作", { article: this.article });
+																break;
+															case 1:
+																removeArticle({
+																	variables: {
+																		id: this.article.id
+																	},
+																	refetchQueries: result => [
+																		{
+																			query: userArticlesQuery,
+																			variables: {
+																				user_id: user.id
+																			}
+																		}
+																	]
+																});
+																break;
+															case 2:
+																navigation.navigate("投稿管理", { article: this.article });
+																break;
+															case 3:
+																unpublishArticle({
+																	variables: {
+																		id: this.article.id
+																	},
+																	refetchQueries: result => [
+																		{
+																			query: userArticlesQuery,
+																			variables: {
+																				user_id: user.id
+																			}
+																		}
+																	]
+																});
+																break;
+															case 4:
+																navigation.navigate("选择文集", { article: this.article });
+																break;
+														}
+													}}
+												/>
+											);
+										}}
+									</Mutation>
+								</View>
 							);
 						}}
 					</Query>
 				</View>
-				<Mutation mutation={removeArticleMutation} variables={{ id: article.id }}>
-					{removeArticle => {
-						return (
-							<OperationModal
-								operation={["编辑", "删除文章", "投稿管理", "转为私密", "文集设置"]}
-								visible={modalVisible}
-								handleVisible={this.handleModal}
-								handleOperation={index => {
-									this.handleModal();
-									switch (index) {
-										case 0:
-											navigation.navigate("创作", { article });
-											break;
-										case 1:
-											removeArticle();
-											break;
-										case 2:
-											navigation.navigate("投稿管理", { article });
-											break;
-										case 3:
-											unpublishArticle({
-												variables: {
-													id: article.id
-												}
-											});
-											break;
-										case 4:
-											navigation.navigate("选择文集", { article });
-											break;
-									}
-								}}
-							/>
-						);
-					}}
-				</Mutation>
 			</Screen>
 		);
 	}

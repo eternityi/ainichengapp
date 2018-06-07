@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity, TextInput, Platform, Dimensions } from "react-native";
+import Modal from "react-native-modal";
+
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import FullScreenModal from "./FullScreenModal";
-import Header from "../../components/Header/Header";
-import HollowButton from "../../components/Button/Hollow";
-import UserMetaGroup from "../../components/MediaGroup/UserMetaGroup";
-import HeaderLeft from "../../components/Header/HeaderLeft";
-import ContentEnd from "../../components/Pure/ContentEnd";
-import LoadingMore from "../../components/Pure/LoadingMore";
+import { Header, SingleSearchBar } from "../../components/Header";
+import { HollowButton } from "../../components/Button";
+import { UserMetaGroup } from "../../components/MediaGroup";
+import { ContentEnd, LoadingMore } from "../../components/Pure";
 
 import { Query } from "react-apollo";
 import { userFollowersQuery } from "../../../graphql/user.graphql";
@@ -30,31 +29,28 @@ class SearchUserModal extends Component {
 
 	render() {
 		let { keywords, fetchingMore, complete } = this.state;
-		let { user, navigation, visible, handleVisible } = this.props;
+		let { user, navigation, visible, toggleVisible } = this.props;
 		return (
-			<FullScreenModal
-				visible={visible}
-				handleVisible={handleVisible}
-				headerRight={
-					<View style={styles.searchBar}>
-						<TextInput
-							words={false}
-							underlineColorAndroid="transparent"
-							selectionColor={Colors.themeColor}
-							style={styles.textInput}
-							autoFocus={true}
-							placeholder="搜索好友"
-							placeholderText={Colors.tintFontColor}
-							onChangeText={value => this.setState({ keywords: value })}
-							value={keywords}
-						/>
-						<TouchableOpacity style={styles.searchButton} onPress={() => null}>
-							<Iconfont name={"search"} size={22} color={Colors.tintFontColor} />
-						</TouchableOpacity>
-					</View>
-				}
+			<Modal
+				animationIn="zoomInDown"
+				animationOut="zoomOutUp"
+				isVisible={visible}
+				onBackButtonPress={toggleVisible}
+				onBackdropPress={toggleVisible}
+				backdropOpacity={0.4}
+				style={{ justifyContent: "flex-end", margin: 0 }}
 			>
 				<View style={styles.container}>
+					<Header
+						routeName={true}
+						navigation={navigation}
+						leftComponent={
+							<TouchableOpacity onPress={toggleVisible}>
+								<Iconfont name={"back-ios"} size={23} color={Colors.primaryFontColor} style={{ marginRight: 15 }} />
+							</TouchableOpacity>
+						}
+						rightComponent={<SingleSearchBar placeholder={"搜索好友"} keywords={keywords} changeKeywords={this.changeKeywords.bind(this)} handleSearch={() => null} />}
+					/>
 					<Query query={userFollowersQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (!(data && data.users)) return null;
@@ -100,7 +96,7 @@ class SearchUserModal extends Component {
 						}}
 					</Query>
 				</View>
-			</FullScreenModal>
+			</Modal>
 		);
 	}
 
@@ -128,34 +124,19 @@ class SearchUserModal extends Component {
 			</TouchableOpacity>
 		);
 	};
+
+	changeKeywords(keywords) {
+		this.setState({
+			keywords
+		});
+	}
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colors.skinColor
-	},
-	searchBar: {
-		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		height: 33,
-		borderWidth: 1,
-		borderColor: Colors.lightBorderColor,
-		backgroundColor: Colors.lightGray,
-		borderRadius: 4
-	},
-	textInput: {
-		flex: 1,
-		fontSize: 16,
-		padding: 0,
-		paddingLeft: 10,
-		color: Colors.primaryFontColor
-	},
-	searchButton: {
-		paddingHorizontal: 10,
-		borderLeftWidth: 1,
-		borderLeftColor: Colors.tintBorderColor
+		backgroundColor: Colors.skinColor,
+		paddingTop: Platform.OS === "ios" ? 20 : 0
 	},
 	follows: {
 		paddingLeft: 15,

@@ -47,7 +47,7 @@ class SettingScreen extends Component {
 								<View style={{ marginLeft: 10 }}>
 									<Switch
 										value={mute}
-										onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+										onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 										tintColor={"#ccc"}
 										thumbTintColor={mute ? Colors.themeColor : Colors.tintGray}
 										onValueChange={value => {
@@ -67,7 +67,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && voice}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && voice ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -88,7 +88,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && shake}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && shake ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -109,7 +109,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && comment}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && comment ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -129,7 +129,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && message}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && message ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -149,7 +149,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && request}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && request ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -169,7 +169,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && like}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && like ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -189,7 +189,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && follow}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && follow ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {
@@ -209,7 +209,7 @@ class SettingScreen extends Component {
 									<View style={{ marginLeft: 10 }}>
 										<Switch
 											value={!mute && reward}
-											onTintColor={`rgba(${Colors.rgbThemeColor},0.6)`}
+											onTintColor={`rgba(${Colors.rgbThemeColor},0.3)`}
 											tintColor={"#ccc"}
 											thumbTintColor={!mute && reward ? Colors.themeColor : Colors.tintGray}
 											onValueChange={value => {

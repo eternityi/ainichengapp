@@ -4,7 +4,7 @@ import { ScrollView, FlatList, StyleSheet, Text, View, Button, TextInput, Toucha
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
-import { ShareMenuModal } from "../../components/Modal";
+import { ShareModal } from "../../components/Modal";
 import UserTopInfo from "./UserTopInfo";
 import { Header } from "../../components/Header";
 import { DivisionLine, ContentEnd } from "../../components/Pure";
@@ -160,7 +160,7 @@ class HomeScreen extends React.Component {
             <DivisionLine height={15} />
           </ScrollView>
         </View>
-        <ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+        <ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
       </Screen>
     );
   }

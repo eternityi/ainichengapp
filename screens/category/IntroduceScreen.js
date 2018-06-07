@@ -6,7 +6,7 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Header } from "../../components/Header";
 import { Avatar } from "../../components/Pure";
-import { ShareMenuModal } from "../../components/Modal";
+import { ShareModal } from "../../components/Modal";
 import Screen from "../Screen";
 
 import actions from "../../store/actions";
@@ -59,9 +59,7 @@ class IntroduceScreen extends Component {
 							</View>
 							<View style={styles.cardBottom}>
 								<View>
-									<Text style={{ fontSize: 15, color: Colors.primaryFontColor, lineHeight: 21 }}>
-										{category.description ? category.description : "暂无简介"}
-									</Text>
+									<Text style={{ fontSize: 15, color: Colors.primaryFontColor, lineHeight: 21 }}>{category.description ? category.description : "暂无简介"}</Text>
 								</View>
 								<View style={styles.QRcodeRow}>
 									<Image style={styles.QRcode} source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }} />
@@ -81,10 +79,7 @@ class IntroduceScreen extends Component {
 								<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
 							</TouchableOpacity>
 							<TouchableOpacity>
-								<Image
-									style={{ width: 32, height: 32, resizeMode: "contain" }}
-									source={require("../../assets/images/pengyouquan.png")}
-								/>
+								<Image style={{ width: 32, height: 32, resizeMode: "contain" }} source={require("../../assets/images/pengyouquan.png")} />
 							</TouchableOpacity>
 							<TouchableOpacity onPress={this.toggleModalVisible}>
 								<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />
@@ -92,7 +87,7 @@ class IntroduceScreen extends Component {
 						</View>
 					</View>
 				</View>
-				<ShareMenuModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}

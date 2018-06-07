@@ -8,7 +8,6 @@ import { Avatar, ContentEnd } from "../../components/Pure";
 import { FollowCategoryButton, HollowButton } from "../../components/Button";
 import UserListHorizontal from "../../components/User/UserListHorizontal";
 import { MenuOption } from "react-native-popup-menu";
-import { CustomSlideMenu, BasicModal } from "../../components/Modal";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -46,11 +45,7 @@ class ArticleItem extends Component {
 								<HollowButton
 									name={submit_status}
 									size={12}
-									color={
-										submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1
-											? "rgba(66,192,46,0.9)"
-											: Colors.themeColor
-									}
+									color={submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
 									onPress={() => {
 										submitArticle({
 											variables: { category_id: category.id, article_id: article.id }
@@ -142,13 +137,7 @@ class CategoryTopInfo extends Component {
 				</View>
 				<View style={styles.categoryButton}>
 					<View style={{ flex: 1, marginRight: 6 }}>
-						<FollowCategoryButton
-							size={15}
-							id={category.id}
-							type={"category"}
-							followed={category.followed}
-							follows={category.count_follows}
-						/>
+						<FollowCategoryButton size={15} id={category.id} type={"category"} followed={category.followed} follows={category.count_follows} />
 					</View>
 					<View style={{ flex: 1, marginLeft: 6 }}>
 						<HollowButton name={"投稿"} size={17} onPress={this.handleVisible} />

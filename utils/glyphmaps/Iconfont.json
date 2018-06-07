@@ -106,5 +106,7 @@
   "fullscreen": 58902,
   "game": 59008,
   "rocker": 58962,
-  "share-square": 58966
+  "share-square": 58966,
+  "publish": 58915,
+  "published": 58916
 }

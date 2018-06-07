@@ -20,73 +20,73 @@ const official_categories = [
 		id: 11,
 		avatar: "https://www.dongmeiwei.com/images/app/choiceness.png",
 		name: "官方课堂",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 102,
 		avatar: "https://dongmeiwei.com/images/app/fruits.png",
 		name: "水果",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 101,
 		avatar: "https://dongmeiwei.com/images/app/ccake.png",
 		name: "中式糕点",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 58,
 		avatar: "https://dongmeiwei.com/images/app/xiangcai.png",
 		name: "湘菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 19,
 		avatar: "https://dongmeiwei.com/images/app/yuecai.png",
 		name: "粤菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 18,
 		avatar: "https://dongmeiwei.com/images/app/chuangcai.png",
 		name: "川菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 60,
 		avatar: "https://dongmeiwei.com/images/app/lucai.png",
 		name: "鲁菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 69,
 		avatar: "https://dongmeiwei.com/images/app/cake.png",
 		name: "西式糕点",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 99,
 		avatar: "https://dongmeiwei.com/images/app/mincai.png",
 		name: "闽菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 100,
 		avatar: "https://dongmeiwei.com/images/app/huicai.png",
 		name: "徽菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 61,
 		avatar: "https://dongmeiwei.com/images/app/sucai.png",
 		name: "苏菜",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 82,
 		avatar: "https://dongmeiwei.com/images/app/zhecai.png",
 		name: "浙菜",
-		type: "视频详情"
+		type: "专题详情"
 	}
 ];
 

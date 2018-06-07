@@ -4,9 +4,9 @@ import { NavigationActions } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import SearchHeader from "../../components/Header/SearchHeader";
+import { Header, SingleSearchBar } from "../../components/Header";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
-import CustomPopoverMenu from "../../components/Modal/CustomPopoverMenu";
+import { CustomPopoverMenu } from "../../components/Modal";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
@@ -34,20 +34,15 @@ class ArticlesScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <SearchHeader
-            changeKeywords={this.changeKeywords}
-            keywords={keywords}
+          <Header
+            routeName={true}
             navigation={navigation}
-            handleSearch={this.handleSearch}
-            placeholder={"搜索标题或者文章内容"}
+            rightComponent={
+              <SingleSearchBar placeholder={"搜索文章的内容或标题"} keywords={keywords} changeKeywords={this.changeKeywords.bind(this)} handleSearch={this.handleSearch.bind(this)} />
+            }
           />
           {articles.length > 0 && (
-            <FlatList
-              data={articles}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this._renderRelatedArticle}
-              ListHeaderComponent={this._renderSearchHeader}
-            />
+            <FlatList data={articles} keyExtractor={(item, index) => index.toString()} renderItem={this._renderRelatedArticle} ListHeaderComponent={this._renderSearchHeader} />
           )}
         </View>
       </Screen>
@@ -103,6 +98,12 @@ class ArticlesScreen extends Component {
     //  return content;
     // }
     return content;
+  }
+
+  changeKeywords(keywords) {
+    this.setState({
+      keywords
+    });
   }
 
   handleSearch(keywords) {

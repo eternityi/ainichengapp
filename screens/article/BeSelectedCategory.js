@@ -1,74 +1,79 @@
 import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity, TouchableNativeFeedback, Text, FlatList, ScrollView, Dimensions } from "react-native";
-import { MenuOption } from "react-native-popup-menu";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { CustomSlideMenu, BasicModal } from "../../components/Modal";
+import { SlideInUpModal } from "../../components/Modal";
 import { CategoryGroup } from "../../components/MediaGroup";
 import { ContentEnd } from "../../components/Pure";
 
 const { width, height } = Dimensions.get("window");
 
-const slideOption = {
-  optionWrapper: {
-    height: 70,
-    padding: 20,
-    justifyContent: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.lightBorderColor
-  }
-};
-
 class BeSelectedCategory extends Component {
+  constructor(props) {
+    super(props);
+    this.toggleVisible = this.toggleVisible.bind(this);
+    this.state = {
+      modalVisible: false
+    };
+  }
+
   render() {
     let { categories, navigation } = this.props;
+    let { modalVisible } = this.state;
     if (!categories.length) {
       return null;
     }
-
     return (
       <View style={styles.beSelectedCategory}>
-        <TouchableOpacity style={styles.beSelectedCategoryItem} onPress={() => navigation.navigate("专题详情", { category: categories[0] })}>
-          <Text style={styles.beSelectedCategoryItemText}>{categories[0].name}</Text>
-          <Iconfont name={"right"} size={16} color={Colors.themeColor} />
-        </TouchableOpacity>
-        {categories.length >= 2 && (
-          <TouchableOpacity style={styles.beSelectedCategoryItem} onPress={() => navigation.navigate("专题详情", { category: categories[1] })}>
-            <Text style={styles.beSelectedCategoryItemText}>{categories[1].name}</Text>
-            <Iconfont name={"right"} size={16} color={Colors.themeColor} />
+        {categories.slice(0, 2).map(function(elem, index) {
+          if (elem) {
+            return (
+              <TouchableOpacity key={index} style={styles.beSelectedCategoryItem} onPress={() => navigation.navigate("专题详情", { category: elem })}>
+                <Text style={styles.beSelectedCategoryItemText}>{elem.name}</Text>
+                <Iconfont name={"right"} size={16} color={Colors.themeColor} />
+              </TouchableOpacity>
+            );
+          }
+        })}
+        {categories.length >= 3 && (
+          <TouchableOpacity style={styles.beSelectedCategoryItem} onPress={this.toggleVisible}>
+            <Iconfont name={"more"} size={16} color={Colors.themeColor} style={{ marginHorizontal: 6 }} />
           </TouchableOpacity>
         )}
-
-        {categories.length >= 3 && (
-          <CustomSlideMenu
-            triggerComponent={
-              <View style={styles.beSelectedCategoryItem}>
-                <Iconfont name={"more"} size={16} color={Colors.themeColor} style={{ marginHorizontal: 6 }} />
-              </View>
-            }
-          >
-            {
-              <FlatList
-                style={{ height: height * 0.6 }}
-                data={categories}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => (
-                  <MenuOption value={item.id} customStyles={slideOption}>
-                    <CategoryGroup category={item} miniButton />
-                  </MenuOption>
-                )}
-                getItemLayout={(data, index) => ({
-                  length: 70,
-                  offset: 70 * index,
-                  index
-                })}
-                ListFooterComponent={() => <ContentEnd />}
-              />
-            }
-          </CustomSlideMenu>
-        )}
+        <SlideInUpModal visible={modalVisible} toggleVisible={this.toggleVisible}>
+          <View style={{ height: height * 0.6 }}>
+            <View style={styles.beSelectedHeader}>
+              <Text style={{ fontSize: 12, color: Colors.lightFontColor }}>入选专题</Text>
+            </View>
+            <FlatList
+              data={categories}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.categoryItem}
+                  onPress={() => {
+                    this.toggleVisible();
+                    navigation.navigate("专题详情", { category: item });
+                  }}
+                >
+                  <CategoryGroup category={item} miniButton />
+                </TouchableOpacity>
+              )}
+              getItemLayout={(data, index) => ({
+                length: 70,
+                offset: 70 * index,
+                index
+              })}
+              ListFooterComponent={() => <ContentEnd />}
+            />
+          </View>
+        </SlideInUpModal>
       </View>
     );
+  }
+
+  toggleVisible() {
+    this.setState(prevState => ({ modalVisible: !prevState.modalVisible }));
   }
 }
 
@@ -89,6 +94,18 @@ const styles = StyleSheet.create({
   beSelectedCategoryItemText: {
     fontSize: 15,
     color: Colors.themeColor
+  },
+  beSelectedHeader: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightBorderColor
+  },
+  categoryItem: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightBorderColor
   }
 });
 

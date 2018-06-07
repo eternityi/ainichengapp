@@ -4,6 +4,7 @@ import MainTabNavigator from "./MainTabNavigator";
 import CreationScreen from "../screens/creation/CreationScreen";
 import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
+import ArticleContributeScreen from "../screens/creation/ContributeScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -124,6 +125,9 @@ export default {
   },
   发布分享: {
     screen: PublishedScreen
+  },
+  文章投稿: {
+    screen: ArticleContributeScreen
   },
   设置: {
     screen: SettingsScreen
