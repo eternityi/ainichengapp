@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
+
+import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
+import { DivisionLine, SearchBar, LoadingError, SpinnerLoading, BlankContent, LoadingMore, ContentEnd } from "../../components/Pure";
 import FollowItem from "./FollowItem";
-import Screen from "../Screen";
 
-import { recommendAuthors } from "../../graphql/user.graphql";
+import { recommendFollowUsersQuery } from "../../graphql/user.graphql";
 import { graphql, Query } from "react-apollo";
 import { connect } from "react-redux";
 
@@ -16,36 +18,67 @@ class AuthorsScreen extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			fetchingMore: true
+		};
 	}
 
 	render() {
-		let { recommend_authors, navigation } = this.props;
+		let { user, navigation } = this.props;
 		return (
 			<Screen>
+				<Header navigation={navigation} />
 				<View style={styles.container}>
-					<Header navigation={navigation} />
-					<FlatList data={recommend_authors} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem} />
+					<Query query={recommendFollowUsersQuery} variables={{ user_id: user.id }}>
+						{({ loading, error, data, fetchMore, fetch }) => {
+							if (error) return <LoadingError reload={() => refetch()} />;
+							if (!(data && data.follows)) return <SpinnerLoading />;
+							if (data.follows.length < 1) return <BlankContent />;
+							return (
+								<FlatList
+									data={data.follows}
+									keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+									renderItem={this._renderItem}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										if (data.follows) {
+											fetchMore({
+												variables: {
+													offset: data.follows.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (!(fetchMoreResult && fetchMoreResult.follows && fetchMoreResult.follows.length > 0)) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														follows: [...prev.follows, ...fetchMoreResult.follows]
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
+								/>
+							);
+						}}
+					</Query>
 				</View>
-				{
-					// <Query query={recommendAuthors}>
-					//   {({ loading, error, data, refetch, fetchMore }) => {
-					//     if (!(data && data.users)) return null;
-					//     return (
-					// 		<FlatList
-					// 			data={data.users}
-					// 			keyExtractor={(item, index) => index.toString()}
-					// 			renderItem={this._renderItem}
-					// 		/>
-					//     );
-					//   }}
-					// </Query>
-				}
 			</Screen>
 		);
 	}
 
 	_renderItem = ({ item }) => {
 		let { navigation } = this.props;
+		let follow = item;
 		return (
 			<View style={{ paddingHorizontal: 15 }}>
 				<TouchableOpacity
@@ -56,10 +89,10 @@ class AuthorsScreen extends Component {
 					}}
 					onPress={() =>
 						navigation.navigate("用户详情", {
-							user: item
+							user: follow.user
 						})}
 				>
-					<FollowItem data={{ user: item }} navigation={navigation} />
+					<FollowItem follow={follow} navigation={navigation} />
 				</TouchableOpacity>
 			</View>
 		);
@@ -74,5 +107,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({
-	recommend_authors: store.users.recommend_authors
+	user: store.users.user
 }))(AuthorsScreen);

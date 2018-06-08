@@ -46,7 +46,7 @@ class PublishedScreen extends React.Component {
 						<View style={styles.contributeTop}>
 							<Text style={styles.text2}>投稿到</Text>
 						</View>
-						<TouchableOpacity style={styles.contributeBottom} onPress={() => navigation.navigate("文章投稿", { article })}>
+						<TouchableOpacity style={styles.contributeBottom} onPress={() => navigation.replace("文章投稿", { article })}>
 							<View style={styles.sharetLeft}>
 								<Iconfont name="upload" size={30} color={Colors.themeColor} />
 							</View>

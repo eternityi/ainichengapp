@@ -4,7 +4,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Header } from "../../components/Header";
-import { DivisionLine, SearchBar } from "../../components/Pure";
+import { DivisionLine, SearchBar, LoadingError, SpinnerLoading, BlankContent, LoadingMore, ContentEnd } from "../../components/Pure";
 import { OperationModal } from "../../components/Modal";
 import FollowItem from "./FollowItem";
 import Screen from "../Screen";
@@ -12,6 +12,7 @@ import Screen from "../Screen";
 import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql, Query } from "react-apollo";
+import { recommendFollowsQuery } from "../../graphql/user.graphql";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,24 +24,62 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fetchingMore: true,
       modalVisible: false,
       operation: []
     };
   }
 
   render() {
-    let { navigation, recommend_follows } = this.props;
+    let { navigation, user } = this.props;
     let { modalVisible, operation } = this.state;
     return (
       <Screen>
+        <Header navigation={navigation} />
         <View style={styles.container}>
-          <Header navigation={navigation} />
-          <FlatList
-            ListHeaderComponent={this._renderHeader}
-            data={recommend_follows}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={this._renderItem}
-          />
+          <Query query={recommendFollowsQuery} variables={{ user_id: user.id }}>
+            {({ loading, error, data, fetchMore, fetch }) => {
+              if (error) return <LoadingError reload={() => refetch()} />;
+              if (!(data && data.follows)) return <SpinnerLoading />;
+              if (data.follows.length < 1) return <BlankContent />;
+              return (
+                <FlatList
+                  ListHeaderComponent={this._renderHeader}
+                  data={data.follows}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={this._renderItem}
+                  onEndReachedThreshold={0.3}
+                  onEndReached={() => {
+                    if (data.follows) {
+                      fetchMore({
+                        variables: {
+                          offset: data.follows.length
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (!(fetchMoreResult && fetchMoreResult.follows && fetchMoreResult.follows.length > 0)) {
+                            this.setState({
+                              fetchingMore: false
+                            });
+                            return prev;
+                          }
+                          return Object.assign({}, prev, {
+                            follows: [...prev.follows, ...fetchMoreResult.follows]
+                          });
+                        }
+                      });
+                    } else {
+                      this.setState({
+                        fetchingMore: false
+                      });
+                    }
+                  }}
+                  ListFooterComponent={() => {
+                    return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                  }}
+                />
+              );
+            }}
+          </Query>
           <OperationModal handleOperation={index => index} operation={operation} visible={modalVisible} handleVisible={this.toggleModalVisible} />
         </View>
       </Screen>
@@ -110,12 +149,13 @@ class HomeScreen extends React.Component {
 
   _renderItem = ({ item }) => {
     let { navigation } = this.props;
+    let follow = item;
     return (
       <View>
         <DivisionLine height={18} noBorder />
         <View style={{ paddingHorizontal: 15 }}>
           <View style={styles.officialRecommend}>
-            <Iconfont name={item.user ? "followed" : "ranking"} size={17} color={Colors.themeColor} />
+            <Iconfont name={follow.user ? "followed" : "ranking"} size={17} color={Colors.themeColor} />
             <Text
               style={{
                 fontSize: 15,
@@ -123,14 +163,14 @@ class HomeScreen extends React.Component {
                 marginLeft: 5
               }}
             >
-              {Config.AppName}推荐{item.user ? "作者" : "专题"}
+              {Config.AppName}推荐{follow.user ? "作者" : "专题"}
             </Text>
           </View>
           <TouchableOpacity
             style={{ paddingVertical: 20 }}
-            onPress={() => navigation.navigate(item.user ? "用户详情" : "专题详情", item.user ? { user: item.user } : { category: item.category })}
+            onPress={() => navigation.navigate(follow.user ? "用户详情" : "专题详情", follow.user ? { user: follow.user } : { category: follow.category })}
           >
-            <FollowItem data={item} navigation={navigation} />
+            <FollowItem follow={follow} navigation={navigation} />
           </TouchableOpacity>
         </View>
       </View>
@@ -170,5 +210,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => {
-  return { recommend_follows: store.users.recommend_follows };
+  return { user: store.users.user };
 })(HomeScreen);

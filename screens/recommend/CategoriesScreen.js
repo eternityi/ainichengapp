@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
+
+import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
+import { DivisionLine, SearchBar, LoadingError, SpinnerLoading, BlankContent, LoadingMore, ContentEnd } from "../../components/Pure";
 import FollowItem from "./FollowItem";
-import Screen from "../Screen";
 
-import { topCategoriesQuery } from "../../graphql/category.graphql";
+import { recommendFollowCategoriesQuery } from "../../graphql/user.graphql";
 import { graphql, Query } from "react-apollo";
 import { connect } from "react-redux";
 
@@ -16,47 +18,59 @@ class CategoriesScreen extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			fetchingMore: true
+		};
 	}
 
 	render() {
-		let { recommend_categories, navigation } = this.props;
+		let { user, navigation } = this.props;
 		return (
 			<Screen>
+				<Header navigation={navigation} />
 				<View style={styles.container}>
-					<Header navigation={navigation} />
-					<FlatList data={recommend_categories} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem} />
-					{
-						// <Query query={topCategoriesQuery}>
-						//   {({ loading, error, data, fetchMore }) => {
-						//     if (!(data && data.categories)) return null;
-						//     return (
-						//       <FlatList
-						//         data={data.categories}
-						//         keyExtractor={(item, index) =>
-						//           item.key ? item.key : index.toString()}
-						//         renderItem={this._renderItem}
-						//         onEndReached={() => {
-						//           fetchMore({
-						//             variables: {
-						//               offset: data.categories.length
-						//             },
-						//             updateQuery: (prev, { fetchMoreResult }) => {
-						//               if (!(fetchMoreResult && fetchMoreResult.categories))
-						//                 return prev;
-						//               return Object.assign({}, prev, {
-						//                 categories: [
-						//                   ...prev.categories,
-						//                   ...fetchMoreResult.categories
-						//                 ]
-						//               });
-						//             }
-						//           });
-						//         }}
-						//       />
-						//     );
-						//   }}
-						// </Query>
-					}
+					<Query query={recommendFollowCategoriesQuery} variables={{ user_id: user.id }}>
+						{({ loading, error, data, fetchMore, fetch }) => {
+							if (error) return <LoadingError reload={() => refetch()} />;
+							if (!(data && data.follows)) return <SpinnerLoading />;
+							if (data.follows.length < 1) return <BlankContent />;
+							return (
+								<FlatList
+									data={data.follows}
+									keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+									renderItem={this._renderItem}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										if (data.follows) {
+											fetchMore({
+												variables: {
+													offset: data.follows.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (!(fetchMoreResult && fetchMoreResult.follows && fetchMoreResult.follows.length > 0)) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														follows: [...prev.follows, ...fetchMoreResult.follows]
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
+								/>
+							);
+						}}
+					</Query>
 				</View>
 			</Screen>
 		);
@@ -64,6 +78,7 @@ class CategoriesScreen extends Component {
 
 	_renderItem = ({ item }) => {
 		let { navigation } = this.props;
+		let follow = item;
 		return (
 			<View style={{ paddingHorizontal: 15 }}>
 				<TouchableOpacity
@@ -74,10 +89,10 @@ class CategoriesScreen extends Component {
 					}}
 					onPress={() =>
 						navigation.navigate("专题详情", {
-							item
+							category: follow.category
 						})}
 				>
-					<FollowItem data={{ category: item }} navigation={navigation} />
+					<FollowItem follow={follow} navigation={navigation} />
 				</TouchableOpacity>
 			</View>
 		);
@@ -92,5 +107,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({
-	recommend_categories: store.categories.recommend_categories
+	user: store.users.user
 }))(CategoriesScreen);

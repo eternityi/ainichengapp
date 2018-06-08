@@ -55,6 +55,7 @@ import FavoritedArticlesScreen from "../screens/my/staff/FavoritedArticlesScreen
 import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
 import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
 import MoveArticleScreen from "../screens/my/staff/MoveArticleScreen";
+import ContributeManageScreen from "../screens/my/staff/ContributeManageScreen";
 
 //my wallet
 import WalletScreen from "../screens/my/wallet/WalletScreen";
@@ -302,6 +303,9 @@ export default {
   },
   选择文集: {
     screen: MoveArticleScreen
+  },
+  投稿管理: {
+    screen: ContributeManageScreen
   },
   排行榜: {
     screen: ArticleRankingScreen

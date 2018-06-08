@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, Dimensions } from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, FlatList, Dimensions } from "react-native";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
@@ -18,12 +18,12 @@ const { width, height } = Dimensions.get("window");
 
 class CategoryItem extends React.Component {
 	render() {
-		let { article, category } = this.props;
+		let { article, category, navigation } = this.props;
 		console.log("article", article);
 		let { submit_status } = category;
 		console.log("category", category);
 		return (
-			<View style={styles.categoryItem}>
+			<TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate("专题详情", { category })}>
 				<View>
 					<Avatar type={"category"} uri={category.logo} size={40} />
 				</View>
@@ -54,7 +54,10 @@ class CategoryItem extends React.Component {
 										color={"rgba(66,192,46,0.9)"}
 										onPress={() => {
 											submitArticle({
-												variables: { category_id: category.id, article_id: article.id }
+												variables: {
+													category_id: category.id,
+													article_id: article.id
+												}
 											});
 										}}
 									/>
@@ -63,7 +66,7 @@ class CategoryItem extends React.Component {
 						</Mutation>
 					</View>
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -76,7 +79,7 @@ class ContributeScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fetchingMore: false,
+			fetchingMore: true,
 			keywords: ""
 		};
 	}
@@ -91,7 +94,14 @@ class ContributeScreen extends React.Component {
 					<Header
 						routeName={true}
 						navigation={navigation}
-						rightComponent={<SingleSearchBar placeholder={"搜索专题"} keywords={keywords} changeKeywords={this.changeKeywords.bind(this)} handleSearch={() => null} />}
+						rightComponent={
+							<SingleSearchBar
+								placeholder={"搜索专题"}
+								keywords={keywords}
+								changeKeywords={this.changeKeywords.bind(this)}
+								handleSearch={() => null}
+							/>
+						}
 					/>
 					<Query query={topCategoriesQuery}>
 						{({ loading, error, data, fetchMore, refetch }) => {
@@ -100,10 +110,10 @@ class ContributeScreen extends React.Component {
 							if (data.categories.length < 1) return <BlankContent />;
 							return (
 								<FlatList
+									ListHeaderComponent={this.renderListHeader.bind(this)}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => <CategoryItem article={article} category={item} />}
-									ListHeaderComponent={this.renderListHeader.bind(this)}
 									refreshing={loading}
 									onRefresh={() => {
 										refetch();
@@ -132,6 +142,9 @@ class ContributeScreen extends React.Component {
 												fetchingMore: false
 											});
 										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
 									}}
 								/>
 							);

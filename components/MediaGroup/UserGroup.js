@@ -14,16 +14,18 @@ class UserGroup extends Component {
           <TouchableOpacity onPress={() => navigation.navigate("用户详情", { user })}>
             <Avatar size={avatar} uri={user.avatar} />
           </TouchableOpacity>
-          <Text
-            numberOfLines={1}
-            style={{
-              color: Colors.primaryFontColor,
-              fontSize: nameSize,
-              marginLeft: 10
-            }}
-          >
-            {user.name || ""}
-          </Text>
+          <View style={{ flex: 1 }}>
+            <Text
+              numberOfLines={1}
+              style={{
+                color: Colors.primaryFontColor,
+                fontSize: nameSize,
+                marginLeft: 10
+              }}
+            >
+              {user.name || ""}
+            </Text>
+          </View>
         </View>
         {rightButton ? (
           rightButton
@@ -50,7 +52,8 @@ const styles = StyleSheet.create({
   groupLeft: {
     flexDirection: "row",
     alignItems: "center",
-    flex: 1
+    flex: 1,
+    marginRight: 20
   }
 });
 

@@ -1,17 +1,19 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, Button, TextInput, Dimensions, View, TouchableOpacity, YellowBox } from "react-native";
-
-import Colors from "../../constants/Colors";
-import { Iconfont } from "../../utils/Fonts";
-import Header from "../../components/Header/Header";
+import { FlatList, StyleSheet, Text, Platform, TextInput, Dimensions, View, TouchableOpacity, YellowBox, BackHandler } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
-import { ContentEnd, LoadingMore, LoadingError } from "../../components/Pure";
+
 import Screen from "../Screen";
+import Colors from "../../constants/Colors";
+import Config from "../../constants/Config";
+import { Iconfont } from "../../utils/Fonts";
+import { Header } from "../../components/Header";
+import { ContentEnd, LoadingMore, LoadingError } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-import { articleContentQuery, createArticleMutation, editArticleMutation, publishArticleMutation } from "../../graphql/article.graphql";
+import { draftsQuery } from "../../graphql/user.graphql";
+import { articleContentQuery, createdArticleMutation, editArticleMutation } from "../../graphql/article.graphql";
 import { withApollo, compose, graphql, Query } from "react-apollo";
 
 let { width, height } = Dimensions.get("window");
@@ -32,6 +34,15 @@ class CreationScreen extends React.Component {
 
   componentDidMount() {
     YellowBox.ignoreWarnings(["Warning: RichTextToolbar has a method called componentDidReceiveProps()"]);
+    //监听安卓back
+    if (Platform.OS === "android") {
+      BackHandler.addEventListener("hardwareBackPress", function() {
+        if (!this.publishing) {
+          this.backAction();
+        }
+        return true;
+      });
+    }
   }
 
   onEditorInitialized() {}
@@ -68,25 +79,27 @@ class CreationScreen extends React.Component {
               {({ loading, error, data, refetch }) => {
                 if (error) return <LoadingError reload={() => refetch()} />;
                 if (!(data && data.article)) return null;
-                return this.renderEditor(data.article.title, data.article.body);
+                this.gotArticle = data.article;
+                return this.renderEditor(data.article);
               }}
             </Query>
           ) : (
-            this.renderEditor("", "")
+            this.renderEditor()
           )}
         </View>
       </Screen>
     );
   }
 
-  renderEditor = (title, body) => {
+  renderEditor = (article = this.state.article) => {
+    this.gotArticle = article;
     return (
       <View style={{ flex: 1 }}>
         <RichTextEditor
           ref={r => (this.richtext = r)}
-          initialTitleHTML={title}
+          initialTitleHTML={article.title}
           titlePlaceholder={"请输入标题"}
-          initialContentHTML={body}
+          initialContentHTML={article.body}
           contentPlaceholder={"请输入正文"}
           editorInitializedCallback={() => this.onEditorInitialized()}
         />
@@ -100,13 +113,7 @@ class CreationScreen extends React.Component {
               cropping: true
             })
               .then(image => {
-                //TODO:: upload to server, get image url back ....
-                this.richtext.insertImage({
-                  src: image.path,
-                  width: width,
-                  height: 200,
-                  resizeMode: "cover"
-                });
+                this.saveImage(image.path);
               })
               .catch(error => {});
           }}
@@ -115,42 +122,141 @@ class CreationScreen extends React.Component {
     );
   };
 
-  // todo todo todo 监听返回，更新发布/创建文章
+  //插入图片
+  saveImage = imagePath => {
+    const { token } = this.props.user;
+    var data = new FormData();
+    data.append("photo", {
+      uri: imagePath,
+      name: "image.jpg",
+      type: "image/jpg"
+    });
 
-  ///发布
-  publish = () => {
+    const config = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data"
+      },
+      body: data
+    };
+
+    fetch(Config.ServerRoot + "/api/image/save?api_token=" + token, config)
+      .then(response => {
+        console.log("response", response);
+        return response.text();
+      })
+      .then(photo => {
+        console.log("photo", photo);
+        //TODO:: server return photo.width/height
+        this.richtext.insertImage({
+          src: photo,
+          width: width,
+          height: 200,
+          resizeMode: "cover"
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //判断article内容是否change
+  isChange(prevACont, currentCont) {
+    if (prevACont.title != currentCont.title || prevACont.body != currentCont.body) {
+      return true;
+    }
+    return false;
+  }
+
+  // 安卓返回处理
+  backAction = () => {
     this.publishing = true;
-    const { createArticle, publishArticle, navigation } = this.props;
-    let { article } = this.state;
-    //获取editor的标题和内容
+    const { createArticle, editArticle, navigation } = this.props;
+    //内容有改动
+    if (isChange(this.gotArticle, { title, body })) {
+      // 异步获取编辑器内容
+      Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
+        .then(async ([body, title]) => {
+          //文章已经创建
+          if (this.gotArticle.id) {
+            let { data: { createArticle } } = await editArticle({
+              variables: {
+                id: this.gotArticle.id,
+                title,
+                body
+              }
+            });
+            this.publishing = false;
+            //文章发布状态
+            if (gotArticle.status > 0) {
+              navigation.replace("文章详情", { article: createArticle });
+            } else {
+              navigation.goBack();
+            }
+          } else {
+            let { data } = await createArticle({
+              variables: {
+                title,
+                body
+              },
+              refetchQueries: result => [
+                {
+                  query: draftsQuery
+                }
+              ]
+            });
+            this.publishing = false;
+            navigation.replace("私密文章");
+          }
+        })
+        .catch(error => {
+          throw new Error(error);
+        });
+    } else {
+      this.publishing = false;
+      navigation.goBack();
+    }
+  };
+
+  //点击发布
+  publish = () => {
+    //更改发布状态（防止点击发布两次）
+    this.publishing = true;
+    const { createArticle, editArticle, navigation } = this.props;
+    //异步获取编辑器内容
     Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
       .then(async ([body, title]) => {
-        //更新发布（或者发布更新）
-        if (article.id) {
-          let { data: { createArticle } } = await publishArticle({
+        //文章已经创建=>更新发布（或者发布更新）
+        if (this.gotArticle.id) {
+          let flag = { ...this.gotArticle }; //这里是保存第一次query的article（因为editArticleMutation后会使query重新fetch给gotArticle赋值）
+          // 先提交编辑后的文章
+          let { data } = await editArticle({
             variables: {
-              id: article.id,
+              id: this.gotArticle.id,
               title,
-              body
+              body,
+              is_publish: this.gotArticle.status == 0
             }
           });
           this.publishing = false;
-          //如果没有发布就发布更新或者更新发布
-          if (article.status < 1) {
-            navigation.navigate("发布分享", { article: createArticle });
+          //如果没有发布就发布更新否则更新发布
+          if (flag.status < 1) {
+            navigation.replace("发布分享", { article: data.editArticle });
           } else {
-            navigation.navigate("文章详情", { article: createArticle });
+            navigation.replace("文章详情", { article: data.editArticle });
           }
         } else {
           //创建并发布
           let { data } = await createArticle({
             variables: {
               title,
-              body
+              body,
+              is_publish: true
             }
           });
           this.publishing = false;
-          navigation.navigate("发布分享", { article: data.createArticle });
+          navigation.replace("发布分享", { article: data.createArticle });
         }
       })
       .catch(error => {
@@ -168,7 +274,7 @@ const styles = StyleSheet.create({
 
 export default compose(
   withApollo,
-  graphql(publishArticleMutation, { name: "publishArticle" }),
-  graphql(createArticleMutation, { name: "createArticle" }),
-  graphql(editArticleMutation, { name: "editArticle" })
+  graphql(createdArticleMutation, { name: "createArticle" }),
+  graphql(editArticleMutation, { name: "editArticle" }),
+  connect(store => ({ user: store.users.user }))
 )(CreationScreen);
