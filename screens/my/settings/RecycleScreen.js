@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
-import { CustomPopoverMenu } from "../../../components/Modal";
+import { OperationModal } from "../../../components/Modal";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
-import { Query } from "react-apollo";
-import { userTrashQuery } from "../../../graphql/user.graphql";
+import { Query, compose, graphql } from "react-apollo";
+import { userTrashQuery, restoreArticleMutation, deleteArticleMutation } from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 
 class RecycleScreen extends Component {
@@ -18,24 +18,26 @@ class RecycleScreen extends Component {
 
 	constructor(props) {
 		super(props);
-
+		this.handleModal = this.handleModal.bind(this);
+		this.article = {};
 		this.state = {
-			fetchingMore: true
+			fetchingMore: true,
+			modalVisible: false
 		};
 	}
 
 	render() {
-		let { navigation, drafts } = this.props;
+		let { navigation, drafts, deleteArticle, restoreArticle } = this.props;
 		return (
 			<Screen>
-				<View style={styles.container}>
-					<Header navigation={navigation} routeName={"回收站"} />
-					<Query query={userTrashQuery}>
-						{({ loading, error, data, refetch, fetchMore }) => {
-							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.user && data.user.articles)) return <SpinnerLoading />;
-							if (!(data.user.articles.length > 0)) return <BlankContent />;
-							return (
+				<Header navigation={navigation} routeName={"回收站"} />
+				<Query query={userTrashQuery}>
+					{({ loading, error, data, refetch, fetchMore }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.user && data.user.articles)) return <SpinnerLoading />;
+						if (!(data.user.articles.length > 0)) return <BlankContent />;
+						return (
+							<View style={styles.container}>
 								<FlatList
 									data={data.user.articles}
 									refreshing={loading}
@@ -77,10 +79,44 @@ class RecycleScreen extends Component {
 									}}
 									ListFooterComponent={() => (this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />)}
 								/>
-							);
-						}}
-					</Query>
-				</View>
+								<OperationModal
+									operation={["彻底删除", "恢复"]}
+									visible={this.state.modalVisible}
+									handleVisible={this.handleModal}
+									handleOperation={index => {
+										switch (index) {
+											case 0:
+												deleteArticle({
+													variables: {
+														id: this.article.id
+													},
+													refetchQueries: result => [
+														{
+															query: userTrashQuery
+														}
+													]
+												});
+												break;
+											case 1:
+												restoreArticle({
+													variables: {
+														id: this.article.id
+													},
+													refetchQueries: result => [
+														{
+															query: userTrashQuery
+														}
+													]
+												});
+												break;
+										}
+										this.handleModal();
+									}}
+								/>
+							</View>
+						);
+					}}
+				</Query>
 			</Screen>
 		);
 	}
@@ -88,7 +124,13 @@ class RecycleScreen extends Component {
 	_renderItem({ item }) {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity onPress={() => navigation.navigate("回收详情", { article: item })}>
+			<TouchableOpacity
+				onPress={() => navigation.navigate("回收详情", { article: item })}
+				onLongPress={() => {
+					this.article = item;
+					this.handleModal();
+				}}
+			>
 				<View style={styles.draftsItem}>
 					<View>
 						<Text numberOfLines={1} style={styles.timeAgo}>
@@ -103,6 +145,12 @@ class RecycleScreen extends Component {
 				</View>
 			</TouchableOpacity>
 		);
+	}
+
+	handleModal() {
+		this.setState(prevState => ({
+			modalVisible: !prevState.modalVisible
+		}));
 	}
 }
 
@@ -130,4 +178,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ drafts: store.articles.drafts }))(RecycleScreen);
+export default compose(
+	graphql(deleteArticleMutation, { name: "deleteArticle" }),
+	graphql(restoreArticleMutation, { name: "restoreArticle" }),
+	connect(store => ({ drafts: store.articles.drafts }))
+)(RecycleScreen);

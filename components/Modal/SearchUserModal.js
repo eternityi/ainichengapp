@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { Header, SingleSearchBar } from "../../components/Header";
+import { SearchTypeHeader } from "../../components/Header";
 import { HollowButton } from "../../components/Button";
 import { UserMetaGroup } from "../../components/MediaGroup";
 import { ContentEnd, LoadingMore } from "../../components/Pure";
@@ -41,15 +41,13 @@ class SearchUserModal extends Component {
 				style={{ justifyContent: "flex-end", margin: 0 }}
 			>
 				<View style={styles.container}>
-					<Header
-						routeName={true}
+					<SearchTypeHeader
+						placeholder="搜索用户"
 						navigation={navigation}
-						leftComponent={
-							<TouchableOpacity onPress={toggleVisible}>
-								<Iconfont name={"back-ios"} size={23} color={Colors.primaryFontColor} style={{ marginRight: 15 }} />
-							</TouchableOpacity>
-						}
-						rightComponent={<SingleSearchBar placeholder={"搜索好友"} keywords={keywords} changeKeywords={this.changeKeywords.bind(this)} handleSearch={() => null} />}
+						backHandler={toggleVisible}
+						keywords={keywords}
+						changeKeywords={this.changeKeywords.bind(this)}
+						handleSearch={() => null}
 					/>
 					<Query query={userFollowersQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, refetch, fetchMore }) => {

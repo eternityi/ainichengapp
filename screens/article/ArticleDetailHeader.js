@@ -10,8 +10,9 @@ import { Avatar, ContentEnd } from "../../components/Pure";
 import { HollowButton } from "../../components/Button";
 import { CustomPopoverMenu, ReportModal } from "../../components/Modal";
 
-import { Query, Mutation } from "react-apollo";
+import { Query, compose, graphql } from "react-apollo";
 import { userCategoriesQuery } from "../../graphql/user.graphql";
+import { favoriteArticleMutation } from "../../graphql/article.graphql";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -39,7 +40,7 @@ class ArticleDetailHeader extends Component {
 
   render() {
     let { reportModalVisible, includeModalVisible } = this.state;
-    let { navigation, article, share, currentUser } = this.props;
+    let { navigation, article, share, currentUser, favoriteArticle } = this.props;
     let { user } = article;
     return (
       <View>
@@ -61,13 +62,18 @@ class ArticleDetailHeader extends Component {
                   switch (index) {
                     case 0:
                       //收藏
+                      favoriteArticle({
+                        variables: {
+                          article_id: article.id
+                        }
+                      });
                       break;
                     case 1:
                       //分享
                       share();
                       break;
                     case 2:
-                      //收入
+                      //收入专题
                       this.toggleIncludeModal();
                       break;
                     case 3:
@@ -184,4 +190,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ currentUser: store.users.user }))(ArticleDetailHeader);
+export default compose(graphql(favoriteArticleMutation, { name: "favoriteArticle" }), connect(store => ({ currentUser: store.users.user })))(
+  ArticleDetailHeader
+);

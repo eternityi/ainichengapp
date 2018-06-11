@@ -4,7 +4,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, OperationModal } from "../../../components/Modal";
 import { Header, HeaderLeft } from "../../../components/Header";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query, Mutation, graphql, compose } from "react-apollo";
@@ -35,6 +35,7 @@ class DraftsScreen extends Component {
 					<Header
 						navigation={navigation}
 						search
+						searchRouteName={"搜索文章"}
 						leftComponent={
 							<HeaderLeft navigation={navigation} routeName>
 								{
@@ -93,7 +94,13 @@ class DraftsScreen extends Component {
 													offset: data.user.articles.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.user.articles && fetchMoreResult.user.articles.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user.articles &&
+															fetchMoreResult.user.articles.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});

@@ -18,6 +18,7 @@ export default class Header extends React.Component {
 			leftComponent,
 			rightComponent,
 			navigation,
+			backHandler = null,
 			goBack = true,
 			notification = false,
 			setting = false,
@@ -34,6 +35,7 @@ export default class Header extends React.Component {
 					<HeaderLeft
 						navigation={navigation}
 						routeName={routeName}
+						backHandler={backHandler}
 						goBack={goBack}
 						color={lightTabBar ? "#fff" : "#515151"}
 					/>
@@ -41,9 +43,7 @@ export default class Header extends React.Component {
 				{rightComponent ? (
 					rightComponent
 				) : (
-					<View
-						style={{ flexDirection: "row", alignItems: "center" }}
-					>
+					<View style={{ flexDirection: "row", alignItems: "center" }}>
 						{notification && (
 							<View style={{ marginLeft: 15 }}>
 								<NotificationSetting navigation={navigation} />
@@ -56,11 +56,7 @@ export default class Header extends React.Component {
 						)}
 						{search && (
 							<View style={{ marginLeft: 15 }}>
-								<Search
-									navigation={navigation}
-									color={lightTabBar ? "#fff" : "#515151"}
-									routeName={searchRouteName}
-								/>
+								<Search navigation={navigation} color={lightTabBar ? "#fff" : "#515151"} routeName={searchRouteName} />
 							</View>
 						)}
 					</View>

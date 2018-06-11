@@ -26,20 +26,18 @@ class SelectScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.toggleCreateModal = this.toggleCreateModal.bind(this);
-		//根据routeparams passed article init selectCollection
-		console.log("constructor");
+		this.article = props.navigation.getParam("article", {});
+		const { collection = {} } = this.article;
 		this.state = {
 			createModalVisible: false,
-			selectCollection: 0,
+			selectCollection: collection.id,
 			collectionName: ""
 		};
 	}
 
 	render() {
 		let { navigation, user, moveArticle } = this.props;
-		let article = navigation.getParam("article");
 		let { createModalVisible, selectCollection, collectionName } = this.state;
-		console.log("render", selectCollection);
 		return (
 			<Screen>
 				<Header
@@ -63,31 +61,35 @@ class SelectScreen extends Component {
 						{({ loading, error, data, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.collections)) return <SpinnerLoading />;
-							console.log("Query", selectCollection);
 							return data.collections.map((item, index) => {
 								return (
-									<TouchableOpacity
-										key={index}
-										style={styles.collectionItem}
-										onPress={() => {
-											this.setState(prevState => ({
-												selectCollection: index
-											}));
-											moveArticle({
-												variables: {
-													article_id: article.id,
-													collection_id: item.id
-												}
-											});
+									<Mutation mutation={moveArticleMutation} key={index}>
+										{moveArticle => {
+											return (
+												<TouchableOpacity
+													style={styles.collectionItem}
+													onPress={() => {
+														this.setState(prevState => ({
+															selectCollection: item.id
+														}));
+														moveArticle({
+															variables: {
+																article_id: this.article.id,
+																collection_id: item.id
+															}
+														});
+													}}
+												>
+													<Text>{item.name}</Text>
+													{selectCollection == item.id ? (
+														<Iconfont name="radio-check" size={22} color={Colors.themeColor} />
+													) : (
+														<Iconfont name="radio-uncheck" size={22} color={Colors.themeColor} />
+													)}
+												</TouchableOpacity>
+											);
 										}}
-									>
-										<Text>{item.name}</Text>
-										{selectCollection == index ? (
-											<Iconfont name="radio-check" size={22} color={Colors.themeColor} />
-										) : (
-											<Iconfont name="radio-uncheck" size={22} color={Colors.themeColor} />
-										)}
-									</TouchableOpacity>
+									</Mutation>
 								);
 							});
 						}}
@@ -102,7 +104,7 @@ class SelectScreen extends Component {
 								visible={createModalVisible}
 								value={collectionName}
 								handleVisible={this.toggleCreateModal}
-								changeVaule={this.changeCollectionName}
+								changeVaule={this.changeCollectionName.bind(this)}
 								submit={() => {
 									createCollection({
 										variables: {
@@ -157,4 +159,4 @@ const styles = StyleSheet.create({
 export default connect(store => ({
 	user: store.users.user,
 	collections: store.categories.collections
-}))(graphql(moveArticleMutation, { name: "moveArticle" })(SelectScreen));
+}))(SelectScreen);

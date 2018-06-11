@@ -68,48 +68,7 @@ class CategoryItem extends React.Component {
 	}
 }
 
-class CategoryItemRow extends React.Component {
-	render() {
-		let { article, category, navigation } = this.props;
-		let { submit_status } = category;
-		return (
-			<TouchableOpacity style={{ marginRight: 25 }} onPress={() => navigation.navigate("专题详情", { category })}>
-				<View style={{ position: "relative" }}>
-					<Avatar type={"category"} uri={category.logo} size={70} />
-					<View style={styles.categoryName}>
-						<Text style={{ fontSize: 13, color: "#fff", textAlign: "center" }} numberOfLines={2}>
-							{category.name}
-						</Text>
-					</View>
-				</View>
-				<View style={{ width: 70, height: 28, marginTop: 12 }}>
-					<Mutation mutation={submitArticleMutation}>
-						{submitArticle => {
-							return (
-								<HollowButton
-									name={submit_status ? submit_status : "投稿"}
-									size={12}
-									// color={submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-									color={"rgba(66,192,46,0.9)"}
-									onPress={() => {
-										submitArticle({
-											variables: {
-												category_id: category.id,
-												article_id: article.id
-											}
-										});
-									}}
-								/>
-							);
-						}}
-					</Mutation>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-}
-
-class ContributeScreen extends React.Component {
+class CategoryListScreen extends React.Component {
 	static navigationOptions = {
 		header: null
 	};
@@ -124,20 +83,29 @@ class ContributeScreen extends React.Component {
 
 	render() {
 		const { navigation, user } = this.props;
+		const type = navigation.getParam("type", "admin");
 		const article = navigation.getParam("article", {});
 		let { fetchingMore, keywords } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
 					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"category"} />
-					<Query query={topCategoriesQuery}>
+					<Query query={type == "admin" ? userAdminCategoriesQuery : topCategoriesQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.categories)) return <SpinnerLoading />;
 							if (data.categories.length < 1) return <BlankContent />;
 							return (
 								<FlatList
-									ListHeaderComponent={this._renderHeader.bind(this)}
+									ListHeaderComponent={() => {
+										return (
+											<View>
+												<View style={styles.listHeader}>
+													<Text style={styles.listHeaderText}>{type == "admin" ? "我管理的专题" : "最近投稿"}</Text>
+												</View>
+											</View>
+										);
+									}}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => <CategoryItem article={article} category={item} />}
@@ -179,68 +147,6 @@ class ContributeScreen extends React.Component {
 					</Query>
 				</View>
 			</Screen>
-		);
-	}
-
-	_renderHeader() {
-		let { user, navigation } = this.props;
-		const article = navigation.getParam("article", {});
-		return (
-			<View>
-				<Query query={userAdminCategoriesQuery} variables={{ user_id: user.id }}>
-					{({ loading, error, data, fetchMore, refetch }) => {
-						if (error) return null;
-						if (!(data && data.categories && data.categories.length > 0)) return null;
-						return (
-							<View>
-								<View style={[styles.listHeader, styles.hListHeader]}>
-									<View>
-										<Text style={styles.listHeaderText}>我管理的专题</Text>
-									</View>
-									<TouchableOpacity onPress={() => navigation.navigate("全部专题投稿", { type: "admin" })}>
-										<Text style={styles.listHeaderText}>查看全部</Text>
-									</TouchableOpacity>
-								</View>
-								<FlatList
-									style={{ paddingVertical: 10, paddingLeft: 15 }}
-									horizontal={true}
-									data={data.categories}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItemRow article={article} category={item} navigation={navigation} />}
-								/>
-							</View>
-						);
-					}}
-				</Query>
-				<Query query={topCategoriesQuery}>
-					{({ loading, error, data, fetchMore, refetch }) => {
-						if (error) return null;
-						if (!(data && data.categories && data.categories.length > 0)) return null;
-						return (
-							<View>
-								<View style={[styles.listHeader, styles.hListHeader]}>
-									<View>
-										<Text style={styles.listHeaderText}>最近投稿</Text>
-									</View>
-									<TouchableOpacity onPress={() => navigation.navigate("全部专题投稿", { type: "contribute" })}>
-										<Text style={styles.listHeaderText}>查看全部</Text>
-									</TouchableOpacity>
-								</View>
-								<FlatList
-									style={{ paddingVertical: 10, paddingLeft: 15 }}
-									horizontal={true}
-									data={data.categories}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItemRow article={article} category={item} navigation={navigation} />}
-								/>
-							</View>
-						);
-					}}
-				</Query>
-				<View style={styles.listHeader}>
-					<Text style={styles.listHeaderText}>推荐投稿</Text>
-				</View>
-			</View>
 		);
 	}
 
@@ -304,4 +210,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ user: store.users.user }))(ContributeScreen);
+export default connect(store => ({ user: store.users.user }))(CategoryListScreen);

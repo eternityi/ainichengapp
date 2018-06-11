@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions } from "react-native";
+import Screen from "../../Screen";
+
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import PlainArticleItem from "../../../components/Article/PlainArticleItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import { OperationModal } from "../../../components/Modal";
-import Screen from "../../Screen";
+import PlainArticleItem from "../../../components/Article/PlainArticleItem";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 import { favoritedArticlesQuery } from "../../../graphql/user.graphql";
+import { favoriteArticleMutation } from "../../../graphql/article.graphql";
 import { Mutation, Query } from "react-apollo";
 
 const { width, height } = Dimensions.get("window");
@@ -22,6 +24,7 @@ class FavoritedArticlesScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.handleModal = this.handleModal.bind(this);
+		this.article = {};
 		this.state = {
 			modalVisible: false,
 			fetchingMore: true
@@ -51,7 +54,10 @@ class FavoritedArticlesScreen extends Component {
 													navigation.navigate("文章详情", {
 														article: item
 													})}
-												onLongPress={this.handleModal}
+												onLongPress={() => {
+													this.article = item;
+													this.handleModal();
+												}}
 											>
 												<PlainArticleItem article={item} showAuthorName navigation={navigation} />
 											</TouchableOpacity>
@@ -70,7 +76,13 @@ class FavoritedArticlesScreen extends Component {
 													offset: data.user.articles.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.user.articles && fetchMoreResult.user.articles.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user.articles &&
+															fetchMoreResult.user.articles.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
@@ -96,14 +108,26 @@ class FavoritedArticlesScreen extends Component {
 							);
 						}}
 					</Query>
-					<OperationModal
-						operation={["取消收藏"]}
-						visible={modalVisible}
-						handleVisible={this.handleModal}
-						handleOperation={index => {
-							this.handleModal();
+					<Mutation mutation={favoriteArticleMutation}>
+						{favoriteArticle => {
+							return (
+								<OperationModal
+									operation={["取消收藏"]}
+									visible={modalVisible}
+									handleVisible={this.handleModal}
+									handleOperation={index => {
+										favoriteArticle({
+											variables: {
+												article_id: this.article.id
+											},
+											refetchQueries: result => [{ query: favoritedArticlesQuery }]
+										});
+										this.handleModal();
+									}}
+								/>
+							);
 						}}
-					/>
+					</Mutation>
 				</View>
 			</Screen>
 		);

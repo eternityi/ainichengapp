@@ -4,7 +4,7 @@ import { NavigationActions } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { Header, SingleSearchBar } from "../../components/Header";
+import { SearchTypeHeader } from "../../components/Header";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 import { CustomPopoverMenu } from "../../components/Modal";
 import Screen from "../Screen";
@@ -34,15 +34,21 @@ class ArticlesScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <Header
-            routeName={true}
+          <SearchTypeHeader
             navigation={navigation}
-            rightComponent={
-              <SingleSearchBar placeholder={"搜索文章的内容或标题"} keywords={keywords} changeKeywords={this.changeKeywords.bind(this)} handleSearch={this.handleSearch.bind(this)} />
-            }
+            placeholder={"搜索文章的内容或标题"}
+            type={"article"}
+            keywords={keywords}
+            changeKeywords={this.changeKeywords.bind(this)}
+            handleSearch={this.handleSearch.bind(this)}
           />
           {articles.length > 0 && (
-            <FlatList data={articles} keyExtractor={(item, index) => index.toString()} renderItem={this._renderRelatedArticle} ListHeaderComponent={this._renderSearchHeader} />
+            <FlatList
+              data={articles}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={this._renderRelatedArticle}
+              ListHeaderComponent={this._renderSearchHeader}
+            />
           )}
         </View>
       </Screen>

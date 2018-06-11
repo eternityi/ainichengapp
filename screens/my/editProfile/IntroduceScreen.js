@@ -18,15 +18,14 @@ class IntroduceScreen extends Component {
 
 	constructor(props) {
 		super(props);
-
 		this.state = {
-			introduction: this.props.navigation.state.params.introduction
+			introduction: props.navigation.getParam("introduction", "")
 		};
 	}
 
 	render() {
 		const { navigation } = this.props;
-		const { introduction } = this.state;
+		let { introduction } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -70,7 +69,7 @@ class IntroduceScreen extends Component {
 							autoFocus
 							style={styles.textInput}
 							onChangeText={introduction => this.setState({ introduction })}
-							value={introduction + ""}
+							value={introduction ? introduction + "" : ""}
 						/>
 					</View>
 				</View>

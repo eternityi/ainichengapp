@@ -181,6 +181,7 @@ query userDetailQuery($id: Int!) {
     }
 }
 
+# 用户公开文章
 query userArticlesQuery($offset: Int, $user_id: Int!) {
     articles(offset: $offset, user_id: $user_id) {
         id
@@ -198,6 +199,10 @@ query userArticlesQuery($offset: Int, $user_id: Int!) {
             name
             avatar
         }
+        collection {
+            id
+            name
+        }
     }
 }
 
@@ -209,6 +214,10 @@ query draftsQuery($offset: Int) {
             title
             updated_at
             time_ago
+            collection {
+                id
+                name
+            }
         }
     }
 }

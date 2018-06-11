@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity, TextInput, Platform } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchTypeHeader } from "../../components/Header";
@@ -13,14 +14,14 @@ import { userFriendsQuery } from "../../graphql/user.graphql";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
-class NewChatScreen extends Component {
+// TODO 根据type查找不同的数据
+class ClassifyScreen extends Component {
 	static navigationOptions = {
 		header: null
 	};
 
 	constructor(props) {
 		super(props);
-
 		this.state = {
 			keywords: "",
 			fetchingMore: true
@@ -138,4 +139,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ follows: store.users.follows }))(NewChatScreen);
+export default ClassifyScreen;

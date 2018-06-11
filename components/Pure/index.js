@@ -12,6 +12,7 @@ import LoadingMore from "./LoadingMore";
 import SpinnerLoading from "./SpinnerLoading";
 import RefreshControl from "./RefreshControl";
 import SearchBar from "./SearchBar";
+import SearchTypeBar from "./SearchTypeBar";
 
 // export { SearchBar };
 // export { ContentEnd };
@@ -31,5 +32,6 @@ export {
 	LoadingMore,
 	SpinnerLoading,
 	RefreshControl,
-	SearchBar
+	SearchBar,
+	SearchTypeBar
 };

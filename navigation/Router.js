@@ -4,7 +4,8 @@ import MainTabNavigator from "./MainTabNavigator";
 import CreationScreen from "../screens/creation/CreationScreen";
 import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
-import ArticleContributeScreen from "../screens/creation/ContributeScreen";
+import ContributeArticleScreen from "../screens/creation/ContributeScreen";
+import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -128,7 +129,10 @@ export default {
     screen: PublishedScreen
   },
   文章投稿: {
-    screen: ArticleContributeScreen
+    screen: ContributeArticleScreen
+  },
+  全部专题投稿: {
+    screen: ContributeCategoryListScreen
   },
   设置: {
     screen: SettingsScreen

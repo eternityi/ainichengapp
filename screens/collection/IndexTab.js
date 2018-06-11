@@ -57,7 +57,7 @@ class IndexTab extends Component {
 								onEndReached={() => {
 									if (data.articles) {
 										fetchMore({
-											varibales: {
+											variables: {
 												offset: data.articles.length
 											},
 											updateQuery: (prev, { fetchMoreResult }) => {

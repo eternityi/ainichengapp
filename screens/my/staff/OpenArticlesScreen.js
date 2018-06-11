@@ -34,7 +34,7 @@ class OpenArticlesScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
+					<Header navigation={navigation} search searchRouteName={"搜索文章"} />
 					<Query
 						query={userArticlesQuery}
 						variables={{

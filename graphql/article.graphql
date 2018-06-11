@@ -47,6 +47,7 @@ mutation moveArticleMutation($article_id: Int!, $collection_id: Int!) {
 	}
 }
 
+# 收藏文章
 mutation favoriteArticleMutation($article_id: Int!, $undo: Boolean) {
 	favoriteArticle(article_id: $article_id, undo: $undo) {
 		id
