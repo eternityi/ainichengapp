@@ -17,92 +17,93 @@ const { width, height } = Dimensions.get("window");
 const official_categories = [
   {
     id: 1,
-    avatar: "https://dongmeiwei.com/images/app/followed.png",
+    avatar: "https://ainicheng.com/app/follows.png",
     name: "关注的专题",
-    type: "全部关注"
+    type: "全部关注",
+    filter: "关注的专题"
   },
   {
-    id: 2,
-    avatar: "https://dongmeiwei.com/images/app/rank.png",
-    name: "排行榜",
-    type: "排行榜"
-  },
-  {
-    id: 11,
-    avatar: "https://dongmeiwei.com/images/app/choiceness.png",
+    id: 64,
+    avatar: "https://www.ainicheng.com/app/teaching.png",
     name: "官方课堂",
     type: "专题详情"
   },
   {
-    id: 102,
-    avatar: "https://dongmeiwei.com/images/app/wallet.png",
-    name: "我的糖果",
-    type: "专题详情"
-  },
-  {
-    id: 102,
-    avatar: "https://dongmeiwei.com/images/app/fruits.png",
-    name: "水果大全",
+    id: 11,
+    avatar: "https://ainicheng.com/app/moba.png",
+    name: "MOBA",
     type: "专题详情"
   },
   {
     id: 101,
-    avatar: "https://dongmeiwei.com/images/app/ccake.png",
-    name: "中式糕点",
-    type: "专题详情"
-  },
-  {
-    id: 58,
-    avatar: "https://dongmeiwei.com/images/app/xiangcai.png",
-    name: "湘菜大全",
-    type: "专题详情"
-  },
-  {
-    id: 19,
-    avatar: "https://dongmeiwei.com/images/app/yuecai.png",
-    name: "粤菜大全",
-    type: "专题详情"
-  },
-  {
-    id: 18,
-    avatar: "https://dongmeiwei.com/images/app/chuangcai.png",
-    name: "川菜大全",
-    type: "专题详情"
-  },
-  {
-    id: 60,
-    avatar: "https://dongmeiwei.com/images/app/lucai.png",
-    name: "鲁菜大全",
-    type: "专题详情"
-  },
-  {
-    id: 69,
-    avatar: "https://dongmeiwei.com/images/app/cake.png",
-    name: "西式糕点",
+    avatar: "https://ainicheng.com/app/sheji.png",
+    name: "射击",
     type: "专题详情"
   },
   {
     id: 99,
-    avatar: "https://dongmeiwei.com/images/app/mincai.png",
-    name: "闽菜大全",
+    avatar: "https://ainicheng.com/app/jingsong.png",
+    name: "惊悚",
+    type: "专题详情"
+  },
+  {
+    id: 69,
+    avatar: "https://ainicheng.com/app/gedou.png",
+    name: "格斗",
+    type: "专题详情"
+  },
+  {
+    id: 58,
+    avatar: "https://ainicheng.com/app/maoxian.png",
+    name: "冒险",
+    type: "专题详情"
+  },
+  {
+    id: 19,
+    avatar: "https://ainicheng.com/app/jingsu.png",
+    name: "竞速",
+    type: "专题详情"
+  },
+  {
+    id: 18,
+    avatar: "https://ainicheng.com/app/kapai.png",
+    name: "卡牌",
+    type: "专题详情"
+  },
+  {
+    id: 60,
+    avatar: "https://ainicheng.com/app/qipai.png",
+    name: "棋牌",
+    type: "专题详情"
+  },
+  {
+    id: 99,
+    avatar: "https://ainicheng.com/app/jishizhanlue.png",
+    name: "即时战略",
     type: "专题详情"
   },
   {
     id: 100,
-    avatar: "https://dongmeiwei.com/images/app/huicai.png",
-    name: "徽菜大全",
+    avatar: "https://ainicheng.com/app/jingyingcelue.png",
+    name: "经营策略",
+    type: "专题详情"
+  },
+  {
+    id: 55,
+    avatar: "https://ainicheng.com/app/moniyangc.png",
+    name: "模拟养成",
     type: "专题详情"
   },
   {
     id: 61,
-    avatar: "https://dongmeiwei.com/images/app/sucai.png",
-    name: "苏菜大全",
+    avatar: "https://ainicheng.com/app/yizhi.png",
+    name: "益智",
     type: "专题详情"
   },
   {
     id: 82,
-    avatar: "https://dongmeiwei.com/images/app/zhecai.png",
-    name: "浙菜大全",
+    avatar: "https://ainicheng.com/app/music.png",
+    name: "音乐",
     type: "专题详情"
   }
 ];
@@ -205,24 +206,6 @@ class CategoriesScreen extends React.Component {
           </View>
         </View>
         <DivisionLine />
-        <TouchableOpacity
-          style={styles.followCategory}
-          onPress={() =>
-            this.props.navigation.navigate("全部关注", {
-              filter: "只看专题"
-            })}
-        >
-          <Image style={{ marginRight: 10, width: 22, height: 22 }} source={require("../../assets/images/xinxin.png")} />
-          <Text
-            style={{
-              fontSize: 14,
-              color: Colors.primaryFontColor
-            }}
-          >
-            我关注的专题
-          </Text>
-        </TouchableOpacity>
-        <DivisionLine />
       </View>
     );
   };
@@ -230,7 +213,11 @@ class CategoriesScreen extends React.Component {
   _renderColumnItem = ({ item, index }) => {
     const { navigate } = this.props.navigation;
     return (
-      <TouchableOpacity key={index} style={{ flex: 1 }} onPress={() => navigate(item.type, { category: item })}>
+      <TouchableOpacity
+        key={index}
+        style={{ flex: 1 }}
+        onPress={() => navigate(item.type, item.type == "专题详情" ? { category: item } : { filter: item.filter })}
+      >
         <OfficialColumn data={item} />
       </TouchableOpacity>
     );

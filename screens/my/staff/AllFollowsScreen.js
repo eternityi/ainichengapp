@@ -61,9 +61,6 @@ class AllFollowsScreen extends Component {
 											case 3:
 												this.setState({ filter: "只看文集" });
 												break;
-											case 4:
-												this.setState({ filter: "只看推送更新" });
-												break;
 										}
 									}}
 									triggerComponent={
@@ -85,7 +82,7 @@ class AllFollowsScreen extends Component {
 											<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
 										</View>
 									}
-									options={["全部关注", "只看用户", "只看专题", "只看文集", "只看推送更新"]}
+									options={["全部关注", "只看用户", "只看专题", "只看文集"]}
 								/>
 							</HeaderLeft>
 						}

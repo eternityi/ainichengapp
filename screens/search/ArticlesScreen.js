@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import { ScrollView, Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
-import { NavigationActions } from "react-navigation";
 
+import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchTypeHeader } from "../../components/Header";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 import { CustomPopoverMenu } from "../../components/Modal";
-import Screen from "../Screen";
 
 import { connect } from "react-redux";
-import gql from "graphql-tag";
 import { graphql, Query } from "react-apollo";
+import { hotArticlesQuery } from "../../graphql/article.graphql";
 
+// 搜索不同集合下的article
 class ArticlesScreen extends Component {
   static navigationOptions = {
     header: null
@@ -20,35 +21,74 @@ class ArticlesScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.handleSearch = this.handleSearch.bind(this);
-    this._renderRelatedArticle = this._renderRelatedArticle.bind(this);
     this.state = {
       keywords: "",
-      articles: []
+      fetching: false,
+      fetchingMore: true
     };
   }
 
   render() {
     let { renderItem, search_detail, navigation } = this.props;
-    let { keywords, articles } = this.state;
+    let { keywords, fetching, fetchingMore } = this.state;
+    // 把type传递给query的variable 获取不同集合下的article
+    let type = navigation.getParam("type", "user");
     return (
       <Screen>
         <View style={styles.container}>
           <SearchTypeHeader
             navigation={navigation}
             placeholder={"搜索文章的内容或标题"}
-            type={"article"}
             keywords={keywords}
             changeKeywords={this.changeKeywords.bind(this)}
             handleSearch={this.handleSearch.bind(this)}
           />
-          {articles.length > 0 && (
-            <FlatList
-              data={articles}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this._renderRelatedArticle}
-              ListHeaderComponent={this._renderSearchHeader}
-            />
+          {fetching && (
+            <Query query={hotArticlesQuery}>
+              {({ loading, error, data, refetch, fetchMore }) => {
+                if (error) return <LoadingError reload={() => refetch()} />;
+                if (!(data && data.articles)) return <SpinnerLoading />;
+                if (data.articles.length < 0) return <BlankContent />;
+                return (
+                  <FlatList
+                    ListHeaderComponent={this._renderSearchHeader.bind(this)}
+                    data={data.articles}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => {
+                      return <SearchArticleItem navigation={navigation} keywords={keywords} article={item} />;
+                    }}
+                    onEndReachedThreshold={0.3}
+                    onEndReached={() => {
+                      if (data.articles) {
+                        fetchMore({
+                          variables: {
+                            offset: data.articles.length
+                          },
+                          updateQuery: (prev, { fetchMoreResult }) => {
+                            if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                              this.setState({
+                                fetchingMore: false
+                              });
+                              return prev;
+                            }
+                            return Object.assign({}, prev, {
+                              articles: [...prev.articles, ...fetchMoreResult.articles]
+                            });
+                          }
+                        });
+                      } else {
+                        this.setState({
+                          fetchingMore: false
+                        });
+                      }
+                    }}
+                    ListFooterComponent={() => {
+                      return fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                    }}
+                  />
+                );
+              }}
+            </Query>
           )}
         </View>
       </Screen>
@@ -57,14 +97,7 @@ class ArticlesScreen extends Component {
 
   _renderSearchHeader() {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 20,
-          marginTop: 20
-        }}
-      >
+      <View style={styles.listHeader}>
         <View>
           <Text style={{ fontSize: 14, color: Colors.tintFontColor }}>相关文章</Text>
         </View>
@@ -87,41 +120,15 @@ class ArticlesScreen extends Component {
     );
   }
 
-  _renderRelatedArticle({ item, index }) {
-    let { navigation } = this.props;
-    let { keywords } = this.state;
-    return <SearchArticleItem navigation={navigation} keywords={keywords} article={item} />;
-  }
-
-  _matchingText(keywords, content) {
-    // todo 可以替换 但是不能创建React Element
-    // var reg = new RegExp(keywords,"g");
-    // if(reg.test(content)&&keywords) {
-    //  // var highlightKeywords = React.createElement(Text,{style:{styles.focused}},keywords);
-    //  var enhanceContent = content.replace(reg,`<Text style={styles.focused}>${keywords}</Text>`);
-    //  return enhanceContent;
-    // }else {
-    //  return content;
-    // }
-    return content;
-  }
-
   changeKeywords(keywords) {
     this.setState({
       keywords
     });
   }
 
-  handleSearch(keywords) {
-    // let { navigation } = this.props;
-    // let navigateAction = NavigationActions.replace({
-    //   key: navigation.state.key,
-    //   routeName: "搜索详情",
-    //   params: { keywords }
-    // });
-    // navigation.dispatch(navigateAction);
+  handleSearch() {
     this.setState({
-      articles: this.props.search_detail.articles
+      fetching: true
     });
   }
 }
@@ -130,6 +137,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.skinColor
+  },
+  listHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 10
   }
 });
 

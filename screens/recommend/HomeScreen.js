@@ -104,7 +104,7 @@ class HomeScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("推荐专题")}>
             <View style={{ alignItems: "center" }}>
-              <Iconfont name={"category-rotate"} size={28} color={Colors.themeColor} />
+              <Iconfont name={"category-rotate"} size={28} color="#FF9D23" />
               <View style={{ marginTop: 10 }}>
                 <Text style={styles.classify}>推荐专题</Text>
               </View>

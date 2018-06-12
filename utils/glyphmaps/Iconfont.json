@@ -79,7 +79,7 @@
   "browse": 58885,
   "email": 59019,
   "email-fill": 58889,
-  "business": 59213,
+  "identity": 59213,
   "message": 59234,
   "message-outline": 59235,
   "upload": 59013,
@@ -99,14 +99,10 @@
   "radio-check": 60612,
   "radio-uncheck": 60613,
   "food": 58894,
-  "play": 58901,
-  "paused": 58902,
-  "play-circle": 58923,
-  "paused-circle": 58883,
-  "fullscreen": 58902,
   "game": 59008,
-  "rocker": 58962,
   "share-square": 58966,
   "publish": 58915,
-  "published": 58916
+  "published": 58916,
+  "find": 59199,
+  "balloon": 58917
 }

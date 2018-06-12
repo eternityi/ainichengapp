@@ -6,6 +6,7 @@ import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { HollowButton } from "../../components/Button";
+import { CategoryContributeGroup } from "../../components/MediaGroup";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -16,59 +17,6 @@ import { submitArticleMutation, userAdminCategoriesQuery } from "../../graphql/u
 const { width, height } = Dimensions.get("window");
 
 class CategoryItem extends React.Component {
-	render() {
-		let { article, category, navigation } = this.props;
-		let { submit_status } = category;
-		return (
-			<TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate("专题详情", { category })}>
-				<View>
-					<Avatar type={"category"} uri={category.logo} size={38} />
-				</View>
-				<View style={styles.categoryItemRight}>
-					<View style={styles.categoryItemInfo}>
-						<View>
-							<Text style={styles.categoryItemTitle}>{category.name}</Text>
-						</View>
-						<View>
-							<Text numberOfLines={1} style={styles.categoryItemMeta}>
-								{category.count_articles + "篇文章  " + category.count_follows + "人关注" || ""}
-							</Text>
-						</View>
-						<View>
-							<Text numberOfLines={1} style={styles.categoryItemMeta}>
-								投稿需要管理员审核
-							</Text>
-						</View>
-					</View>
-					<View style={{ width: 60, height: 28 }}>
-						<Mutation mutation={submitArticleMutation}>
-							{submitArticle => {
-								return (
-									<HollowButton
-										name={submit_status ? submit_status : "投稿"}
-										size={12}
-										// color={submit_status.indexOf("投稿") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-										color={"rgba(66,192,46,0.9)"}
-										onPress={() => {
-											submitArticle({
-												variables: {
-													category_id: category.id,
-													article_id: article.id
-												}
-											});
-										}}
-									/>
-								);
-							}}
-						</Mutation>
-					</View>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-}
-
-class CategoryItemRow extends React.Component {
 	render() {
 		let { article, category, navigation } = this.props;
 		let { submit_status } = category;
@@ -129,7 +77,7 @@ class ContributeScreen extends React.Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"category"} />
+					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
 					<Query query={topCategoriesQuery}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -140,7 +88,9 @@ class ContributeScreen extends React.Component {
 									ListHeaderComponent={this._renderHeader.bind(this)}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItem article={article} category={item} />}
+									renderItem={({ item, index }) => (
+										<CategoryContributeGroup article={article} category={item} navigation={navigation} />
+									)}
 									refreshing={loading}
 									onRefresh={() => {
 										refetch();
@@ -206,7 +156,7 @@ class ContributeScreen extends React.Component {
 									horizontal={true}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItemRow article={article} category={item} navigation={navigation} />}
+									renderItem={({ item, index }) => <CategoryItem article={article} category={item} navigation={navigation} />}
 								/>
 							</View>
 						);
@@ -231,7 +181,7 @@ class ContributeScreen extends React.Component {
 									horizontal={true}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItemRow article={article} category={item} navigation={navigation} />}
+									renderItem={({ item, index }) => <CategoryItem article={article} category={item} navigation={navigation} />}
 								/>
 							</View>
 						);
@@ -255,31 +205,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colors.skinColor
-	},
-	categoryItem: {
-		padding: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightBorderColor,
-		flexDirection: "row"
-	},
-	categoryItemRight: {
-		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		marginLeft: 10
-	},
-	categoryItemInfo: {
-		flex: 1,
-		marginRight: 15
-	},
-	categoryItemTitle: {
-		fontSize: 16,
-		color: Colors.primaryFontColor
-	},
-	categoryItemMeta: {
-		marginTop: 6,
-		fontSize: 13,
-		color: Colors.tintFontColor
 	},
 	listHeader: {
 		paddingHorizontal: 15,

@@ -6,86 +6,86 @@ import OfficialColumn from "../../components/Category/OfficialColumn";
 const official_categories = [
 	{
 		id: 1,
-		avatar: "https://dongmeiwei.com/images/app/follows.png",
+		avatar: "https://ainicheng.com/app/follows.png",
 		name: "全部关注",
 		type: "全部关注"
 	},
 	{
 		id: 2,
-		avatar: "https://www.dongmeiwei.com/images/app/rank.png",
+		avatar: "https://www.ainicheng.com/app/ranking.png",
 		name: "排行榜",
 		type: "排行榜"
 	},
 	{
-		id: 11,
-		avatar: "https://www.dongmeiwei.com/images/app/choiceness.png",
+		id: 64,
+		avatar: "https://www.ainicheng.com/app/teaching.png",
 		name: "官方课堂",
 		type: "专题详情"
 	},
 	{
-		id: 102,
-		avatar: "https://dongmeiwei.com/images/app/fruits.png",
-		name: "水果",
+		id: 11,
+		avatar: "https://ainicheng.com/app/moba.png",
+		name: "MOBA",
 		type: "专题详情"
 	},
 	{
 		id: 101,
-		avatar: "https://dongmeiwei.com/images/app/ccake.png",
-		name: "中式糕点",
+		avatar: "https://ainicheng.com/app/sheji.png",
+		name: "射击",
 		type: "专题详情"
 	},
 	{
 		id: 58,
-		avatar: "https://dongmeiwei.com/images/app/xiangcai.png",
-		name: "湘菜",
+		avatar: "https://ainicheng.com/app/maoxian.png",
+		name: "冒险",
 		type: "专题详情"
 	},
 	{
 		id: 19,
-		avatar: "https://dongmeiwei.com/images/app/yuecai.png",
-		name: "粤菜",
+		avatar: "https://ainicheng.com/app/jingsu.png",
+		name: "竞速",
 		type: "专题详情"
 	},
 	{
 		id: 18,
-		avatar: "https://dongmeiwei.com/images/app/chuangcai.png",
-		name: "川菜",
+		avatar: "https://ainicheng.com/app/kapai.png",
+		name: "卡牌",
 		type: "专题详情"
 	},
 	{
 		id: 60,
-		avatar: "https://dongmeiwei.com/images/app/lucai.png",
-		name: "鲁菜",
+		avatar: "https://ainicheng.com/app/qipai.png",
+		name: "棋牌",
 		type: "专题详情"
 	},
 	{
 		id: 69,
-		avatar: "https://dongmeiwei.com/images/app/cake.png",
-		name: "西式糕点",
+		avatar: "https://ainicheng.com/app/gedou.png",
+		name: "格斗",
 		type: "专题详情"
 	},
 	{
 		id: 99,
-		avatar: "https://dongmeiwei.com/images/app/mincai.png",
-		name: "闽菜",
+		avatar: "https://ainicheng.com/app/jishizhanlue.png",
+		name: "即时战略",
 		type: "专题详情"
 	},
 	{
 		id: 100,
-		avatar: "https://dongmeiwei.com/images/app/huicai.png",
-		name: "徽菜",
+		avatar: "https://ainicheng.com/app/jingyingcelue.png",
+		name: "经营策略",
 		type: "专题详情"
 	},
 	{
 		id: 61,
-		avatar: "https://dongmeiwei.com/images/app/sucai.png",
-		name: "苏菜",
+		avatar: "https://ainicheng.com/app/yizhi.png",
+		name: "益智",
 		type: "专题详情"
 	},
 	{
 		id: 82,
-		avatar: "https://dongmeiwei.com/images/app/zhecai.png",
-		name: "浙菜",
+		avatar: "https://ainicheng.com/app/music.png",
+		name: "音乐",
 		type: "专题详情"
 	}
 ];

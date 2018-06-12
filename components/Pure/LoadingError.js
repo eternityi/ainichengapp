@@ -12,7 +12,7 @@ class LoadingError extends Component {
 		return (
 			<View style={styles.container}>
 				{children ? children : <Text style={{ fontSize, color: Colors.tintFontColor, marginBottom: 12 }}>哎呀，好像出了点问题( ´◔ ‸◔`)</Text>}
-				<Iconfont name={"food"} size={size} color={Colors.lightFontColor} />
+				<Iconfont name={"balloon"} size={size} color={Colors.lightFontColor} />
 				<View style={styles.reload}>
 					<HollowButton size={16} onPress={reload} name="重新加载" color={Colors.themeColor} />
 				</View>

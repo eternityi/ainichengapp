@@ -10,7 +10,7 @@ import { UserMetaGroup } from "../../components/MediaGroup";
 import { ContentEnd, LoadingMore } from "../../components/Pure";
 
 import { Query } from "react-apollo";
-import { userFollowersQuery } from "../../../graphql/user.graphql";
+import { userFollowingsQuery } from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -49,7 +49,7 @@ class SearchUserModal extends Component {
 						changeKeywords={this.changeKeywords.bind(this)}
 						handleSearch={() => null}
 					/>
-					<Query query={userFollowersQuery} variables={{ user_id: user.id }}>
+					<Query query={userFollowingsQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (!(data && data.users)) return null;
 							return (

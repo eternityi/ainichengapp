@@ -23,6 +23,7 @@ class HeaderLeft extends Component {
           </TouchableOpacity>
         )}
         <Text style={{ fontSize: 17, color }}>{routeName ? routeName : navigation.state.routeName}</Text>
+        {children}
       </View>
     );
   }

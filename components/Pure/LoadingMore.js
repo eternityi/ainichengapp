@@ -7,7 +7,7 @@ import { Iconfont } from "../../utils/Fonts";
 
 class LoadingMore extends Component {
   render() {
-    let { size = 18, fontSize = 12, color = Colors.themeColor, type = "Circle", isVisible = true } = this.props;
+    let { size = 18, fontSize = 12, color = Colors.themeColor, type = "FadingCircleAlt", isVisible = true } = this.props;
     return (
       <View style={styles.loadingMore}>
         <Spinner isVisible={isVisible} size={size} type={type} color={color} />

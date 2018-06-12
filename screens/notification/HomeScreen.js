@@ -3,7 +3,7 @@ import { ScrollView, FlatList, StyleSheet, Text, View, Button, TextInput, Toucha
 import { Iconfont } from "../../utils/Fonts";
 import Color from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, Find } from "../../components/Pure";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
@@ -33,7 +33,11 @@ class HomeScreen extends React.Component {
     return (
       <Screen>
         <Header navigation={navigation} goBack={false} notification search />
-        <ScrollView style={styles.container} removeClippedSubviews={true} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}>
+        <ScrollView
+          style={styles.container}
+          removeClippedSubviews={true}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}
+        >
           <View style={styles.menuWrap}>
             <Query query={unreadsQuery}>
               {({ loading, error, data }) => {
@@ -89,7 +93,7 @@ class HomeScreen extends React.Component {
             {({ loading, error, data, refetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.user)) return <SpinnerLoading />;
-              if (data.user.chats.length < 1) return <BlankContent />;
+              if (data.user.chats.length < 1) return <Find navigation={navigation} />;
               return (
                 <FlatList
                   data={data.user.chats}

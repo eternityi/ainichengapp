@@ -13,7 +13,7 @@ class SearchTypeBar extends Component {
 				routeName={true}
 				navigation={navigation}
 				rightComponent={
-					<TouchableWithoutFeedback onPress={() => navigation.navigate("分类搜索", { type })}>
+					<TouchableWithoutFeedback onPress={() => navigation.navigate(type)}>
 						<View style={styles.searchBar}>
 							<Text style={styles.placeholder}>{placeholder}</Text>
 							<View style={styles.searchButton}>

@@ -110,6 +110,7 @@ import CollectionHomeScreen from "../screens/collection/HomeScreen";
 // search
 import SearchHomeScreen from "../screens/search/HomeScreen";
 import SearchArticlesScreen from "../screens/search/ArticlesScreen";
+import SearchCategoriesScreen from "../screens/search/CategoriesScreen";
 import SearchDetailScreen from "../screens/search/DetailScreen";
 import RelatedUsersScreen from "../screens/search/RelatedUsersScreen";
 import RelatedCategoriesScreen from "../screens/search/RelatedCategoriesScreen";
@@ -184,6 +185,9 @@ export default {
   },
   搜索文章: {
     screen: SearchArticlesScreen
+  },
+  搜索专题: {
+    screen: SearchCategoriesScreen
   },
   相关用户: {
     screen: RelatedUsersScreen

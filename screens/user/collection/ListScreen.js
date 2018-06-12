@@ -51,7 +51,7 @@ class ListScreen extends Component {
 						routeName="文集"
 						rightComponent={
 							is_self ? (
-								<TouchableOpacity onPress={() => navigation.navigate("文集排序", { user })}>
+								<TouchableOpacity onPress={() => navigation.navigate("文集排序", { collections: this.collections })}>
 									<Text
 										style={{
 											fontSize: 17,
@@ -69,6 +69,8 @@ class ListScreen extends Component {
 							{({ loading, error, data, refetch, fetchMore }) => {
 								if (error) return <LoadingError reload={() => refetch()} />;
 								if (!(data && data.collections)) return <SpinnerLoading />;
+								if (data.collections.length < 1) return <BlankContent />;
+								this.collections = data.collections;
 								return (
 									<FlatList
 										data={data.collections}

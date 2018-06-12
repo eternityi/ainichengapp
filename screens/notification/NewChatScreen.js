@@ -49,11 +49,6 @@ class NewChatScreen extends Component {
 								<FlatList
 									data={data.user.friends}
 									keyExtractor={(item, index) => index.toString()}
-									getItemLayout={(data, index) => ({
-										length: 77,
-										offset: 77 * index,
-										index
-									})}
 									renderItem={this._renderFriendItem}
 									getItemLayout={(data, index) => ({
 										length: 77,

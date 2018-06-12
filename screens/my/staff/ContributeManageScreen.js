@@ -1,25 +1,11 @@
 import React from "react";
-import {
-	Image,
-	Platform,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-	Button,
-	FlatList,
-	Dimensions
-} from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, Dimensions } from "react-native";
 
 import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
 import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
-import {
-	DivisionLine,
-	ContentEnd,
-	LoadingError
-} from "../../../components/Pure";
+import { DivisionLine, ContentEnd, LoadingError } from "../../../components/Pure";
 import { HollowButton } from "../../../components/Button";
 
 import { connect } from "react-redux";
@@ -66,32 +52,40 @@ class ContributeManageScreen extends React.Component {
 								}}
 							</Query>
 						**/}
-					{
-						// 测试数据(预览)
-						<View style={styles.categoryItem}>
-							<View style={styles.itemInfo}>
-								<View>
-									<Text style={styles.darkText}>
-										向
-										<Text style={styles.title}>
-											《爱你哦小宝宝》
-										</Text>
-										投稿
-									</Text>
-								</View>
-								<View>
-									<Text style={styles.grayText}>已撤回/被拒绝</Text>
-								</View>
+					<View style={styles.categoryItem}>
+						<View style={styles.itemInfo}>
+							<View>
+								<Text style={styles.darkText}>
+									向
+									<Text style={styles.title}>《爱你哦小宝宝》</Text>
+									投稿
+								</Text>
 							</View>
-							<View style={styles.button}>
-								<HollowButton
-									name={"投稿"}
-									size={12}
-									onPress={() => null}
-								/>
+							<View>
+								<Text style={styles.grayText}>已撤回/被拒绝</Text>
 							</View>
 						</View>
-					}
+						<View style={styles.button}>
+							<HollowButton name={"投稿"} size={12} onPress={() => null} />
+						</View>
+					</View>
+					<View style={styles.categoryItem}>
+						<View style={styles.itemInfo}>
+							<View>
+								<Text style={styles.darkText}>
+									向
+									<Text style={styles.title}>《都是测试啊》</Text>
+									投稿
+								</Text>
+							</View>
+							<View>
+								<Text style={styles.grayText}>审核中</Text>
+							</View>
+						</View>
+						<View style={styles.button}>
+							<HollowButton name={"撤回"} size={12} color={Colors.themeColor} onPress={() => null} />
+						</View>
+					</View>
 
 					<View
 						style={[
@@ -138,31 +132,23 @@ class ContributeManageScreen extends React.Component {
 								}}
 							</Query>
 						**/}
-					{
-						// 测试数据(预览)
-						<View style={styles.categoryItem}>
-							<View style={styles.itemInfo}>
-								<View>
-									<Text style={styles.darkText}>
-										被
-										<Text style={styles.title}>《好好学习》</Text>
-										收入
-									</Text>
-								</View>
-								<View>
-									<Text style={styles.grayText}>已收入</Text>
-								</View>
+					<View style={styles.categoryItem}>
+						<View style={styles.itemInfo}>
+							<View>
+								<Text style={styles.darkText}>
+									被
+									<Text style={styles.title}>《好好学习》</Text>
+									收入
+								</Text>
 							</View>
-							<View style={styles.button}>
-								<HollowButton
-									name={"移除"}
-									size={12}
-									color={Colors.themeColor}
-									onPress={() => null}
-								/>
+							<View>
+								<Text style={styles.grayText}>已收入</Text>
 							</View>
 						</View>
-					}
+						<View style={styles.button}>
+							<HollowButton name={"移除"} size={12} color={Colors.themeColor} onPress={() => null} />
+						</View>
+					</View>
 					<ContentEnd />
 				</View>
 			</Screen>
@@ -178,16 +164,12 @@ class ContributeManageScreen extends React.Component {
 							<View>
 								<Text style={styles.darkText}>
 									向
-									<Text style={styles.title}>
-										《{category.name}》
-									</Text>
+									<Text style={styles.title}>《{category.name}》</Text>
 									投稿
 								</Text>
 							</View>
 							<View>
-								<Text style={styles.grayText}>
-									{category.submite_status}
-								</Text>
+								<Text style={styles.grayText}>{category.submite_status}</Text>
 							</View>
 						</View>
 						<View style={styles.button}>
@@ -220,9 +202,7 @@ class ContributeManageScreen extends React.Component {
 							<View>
 								<Text style={styles.darkText}>
 									被
-									<Text style={styles.title}>
-										《{category.name}》
-									</Text>
+									<Text style={styles.title}>《{category.name}》</Text>
 									收入
 								</Text>
 							</View>

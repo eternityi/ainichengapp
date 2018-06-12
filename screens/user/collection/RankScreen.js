@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity, TouchableHighlight, FlatList, Text, TextInput } from "react-native";
 import SortableListView from "react-native-sortable-listview";
 
+import Screen from "../../Screen";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
-import { Header, HeaderLeft } from "../../../components/Header";
-import Screen from "../../Screen";
+import { Header } from "../../../components/Header";
 
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
+import { userCollectionsQuery } from "../../../graphql/user.graphql";
 
 class RankScreen extends React.Component {
 	static navigationOptions = {
@@ -20,24 +20,7 @@ class RankScreen extends React.Component {
 	constructor(props) {
 		super(props);
 
-		let data = [
-			{
-				id: 1,
-				name: "美食日记"
-			},
-			{
-				id: 2,
-				name: "私人菜谱"
-			},
-			{
-				id: 3,
-				name: "爱心早点"
-			},
-			{
-				id: 4,
-				name: "家常小菜"
-			}
-		];
+		let data = props.navigation.getParam("collections", []);
 		this.state = {
 			data,
 			order: Object.keys(data)
