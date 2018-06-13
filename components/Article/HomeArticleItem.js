@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableOpacity } from "react-native";
 
+import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar } from "../Pure";
 

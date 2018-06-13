@@ -6,10 +6,12 @@ import Colors from "../../../constants/Colors";
 import Avatar from "../../../components/Pure/Avatar";
 import Dashed from "../../../components/Pure/Dashed";
 import { OperationModal, ReportModal } from "../../../components/Modal";
-const { width, height } = Dimensions.get("window");
 
 import { Query, Mutation } from "react-apollo";
+import { connect } from "react-redux";
 import { likeCommentMutation, commentsQuery, replyCommentsQuery } from "../../../graphql/comment.graphql";
+
+const { width, height } = Dimensions.get("window");
 
 class CommentItem extends Component {
 	constructor(props) {
@@ -30,8 +32,9 @@ class CommentItem extends Component {
 
 	render() {
 		//detail决定评论是否显示详细内容
-		const { detail = false, comment, toggleReplyComment, navigation } = this.props;
+		const { detail = false, comment, toggleReplyComment, navigation, login } = this.props;
 		const { liked, likes, operationModalVisible, reportModalVisible, subComment } = this.state;
+		// 如果不是详细模式就只取前三条子评论
 		let replyComments = detail ? comment.replyComments : comment.replyComments.slice(0, 3);
 		return (
 			<View style={styles.commentItem}>
@@ -68,15 +71,19 @@ class CommentItem extends Component {
 										<TouchableOpacity
 											style={styles.operation}
 											onPress={() => {
-												this.setState(prevState => ({
-													liked: !prevState.liked,
-													likes: prevState.liked ? --prevState.likes : ++prevState.likes
-												}));
-												likeComment({
-													variables: {
-														comment_id: comment.id
-													}
-												});
+												if (login) {
+													this.setState(prevState => ({
+														liked: !prevState.liked,
+														likes: prevState.liked ? --prevState.likes : ++prevState.likes
+													}));
+													likeComment({
+														variables: {
+															comment_id: comment.id
+														}
+													});
+												} else {
+													navigation.navigate("登录注册");
+												}
 											}}
 										>
 											<Iconfont
@@ -149,12 +156,13 @@ class CommentItem extends Component {
 				{!detail &&
 					comment.replyComments.length > 3 && (
 						<TouchableOpacity
+							style={{ flexDirection: "row", alignItems: "center" }}
 							onPress={() =>
 								navigation.navigate("评论详情", {
 									comment: comment
 								})}
 						>
-							<Text style={styles.unfoldMore}>共{comment.replyComments.length - 3}条回复</Text>
+							<Text style={styles.unfoldMore}>共{comment.replyComments.length}条回复</Text>
 							<Iconfont name={"right"} size={16} color={Colors.linkColor} />
 						</TouchableOpacity>
 					)}
@@ -211,9 +219,14 @@ class CommentItem extends Component {
 	}
 
 	handleReportModal() {
-		this.setState(prevState => ({
-			reportModalVisible: !prevState.reportModalVisible
-		}));
+		let { login, navigation } = this.props;
+		if (login) {
+			this.setState(prevState => ({
+				reportModalVisible: !prevState.reportModalVisible
+			}));
+		} else {
+			navigation.navigate("登录注册");
+		}
 	}
 }
 
@@ -267,4 +280,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default CommentItem;
+export default connect(store => ({ login: store.users.login }))(CommentItem);

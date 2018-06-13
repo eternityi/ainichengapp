@@ -29,7 +29,7 @@ class HomeScreen extends React.Component {
   render() {
     let { refreshing } = this.state;
     const { navigation } = this.props;
-    var { chats, user } = this.props.users;
+    var { login, user } = this.props.users;
     return (
       <Screen>
         <Header navigation={navigation} goBack={false} notification search />
@@ -85,7 +85,15 @@ class HomeScreen extends React.Component {
           <DivisionLine height={18} />
           <View style={styles.chatsTitle}>
             <Text style={styles.chatsTitleText}>消息</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("新消息")}>
+            <TouchableOpacity
+              onPress={() => {
+                if (login) {
+                  navigation.navigate("新消息");
+                } else {
+                  navigation.navigate("登录注册");
+                }
+              }}
+            >
               <Text style={[styles.chatsTitleText, { color: Color.themeColor }]}>新消息</Text>
             </TouchableOpacity>
           </View>
@@ -93,7 +101,7 @@ class HomeScreen extends React.Component {
             {({ loading, error, data, refetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.user)) return <SpinnerLoading />;
-              if (data.user.chats.length < 1) return <Find navigation={navigation} />;
+              if (data.user.chats.length < 1) return <Find />;
               return (
                 <FlatList
                   data={data.user.chats}
@@ -132,11 +140,20 @@ class HomeScreen extends React.Component {
   _keyExtractor = (item, index) => (item.key ? item.key : index.toString());
 
   _renderMessageMenu = item => {
-    let { user } = this.props.users;
+    let { user, login } = this.props.users;
     const { navigate } = this.props.navigation;
     return (
       <View style={{ width: (width - 30) / 3 }}>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigate(item.name, { user })}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => {
+            if (login) {
+              navigate(item.name, { user });
+            } else {
+              navigate("登录注册");
+            }
+          }}
+        >
           <View style={{ position: "relative" }}>
             <Iconfont name={item.iconName} size={24} color={Color.themeColor} style={{ marginBottom: 6 }} />
             <View style={styles.badge}>

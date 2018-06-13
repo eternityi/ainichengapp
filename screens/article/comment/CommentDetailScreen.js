@@ -21,10 +21,10 @@ class CommentDetailScreen extends Component {
 
 	constructor(props) {
 		super(props);
-
+		let comment = props.navigation.getParam("comment", 111);
 		this.state = {
-			comment: props.navigation.state.params.comment,
-			replyingComment: props.navigation.state.params.comment,
+			comment,
+			replyingComment: comment, //回复的评论
 			body: ""
 		};
 	}
@@ -124,16 +124,27 @@ class CommentDetailScreen extends Component {
 
 	// 输入框聚焦自带检测是否应该加上@用户名
 	_inputFocus() {
-		let { body, replyingComment } = this.state;
-		if (body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-			body = `@${replyingComment.user.name} ` + body;
-			this.setState({ body });
+		let { navigation, login } = this.props;
+		if (login) {
+			let { body, replyingComment } = this.state;
+			if (body.indexOf(`@${replyingComment.user.name}`) !== 0) {
+				body = `@${replyingComment.user.name} ` + body;
+				this.setState({ body });
+			}
+		} else {
+			navigation.navigate("登录注册");
 		}
 	}
 
+	//点击回复评论  聚焦底部评论框并且set当前回复的该条评论
 	_handleFocus(replyingComment) {
-		this.setState({ replyingComment });
-		this.commentInput.focus();
+		let { navigation, login } = this.props;
+		if (login) {
+			this.setState({ replyingComment });
+			this.commentInput.focus();
+		} else {
+			navigation.navigate("登录注册");
+		}
 	}
 }
 
@@ -158,4 +169,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ comment: store.articles.comment }))(CommentDetailScreen);
+export default connect(store => ({ login: store.users.login }))(CommentDetailScreen);

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { withNavigation } from "react-navigation";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
@@ -9,32 +11,36 @@ import { connect } from "react-redux";
 
 class Follow extends Component {
 	handleFollow() {
-		let { type, id, status, followUser, followCollection, followCategory, user } = this.props;
-		switch (type) {
-			case "user":
-				followUser({
-					variables: {
-						user_id: id,
-						undo: status
-					}
-				});
-				break;
-			case "collection":
-				followCollection({
-					variables: {
-						collection_id: id,
-						undo: status
-					}
-				});
-				break;
-			case "category":
-				followCategory({
-					variables: {
-						category_id: id,
-						undo: status
-					}
-				});
-				break;
+		let { type, id, status, followUser, followCollection, followCategory, login, navigation } = this.props;
+		if (login) {
+			switch (type) {
+				case "user":
+					followUser({
+						variables: {
+							user_id: id,
+							undo: status
+						}
+					});
+					break;
+				case "collection":
+					followCollection({
+						variables: {
+							collection_id: id,
+							undo: status
+						}
+					});
+					break;
+				case "category":
+					followCategory({
+						variables: {
+							category_id: id,
+							undo: status
+						}
+					});
+					break;
+			}
+		} else {
+			navigation.navigate("登录注册");
 		}
 	}
 
@@ -78,10 +84,10 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.skinColor
 	}
 });
-export default connect(store => ({ user: store.users.user }))(
-	compose(
-		graphql(followUserMutation, { name: "followUser" }),
-		graphql(followCollectionMutation, { name: "followCollection" }),
-		graphql(followCategoryMutation, { name: "followCategory" })
-	)(Follow)
-);
+export default compose(
+	withNavigation,
+	graphql(followUserMutation, { name: "followUser" }),
+	graphql(followCollectionMutation, { name: "followCollection" }),
+	graphql(followCategoryMutation, { name: "followCategory" }),
+	connect(store => ({ login: store.users.login }))
+)(Follow);

@@ -67,28 +67,28 @@ class HomeScreen extends React.Component {
             )}
             <DivisionLine height={15} />
             <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={() => navigation.navigate("私密文章")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("私密文章")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>私密文章</Text>
                   <Text style={styles.columnQuantity}>{user.count_drafts || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("收藏的文章")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("收藏的文章")}>
                 <View style={styles.columnItem}>
-                  <Iconfont name={"collect"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                  <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>收藏的文章</Text>
                   <Text style={styles.columnQuantity}>{user.count_favorites || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("喜欢的文章", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢的文章", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>喜欢的文章</Text>
                   <Text style={styles.columnQuantity}>{user.count_likes || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("已购内容", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("已购内容", { user })}>
                 <View style={[styles.columnItem, styles.noBorder]}>
                   <Iconfont name={"diamond"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>已购内容</Text>
@@ -98,28 +98,28 @@ class HomeScreen extends React.Component {
             </View>
             <DivisionLine height={15} />
             <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={() => navigation.navigate("个人专题", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("个人专题", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的专题</Text>
                   <Text style={styles.columnQuantity}>{user.count_categories || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("个人文集", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("个人文集", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"collection"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的文集</Text>
                   <Text style={styles.columnQuantity}>{user.count_collections || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("关注的专题和文集", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("关注的专题和文集", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"followed"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>关注的专题/文集</Text>
                   <Text style={styles.columnQuantity}>{""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("我的钱包")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
                 <View style={[styles.columnItem, styles.noBorder]}>
                   <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的钱包</Text>
@@ -134,7 +134,7 @@ class HomeScreen extends React.Component {
                   <Text style={styles.columnType}>分享{Config.AppName}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("浏览记录")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>浏览记录</Text>
@@ -163,6 +163,15 @@ class HomeScreen extends React.Component {
         <ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
       </Screen>
     );
+  }
+
+  navigateMiddlewear(routeName, params) {
+    let { navigation, users } = this.props;
+    if (users.login) {
+      navigation.navigate(routeName, { ...params });
+    } else {
+      navigation.navigate("登录注册", { login: true });
+    }
   }
 
   toggleModalVisible() {
@@ -221,5 +230,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => {
-  return { ...store };
+  return { users: store.users };
 })(withApollo(HomeScreen));

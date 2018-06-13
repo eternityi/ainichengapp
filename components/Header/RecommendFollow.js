@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { Iconfont } from "../../utils/Fonts";
 import { StyleSheet, TouchableOpacity, Image } from "react-native";
+
+import { Iconfont } from "../../utils/Fonts";
+import { connect } from "react-redux";
 
 class RecommendFollow extends Component {
   navigate() {
-    this.props.navigation ? this.props.navigation.navigate("推荐关注") : () => null;
+    let { login, navigation } = this.props;
+    login ? navigation.navigate("推荐关注") : navigation.navigate("登录注册", { login: true });
   }
 
   render() {
@@ -19,4 +22,6 @@ class RecommendFollow extends Component {
 
 const styles = StyleSheet.create({});
 
-export default RecommendFollow;
+export default connect(store => ({
+  login: store.users.login
+}))(RecommendFollow);

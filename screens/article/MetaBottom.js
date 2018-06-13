@@ -8,7 +8,7 @@ import { Query, Mutation } from "react-apollo";
 
 class MetaBottom extends Component {
   render() {
-    const { article, handleSlideShareMenu } = this.props;
+    const { article, handleSlideShareMenu, login, navigation } = this.props;
     let { liked, count_likes } = article;
     return (
       <Mutation mutation={likeArticleMutation}>
@@ -18,34 +18,38 @@ class MetaBottom extends Component {
               <View style={styles.likeArticle}>
                 <TouchableOpacity
                   onPress={() => {
-                    likeArticle({
-                      variables: {
-                        article_id: article.id,
-                        undo: liked
-                      },
-                      optimisticResponse: {
-                        __typename: "Mutation",
-                        likeArticle: {
-                          __typename: "Article",
-                          id: article.id,
-                          liked: !liked,
-                          count_likes: liked ? --count_likes : ++count_likes
-                        }
-                      },
-                      update: (cache, { data: { likeArticle } }) => {
-                        cache.writeQuery({
-                          query: articleQuery,
-                          variables: { id: article.id },
-                          data: {
-                            article: {
-                              ...article,
-                              count_likes: likeArticle.count_likes,
-                              liked: likeArticle.liked
-                            }
+                    if (login) {
+                      likeArticle({
+                        variables: {
+                          article_id: article.id,
+                          undo: liked
+                        },
+                        optimisticResponse: {
+                          __typename: "Mutation",
+                          likeArticle: {
+                            __typename: "Article",
+                            id: article.id,
+                            liked: !liked,
+                            count_likes: liked ? --count_likes : ++count_likes
                           }
-                        });
-                      }
-                    });
+                        },
+                        update: (cache, { data: { likeArticle } }) => {
+                          cache.writeQuery({
+                            query: articleQuery,
+                            variables: { id: article.id },
+                            data: {
+                              article: {
+                                ...article,
+                                count_likes: likeArticle.count_likes,
+                                liked: likeArticle.liked
+                              }
+                            }
+                          });
+                        }
+                      });
+                    } else {
+                      navigation.navigate("登录注册");
+                    }
                   }}
                 >
                   <Iconfont name={liked ? "like" : "like-outline"} size={25} color={liked ? Colors.themeColor : Colors.tintFontColor} />

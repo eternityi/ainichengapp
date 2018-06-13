@@ -101,7 +101,11 @@ class HomeScreen extends Component {
       <Screen noPadding>
         <View style={styles.container}>
           {/*根据滚动开关判断状态栏颜色**/}
-          <StatusBar translucent={true} backgroundColor={"transparent"} barStyle={scrollEnabled ? (lightTabBar ? "light-content" : "dark-content") : "dark-content"} />
+          <StatusBar
+            translucent={true}
+            backgroundColor={"transparent"}
+            barStyle={scrollEnabled ? (lightTabBar ? "light-content" : "dark-content") : "dark-content"}
+          />
 
           <Query query={userDetailQuery} variables={{ id: user.id }}>
             {({ loading, error, data, refetch }) => {
@@ -109,7 +113,13 @@ class HomeScreen extends Component {
               if (!(data && data.user)) return <SpinnerLoading />;
               let user = data.user;
               return (
-                <ScrollView style={styles.container} onScroll={this._outerScroll} scrollEnabled={scrollEnabled} bounces={false} scrollEventThrottle={20}>
+                <ScrollView
+                  style={styles.container}
+                  onScroll={this._outerScroll}
+                  scrollEnabled={scrollEnabled}
+                  bounces={false}
+                  scrollEventThrottle={20}
+                >
                   <View onLayout={this._mainTopLayout}>
                     <TouchableWithoutFeedback onPress={is_self ? this.handleBackdropVisible : null}>
                       <Image
@@ -177,7 +187,13 @@ class HomeScreen extends Component {
                       ) : (
                         <View style={{ flexDirection: "row", height: 40 }}>
                           <View style={{ marginRight: 6, flex: 1 }}>
-                            <FollowButton customStyle={{ flex: 1, width: "auto" }} id={user.id} type={"user"} status={user.followed_status} fontSize={16} />
+                            <FollowButton
+                              customStyle={{ flex: 1, width: "auto" }}
+                              id={user.id}
+                              type={"user"}
+                              status={user.followed_status}
+                              fontSize={16}
+                            />
                           </View>
                           <View style={{ marginLeft: 6, flex: 1 }}>
                             <Mutation mutation={createChatMutation}>
@@ -270,19 +286,23 @@ class HomeScreen extends Component {
                       this.handleReportVisible();
                       break;
                     case 2:
-                      this.props.blockUserMutation({
-                        variables: {
-                          user_id: user.id
-                        },
-                        refetchQueries: result => [
-                          {
-                            query: blockedUsersQuery
-                          }
-                        ]
-                      });
-                      this.setState(prevState => ({
-                        isBlocked: !prevState.isBlocked
-                      }));
+                      if (login) {
+                        this.props.blockUserMutation({
+                          variables: {
+                            user_id: user.id
+                          },
+                          refetchQueries: result => [
+                            {
+                              query: blockedUsersQuery
+                            }
+                          ]
+                        });
+                        this.setState(prevState => ({
+                          isBlocked: !prevState.isBlocked
+                        }));
+                      } else {
+                        navigation.navigate("登录注册");
+                      }
                       break;
                   }
                 }}
@@ -370,7 +390,12 @@ class HomeScreen extends Component {
 
   //赞赏模态框开关
   handleRewardVisible() {
-    this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
+    let { login, navigation } = this.props;
+    if (login) {
+      this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
+    } else {
+      navigation.navigate("登录注册");
+    }
   }
 
   //更换背景模态框开关
@@ -380,7 +405,12 @@ class HomeScreen extends Component {
 
   //举报模态框开关
   handleReportVisible() {
-    this.setState(prevState => ({ reportVisible: !prevState.reportVisible }));
+    let { login, navigation } = this.props;
+    if (login) {
+      this.setState(prevState => ({ reportVisible: !prevState.reportVisible }));
+    } else {
+      navigation.navigate("登录注册");
+    }
   }
 }
 

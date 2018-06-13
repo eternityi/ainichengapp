@@ -85,7 +85,7 @@ class DetailScreen extends Component {
   render() {
     let { replyingComment, showWrite, rewardVisible, replyCommentVisible, addCommentVisible, shareModalVisible } = this.state;
     const { article = {} } = this.state;
-    let { navigation } = this.props;
+    let { navigation, login } = this.props;
 
     return (
       <Screen>
@@ -97,8 +97,13 @@ class DetailScreen extends Component {
             let article = data.article;
             return (
               <View style={styles.container}>
-                <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} />
-                <ScrollView style={styles.container} onScroll={this._onScroll.bind(this)} ref={ref => (this.scrollRef = ref)} removeClippedSubviews={true}>
+                <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} login={login} />
+                <ScrollView
+                  style={styles.container}
+                  onScroll={this._onScroll.bind(this)}
+                  ref={ref => (this.scrollRef = ref)}
+                  removeClippedSubviews={true}
+                >
                   <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
                     <View>
                       <Text style={styles.title} NumberOfLines={2}>
@@ -143,62 +148,60 @@ class DetailScreen extends Component {
                     //喜欢、分享
                     //赞赏面板
                     //作者卡片
-                    //评论中心
-                    //文章底部工具
                   }
                   <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
                     <BeSelectedCategory categories={article.categories} navigation={navigation} />
-                    <MetaBottom article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
-                    <RewardPanel navigation={navigation} rewardUsers={article.tipedUsers} rewardDescrib={article.user.tip_words} handleRewardVisible={this.handleRewardVisible} />
+                    <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
+                    <RewardPanel
+                      navigation={navigation}
+                      rewardUsers={article.tipedUsers}
+                      rewardDescrib={article.user.tip_words}
+                      handleRewardVisible={this.handleRewardVisible}
+                    />
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
                   <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
+                  {/*评论中心**/}
                   <Comments
                     article={article}
                     navigation={navigation}
                     onLayout={this._commentsOnLayout.bind(this)}
-                    toggleCommentModal={() => {
-                      this.setState(prevState => ({
-                        addCommentVisible: !prevState.addCommentVisible
-                      }));
-                    }}
+                    toggleCommentModal={() => this.toggleAddCommentVisible()}
                     toggleReplyComment={comment => {
-                      this.setState(prevState => ({
-                        replyCommentVisible: !prevState.replyCommentVisible,
-                        replyingComment: comment
-                      }));
+                      if (login) {
+                        this.setState(prevState => ({
+                          replyCommentVisible: !prevState.replyCommentVisible,
+                          replyingComment: comment
+                        }));
+                      } else {
+                        navigation.navigate("登录注册");
+                      }
                     }}
                   />
                 </ScrollView>
-
+                {/*文章底部工具**/}
                 <ArticleBottomTools
                   rewards={article.count_tips}
                   comments={article.count_comments}
                   article={article}
                   showWrite={showWrite}
-                  toggleCommentModal={() => {
-                    this.setState(prevState => ({
-                      addCommentVisible: !prevState.addCommentVisible
-                    }));
-                  }}
+                  toggleCommentModal={() => this.toggleAddCommentVisible()}
                   handleRewardVisible={this.handleRewardVisible}
                   handleSlideShareMenu={this.handleSlideShareMenu}
                   scrollToComments={this._scrollToComments.bind(this)}
+                  navigation={navigation}
+                  login={login}
                 />
 
                 <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
-
+                {/*添加评论**/}
                 <Mutation mutation={addCommentMutation}>
                   {addComment => {
                     return (
                       <AddCommentModal
                         article={article}
                         visible={addCommentVisible}
-                        toggleCommentModal={() => {
-                          this.setState(prevState => ({
-                            addCommentVisible: !prevState.addCommentVisible
-                          }));
-                        }}
+                        toggleCommentModal={() => this.toggleAddCommentVisible()}
                         addComment={({ body }) => {
                           if (!body) return null;
                           addComment({
@@ -245,9 +248,13 @@ class DetailScreen extends Component {
                       <ReplyCommentModal
                         visible={replyCommentVisible}
                         toggleReplyComment={() => {
-                          this.setState(prevState => ({
-                            replyCommentVisible: !prevState.replyCommentVisible
-                          }));
+                          if (login) {
+                            this.setState(prevState => ({
+                              replyCommentVisible: !prevState.replyCommentVisible
+                            }));
+                          } else {
+                            navigation.navigate("登录注册");
+                          }
                         }}
                         replyingComment={this.state.replyingComment}
                         atUser={this.state.replyingComment ? this.state.replyingComment.user : null}
@@ -288,7 +295,24 @@ class DetailScreen extends Component {
 
   //赞赏模态框开关
   handleRewardVisible() {
-    this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
+    let { login, navigation } = this.props;
+    if (login) {
+      this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
+    } else {
+      navigation.navigate("登录注册");
+    }
+  }
+
+  //评论模态框开关
+  toggleAddCommentVisible() {
+    let { login, navigation } = this.props;
+    if (login) {
+      this.setState(prevState => ({
+        addCommentVisible: !prevState.addCommentVisible
+      }));
+    } else {
+      navigation.navigate("登录注册");
+    }
   }
 
   //获取文章底部到页面顶部的高度
@@ -374,6 +398,6 @@ const styles = StyleSheet.create({
 
 export default connect(store => {
   return {
-    users: store.users
+    login: store.users.login
   };
 })(DetailScreen);

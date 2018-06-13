@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { withNavigation } from "react-navigation";
+
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import {
 	followCollectionMutation,
@@ -23,44 +25,48 @@ class FollowCategory extends Component {
 	}
 
 	_handleFollow() {
-		let { type, id, followCollection, followCategory, user } = this.props;
+		let { type, id, followCollection, followCategory, user, login, navigation } = this.props;
 		let { followed, follows } = this.state;
-		switch (type) {
-			case "collection":
-				followCollection({
-					variables: {
-						collection_id: id,
-						undo: followed
-					},
-					refetchQueries: result => [
-						{
-							query: userFollowedCollectionsQuery,
-							variables: { user_id: user.id }
-						}
-					]
-				});
-				break;
-			case "category":
-				followCategory({
-					variables: {
-						category_id: id,
-						undo: followed
-					},
-					refetchQueries: result => [
-						{
-							query: userFollowedCategoriesQuery,
-							variables: { user_id: user.id }
-						}
-					]
-				});
-				break;
+		if (login) {
+			switch (type) {
+				case "collection":
+					followCollection({
+						variables: {
+							collection_id: id,
+							undo: followed
+						},
+						refetchQueries: result => [
+							{
+								query: userFollowedCollectionsQuery,
+								variables: { user_id: user.id }
+							}
+						]
+					});
+					break;
+				case "category":
+					followCategory({
+						variables: {
+							category_id: id,
+							undo: followed
+						},
+						refetchQueries: result => [
+							{
+								query: userFollowedCategoriesQuery,
+								variables: { user_id: user.id }
+							}
+						]
+					});
+					break;
+			}
+			this.setState(prevState => {
+				return {
+					followed: !prevState.followed,
+					follows: prevState.followed ? --prevState.follows : ++prevState.follows
+				};
+			});
+		} else {
+			navigation.navigate("登录注册");
 		}
-		this.setState(prevState => {
-			return {
-				followed: !prevState.followed,
-				follows: prevState.followed ? --prevState.follows : ++prevState.follows
-			};
-		});
 	}
 
 	render() {
@@ -99,8 +105,9 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ user: store.users.user }))(
-	compose(graphql(followCollectionMutation, { name: "followCollection" }), graphql(followCategoryMutation, { name: "followCategory" }))(
-		FollowCategory
-	)
-);
+export default compose(
+	withNavigation,
+	graphql(followCollectionMutation, { name: "followCollection" }),
+	graphql(followCategoryMutation, { name: "followCategory" }),
+	connect(store => ({ login: store.users.login }))
+)(FollowCategory);

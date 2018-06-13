@@ -13,7 +13,18 @@ const { width, height } = Dimensions.get("window");
 
 class ArticleBottomTools extends Component {
   render() {
-    const { rewards, comments, article, showWrite, toggleCommentModal, handleRewardVisible, handleSlideShareMenu, scrollToComments } = this.props;
+    const {
+      rewards,
+      comments,
+      article,
+      showWrite,
+      toggleCommentModal,
+      handleRewardVisible,
+      handleSlideShareMenu,
+      scrollToComments,
+      login,
+      navigation
+    } = this.props;
     let { liked, count_likes } = article;
     return (
       <Mutation mutation={likeArticleMutation}>
@@ -38,12 +49,16 @@ class ArticleBottomTools extends Component {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    likeArticle({
-                      variables: {
-                        article_id: article.id,
-                        undo: liked
-                      }
-                    });
+                    if (login) {
+                      likeArticle({
+                        variables: {
+                          article_id: article.id,
+                          undo: liked
+                        }
+                      });
+                    } else {
+                      navigation.navigate("登录注册");
+                    }
                   }}
                 >
                   <View style={styles.articleToolItem}>

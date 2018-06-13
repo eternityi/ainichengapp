@@ -21,10 +21,9 @@ class LoginScreen extends Component {
     this.handleSkip = this.handleSkip.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    let { params = {} } = this.props.navigation.state;
-    let { login = false } = params;
+    let login = props.navigation.getParam("login", false);
     this.state = {
-      login: login ? true : false
+      login
     };
   }
 
