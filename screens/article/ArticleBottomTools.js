@@ -21,7 +21,7 @@ class ArticleBottomTools extends Component {
       toggleCommentModal,
       handleRewardVisible,
       handleSlideShareMenu,
-      scrollToComments,
+      commentHandler,
       login,
       navigation
     } = this.props;
@@ -41,7 +41,7 @@ class ArticleBottomTools extends Component {
                     <Text style={styles.articleToolItemText}>赞赏 {rewards}</Text>
                   </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={scrollToComments}>
+                <TouchableWithoutFeedback onPress={commentHandler}>
                   <View style={styles.articleToolItem}>
                     <Iconfont name={"comment-hollow"} size={17} color={Colors.tintFontColor} />
                     <Text style={styles.articleToolItemText}>评论 {comments || 0}</Text>

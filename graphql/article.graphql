@@ -66,8 +66,8 @@ query articleContentQuery($id: Int!) {
 	}
 }
 
-query RankingArticleQuery($hot_time: Int!) {
-	articles(hot_time: $hot_time) {
+query RankingArticleQuery($in_days: Int!) {
+	articles(in_days: $in_days, order: HOT) {
 		id
 		title
 		status

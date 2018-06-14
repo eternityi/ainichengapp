@@ -188,11 +188,11 @@ class DetailScreen extends Component {
                   toggleCommentModal={() => this.toggleAddCommentVisible()}
                   handleRewardVisible={this.handleRewardVisible}
                   handleSlideShareMenu={this.handleSlideShareMenu}
-                  scrollToComments={this._scrollToComments.bind(this)}
+                  commentHandler={this._scrollToComments.bind(this)}
                   navigation={navigation}
                   login={login}
                 />
-
+                {/*赞赏模态框**/}
                 <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
                 {/*添加评论**/}
                 <Mutation mutation={addCommentMutation}>
@@ -241,7 +241,7 @@ class DetailScreen extends Component {
                     );
                   }}
                 </Mutation>
-
+                {/*回复评论**/}
                 <Mutation mutation={addCommentMutation}>
                   {replyComment => {
                     return (
@@ -368,8 +368,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "700",
-    lineHeight: 25,
+    fontWeight: "600",
+    lineHeight: 26,
     color: Colors.darkFontColor
   },
   articleInfo: {

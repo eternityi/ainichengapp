@@ -5,9 +5,14 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar } from "../Pure";
 
+const { height, width } = Dimensions.get("window");
+
 class HomeArticleItem extends PureComponent {
 	render() {
 		let { article, navigation } = this.props;
+		if (!article.has_image) {
+			return null;
+		}
 		return (
 			<View style={styles.articleContainer}>
 				<View style={styles.authorItem}>
@@ -19,23 +24,33 @@ class HomeArticleItem extends PureComponent {
 						<Text style={styles.timeAgo}>{article.time_ago}</Text>
 					</View>
 				</View>
-				{article.has_image && (
-					<View style={styles.imageWrap}>
-						<Image style={styles.image} source={{ uri: article.image_url }} />
+				<View>
+					<Image style={styles.cover} source={{ uri: article.image_url }} />
+				</View>
+				<View style={styles.content}>
+					<Text numberOfLines={2} style={styles.title}>
+						{article.title}
+					</Text>
+					<Text numberOfLines={3} style={styles.abstract}>
+						{article.description}
+					</Text>
+					<View style={styles.meta}>
+						{article.category ? (
+							<TouchableOpacity
+								onPress={() =>
+									navigation.navigate("专题详情", {
+										category: article.category
+									})}
+							>
+								<Text style={styles.categoryName}>#{article.category.name}</Text>
+							</TouchableOpacity>
+						) : null}
+						<View style={styles.labels}>
+							{article.hits > 0 && <Text style={styles.count}>{article.hits || 0}次查看</Text>}
+							{article.count_likes > 0 && <Text style={styles.count}>{"· " + article.count_likes || 0}人喜欢</Text>}
+							{article.count_comments > 0 && <Text style={styles.count}>{"· " + article.count_comments || 0}条评论</Text>}
+						</View>
 					</View>
-				)}
-				<Text numberOfLines={2} style={styles.title}>
-					{article.title}
-				</Text>
-				<Text numberOfLines={3} style={styles.abstract}>
-					{" "}
-					{article.description}
-				</Text>
-				<View style={styles.meta}>
-					{article.hits > 0 && <Text style={styles.count}>{article.hits + "阅读"}</Text>}
-					{article.count_comments > 0 && <Text style={styles.count}>{"· " + article.count_comments + "评论"}</Text>}
-					{article.count_likes > 0 && <Text style={styles.count}>{"· " + article.count_likes + "喜欢"}</Text>}
-					{article.count_tips > 0 && <Text style={styles.count}>{"· " + article.count_tips + "赞赏"}</Text>}
 				</View>
 			</View>
 		);
@@ -44,20 +59,15 @@ class HomeArticleItem extends PureComponent {
 	_keyExtractor = (item, index) => (item.key ? item.key : index.toString());
 }
 
-var { height, width } = Dimensions.get("window");
-width = width - 30;
-
 const styles = StyleSheet.create({
 	articleContainer: {
-		padding: 15,
-		paddingTop: 20,
-		borderBottomWidth: 1,
-		borderStyle: "solid",
-		borderColor: Colors.lightBorderColor
+		borderTopWidth: 8,
+		borderTopColor: Colors.lightBorderColor
 	},
 	authorItem: {
 		flexDirection: "row",
-		alignItems: "center"
+		alignItems: "center",
+		padding: 15
 	},
 	userInfo: {
 		justifyContent: "space-between",
@@ -73,19 +83,19 @@ const styles = StyleSheet.create({
 		lineHeight: 18,
 		color: Colors.tintFontColor
 	},
-	imageWrap: {
-		marginTop: 12
+	cover: {
+		width: width,
+		height: width * 0.5,
+		resizeMode: "cover"
 	},
-	image: {
-		width,
-		height: width * 2 / 5,
-		resizeMode: "cover",
-		borderRadius: 2
+	content: {
+		paddingHorizontal: 15,
+		paddingVertical: 10
 	},
 	title: {
-		marginTop: 15,
 		fontSize: 18,
 		lineHeight: 24,
+		fontWeight: "500",
 		color: Colors.darkFontColor
 	},
 	abstract: {
@@ -95,14 +105,28 @@ const styles = StyleSheet.create({
 		color: Colors.tintFontColor
 	},
 	meta: {
-		marginTop: 15,
+		marginTop: 10,
 		flexDirection: "row",
-		justifyContent: "flex-end"
+		justifyContent: "space-between",
+		alignItems: "center"
+	},
+	categoryName: {
+		fontSize: 12,
+		color: Colors.themeColor
+	},
+	labels: {
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	label: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginRight: 15
 	},
 	count: {
-		fontSize: 14,
-		color: Colors.tintFontColor,
-		marginLeft: 6
+		fontSize: 11,
+		color: Colors.lightFontColor,
+		marginLeft: 3
 	}
 });
 

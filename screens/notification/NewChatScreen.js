@@ -57,7 +57,7 @@ class NewChatScreen extends Component {
 									})}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
-										if (data.user.friends) {
+										if (data.user.friends.length < 10) {
 											fetchMore({
 												variables: {
 													offset: data.user.friends.length

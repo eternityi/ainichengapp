@@ -61,8 +61,8 @@ class RecommendScreen extends React.Component {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={this._renderBasicArticleItem}
                 getItemLayout={(data, index) => ({
-                  length: 180,
-                  offset: 180 * index,
+                  length: 176,
+                  offset: 176 * index,
                   index
                 })}
                 onEndReachedThreshold={0.3}
