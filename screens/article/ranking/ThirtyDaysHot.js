@@ -26,7 +26,7 @@ class ThirtyDaysHot extends Component {
         <Query
           query={RankingArticleQuery}
           variables={{
-            hot_time: 30
+            in_days: 30
           }}
         >
           {({ loading, error, data, fetchMore }) => {

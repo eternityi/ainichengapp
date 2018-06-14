@@ -91,21 +91,19 @@ class Comments extends Component {
                   />
                 </View>
                 {comments.length < 1 ? (
-                  <View style={{ paddingVertical: 40, backgroundColor: Colors.skinColor }}>
-                    <Diving>
-                      {onlyAuthor ? (
-                        <Text style={styles.divingFont}>作者还没有发表评论哦~</Text>
-                      ) : (
-                        <Text style={styles.divingFont}>
-                          智慧如你，不
-                          <Text style={{ color: Colors.linkColor }} onPress={() => toggleCommentModal()}>
-                            发表一点看法
-                          </Text>
-                          咩~
+                  <Diving customStyle={{ paddingVertical: 40, backgroundColor: Colors.skinColor }}>
+                    {onlyAuthor ? (
+                      <Text style={styles.divingFont}>作者还没有发表评论哦~</Text>
+                    ) : (
+                      <Text style={styles.divingFont}>
+                        智慧如你，不
+                        <Text style={{ color: Colors.linkColor }} onPress={() => toggleCommentModal()}>
+                          发表一点看法
                         </Text>
-                      )}
-                    </Diving>
-                  </View>
+                        咩~
+                      </Text>
+                    )}
+                  </Diving>
                 ) : (
                   <View>
                     <View style={styles.commentList}>

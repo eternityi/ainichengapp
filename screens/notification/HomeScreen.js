@@ -3,7 +3,7 @@ import { ScrollView, FlatList, StyleSheet, Text, View, Button, TextInput, Toucha
 import { Iconfont } from "../../utils/Fonts";
 import Color from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, Find } from "../../components/Pure";
+import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, Diving } from "../../components/Pure";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
@@ -101,7 +101,7 @@ class HomeScreen extends React.Component {
             {({ loading, error, data, refetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.user)) return <SpinnerLoading />;
-              if (data.user.chats.length < 1) return <Find />;
+              if (data.user.chats.length < 1) return <Diving customStyle={{ marginTop: 20 }} />;
               return (
                 <FlatList
                   data={data.user.chats}

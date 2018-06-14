@@ -118,9 +118,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		paddingVertical: 12,
-		paddingLeft: 20,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightBorderColor
+		paddingLeft: 20
 	}
 });
 

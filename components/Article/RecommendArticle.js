@@ -6,6 +6,7 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Dimensions }
 import { CustomPopoverMenu } from "../../components/Modal";
 
 const { width, height } = Dimensions.get("window");
+width -= 30;
 
 class RecommendArticle extends Component {
 	render() {
@@ -44,7 +45,7 @@ class RecommendArticle extends Component {
 						) : null}
 						{article.description ? (
 							<View>
-								<Text numberOfLines={2} style={styles.abstract}>
+								<Text numberOfLines={article.has_image ? 1 : 2} style={styles.abstract}>
 									{article.description}
 								</Text>
 							</View>
@@ -58,28 +59,19 @@ class RecommendArticle extends Component {
 											category: article.category
 										})}
 								>
-									<Text style={styles.catrgoryName}>{article.category.name}</Text>
+									<Iconfont name="category" size={12} color={Colors.themeColor} />
+									<Text style={styles.categoryName}>{article.category.name}</Text>
 								</TouchableOpacity>
 							) : null}
 							<View style={styles.labels}>
-								{article.count_comments ? (
-									<View style={styles.label}>
-										<Iconfont name={"message"} size={14} color={Colors.lightFontColor} />
-										<Text style={styles.count}>{article.count_comments}</Text>
-									</View>
-								) : null}
-								{article.count_likes ? (
-									<View style={styles.label}>
-										<Iconfont name={"like"} size={14} color={Colors.lightFontColor} />
-										<Text style={styles.count}>{article.count_likes}</Text>
-									</View>
-								) : null}
-								{article.count_tips ? (
-									<View style={styles.label}>
-										<Iconfont name={"income"} size={14} color={Colors.lightFontColor} />
-										<Text style={styles.count}>{article.count_tips}</Text>
-									</View>
-								) : null}
+								<View style={styles.label}>
+									<Iconfont name={"browse-outline"} size={15} color={Colors.lightFontColor} />
+									<Text style={styles.count}>{article.hits || 0}</Text>
+								</View>
+								<View style={styles.label}>
+									<Iconfont name={"comment-outline"} size={15} color={Colors.lightFontColor} />
+									<Text style={styles.count}>{article.count_comments || 0}</Text>
+								</View>
 							</View>
 						</View>
 					</View>
@@ -96,10 +88,10 @@ class RecommendArticle extends Component {
 
 const styles = StyleSheet.create({
 	article: {
-		height: 180,
-		paddingHorizontal: 15,
+		paddingHorizontal: 10,
+		paddingVertical: 15,
 		justifyContent: "center",
-		borderBottomWidth: 1,
+		borderBottomWidth: 8,
 		borderBottomColor: Colors.lightBorderColor
 	},
 	top: {
@@ -124,16 +116,16 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		flex: 1,
-		marginRight: 10
+		height: 100,
+		justifyContent: "space-between"
 	},
 	image: {
-		marginRight: 5,
-		width: 88,
-		height: 88,
+		width: 150,
+		height: 100,
+		marginLeft: 10,
 		resizeMode: "cover",
-		borderWidth: 1,
-		borderColor: Colors.lightBorderColor,
-		borderRadius: 4
+		borderTopRightRadius: 5,
+		borderBottomRightRadius: 5
 	},
 	title: {
 		fontSize: 17,
@@ -141,36 +133,32 @@ const styles = StyleSheet.create({
 		color: Colors.darkFontColor
 	},
 	abstract: {
-		marginTop: 8,
 		fontSize: 13,
 		lineHeight: 19,
 		color: Colors.tintFontColor
 	},
 	meta: {
-		marginTop: 6,
 		flexDirection: "row",
-		alignItems: "center"
+		alignItems: "center",
+		justifyContent: "space-between"
 	},
 	labels: {
+		flex: 1,
 		flexDirection: "row",
+		justifyContent: "flex-end",
 		alignItems: "center"
 	},
 	label: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginRight: 4
+		marginLeft: 8
 	},
 	category: {
-		borderWidth: 1,
-		borderColor: Colors.themeColor,
-		borderRadius: 4,
-		height: 20,
-		paddingHorizontal: 5,
-		justifyContent: "center",
-		marginRight: 6
+		flexDirection: "row",
+		alignItems: "center"
 	},
-	catrgoryName: {
-		fontSize: 11,
+	categoryName: {
+		fontSize: 12,
 		color: Colors.themeColor
 	},
 	count: {
