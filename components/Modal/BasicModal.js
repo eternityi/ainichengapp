@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Modal, Text, Dimensions, Platform, BackHandler } from "react-native";
+import { StyleSheet, View, Modal, Text, Dimensions, Platform, BackHandler, StatusBar } from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 const { width, height } = Dimensions.get("window");
@@ -16,6 +16,7 @@ class BasicModal extends Component {
           onResponderStart={handleVisible}
           onStartShouldSetResponderCapture={evt => false}
         >
+          <StatusBar backgroundColor={visible ? "rgba(105,105,105,0.7)" : "#fff"} barStyle={"dark-content"} />
           <View style={mergeStyle} onStartShouldSetResponder={evt => true}>
             {header ? <View style={styles.modalHeader}>{header}</View> : null}
             {children}

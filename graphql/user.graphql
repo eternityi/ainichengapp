@@ -1,3 +1,19 @@
+# 用户个人资源统计
+query userResourceCountQuery($id: Int!) {
+    user(id: $id) {
+        count_words
+        count_likes
+        count_articles
+        count_follows
+        count_followers
+        count_followings
+        count_drafts
+        count_favorites
+        count_categories
+        count_collections
+    }
+}
+
 # 浏览记录
 query visitsQuery($visit: VisitFilter) {
     visits(offset: 0, limit: 15, filter: $visit) {
@@ -405,7 +421,7 @@ query actionsQuery($offset: Int, $user_id: Int!) {
         postedArticle {
             id
             title
-            image_url
+            description
         }
         postedComment {
             id

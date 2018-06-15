@@ -59,7 +59,7 @@ class RecommendArticle extends Component {
 											category: article.category
 										})}
 								>
-									<Iconfont name="category" size={12} color={Colors.themeColor} />
+									<Iconfont name="category-rotate" size={12} color={Colors.themeColor} />
 									<Text style={styles.categoryName}>{article.category.name}</Text>
 								</TouchableOpacity>
 							) : null}

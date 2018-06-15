@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions, StatusBar } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import Modal from "react-native-modal";
@@ -10,8 +10,15 @@ class ShareModal extends Component {
   render() {
     const { visible, plain = false, toggleVisible } = this.props;
     return (
-      <Modal isVisible={visible} onBackButtonPress={toggleVisible} onBackdropPress={toggleVisible} backdropOpacity={0.4} style={{ justifyContent: "flex-end", margin: 0 }}>
+      <Modal
+        isVisible={visible}
+        onBackButtonPress={toggleVisible}
+        onBackdropPress={toggleVisible}
+        backdropOpacity={0.4}
+        style={{ justifyContent: "flex-end", margin: 0 }}
+      >
         <View style={styles.shareSlide}>
+          <StatusBar backgroundColor={visible ? "rgba(105,105,105,0.7)" : "#fff"} barStyle={"dark-content"} />
           {!plain && (
             <View style={styles.shareSlideItemWrap}>
               <TouchableOpacity style={styles.shareSlideItem}>

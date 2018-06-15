@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList } from "react-native";
-
-import { connect } from "react-redux";
-import actions from "../../store/actions";
-import Colors from "../../constants/Colors";
-import { Iconfont } from "../../utils/Fonts";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
+import ImageViewer from "react-native-image-zoom-viewer";
 import HTML from "react-native-render-html";
 
 import Screen from "../Screen";
-
+import Colors from "../../constants/Colors";
+import { Iconfont } from "../../utils/Fonts";
 import ArticleDetailHeader from "./ArticleDetailHeader";
 import BeSelectedCategory from "./BeSelectedCategory";
 import MetaBottom from "./MetaBottom";
@@ -20,11 +17,13 @@ import AuthorCard from "../../components/Card/AuthorCard";
 import { RewardModal, AddCommentModal, ReplyCommentModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
-const { width, height } = Dimensions.get("window");
-
+import { connect } from "react-redux";
+import actions from "../../store/actions";
+import { Query, Mutation } from "react-apollo";
 import { articleQuery } from "../../graphql/article.graphql";
 import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
-import { Query, Mutation } from "react-apollo";
+
+const { width, height } = Dimensions.get("window");
 
 let css_fix = `
     <!DOCTYPE html>
@@ -67,7 +66,6 @@ class DetailScreen extends Component {
 
     this.handleRewardVisible = this.handleRewardVisible.bind(this);
     this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
-
     this.state = {
       article: props.navigation.state.params.article,
       footOffsetHeight: height,
@@ -78,12 +76,23 @@ class DetailScreen extends Component {
       rewardVisible: false,
       shareModalVisible: false,
       reply: false,
-      replyingComment: null
+      replyingComment: null,
+      imageViewerVisible: false,
+      initImage: 0
     };
   }
 
   render() {
-    let { replyingComment, showWrite, rewardVisible, replyCommentVisible, addCommentVisible, shareModalVisible } = this.state;
+    let {
+      replyingComment,
+      showWrite,
+      rewardVisible,
+      replyCommentVisible,
+      addCommentVisible,
+      shareModalVisible,
+      imageViewerVisible,
+      initImage
+    } = this.state;
     const { article = {} } = this.state;
     let { navigation, login } = this.props;
 
@@ -95,8 +104,11 @@ class DetailScreen extends Component {
             if (loading) return <SpinnerLoading />;
             if (!(data && data.article)) return <BlankContent />;
             let article = data.article;
+            this.pictures = []; //初始化pictures，同时也是防止重复render所以在此清空
+            this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
+                <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
                 <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} login={login} />
                 <ScrollView
                   style={styles.container}
@@ -125,18 +137,34 @@ class DetailScreen extends Component {
                       imagesMaxWidth={width}
                       renderers={{
                         img: (htmlAttribs, children, passProps) => {
+                          //往picture填充图片
+                          this.pictures.push({
+                            url: htmlAttribs.src
+                          });
+                          // 获取当前index
+                          let index = this.imgKey;
+                          this.imgKey++;
                           return (
-                            <Image
-                              key={htmlAttribs.src}
-                              source={{ uri: htmlAttribs.src }}
-                              style={{
-                                marginLeft: -15,
-                                width, //TODO: will use htmlAttribs.width
-                                height: 200, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
-                                resizeMode: "cover"
+                            <TouchableOpacity
+                              key={index}
+                              onPress={() => {
+                                this.setState({
+                                  imageViewerVisible: true,
+                                  initImage: index
+                                });
                               }}
-                              {...passProps}
-                            />
+                            >
+                              <Image
+                                source={{ uri: htmlAttribs.src }}
+                                style={{
+                                  marginLeft: -15,
+                                  width, //TODO: will use htmlAttribs.width
+                                  height: 200, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
+                                  resizeMode: "cover"
+                                }}
+                                {...passProps}
+                              />
+                            </TouchableOpacity>
                           );
                         }
                       }}
@@ -288,6 +316,15 @@ class DetailScreen extends Component {
             );
           }}
         </Query>
+        {/*点击图片预览**/}
+        <Modal visible={imageViewerVisible} transparent={true} onRequestClose={() => this.setState({ imageViewerVisible: false })}>
+          <ImageViewer
+            onClick={() => this.setState({ imageViewerVisible: false })}
+            onSwipeDown={() => this.setState({ imageViewerVisible: false })}
+            imageUrls={this.pictures}
+            index={initImage}
+          />
+        </Modal>
         <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
@@ -315,7 +352,7 @@ class DetailScreen extends Component {
     }
   }
 
-  //获取文章底部到页面顶部的高度
+  //获取文章底部到页面顶部的高度 控制底部输入框显示隐藏的临界点
   _footOnLayout(event) {
     let { x, y, width, height } = event.nativeEvent.layout;
     this.setState({ footOffsetHeight: y });

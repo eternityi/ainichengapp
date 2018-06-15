@@ -100,7 +100,7 @@ class HomeScreen extends React.Component {
           <Query query={chatsQuery} pollInterval={20000}>
             {({ loading, error, data, refetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
-              if (!(data && data.user)) return <SpinnerLoading />;
+              if (!(data && data.user && data.user.chats)) return <SpinnerLoading />;
               if (data.user.chats.length < 1) return <Diving customStyle={{ marginTop: 20 }} />;
               return (
                 <FlatList

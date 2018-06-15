@@ -10,6 +10,7 @@ export default defineActionConstants([
 	"UPDATE_AVATAR",
 	"UPDATE_NAME",
 	"UPDATE_INTRODUCTION",
+	"UPDATE_RESOURCE_COUNT",
 
 	//专题
 	"EDIT_CATEGORY_ADMINS",

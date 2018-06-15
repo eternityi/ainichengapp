@@ -11,6 +11,16 @@ class UserReducer {
 		}
 	}
 
+	static [types.UPDATE_RESOURCE_COUNT](state, action) {
+		let { resource } = action;
+		let { user } = state;
+		user = {
+			...user,
+			...resource
+		};
+		return state.set("user", user);
+	}
+
 	static [types.UPDATE_UNREADS](state, action) {
 		let { unreads } = action;
 		return state.set("count_unreads", unreads);

@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     marginLeft: 21
   },
   dynamicList: {
-    paddingTop: 25,
+    marginTop: 20,
     paddingRight: 20
   },
   dynamicItem: {

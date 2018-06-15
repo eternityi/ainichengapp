@@ -13,16 +13,11 @@ import Screen from "../Screen";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { withApollo } from "react-apollo";
+import { userResourceCountQuery } from "../../graphql/user.graphql";
 
 class HomeScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    // navigation.getParams
-    // if(navigation.state.params.resetStore) {
-    //   navigation.state.params.resetStore();
-    // }
-    return {
-      header: null
-    };
+  static navigationOptions = {
+    header: null
   };
 
   constructor(props) {
@@ -31,6 +26,26 @@ class HomeScreen extends React.Component {
     this.state = {
       modalVisible: false
     };
+  }
+
+  componentDidMount() {
+    // 请求数据更新 user resource
+    let { users, client, dispatch } = this.props;
+    if (users.user && users.user.id) {
+      client
+        .query({
+          query: userResourceCountQuery,
+          variables: {
+            id: users.user.id
+          }
+        })
+        .then(({ data }) => {
+          dispatch(actions.updateUserResource(data.user));
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
+    }
   }
 
   render() {

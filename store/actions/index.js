@@ -1,6 +1,13 @@
 import types from "../types";
 
 export default {
+  updateUserResource(resource) {
+    return {
+      type: types.UPDATE_RESOURCE_COUNT,
+      resource
+    };
+  },
+
   updateUnreads(unreads) {
     return {
       type: types.UPDATE_UNREADS,

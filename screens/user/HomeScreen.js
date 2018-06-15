@@ -138,27 +138,15 @@ class HomeScreen extends Component {
                           <View style={{ marginBottom: 6 }}>
                             <Text style={{ fontSize: 20, color: Colors.primaryFontColor }}>{user.name}</Text>
                           </View>
-                          <View>
-                            <Text style={{ fontSize: 15, color: Colors.tintFontColor }}>
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  color: Colors.primaryFontColor
-                                }}
-                              >
-                                {user.count_follows}
-                              </Text>{" "}
-                              关注{"  "}
-                              <Text
-                                style={{
-                                  fontSize: 16,
-                                  color: Colors.primaryFontColor
-                                }}
-                              >
-                                {user.count_followings}
-                              </Text>{" "}
-                              粉丝
-                            </Text>
+                          <View style={styles.layoutRow}>
+                            <View style={styles.layoutRow}>
+                              <Text style={styles.darkText}>{user.count_followings}</Text>
+                              <Text style={styles.tintText}>关注</Text>
+                            </View>
+                            <View style={[styles.layoutRow, { marginHorizontal: 6 }]}>
+                              <Text style={styles.darkText}>{user.count_follows}</Text>
+                              <Text style={styles.tintText}>粉丝</Text>
+                            </View>
                           </View>
                         </View>
                       </View>
@@ -182,7 +170,7 @@ class HomeScreen extends Component {
                           <HollowButton onPress={() => navigation.navigate("编辑个人资料")}>
                             <Iconfont name={"editor"} size={16} color={"rgba(66,192,46,0.9)"} />
                             <Text style={{ fontSize: 14, color: "rgba(66,192,46,0.9)" }}> 编辑个人资料</Text>
-                          </HollowButton>$
+                          </HollowButton>
                         </View>
                       ) : (
                         <View style={{ flexDirection: "row", height: 40 }}>
@@ -219,6 +207,7 @@ class HomeScreen extends Component {
                         </View>
                       )}
                     </View>
+                    {/*查看头像大图**/}
                     <Modal visible={avatarViewerVisible} transparent={true} onRequestClose={() => this.setState({ avatarViewerVisible: false })}>
                       <ImageViewer
                         onClick={() => this.setState({ avatarViewerVisible: false })}
@@ -234,7 +223,8 @@ class HomeScreen extends Component {
                       />
                     </Modal>
                   </View>
-                  {!scrollEnabled && <View style={{ height: height - headerHeight }} /> /*position后扯开父级的空内容**/}
+                  {/*撑开scrollView后用来抵消的tabView position后的高度**/}
+                  {!scrollEnabled ? <View style={{ height: height - headerHeight }} /> : null}
                   <View
                     style={[
                       styles.userDetailTabScreen,
@@ -248,7 +238,14 @@ class HomeScreen extends Component {
                       onChangeTab={this._changeTab}
                     >
                       <ActionsTab tabLabel="动态" scrollEnabled={!scrollEnabled} onScroll={this.innerScroll} navigation={navigation} user={user} />
-                      <ArticlesTab tabLabel="文章" scrollEnabled={!scrollEnabled} onScroll={this.innerScroll} navigation={navigation} user={user} />
+                      <ArticlesTab
+                        tabLabel="文章"
+                        scrollEnabled={!scrollEnabled}
+                        onScroll={this.innerScroll}
+                        navigation={navigation}
+                        user={user}
+                        emit={this.articlesLength}
+                      />
                       <MoreTab tabLabel="更多" scrollEnabled={!scrollEnabled} navigation={navigation} user={user} />
                     </ScrollableTabView>
                   </View>
@@ -264,7 +261,8 @@ class HomeScreen extends Component {
                   inputRange: [0, 1],
                   outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"]
                 })
-              }
+              },
+              avatarViewerVisible && { backgroundColor: "#000" }
             ]}
           >
             <View>
@@ -347,6 +345,9 @@ class HomeScreen extends Component {
     let opacity = this.offsetTop > 15 ? this.offsetTop / 150 : 0;
     this._startHeaderAnimation(opacity);
     //根据当前tab页以及滚动高度控制跳转
+    if (this.state.currentTab == 1 && this.switch) {
+      return;
+    }
     if (currentTab !== 2 && this.offsetTop >= mainTopHeight - headerHeight) {
       this.setState({ scrollEnabled: false });
     }
@@ -356,7 +357,9 @@ class HomeScreen extends Component {
   _changeTab(obj) {
     this.setState({ currentTab: obj.i });
     let { mainTopHeight } = this.state;
-    if (obj.i !== 2 && this.offsetTop >= mainTopHeight - headerHeight) {
+    if (obj.i == 0 && this.offsetTop >= mainTopHeight - headerHeight) {
+      this.setState({ scrollEnabled: false });
+    } else if (obj.i == 1 && this.offsetTop >= mainTopHeight - headerHeight && !this.switch) {
       this.setState({ scrollEnabled: false });
     } else {
       this.setState({ scrollEnabled: true });
@@ -412,6 +415,11 @@ class HomeScreen extends Component {
       navigation.navigate("登录注册");
     }
   }
+
+  // 通过获取articleTab的文章数量，判断内容长度，觉得是否切换scrollEnabled
+  articlesLength = num => {
+    this.switch = height - 130 * num - headerHeight - 55 > 0;
+  };
 }
 
 const styles = StyleSheet.create({
@@ -432,6 +440,18 @@ const styles = StyleSheet.create({
   userInfoTop: {
     flexDirection: "row",
     paddingBottom: 20
+  },
+  layoutRow: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  tintText: {
+    fontSize: 15,
+    color: Colors.tintFontColor
+  },
+  darkText: {
+    fontSize: 16,
+    color: Colors.primaryFontColor
   },
   userAvatar: {
     marginRight: 20,

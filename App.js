@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  YellowBox,
-  Dimensions,
-  Image
-} from "react-native";
+import { Platform, StatusBar, StyleSheet, View, Text, YellowBox, Dimensions, Image } from "react-native";
 import codePush from "react-native-code-push";
 import ApolloApp from "./ApolloApp";
 import Colors from "./constants/Colors";
@@ -56,21 +47,14 @@ class App extends React.Component {
         </MenuProvider>
         {!isLoadingComplete && (
           <View style={styles.appLaunch}>
-            {Platform.OS === "ios" && (
-              <Image
-                source={require("./assets/images/flight.gif")}
-                style={styles.filght}
-              />
-            )}
+            {Platform.OS === "ios" && <Image source={require("./assets/images/flight.gif")} style={styles.flight} />}
             {Platform.OS === "android" && <SpinnerLoading type="9CubeGrid" />}
             <View style={styles.appInfo}>
               <View style={styles.appLogoWrap}>
                 {/**<Image source={require("./assets/images/appLogo.png")} style={styles.appLogo} />*/}
                 <Text style={styles.appName}>{Config.AppName}</Text>
               </View>
-              <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>
-                {Config.AppSlogan}
-              </Text>
+              <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>{Config.AppSlogan}</Text>
             </View>
           </View>
         )}
@@ -112,13 +96,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff"
   },
-  filght: {
+  flight: {
     width,
     height: width * 0.68,
     resizeMode: "cover"
   },
   appInfo: {
-    marginVertical: 20,
+    marginVertical: 30,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center"

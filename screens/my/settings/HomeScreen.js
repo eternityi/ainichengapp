@@ -54,9 +54,11 @@ class HomeScreen extends Component {
 					<Header navigation={navigation} />
 					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
 						<SettingType typeName={"消息推送"} customStyle={{ borderTopColor: "transparent" }} />
-						<TouchableOpacity onPress={() => navigation.navigate("文章更新推送")}>
-							<SettingItem itemName="文章更新推送" />
-						</TouchableOpacity>
+						{
+							// <TouchableOpacity onPress={() => navigation.navigate("文章更新推送")}>
+							// 	<SettingItem itemName="文章更新推送" />
+							// </TouchableOpacity>
+						}
 						<TouchableOpacity onPress={() => navigation.navigate("推送通知")}>
 							<SettingItem itemName="推送通知" />
 						</TouchableOpacity>

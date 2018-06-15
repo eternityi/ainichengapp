@@ -134,7 +134,7 @@ class CategoriesScreen extends React.Component {
                 keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
                 renderItem={this._renderCategoryItem}
                 numColumns={3}
-                columnWrapperStyle={{ paddingBottom: 20, paddingLeft: 15 }}
+                columnWrapperStyle={{ paddingBottom: 20, justifyContent: "space-around" }}
                 refreshing={loading}
                 onRefresh={() => {
                   refetch();
@@ -226,7 +226,7 @@ class CategoriesScreen extends React.Component {
   _renderCategoryItem = ({ item, index }) => {
     const { navigate } = this.props.navigation;
     return (
-      <TouchableOpacity style={{ flex: 1 }} onPress={() => navigate("专题详情", { category: item })}>
+      <TouchableOpacity onPress={() => navigate("专题详情", { category: item })}>
         <CategoryItem category={item} />
       </TouchableOpacity>
     );
