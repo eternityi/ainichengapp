@@ -7,7 +7,8 @@ import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-import { unreadsQuery, recommendAuthors } from "./graphql/user.graphql";
+import { recommendAuthors } from "./graphql/user.graphql";
+import { unreadsQuery } from "./graphql/notification.graphql";
 import { chatsQuery } from "./graphql/chat.graphql";
 import {
 	recommendArticlesQuery,

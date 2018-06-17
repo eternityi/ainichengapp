@@ -71,7 +71,7 @@ class CategoryTopInfo extends Component {
 	}
 
 	render() {
-		let { category = {}, navigation } = this.props;
+		let { category = {}, navigation, user } = this.props;
 		let { modalVisible } = this.state;
 		return (
 			<View style={styles.categoryInfo}>
@@ -137,7 +137,7 @@ class CategoryTopInfo extends Component {
 				</View>
 				<View style={styles.categoryButton}>
 					<View style={{ flex: 1, marginRight: 6 }}>
-						<FollowCategoryButton size={15} id={category.id} type={"category"} followed={category.followed} follows={category.count_follows} />
+						<FollowCategoryButton size={15} id={category.id} type={"category"} user={user} followed={category.followed} follows={category.count_follows} />
 					</View>
 					<View style={{ flex: 1, marginLeft: 6 }}>
 						<HollowButton name={"投稿"} size={17} onPress={this.handleVisible} />

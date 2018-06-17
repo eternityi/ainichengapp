@@ -12,7 +12,7 @@ import actions from "../../store/actions";
 
 class CollectionTopInfo extends Component {
 	render() {
-		let { collection = {}, navigation, user_articles } = this.props;
+		let { collection = {}, navigation, user } = this.props;
 		return (
 			<View style={styles.collectionInfo}>
 				<View style={styles.collectionInfoTop}>
@@ -55,6 +55,7 @@ class CollectionTopInfo extends Component {
 						size={15}
 						id={collection.id}
 						type={"collection"}
+						user={user}
 						followed={collection.followed}
 						follows={collection.count_follows}
 					/>
@@ -82,4 +83,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ user_articles: store.users.user_articles }))(CollectionTopInfo);
+export default connect(store => ({ user: store.users.user }))(CollectionTopInfo);
