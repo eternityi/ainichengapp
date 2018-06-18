@@ -17,92 +17,92 @@ const { width, height } = Dimensions.get("window");
 const official_categories = [
   {
     id: 1,
-    avatar: "https://ainicheng.com/app/follows.png",
+    avatar: "https://ainicheng.com/images/appicons/follows.png",
     name: "关注的专题",
     type: "全部关注",
     filter: "关注的专题"
   },
   {
     id: 64,
-    avatar: "https://www.ainicheng.com/app/teaching.png",
+    avatar: "https://www.ainicheng.com/images/appicons/teaching.png",
     name: "官方课堂",
     type: "视频详情"
   },
   {
     id: 11,
-    avatar: "https://ainicheng.com/app/moba.png",
+    avatar: "https://ainicheng.com/images/appicons/moba.png",
     name: "MOBA",
     type: "专题详情"
   },
   {
     id: 101,
-    avatar: "https://ainicheng.com/app/sheji.png",
+    avatar: "https://ainicheng.com/images/appicons/sheji.png",
     name: "射击",
     type: "专题详情"
   },
   {
     id: 99,
-    avatar: "https://ainicheng.com/app/jingsong.png",
+    avatar: "https://ainicheng.com/images/appicons/jingsong.png",
     name: "惊悚",
     type: "专题详情"
   },
   {
     id: 69,
-    avatar: "https://ainicheng.com/app/gedou.png",
+    avatar: "https://ainicheng.com/images/appicons/gedou.png",
     name: "格斗",
     type: "专题详情"
   },
   {
     id: 58,
-    avatar: "https://ainicheng.com/app/maoxian.png",
+    avatar: "https://ainicheng.com/images/appicons/maoxian.png",
     name: "冒险",
     type: "专题详情"
   },
   {
     id: 19,
-    avatar: "https://ainicheng.com/app/jingsu.png",
+    avatar: "https://ainicheng.com/images/appicons/jingsu.png",
     name: "竞速",
     type: "专题详情"
   },
   {
     id: 18,
-    avatar: "https://ainicheng.com/app/kapai.png",
+    avatar: "https://ainicheng.com/images/appicons/kapai.png",
     name: "卡牌",
     type: "专题详情"
   },
   {
     id: 60,
-    avatar: "https://ainicheng.com/app/qipai.png",
+    avatar: "https://ainicheng.com/images/appicons/qipai.png",
     name: "棋牌",
     type: "专题详情"
   },
   {
     id: 99,
-    avatar: "https://ainicheng.com/app/jishizhanlue.png",
+    avatar: "https://ainicheng.com/images/appicons/jishizhanlue.png",
     name: "即时战略",
     type: "专题详情"
   },
   {
     id: 100,
-    avatar: "https://ainicheng.com/app/jingyingcelue.png",
+    avatar: "https://ainicheng.com/images/appicons/jingyingcelue.png",
     name: "经营策略",
     type: "专题详情"
   },
   {
     id: 55,
-    avatar: "https://ainicheng.com/app/moniyangc.png",
+    avatar: "https://ainicheng.com/images/appicons/moniyangc.png",
     name: "模拟养成",
     type: "专题详情"
   },
   {
     id: 61,
-    avatar: "https://ainicheng.com/app/yizhi.png",
+    avatar: "https://ainicheng.com/images/appicons/yizhi.png",
     name: "益智",
     type: "专题详情"
   },
   {
     id: 82,
-    avatar: "https://ainicheng.com/app/music.png",
+    avatar: "https://ainicheng.com/images/appicons/music.png",
     name: "音乐",
     type: "专题详情"
   }
