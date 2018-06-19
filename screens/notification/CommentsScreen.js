@@ -40,7 +40,7 @@ class CommentsScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;
-							if (!(data.user.notifications.length > 0)) return <BlankContent />;
+							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
@@ -128,8 +128,7 @@ class CommentsScreen extends Component {
 								onPress={() =>
 									navigation.navigate("文章详情", {
 										article: notification.article
-									})
-								}
+									})}
 							>
 								{" 《" + notification.article.title + "》 "}
 							</Text>的评论中提到了你
@@ -141,8 +140,7 @@ class CommentsScreen extends Component {
 								onPress={() =>
 									navigation.navigate("文章详情", {
 										article: notification.article
-									})
-								}
+									})}
 							>
 								{" 《" + notification.article.title + "》 "}
 							</Text>
@@ -154,8 +152,7 @@ class CommentsScreen extends Component {
 								onPress={() =>
 									navigation.navigate("文章详情", {
 										article: notification.article
-									})
-								}
+									})}
 							>
 								{" 《" + notification.article.title + "》 "}
 							</Text>中添加了一条新评论

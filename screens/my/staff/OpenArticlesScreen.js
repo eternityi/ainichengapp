@@ -4,7 +4,7 @@ import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
 import PlainArticleItem from "../../../components/Article/PlainArticleItem";
 import { OperationModal } from "../../../components/Modal";
-import { ContentEnd, LoadingMore, LoadingError } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { connect } from "react-redux";
@@ -44,6 +44,7 @@ class OpenArticlesScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.articles)) return null;
+							if (data.articles.length < 1) return <BlankContent />;
 							return (
 								<View>
 									<FlatList

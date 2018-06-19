@@ -36,7 +36,7 @@ class FollowersScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.users)) return <SpinnerLoading />;
-							if (!(data.users.length > 0)) return <BlankContent />;
+							if (data.users.length < 1) return <BlankContent />;
 							return (
 								<FlatList
 									data={data.users}

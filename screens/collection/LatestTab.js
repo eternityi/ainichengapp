@@ -30,7 +30,7 @@ class LatestTab extends Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
-            if (!(data.articles.length > 0)) return <BlankContent />;
+            if (data.articles.length < 1) return <BlankContent />;
             return (
               <FlatList
                 onScroll={onScroll}
@@ -61,7 +61,6 @@ class LatestTab extends Component {
                         offset: data.articles.length
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        console.log("fetchMoreResult", fetchMoreResult);
                         if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
                           this.setState({
                             fetchingMore: false

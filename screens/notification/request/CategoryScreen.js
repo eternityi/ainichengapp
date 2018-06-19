@@ -35,14 +35,20 @@ class CategoryScreen extends Component {
 				<View style={styles.container}>
 					<Header navigation={navigation} routeName={navigation.state.params.category.name} />
 					<ScrollableTabView
-						renderTabBar={() => <CustomScrollTabBar tabNames={["全部", "未处理"]} tabBarStyle={{ borderTopColor: "transparent" }} tabItemWrapStyle={{ width: 90 }} />}
+						renderTabBar={() => (
+							<CustomScrollTabBar
+								tabNames={["全部", "未处理"]}
+								tabBarStyle={{ borderTopColor: "transparent" }}
+								tabItemWrapStyle={{ width: 90 }}
+							/>
+						)}
 					>
 						<View style={styles.container}>
 							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "ALL" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
-									if (!(data.category.articles.length > 0)) return <BlankContent />;
+									if (data.category.articles.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.category.articles}
@@ -62,7 +68,7 @@ class CategoryScreen extends Component {
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
-									if (!(data.category.articles.length > 0)) return <BlankContent />;
+									if (data.category.articles.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.category.articles}

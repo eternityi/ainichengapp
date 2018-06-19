@@ -42,7 +42,7 @@ class HistoryScreen extends Component {
 								{({ error, loading, data, fetchMore, refetch }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.visits)) return <SpinnerLoading />;
-									if (!(data.visits.length > 0)) return <BlankContent />;
+									if (data.visits.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.visits}
@@ -59,7 +59,7 @@ class HistoryScreen extends Component {
 								{({ error, loading, data, fetchMore, refetch }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.visits)) return <SpinnerLoading />;
-									if (!(data.visits.length > 0)) return <BlankContent />;
+									if (data.visits.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.visits}

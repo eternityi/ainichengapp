@@ -26,7 +26,7 @@ class OtherRemindScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;
-							if (!(data.user.notifications.length > 0)) return <BlankContent />;
+							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
@@ -106,8 +106,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("用户详情", {
 									user: notification.user
-								})
-							}
+								})}
 						>
 							{notification.user.name + " "}
 						</Text>
@@ -117,8 +116,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})
-							}
+								})}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>
@@ -134,8 +132,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("文章详情", {
 									article: notification.article
-								})
-							}
+								})}
 						>
 							{" 《" + notification.article.title + "》 "}
 						</Text>
@@ -145,8 +142,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})
-							}
+								})}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>
@@ -162,8 +158,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("文章详情", {
 									article: notification.article
-								})
-							}
+								})}
 						>
 							{" 《" + notification.article.title + "》 "}
 						</Text>
@@ -173,8 +168,7 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})
-							}
+								})}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>

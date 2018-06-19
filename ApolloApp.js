@@ -10,11 +10,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { recommendAuthors } from "./graphql/user.graphql";
 import { unreadsQuery } from "./graphql/notification.graphql";
 import { chatsQuery } from "./graphql/chat.graphql";
-import {
-	recommendArticlesQuery,
-	topArticleWithImagesQuery,
-	hotArticlesQuery
-} from "./graphql/article.graphql";
+import { recommendArticlesQuery, topArticleWithImagesQuery, hotArticlesQuery } from "./graphql/article.graphql";
 import { topCategoriesQuery } from "./graphql/category.graphql";
 
 class ApolloApp extends Component {
@@ -43,18 +39,13 @@ class ApolloApp extends Component {
 			query({ query: topCategoriesQuery })
 		];
 		if (this.props.user.token) {
-			promises.concat([
-				query({ query: unreadsQuery }),
-				query({ query: chatsQuery })
-			]);
+			promises.concat([query({ query: unreadsQuery }), query({ query: chatsQuery })]);
 		}
 		Promise.all(promises)
 			.then(fulfilled => {
-				console.log("fulfilled");
 				this.props.onReady();
 			})
 			.catch(rejected => {
-				console.log("rejected");
 				console.log(rejected);
 			});
 	}

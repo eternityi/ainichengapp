@@ -26,7 +26,7 @@ class PendingScreen extends Component {
             {({ loading, error, data, refetch, fetchMore }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.user)) return <SpinnerLoading />;
-              if (!(data.user.articles.length > 0)) return <BlankContent />;
+              if (data.user.articles.length < 1) return <BlankContent />;
               return (
                 <FlatList
                   data={data.user.articles}

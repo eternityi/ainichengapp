@@ -1,31 +1,15 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Text
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList, Text } from "react-native";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import {
-  CustomScrollTabBar,
-  ContentEnd,
-  LoadingMore,
-  BlankContent,
-  LoadingError,
-  SpinnerLoading
-} from "../../../components/Pure";
+import { CustomScrollTabBar, ContentEnd, LoadingMore, BlankContent, LoadingError, SpinnerLoading } from "../../../components/Pure";
 import { CategoryGroup, CollectionGroup } from "../../../components/MediaGroup";
 import Screen from "../../Screen";
 
 import { Query } from "react-apollo";
-import {
-  userFollowedCategoriesQuery,
-  userFollowedCollectionsQuery
-} from "../../../graphql/user.graphql";
+import { userFollowedCategoriesQuery, userFollowedCollectionsQuery } from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
@@ -54,14 +38,11 @@ class FollowedBooksScreen extends Component {
             )}
           >
             <View tabLabel="专题" style={{ flex: 1 }}>
-              <Query
-                query={userFollowedCategoriesQuery}
-                variables={{ user_id: user.id }}
-              >
+              <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
                 {({ loading, error, data, refetch }) => {
                   if (error) return <LoadingError reload={() => refetch()} />;
                   if (!(data && data.categories)) return <SpinnerLoading />;
-                  if (!(data.categories.length > 0)) return <BlankContent />;
+                  if (data.categories.length < 1) return <BlankContent />;
                   return (
                     <FlatList
                       data={data.categories}
@@ -79,13 +60,7 @@ class FollowedBooksScreen extends Component {
                               category: item
                             })}
                         >
-                          <CategoryGroup
-                            navigation={navigation}
-                            category={item}
-                            showCreator
-                            customStyle={{ logo: 44, mateSize: 13 }}
-                            miniButton
-                          />
+                          <CategoryGroup navigation={navigation} category={item} showCreator customStyle={{ logo: 44, mateSize: 13 }} miniButton />
                         </TouchableOpacity>
                       )}
                       ListFooterComponent={() => <ContentEnd />}
@@ -95,14 +70,11 @@ class FollowedBooksScreen extends Component {
               </Query>
             </View>
             <View tabLabel="文集" style={{ flex: 1 }}>
-              <Query
-                query={userFollowedCollectionsQuery}
-                variables={{ user_id: user.id }}
-              >
+              <Query query={userFollowedCollectionsQuery} variables={{ user_id: user.id }}>
                 {({ loading, error, data, refetch }) => {
                   if (error) return <LoadingError reload={() => refetch()} />;
                   if (!(data && data.collections)) return <SpinnerLoading />;
-                  if (!(data.collections.length > 0)) return <BlankContent />;
+                  if (data.collections.length < 1) return <BlankContent />;
                   return (
                     <FlatList
                       data={data.collections}
@@ -120,12 +92,7 @@ class FollowedBooksScreen extends Component {
                               collection: item
                             })}
                         >
-                          <CollectionGroup
-                            navigation={navigation}
-                            collection={item}
-                            customStyle={{ logo: 44, mateSize: 13 }}
-                            miniButton
-                          />
+                          <CollectionGroup navigation={navigation} collection={item} customStyle={{ logo: 44, mateSize: 13 }} miniButton />
                         </TouchableOpacity>
                       )}
                       ListFooterComponent={() => <ContentEnd />}

@@ -26,7 +26,7 @@ class LatestTab extends Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
-            if (!(data.articles.length > 0)) return <BlankContent />;
+            if (data.articles.length < 1) return <BlankContent />;
             return (
               <FlatList
                 refreshing={loading}

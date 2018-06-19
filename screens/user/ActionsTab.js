@@ -22,7 +22,7 @@ class ActionsTab extends Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.actions)) return <SpinnerLoading />;
-            if (!(data.actions.length > 0)) return <BlankContent />;
+            if (data.actions.length < 1) return <BlankContent />;
             return (
               <View style={styles.dynamicWrap}>
                 <View style={styles.dynamicLeftLine} />

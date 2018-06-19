@@ -57,7 +57,6 @@ class DetailScreen extends Component {
 	}
 
 	onLoad(data) {
-		console.log("On load fired!");
 		this.setState({ duration: data.duration });
 	}
 
@@ -373,6 +372,7 @@ const styles = StyleSheet.create({
 	commentInput: {
 		flex: 1,
 		height: 34,
+		paddingLeft: 10,
 		borderRadius: 3,
 		justifyContent: "center",
 		marginHorizontal: 8,

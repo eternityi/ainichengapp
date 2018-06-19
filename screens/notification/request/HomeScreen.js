@@ -26,7 +26,7 @@ class HomeScreen extends Component {
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;
-							if (!(data.user.categories.length > 0)) return <BlankContent />;
+							if (data.user.categories.length < 1) return <BlankContent />;
 							return (
 								<FlatList
 									data={data.user.categories}

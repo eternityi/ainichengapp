@@ -103,17 +103,12 @@ class HomeScreen extends React.Component {
               if (!(data && data.user && data.user.chats)) return <SpinnerLoading />;
               if (data.user.chats.length < 1) return <Diving customStyle={{ marginTop: 20 }} />;
               return (
-                <FlatList
-                  data={data.user.chats}
-                  keyExtractor={this._keyExtractor}
-                  getItemLayout={(data, index) => ({
-                    length: 68,
-                    offset: 68 * index,
-                    index
+                <View>
+                  {data.user.chats.map((elem, index) => {
+                    return this._renderChatItem({ item: elem, index });
                   })}
-                  renderItem={this._renderChatItem}
-                  ListFooterComponent={() => <ContentEnd />}
-                />
+                  <ContentEnd />
+                </View>
               );
             }}
           </Query>
@@ -170,7 +165,7 @@ class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     let chat = item;
     return (
-      <View style={styles.chatItem}>
+      <View style={styles.chatItem} key={index}>
         <TouchableOpacity style={styles.chatUser} onPress={() => navigate("用户详情", { user: chat.withUser })}>
           <Avatar uri={chat.withUser.avatar} size={32} />
           <View style={styles.chatBadge}>
@@ -199,7 +194,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.skinColor
   },
   menuWrap: {
-    flex: 1,
     paddingHorizontal: 15,
     paddingTop: 15,
     paddingBottom: 10

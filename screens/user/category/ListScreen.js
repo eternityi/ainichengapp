@@ -126,7 +126,7 @@ class ListScreen extends Component {
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.categories)) return <SpinnerLoading />;
-									if (!(data.categories.length > 0)) return <BlankContent />;
+									if (data.categories.length < 1) return <BlankContent />;
 									return (
 										<FlatList
 											data={data.categories}

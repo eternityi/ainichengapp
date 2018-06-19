@@ -44,7 +44,7 @@ class NewChatScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.friends)) return <SpinnerLoading />;
-							if (!(data.user.friends.length > 0)) return <BlankContent />;
+							if (data.user.friends.length < 1) return <BlankContent />;
 							return (
 								<FlatList
 									data={data.user.friends}

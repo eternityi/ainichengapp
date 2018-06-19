@@ -100,7 +100,11 @@ class CreateScreen extends Component {
 				<ScrollView style={styles.container} bounces={false}>
 					<View style={styles.uploadWrap}>
 						<TouchableOpacity style={styles.uploadLogo} onPress={this._uploadLogo.bind(this)}>
-							{logo ? <Image source={{ uri: logo }} style={styles.categoryLogo} /> : <Iconfont name={"camera"} size={25} color={"#fff"} />}
+							{logo ? (
+								<Image source={{ uri: logo }} style={styles.categoryLogo} />
+							) : (
+								<Iconfont name={"camera"} size={25} color={"#fff"} />
+							)}
 						</TouchableOpacity>
 						<Text
 							style={{
@@ -249,8 +253,6 @@ class CreateScreen extends Component {
 				fetch(Config.ServerRoot + "/api/category/new-logo?api_token=" + token, config)
 					.then(response => response.text())
 					.then(logo => {
-						console.log("logo::::");
-						console.log(logo);
 						// real ui update
 						_this.setState({
 							logo
@@ -349,5 +351,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({ user: store.users.user, admin_uids: store.categories.admin_uids }))(
-	compose(graphql(createCategoryMutation, { name: "createCategoryMutation" }), graphql(editCategoryMutation, { name: "editCategoryMutation" }))(CreateScreen)
+	compose(graphql(createCategoryMutation, { name: "createCategoryMutation" }), graphql(editCategoryMutation, { name: "editCategoryMutation" }))(
+		CreateScreen
+	)
 );
