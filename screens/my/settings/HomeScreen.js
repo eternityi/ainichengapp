@@ -63,20 +63,20 @@ class HomeScreen extends Component {
 							<SettingItem itemName="推送通知" />
 						</TouchableOpacity>
 						<SettingType typeName={"通用设置"} />
-						<TouchableOpacity onPress={() => navigation.navigate("编辑个人资料")}>
+						<TouchableOpacity onPress={() => this.navigateMiddlewear("编辑个人资料")}>
 							<SettingItem itemName="编辑个人资料" />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => navigation.navigate("赞赏设置")}>
+						<TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
 							<SettingItem itemName="赞赏设置" />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={this.handleFontModalVisible}>
 							<SettingItem itemName="字号设置" />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => navigation.navigate("黑名单")}>
+						<TouchableOpacity onPress={() => this.navigateMiddlewear("黑名单")}>
 							<SettingItem itemName="黑名单" endItem />
 						</TouchableOpacity>
 						<SettingType typeName={"其他"} />
-						<TouchableOpacity onPress={() => navigation.navigate("回收站")}>
+						<TouchableOpacity onPress={() => this.navigateMiddlewear("回收站")}>
 							<SettingItem itemName="回收站" />
 						</TouchableOpacity>
 						<TouchableOpacity
@@ -190,6 +190,15 @@ class HomeScreen extends Component {
 			fontModalVisible: !prevState.fontModalVisible
 		}));
 	}
+
+	navigateMiddlewear(routeName) {
+		let { navigation, users } = this.props;
+		if (users.login) {
+			navigation.navigate(routeName);
+		} else {
+			navigation.navigate("登录注册", { login: true });
+		}
+	}
 }
 
 const styles = StyleSheet.create({
@@ -240,5 +249,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => {
-	return { ...store };
+	return { users: store.users };
 })(withApollo(HomeScreen));

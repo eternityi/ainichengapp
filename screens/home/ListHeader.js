@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import Colors from "../../constants/Colors";
 import OfficialColumn from "../../components/Category/OfficialColumn";
+import { NavigationActions } from "react-navigation";
 
 const official_categories = [
 	{
@@ -113,7 +114,21 @@ class ListHeader extends PureComponent {
 	_renderItem = (item, index) => {
 		const { navigation } = this.props;
 		return (
-			<TouchableOpacity key={index.toString()} style={{ marginRight: 25 }} onPress={() => navigation.navigate(item.type, { category: item })}>
+			<TouchableOpacity
+				key={index.toString()}
+				style={{ marginRight: 25 }}
+				onPress={() => {
+					// navigation.navigate(item.type, { category: item }, {}, "official_column");
+					const navigateAction = NavigationActions.navigate({
+						routeName: item.type,
+						params: { category: item },
+						action: null,
+						key: "screen-123"
+					});
+
+					navigation.dispatch(navigateAction);
+				}}
+			>
 				<OfficialColumn data={item} />
 			</TouchableOpacity>
 		);
