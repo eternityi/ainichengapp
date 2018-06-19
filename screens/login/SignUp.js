@@ -14,10 +14,10 @@ class SignUp extends Component {
 		this.changeValue = this.changeValue.bind(this);
 		this.emptyValue = this.emptyValue.bind(this);
 		this.state = {
-			nickName: "",
+			name: "",
 			email: "",
 			password: "",
-			focusItem: "nickName",
+			focusItem: "name",
 			disableSubmit: true
 		};
 	}
@@ -27,8 +27,9 @@ class SignUp extends Component {
 	}
 
 	changeValue(key, value) {
-		this.setState({ [key]: value });
-		if (this.state.nickName && this.state.email && this.state.password) {
+		console.log("key", key, value);
+		this.setState({ [key]: value + "" });
+		if (this.state.name && this.state.email && this.state.password) {
 			this.setState({ disableSubmit: false });
 		} else if (!this.state.disableSubmit) {
 			this.setState({ disableSubmit: true });
@@ -40,7 +41,7 @@ class SignUp extends Component {
 	}
 
 	render() {
-		let { nickName, email, password, focusItem, disableSubmit } = this.state;
+		let { name, email, password, focusItem, disableSubmit } = this.state;
 		let { handleSkip } = this.props;
 		return (
 			<View style={styles.container}>
@@ -57,9 +58,9 @@ class SignUp extends Component {
 						<View>
 							<LoginInput
 								name={"user"}
-								keys={"nickName"}
+								keys={"name"}
 								focusItem={focusItem}
-								value={nickName}
+								value={name}
 								focusKey={this.focusKey}
 								emptyValue={this.emptyValue}
 								placeholder={"你的昵称"}

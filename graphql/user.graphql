@@ -128,7 +128,7 @@ mutation signInMutation($email: String!, $password: String!) {
 }
 
 mutation signUpMutation($email: String!, $password: String!, $name: String!) {
-    signup(email: $email, password: $password, name: $name) {
+    signUp(email: $email, password: $password, name: $name) {
         id
         name
         email

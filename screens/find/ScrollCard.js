@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList } from "
 
 import Color from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { RefreshControl } from "../../components/Pure";
+import { RefreshControl, LoadingError } from "../../components/Pure";
 import AuthorCard from "./AuthorCard";
 
 import { connect } from "react-redux";
@@ -12,15 +12,20 @@ import { Query } from "react-apollo";
 import { recommendAuthors } from "../../graphql/user.graphql";
 
 class ScrollCard extends Component {
-  state = {
-    page: 1
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+      page: 1
+    };
+  }
 
   render() {
     let { navigation } = this.props;
     return (
       <Query query={recommendAuthors}>
         {({ loading, error, data, refetch, fetchMore }) => {
+          if (error) return <LoadingError reload={() => refetch()} />;
           if (!(data && data.users)) return null;
           return (
             <View style={styles.authorCard}>
@@ -29,18 +34,29 @@ class ScrollCard extends Component {
                   <Text style={styles.titleText}>推荐作者</Text>
                 </View>
                 <RefreshControl
+                  refreshing={this.state.refreshing}
                   refresh={() => {
-                    fetchMore({
-                      variables: {
-                        offset: this.state.page * 10
-                      },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        this.setState({
-                          page: this.state.page + 1
-                        });
-                        return fetchMoreResult;
-                      }
+                    this.setState({
+                      refreshing: true
                     });
+                    if (data.users) {
+                      fetchMore({
+                        variables: {
+                          offset: this.state.page * 10
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          this.setState({
+                            refreshing: false,
+                            page: this.state.page + 1
+                          });
+                          console.log("refreshing", this.state.refreshing);
+                          if (!(fetchMoreResult && fetchMoreResult.users && fetchMoreResult.users.length > 0)) {
+                            return prev;
+                          }
+                          return fetchMoreResult;
+                        }
+                      });
+                    }
                   }}
                 />
               </View>

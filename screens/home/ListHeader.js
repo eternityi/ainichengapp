@@ -6,86 +6,93 @@ import OfficialColumn from "../../components/Category/OfficialColumn";
 const official_categories = [
 	{
 		id: 1,
-		avatar: "https://ainicheng.com/images/appicons/follows.png",
-		name: "全部关注",
-		type: "全部关注"
-	},
-	{
-		id: 2,
-		avatar: "https://www.ainicheng.com/images/appicons/ranking.png",
-		name: "排行榜",
-		type: "排行榜"
+		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
+		name: "关注的专题",
+		type: "全部关注",
+		filter: "我的关注"
 	},
 	{
 		id: 64,
-		avatar: "https://www.ainicheng.com/images/appicons/teaching.png",
+		avatar: "https://www.ainicheng.com/images/appicons/guanfangketang.png",
 		name: "官方课堂",
-		type: "专题详情"
+		type: "视频详情"
 	},
 	{
-		id: 11,
-		avatar: "https://ainicheng.com/images/appicons/moba.png",
-		name: "MOBA",
-		type: "专题详情"
-	},
-	{
-		id: 101,
-		avatar: "https://ainicheng.com/images/appicons/sheji.png",
-		name: "射击",
-		type: "专题详情"
-	},
-	{
-		id: 58,
-		avatar: "https://ainicheng.com/images/appicons/maoxian.png",
-		name: "冒险",
-		type: "专题详情"
-	},
-	{
-		id: 19,
-		avatar: "https://ainicheng.com/images/appicons/jingsu.png",
-		name: "竞速",
-		type: "专题详情"
-	},
-	{
-		id: 18,
-		avatar: "https://ainicheng.com/images/appicons/kapai.png",
-		name: "卡牌",
+		id: 60,
+		avatar: "https://ainicheng.com/images/appicons/jingxuantougao.png",
+		name: "精选投稿",
 		type: "专题详情"
 	},
 	{
 		id: 60,
-		avatar: "https://ainicheng.com/images/appicons/qipai.png",
-		name: "棋牌",
+		avatar: "https://ainicheng.com/images/appicons/youxizixun.png",
+		name: "游戏资讯",
 		type: "专题详情"
 	},
 	{
-		id: 69,
-		avatar: "https://ainicheng.com/images/appicons/gedou.png",
-		name: "格斗",
+		id: 18,
+		avatar: "https://ainicheng.com/images/appicons/steam.png",
+		name: "steam",
+		type: "专题详情"
+	},
+	{
+		id: 11,
+		avatar: "https://ainicheng.com/images/appicons/yingxionglianmeng.png",
+		name: "英雄联盟",
+		type: "专题详情"
+	},
+	{
+		id: 101,
+		avatar: "https://ainicheng.com/images/appicons/juedidataosha.png",
+		name: "绝地逃生",
 		type: "专题详情"
 	},
 	{
 		id: 99,
-		avatar: "https://ainicheng.com/images/appicons/jishizhanlue.png",
-		name: "即时战略",
+		avatar: "https://ainicheng.com/images/appicons/wangzerongyao.png",
+		name: "王者荣耀",
+		type: "专题详情"
+	},
+	{
+		id: 69,
+		avatar: "https://ainicheng.com/images/appicons/dota2.png",
+		name: "dota2",
+		type: "专题详情"
+	},
+	{
+		id: 58,
+		avatar: "https://ainicheng.com/images/appicons/duanyou.png",
+		name: "端游",
 		type: "专题详情"
 	},
 	{
 		id: 100,
-		avatar: "https://ainicheng.com/images/appicons/jingyingcelue.png",
-		name: "经营策略",
+		avatar: "https://ainicheng.com/images/appicons/shouyou.png",
+		name: "手游",
 		type: "专题详情"
 	},
 	{
-		id: 61,
-		avatar: "https://ainicheng.com/images/appicons/yizhi.png",
-		name: "益智",
+		id: 19,
+		avatar: "https://ainicheng.com/images/appicons/biaoqingbao.png",
+		name: "表情包",
 		type: "专题详情"
 	},
 	{
-		id: 82,
-		avatar: "https://ainicheng.com/images/appicons/music.png",
-		name: "音乐",
+		id: 60,
+		avatar: "https://ainicheng.com/images/appicons/touxiang.png",
+		name: "头像",
+		type: "专题详情"
+	},
+	{
+		id: 99,
+		avatar: "https://ainicheng.com/images/appicons/nicheng.png",
+		name: "昵称",
+		type: "专题详情"
+	},
+	{
+		id: 100,
+		avatar: "https://ainicheng.com/images/appicons/xinqing.png",
+		name: "心情",
 		type: "专题详情"
 	}
 ];

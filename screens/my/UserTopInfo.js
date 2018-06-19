@@ -63,7 +63,7 @@ class UserTopInfo extends Component {
 										color: Colors.tintFontColor
 									}}
 								>
-									立即开辟属于你的美食风格
+									立即加入这座暖心的小城
 								</Text>
 							</View>
 						</View>

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
+import Toast from "react-native-root-toast";
+
+import Screen from "../Screen";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
 import { graphql, compose } from "react-apollo";
 import { signUpMutation, signInMutation } from "../../graphql/user.graphql";
 import { NavigationActions } from "react-navigation";
-import Screen from "../Screen";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -55,9 +57,14 @@ class LoginScreen extends Component {
           password
         }
       });
-      const user = result.data.signIn;
-      this._saveUserData(user);
+      if (result.error) {
+        this.toast();
+      } else {
+        const user = result.data.signIn;
+        this._saveUserData(user);
+      }
     } else {
+      console.log("name, email, password", name, email, password);
       const result = await this.props.signUpMutation({
         variables: {
           name,
@@ -65,7 +72,7 @@ class LoginScreen extends Component {
           password
         }
       });
-      const user = result.data.signup;
+      const user = result.data.signUp;
       this._saveUserData(user);
     }
   };
@@ -82,6 +89,21 @@ class LoginScreen extends Component {
 
     this.props.navigation.dispatch(navigateAction);
   };
+
+  toast() {
+    let toast = Toast.show("登录失败，请检查用户名或者密码是否有误！", {
+      duration: Toast.durations.LONG,
+      position: 70,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 100,
+      backgroundColor: Colors.nightColor
+    });
+    setTimeout(function() {
+      Toast.hide(toast);
+    }, 2000);
+  }
 }
 
 const styles = StyleSheet.create({

@@ -140,7 +140,7 @@ class SignIn extends Component {
 					visible={modalVisible}
 					handleVisible={this.handleModal}
 					customStyle={{ width: width - 60 }}
-					header={<Text style={styles.helpSignIn}>美味君提供以下方式帮你登录</Text>}
+					header={<Text style={styles.helpSignIn}>小爱提供以下方式帮你登录</Text>}
 				>
 					<View>
 						<View>

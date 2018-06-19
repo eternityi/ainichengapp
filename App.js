@@ -64,7 +64,6 @@ class App extends React.Component {
 
   _loadResourcesAsync = async () => {
     let user = await Storage.getItem(ItemKeys.user);
-    console.log(user);
     if (user) {
       store.dispatch(actions.signIn(user));
     }

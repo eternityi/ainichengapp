@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   column_image: {
-    width: 36,
-    height: 36,
+    width: 42,
+    height: 42,
     resizeMode: "contain"
   },
   column_name: {

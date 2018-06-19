@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Modal, Text, TouchableOpacity } from "react-native";
-import BasicModal from "./BasicModal";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
+import Config from "../../constants/Config";
+import BasicModal from "./BasicModal";
+
 import { connect } from "react-redux";
 
 class PaymentModal extends Component {
@@ -37,7 +40,7 @@ class PaymentModal extends Component {
             </View>
             <View>
               <Text style={styles.paymentText}>
-                懂美味余额：<Text style={{ color: Colors.primaryColor }}>{this.props.user.balance}.00</Text>
+                {Config.AppName}余额：<Text style={{ color: Colors.primaryColor }}>{this.props.user.balance}.00</Text>
               </Text>
             </View>
           </TouchableOpacity>
