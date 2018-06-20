@@ -18,7 +18,7 @@ class LatestTab extends Component {
   }
 
   render() {
-    const { navigation, scrollEnabled, onScroll, collection } = this.props;
+    const { navigation, scrollEnabled, onScroll, collection, gotArticleLength } = this.props;
     return (
       <View style={styles.container}>
         <Query
@@ -30,6 +30,7 @@ class LatestTab extends Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
+            gotArticleLength(data.articles.length);
             if (data.articles.length < 1) return <BlankContent />;
             return (
               <FlatList
@@ -50,8 +51,8 @@ class LatestTab extends Component {
                   </View>
                 )}
                 getItemLayout={(data, index) => ({
-                  length: 180,
-                  offset: 180 * index,
+                  length: 150,
+                  offset: 150 * index,
                   index
                 })}
                 onEndReached={() => {

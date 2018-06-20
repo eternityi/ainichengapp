@@ -56,7 +56,7 @@ class HomeScreen extends Component {
     this._changeTab = this._changeTab.bind(this);
     this._outerScroll = this._outerScroll.bind(this);
     this._mainTopLayout = this._mainTopLayout.bind(this);
-    this.actionsTabHeight = 55;
+    this.actionsHeight = 55;
     this.state = {
       mainTopHeight: 0,
       backgroundOpacity: new Animated.Value(0),
@@ -351,34 +351,51 @@ class HomeScreen extends Component {
   _outerScroll(event) {
     let { currentTab, mainTopHeight } = this.state;
     let { y } = event.nativeEvent.contentOffset;
-    this.offsetTop = y;
     //到达顶部
-    this.topReached = this.offsetTop >= mainTopHeight - headerHeight;
-    let opacity = this.offsetTop > 15 ? this.offsetTop / 150 : 0;
+    this.topReached = y >= mainTopHeight - headerHeight;
+    let opacity = y > 15 ? y / 150 : 0;
     this._startHeaderAnimation(opacity);
-    //根据当前tab页以及滚动高度控制跳转
-    if (this.state.currentTab == 0 && !this.actionsTabSwitch) {
-      return;
-    }
-    if (this.state.currentTab == 1 && !this.articlesTabSwitch) {
-      return;
-    }
-    if (currentTab !== 2 && this.offsetTop >= mainTopHeight - headerHeight) {
-      this.setState({ scrollEnabled: false });
+    this._scrollEnabled();
+  }
+
+  //内部滚动切换scrollEnabled
+  innerScroll(event) {
+    let { y } = event.nativeEvent.contentOffset;
+    if (y <= 1) {
+      this.setState({
+        scrollEnabled: true
+      });
     }
   }
 
   //切换tab页 判断scrollEnabled状态
   _changeTab(obj) {
-    this.setState({ currentTab: obj.i });
-    if (obj.i == 0 && this.topReached && this.actionsTabSwitch) {
-      this.setState({ scrollEnabled: false });
-    } else if (obj.i == 1 && this.topReached && this.articlesTabSwitch) {
-      this.setState({ scrollEnabled: false });
-    } else {
-      this.setState({ scrollEnabled: true });
-    }
+    this.setState({ currentTab: obj.i }, () => this._scrollEnabled());
   }
+
+  // scrollEnabled判断逻辑
+  _scrollEnabled = () => {
+    let { currentTab } = this.state;
+    if (currentTab == 2) {
+      this.setState({ scrollEnabled: true });
+    } else if (currentTab == 0 && this.actionsTabSwitch && this.topReached) {
+      this.setState({ scrollEnabled: false });
+    } else if (currentTab == 1 && this.articlesTabSwitch && this.topReached) {
+      this.setState({ scrollEnabled: false });
+    }
+  };
+
+  // 通过计算actionItem的高度总和，计算内容长度，决定是否切换scrollEnabled
+  calcActionHeight = actionHeight => {
+    this.actionsHeight += actionHeight;
+    this.actionsTabSwitch = this.actionsHeight + headerHeight > height;
+  };
+
+  // 通过获取article数量，计算内容长度，决定是否切换scrollEnabled
+  // 130是article高度，55是endComponent的高度
+  gotArticleLength = num => {
+    this.articlesTabSwitch = 130 * num + headerHeight + 55 > height;
+  };
 
   //头部动画
   _startHeaderAnimation(value) {
@@ -392,16 +409,6 @@ class HomeScreen extends Component {
       this.setState({ lightTabBar: false });
     } else if (value < 0.4 && !lightTabBar) {
       this.setState({ lightTabBar: true });
-    }
-  }
-
-  //内部滚动切换scrollEnabled
-  innerScroll(event) {
-    let { y } = event.nativeEvent.contentOffset;
-    if (y <= 1) {
-      this.setState({
-        scrollEnabled: true
-      });
     }
   }
 
@@ -429,18 +436,6 @@ class HomeScreen extends Component {
       navigation.navigate("登录注册");
     }
   }
-
-  // 通过计算actionItem的高度总和，计算内容长度，决定是否切换scrollEnabled
-  calcActionHeight = actionHeight => {
-    this.actionsTabHeight += actionHeight;
-    this.actionsTabSwitch = this.actionsTabHeight + headerHeight > height;
-  };
-
-  // 通过获取article数量，计算内容长度，决定是否切换scrollEnabled
-  // 130是article高度，55是endComponent的高度
-  gotArticleLength = num => {
-    this.articlesTabSwitch = 130 * num + headerHeight + 55 > height;
-  };
 }
 
 const styles = StyleSheet.create({

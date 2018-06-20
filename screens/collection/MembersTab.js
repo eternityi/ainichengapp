@@ -22,15 +22,17 @@ class MembersTab extends Component {
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (!(data && data.users)) return null;
 						return (
-							<FlatList
-								ListHeaderComponent={this._renderHeader.bind(this, data.users)}
-								onScroll={onScroll}
-								scrollEnabled={scrollEnabled}
-								data={data.users}
-								keyExtractor={(item, index) => index.toString()}
-								numColumns={3}
-								renderItem={this._renderItem}
-							/>
+							<View>
+								<FlatList
+									ListHeaderComponent={this._renderHeader.bind(this, data.users)}
+									onScroll={onScroll}
+									scrollEnabled={scrollEnabled}
+									data={data.users}
+									keyExtractor={(item, index) => index.toString()}
+									numColumns={3}
+									renderItem={this._renderItem}
+								/>
+							</View>
 						);
 					}}
 				</Query>
@@ -39,9 +41,14 @@ class MembersTab extends Component {
 	}
 
 	_renderHeader(users) {
-		let { navigation, collection } = this.props;
+		let { navigation, collection, calcAuthorHeight } = this.props;
 		return (
-			<View>
+			<View
+				onLayout={event => {
+					let { height } = event.nativeEvent.layout;
+					calcAuthorHeight(height);
+				}}
+			>
 				<View
 					style={{
 						paddingBottom: 20,
@@ -75,11 +82,17 @@ class MembersTab extends Component {
 	}
 
 	_renderItem = ({ item }) => {
-		let { navigation } = this.props;
+		let { navigation, calcMembersHeight } = this.props;
 		let user = item;
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate("用户详情", { user })}>
-				<View style={styles.memberItem}>
+				<View
+					style={styles.memberItem}
+					onLayout={event => {
+						let { height } = event.nativeEvent.layout;
+						calcMembersHeight(height);
+					}}
+				>
 					<View style={{ marginBottom: 12 }}>
 						<Avatar uri={user.avatar} size={46} />
 					</View>

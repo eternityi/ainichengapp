@@ -35,9 +35,13 @@ class HomeScreen extends Component {
 		this._mainTopLoaded = this._mainTopLoaded.bind(this);
 		this._outerScroll = this._outerScroll.bind(this);
 		this.innerScroll = this.innerScroll.bind(this);
+		this.tabSwitch = [];
+		this.authorHeight = 0;
+		this.membersHeight = 0;
 		this.state = {
 			tabNames: ["最新发布", "最新评论", "目录", "成员"],
 			mainTopHeight: 0,
+			currentTab: 0,
 			scrollEnabled: true
 		};
 	}
@@ -110,6 +114,7 @@ class HomeScreen extends Component {
 									>
 										<ScrollableTabView
 											renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabBarStyle={{ paddingHorizontal: 20 }} />}
+											onChangeTab={this._changeTab.bind(this)}
 										>
 											<LatestTab
 												tabLabel="最新发布"
@@ -117,6 +122,7 @@ class HomeScreen extends Component {
 												onScroll={this.innerScroll}
 												navigation={navigation}
 												collection={collection}
+												gotArticleLength={num => this.gotArticleLength(num, 0)}
 											/>
 											<CommentedTab
 												tabLabel="最新评论"
@@ -124,6 +130,7 @@ class HomeScreen extends Component {
 												onScroll={this.innerScroll}
 												navigation={navigation}
 												collection={collection}
+												gotArticleLength={num => this.gotArticleLength(num, 1)}
 											/>
 											<IndexTab
 												tabLabel="目录"
@@ -131,6 +138,7 @@ class HomeScreen extends Component {
 												onScroll={this.innerScroll}
 												navigation={navigation}
 												collection={collection}
+												gotArticleLength={num => this.gotArticleLength(num, 2)}
 											/>
 											<MembersTab
 												tabLabel="成员"
@@ -138,6 +146,8 @@ class HomeScreen extends Component {
 												onScroll={this.innerScroll}
 												navigation={navigation}
 												collection={collection}
+												calcAuthorHeight={this.calcAuthorHeight}
+												calcMembersHeight={this.calcMembersHeight}
 											/>
 										</ScrollableTabView>
 									</View>
@@ -159,10 +169,8 @@ class HomeScreen extends Component {
 	_outerScroll(event) {
 		let { mainTopHeight } = this.state;
 		let { y } = event.nativeEvent.contentOffset;
-		//根据滚动高度控制跳转
-		if (y >= mainTopHeight) {
-			this.setState({ scrollEnabled: false });
-		}
+		this.topReached = y >= mainTopHeight;
+		this._scrollEnabled();
 	}
 
 	//内部滚动切换scrollEnabled
@@ -174,6 +182,44 @@ class HomeScreen extends Component {
 			});
 		}
 	}
+
+	_changeTab(obj) {
+		this.setState({ currentTab: obj.i }, () => this._scrollEnabled());
+	}
+
+	// scrollEnabled判断逻辑
+	_scrollEnabled = () => {
+		let { currentTab } = this.state;
+		this.calcMembersTabSwitch();
+		if (currentTab == 3 && this.membersTabSwitch && this.topReached) {
+			this.setState({ scrollEnabled: false });
+		} else if (this.tabSwitch[currentTab] && this.topReached) {
+			this.setState({ scrollEnabled: false });
+		} else {
+			this.setState({ scrollEnabled: true });
+		}
+	};
+
+	// 150是article高度，55是endComponent的高度
+	gotArticleLength(num, i) {
+		this.tabSwitch[i] = 150 * num + headerHeight + 55 > height;
+	}
+
+	calcAuthorHeight = authorHeight => {
+		this.authorHeight = authorHeight;
+	};
+
+	calcMembersHeight = memberHeight => {
+		this.membersHeight += memberHeight;
+	};
+
+	calcMembersTabSwitch = () => {
+		if (this.membersHeight) {
+			this.membersTabSwitch = this.authorHeight + Math.floor(this.membersHeight / 3) + headerHeight + 55 > height;
+		} else {
+			this.membersTabSwitch = this.authorHeight + headerHeight > height;
+		}
+	};
 }
 
 const styles = StyleSheet.create({

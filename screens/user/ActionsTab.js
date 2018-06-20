@@ -83,7 +83,7 @@ class ActionsTab extends Component {
       <View
         style={[styles.dynamicItem, action.signUp && { backgroundColor: "#fff" }]}
         onLayout={event => {
-          let { x, y, width, height } = event.nativeEvent.layout;
+          let { height } = event.nativeEvent.layout;
           calcActionHeight(height);
         }}
       >
