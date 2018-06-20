@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, Image, FlatList, TouchableWithoutFeedback, Dimensions, TouchableHighlight } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar } from "../Pure";
-import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { CustomPopoverMenu } from "../../components/Modal";
 
 const { width, height } = Dimensions.get("window");
@@ -12,76 +13,79 @@ class RecommendArticle extends Component {
 	render() {
 		let { article, navigation } = this.props;
 		return (
-			<View style={styles.article}>
-				<View style={styles.top}>
-					{article.user && (
-						<View style={styles.info}>
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("用户详情", {
-										user: article.user
-									})}
-							>
-								<Avatar size={28} uri={article.user.avatar} />
-							</TouchableOpacity>
-							<Text style={styles.authorName}>{article.user.name}</Text>
-						</View>
-					)}
-					<CustomPopoverMenu
-						width={110}
-						selectHandler={() => null}
-						triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
-						options={["不感兴趣"]}
-					/>
-				</View>
-				<View style={styles.main}>
-					<View style={styles.content}>
-						{article.title ? (
-							<View>
-								<Text numberOfLines={2} style={styles.title}>
-									{article.title}
-								</Text>
-							</View>
-						) : null}
-						{article.description ? (
-							<View>
-								<Text numberOfLines={article.has_image ? 1 : 2} style={styles.abstract}>
-									{article.description}
-								</Text>
-							</View>
-						) : null}
-						<View style={styles.meta}>
-							{article.category ? (
-								<TouchableOpacity
-									style={styles.category}
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => navigation.navigate("文章详情", { article })}>
+				<View style={styles.article}>
+					<View style={styles.top}>
+						{article.user && (
+							<View style={styles.info}>
+								<TouchableWithoutFeedback
 									onPress={() =>
-										navigation.navigate("专题详情", {
-											category: article.category
+										navigation.navigate("用户详情", {
+											user: article.user
 										})}
 								>
-									<Iconfont name="category-rotate" size={12} color={Colors.themeColor} />
-									<Text style={styles.categoryName}>{article.category.name}</Text>
-								</TouchableOpacity>
-							) : null}
-							<View style={styles.labels}>
-								<View style={styles.label}>
-									<Iconfont name={"browse-outline"} size={15} color={Colors.lightFontColor} />
-									<Text style={styles.count}>{article.hits || 0}</Text>
+									<Avatar size={28} uri={article.user.avatar} />
+								</TouchableWithoutFeedback>
+								<Text style={styles.authorName}>{article.user.name}</Text>
+							</View>
+						)}
+						<CustomPopoverMenu
+							width={110}
+							selectHandler={() => null}
+							triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
+							options={["不感兴趣"]}
+						/>
+					</View>
+					<View style={styles.main}>
+						<View style={styles.content}>
+							{article.title ? (
+								<View>
+									<Text numberOfLines={2} style={styles.title}>
+										{article.title}
+									</Text>
 								</View>
-								<View style={styles.label}>
-									<Iconfont name={"comment-outline"} size={15} color={Colors.lightFontColor} />
-									<Text style={styles.count}>{article.count_comments || 0}</Text>
+							) : null}
+							{article.description ? (
+								<View>
+									<Text numberOfLines={article.has_image ? 1 : 2} style={styles.abstract}>
+										{article.description}
+									</Text>
+								</View>
+							) : null}
+							<View style={styles.meta}>
+								{article.category ? (
+									<TouchableWithoutFeedback
+										onPress={() =>
+											navigation.navigate("专题详情", {
+												category: article.category
+											})}
+									>
+										<View style={styles.category}>
+											<Iconfont name="category-rotate" size={12} color={Colors.themeColor} />
+											<Text style={styles.categoryName}>{article.category.name}</Text>
+										</View>
+									</TouchableWithoutFeedback>
+								) : null}
+								<View style={styles.labels}>
+									<View style={styles.label}>
+										<Iconfont name={"browse-outline"} size={15} color={Colors.lightFontColor} />
+										<Text style={styles.count}>{article.hits || 0}</Text>
+									</View>
+									<View style={styles.label}>
+										<Iconfont name={"comment-outline"} size={15} color={Colors.lightFontColor} />
+										<Text style={styles.count}>{article.count_comments || 0}</Text>
+									</View>
 								</View>
 							</View>
 						</View>
+						{article.has_image && (
+							<View>
+								<Image style={styles.image} source={{ uri: article.image_url }} />
+							</View>
+						)}
 					</View>
-					{article.has_image && (
-						<View>
-							<Image style={styles.image} source={{ uri: article.image_url }} />
-						</View>
-					)}
 				</View>
-			</View>
+			</TouchableHighlight>
 		);
 	}
 }

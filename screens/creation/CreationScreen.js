@@ -143,11 +143,9 @@ class CreationScreen extends React.Component {
 
     fetch(Config.ServerRoot + "/api/image/save?api_token=" + token, config)
       .then(response => {
-        console.log("response", response);
         return response.text();
       })
       .then(photo => {
-        console.log("photo", photo);
         //TODO:: server return photo.width/height
         this.richtext.insertImage({
           src: photo,

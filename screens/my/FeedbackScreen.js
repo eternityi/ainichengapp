@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, Image, View, Text, TextInput, TouchableOpacity, Platform } from "react-native";
 import Header from "../../components/Header/Header";
-// import ImagePicker from "react-native-image-crop-picker";
-const ImagePicker = null;
+import ImagePicker from "react-native-image-crop-picker";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";

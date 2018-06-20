@@ -51,9 +51,7 @@ mutation moveArticleMutation($article_id: Int!, $collection_id: Int!) {
 mutation favoriteArticleMutation($article_id: Int!, $undo: Boolean) {
 	favoriteArticle(article_id: $article_id, undo: $undo) {
 		id
-		title
-		status
-		body
+		favorited
 	}
 }
 
@@ -124,6 +122,7 @@ query articleQuery($id: Int!) {
 		count_words
 		hits
 		liked
+		favorited
 		count_likes
 		count_tips
 		count_comments

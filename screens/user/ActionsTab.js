@@ -77,10 +77,16 @@ class ActionsTab extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    let { user } = this.props;
+    let { user, calcActionHeight } = this.props;
     let action = item;
     return (
-      <View style={[styles.dynamicItem, action.signUp && { backgroundColor: "#fff" }]}>
+      <View
+        style={[styles.dynamicItem, action.signUp && { backgroundColor: "#fff" }]}
+        onLayout={event => {
+          let { x, y, width, height } = event.nativeEvent.layout;
+          calcActionHeight(height);
+        }}
+      >
         <View style={styles.dynamicItemLeft}>
           <Avatar uri={user.avatar} size={42} />
           <View style={[styles.dynamicIcon, { backgroundColor: this._iconColor(action) }]}>
@@ -103,7 +109,7 @@ class ActionsTab extends Component {
         return "add-person";
         break;
       case "comments":
-        return "message";
+        return "comment";
         break;
       case "tips":
         return "RMB";

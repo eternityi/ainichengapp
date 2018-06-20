@@ -56,6 +56,7 @@ class HomeScreen extends Component {
     this._changeTab = this._changeTab.bind(this);
     this._outerScroll = this._outerScroll.bind(this);
     this._mainTopLayout = this._mainTopLayout.bind(this);
+    this.actionsTabHeight = 55;
     this.state = {
       mainTopHeight: 0,
       backgroundOpacity: new Animated.Value(0),
@@ -130,13 +131,15 @@ class HomeScreen extends Component {
                       />
                     </TouchableWithoutFeedback>
                     <View style={styles.userInfo}>
-                      <View style={styles.userInfoTop}>
+                      <View style={styles.topInfo}>
                         <TouchableOpacity style={styles.userAvatar} onPress={() => this.setState({ avatarViewerVisible: true })}>
                           <Avatar uri={user.avatar} size={90} borderStyle={{ borderWidth: 0 }} />
                         </TouchableOpacity>
-                        <View>
+                        <View style={{ flex: 1 }}>
                           <View style={{ marginBottom: 6 }}>
-                            <Text style={{ fontSize: 20, color: Colors.primaryFontColor }}>{user.name}</Text>
+                            <Text numberOfLines={1} style={{ fontSize: 20, color: Colors.primaryFontColor }}>
+                              {user.name}
+                            </Text>
                           </View>
                           <View style={styles.layoutRow}>
                             <View style={styles.layoutRow}>
@@ -150,7 +153,7 @@ class HomeScreen extends Component {
                           </View>
                         </View>
                       </View>
-                      <View style={styles.userInfoBottom}>
+                      <View style={styles.bottomInfo}>
                         <TouchableOpacity style={styles.userBriefIntro} onPress={() => navigation.navigate("个人介绍", { user })}>
                           <View style={{ flex: 1 }}>
                             <Text numberOfLines={1} style={{ fontSize: 15, color: "#666" }}>
@@ -237,14 +240,21 @@ class HomeScreen extends Component {
                       renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabItemWrapStyle={{ width: 80 }} />}
                       onChangeTab={this._changeTab}
                     >
-                      <ActionsTab tabLabel="动态" scrollEnabled={!scrollEnabled} onScroll={this.innerScroll} navigation={navigation} user={user} />
+                      <ActionsTab
+                        tabLabel="动态"
+                        scrollEnabled={!scrollEnabled}
+                        onScroll={this.innerScroll}
+                        navigation={navigation}
+                        user={user}
+                        calcActionHeight={this.calcActionHeight}
+                      />
                       <ArticlesTab
                         tabLabel="文章"
                         scrollEnabled={!scrollEnabled}
                         onScroll={this.innerScroll}
                         navigation={navigation}
                         user={user}
-                        emit={this.articlesLength}
+                        gotArticleLength={this.gotArticleLength}
                       />
                       <MoreTab tabLabel="更多" scrollEnabled={!scrollEnabled} navigation={navigation} user={user} />
                     </ScrollableTabView>
@@ -342,10 +352,15 @@ class HomeScreen extends Component {
     let { currentTab, mainTopHeight } = this.state;
     let { y } = event.nativeEvent.contentOffset;
     this.offsetTop = y;
+    //到达顶部
+    this.topReached = this.offsetTop >= mainTopHeight - headerHeight;
     let opacity = this.offsetTop > 15 ? this.offsetTop / 150 : 0;
     this._startHeaderAnimation(opacity);
     //根据当前tab页以及滚动高度控制跳转
-    if (this.state.currentTab == 1 && this.switch) {
+    if (this.state.currentTab == 0 && !this.actionsTabSwitch) {
+      return;
+    }
+    if (this.state.currentTab == 1 && !this.articlesTabSwitch) {
       return;
     }
     if (currentTab !== 2 && this.offsetTop >= mainTopHeight - headerHeight) {
@@ -356,10 +371,9 @@ class HomeScreen extends Component {
   //切换tab页 判断scrollEnabled状态
   _changeTab(obj) {
     this.setState({ currentTab: obj.i });
-    let { mainTopHeight } = this.state;
-    if (obj.i == 0 && this.offsetTop >= mainTopHeight - headerHeight) {
+    if (obj.i == 0 && this.topReached && this.actionsTabSwitch) {
       this.setState({ scrollEnabled: false });
-    } else if (obj.i == 1 && this.offsetTop >= mainTopHeight - headerHeight && !this.switch) {
+    } else if (obj.i == 1 && this.topReached && this.articlesTabSwitch) {
       this.setState({ scrollEnabled: false });
     } else {
       this.setState({ scrollEnabled: true });
@@ -416,9 +430,16 @@ class HomeScreen extends Component {
     }
   }
 
-  // 通过获取articleTab的文章数量，判断内容长度，觉得是否切换scrollEnabled
-  articlesLength = num => {
-    this.switch = height - 130 * num - headerHeight - 55 > 0;
+  // 通过计算actionItem的高度总和，计算内容长度，决定是否切换scrollEnabled
+  calcActionHeight = actionHeight => {
+    this.actionsTabHeight += actionHeight;
+    this.actionsTabSwitch = this.actionsTabHeight + headerHeight > height;
+  };
+
+  // 通过获取article数量，计算内容长度，决定是否切换scrollEnabled
+  // 130是article高度，55是endComponent的高度
+  gotArticleLength = num => {
+    this.articlesTabSwitch = 130 * num + headerHeight + 55 > height;
   };
 }
 
@@ -437,7 +458,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 20
   },
-  userInfoTop: {
+  topInfo: {
     flexDirection: "row",
     paddingBottom: 20
   },
@@ -460,7 +481,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     borderRadius: 48
   },
-  userInfoBottom: {
+  bottomInfo: {
     marginBottom: 20
   },
   userBriefIntro: {

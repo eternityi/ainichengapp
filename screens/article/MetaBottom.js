@@ -58,7 +58,7 @@ class MetaBottom extends Component {
               </View>
               <View style={styles.shareArticle}>
                 <TouchableOpacity onPress={() => null}>
-                  <Iconfont name={"weixin"} size={26} color={Colors.weixinColor} />
+                  <Iconfont name={"weixin"} size={27} color={Colors.weixinColor} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => null}>
                   <Image style={{ width: 25, height: 25, marginHorizontal: 20 }} source={require("../../assets/images/pengyouquan.png")} />

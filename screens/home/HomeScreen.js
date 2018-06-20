@@ -54,7 +54,7 @@ class HomeScreen extends React.Component {
                   }}
                   data={data.articles}
                   keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
-                  renderItem={this._renderItem}
+                  renderItem={({ item, index }) => <HomeArticleItem article={item} navigation={navigation} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
                     if (data.articles) {
@@ -91,15 +91,6 @@ class HomeScreen extends React.Component {
       </Screen>
     );
   }
-
-  _renderItem = ({ item, index }) => {
-    const { navigation } = this.props;
-    return (
-      <TouchableOpacity onPress={() => navigation.navigate("文章详情", { article: item })}>
-        <HomeArticleItem article={item} navigation={navigation} />
-      </TouchableOpacity>
-    );
-  };
 }
 
 const styles = StyleSheet.create({

@@ -27,12 +27,12 @@ class HelpScreen extends Component {
 				{ id: 1, title: "收入结算与提现常见问题（ iOS ）" },
 				{ id: 2, title: `${Config.AppName}收入结算与提现常见问题` },
 				{ id: 3, title: "为什么文章会被锁定？" },
-				{ id: 4, title: `${Config.AppName}账号绑定解绑相关问题汇总` },
+				{ id: 104, title: `${Config.AppName}账号绑定解绑相关问题汇总` },
 				{ id: 5, title: `${Config.AppName}官方专题投稿指南大全` },
 				{ id: 6, title: "关于文章投稿次数的有关说明" },
 				{ id: 7, title: "关于举报“抄袭类文章”的说明" },
 				{ id: 8, title: "如果你被封号了？" },
-				{ id: 9, title: "我该如何发表付费内容？" },
+				{ id: 109, title: "我该如何发表付费内容？" },
 				{ id: 10, title: `如何在${Config.AppName}进行创作` },
 				{ id: 11, title: "删除的文章如何找回，有回收站吗？" }
 			],
@@ -40,7 +40,7 @@ class HelpScreen extends Component {
 				{ id: 1, title: `如何在${Config.AppName}进行创作` },
 				{ id: 2, title: "如何让更多的人看到自己的文章" },
 				{ id: 3, title: "发现页热门文章使用指南" },
-				{ id: 4, title: "公告：关于首页投稿专题密集投稿相关问题" },
+				{ id: 104, title: "公告：关于首页投稿专题密集投稿相关问题" },
 				{ id: 5, title: "如何创建并玩转属于你自己的专题" }
 			],
 			account: [{ id: 1, title: "为什么文章会被锁定？" }, { id: 2, title: "如果你被封号了？" }, { id: 3, title: "身份认证" }]

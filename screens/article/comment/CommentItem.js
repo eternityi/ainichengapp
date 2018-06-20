@@ -108,7 +108,7 @@ class CommentItem extends Component {
 						<Text style={styles.commentBody}>{comment.body}</Text>
 					</TouchableOpacity>
 				</View>
-
+				{/*如果有subcoments就直接渲染，否则尝试去请求subcoments**/}
 				{comment.replyComments && comment.replyComments.length > 0 && this._renderReplyComments(replyComments)}
 				{detail &&
 					!comment.replyComments && (

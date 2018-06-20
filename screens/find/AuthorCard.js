@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, Text, Button, TouchableOpacity, Platform } from "react-native";
 
 import { FollowButton } from "../../components/Button";
-import Color from "../../constants/Colors";
+import Colors from "../../constants/Colors";
 import { Avatar } from "../../components/Pure";
 
 import Config from "../../constants/Config";
@@ -21,7 +21,7 @@ class AuthorCard extends Component {
 		return (
 			<View style={styles.cardWrap}>
 				<View>
-					<Avatar uri={user.avatar} size={66} />
+					<Avatar uri={user.avatar} size={70} />
 				</View>
 				<View>
 					<Text numberOfLines={1} style={styles.name}>
@@ -33,7 +33,7 @@ class AuthorCard extends Component {
 						{user.followings.length ? user.followings[0].name + "关注" : Config.AppName + "推荐"}
 					</Text>
 				</View>
-				<FollowButton type={"user"} id={user.id} status={user.followed_status} customStyle={styles.followWrap} fontSize={16} />
+				<FollowButton type={"user"} id={user.id} status={user.followed_status} customStyle={styles.followWrap} />
 			</View>
 		);
 	}
@@ -41,30 +41,29 @@ class AuthorCard extends Component {
 
 const styles = StyleSheet.create({
 	cardWrap: {
-		borderWidth: 0.5,
 		borderRadius: 4,
-		borderColor: Color.tintBorderColor,
-		backgroundColor: Color.skinColor,
-		width: 152,
-		paddingVertical: 15,
-		paddingHorizontal: 10,
+		backgroundColor: Colors.skinColor,
+		width: 140,
+		paddingVertical: 12,
+		paddingHorizontal: 20,
 		alignItems: "center"
 	},
 	name: {
-		fontSize: 17,
-		color: Color.darkFontColor,
+		fontSize: 15,
+		color: Colors.darkFontColor,
 		paddingTop: 8
 	},
 	latestFollower: {
-		fontSize: 13,
-		color: Color.tintFontColor,
-		paddingTop: 12
+		fontSize: 12,
+		color: Colors.tintFontColor,
+		paddingTop: 6
 	},
 	followWrap: {
 		alignSelf: "stretch",
-		marginTop: 20,
-		height: 34,
-		width: "auto"
+		marginTop: 8,
+		height: 32,
+		width: "auto",
+		borderRadius: 20
 	}
 });
 

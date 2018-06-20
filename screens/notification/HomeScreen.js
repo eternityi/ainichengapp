@@ -99,9 +99,9 @@ class HomeScreen extends React.Component {
           </View>
           <Query query={chatsQuery} pollInterval={20000}>
             {({ loading, error, data, refetch }) => {
+              if (!login) return <Diving customStyle={{ marginTop: 20 }} />;
               if (error) return <LoadingError reload={() => refetch()} />;
-              if (!(data && data.user && data.user.chats)) return <SpinnerLoading />;
-              if (data.user.chats.length < 1) return <Diving customStyle={{ marginTop: 20 }} />;
+              if (!(data && data.user && data.user.chats && data.user.chats.length > 0)) return <Diving customStyle={{ marginTop: 20 }} />;
               return (
                 <View>
                   {data.user.chats.map((elem, index) => {

@@ -21,7 +21,7 @@ class CommentDetailScreen extends Component {
 
 	constructor(props) {
 		super(props);
-		let comment = props.navigation.getParam("comment", 111);
+		let comment = props.navigation.getParam("comment", {});
 		this.state = {
 			comment,
 			replyingComment: comment, //回复的评论

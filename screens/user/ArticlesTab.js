@@ -20,7 +20,7 @@ class ArticlesTab extends Component {
   }
 
   render() {
-    let { scrollEnabled, navigation, onScroll, user, emit } = this.props;
+    let { scrollEnabled, navigation, onScroll, user, gotArticleLength } = this.props;
     return (
       <View style={styles.container}>
         <Query
@@ -32,7 +32,7 @@ class ArticlesTab extends Component {
           {({ loading, data, error, refresh, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
-            emit(data.articles.length);
+            gotArticleLength(data.articles.length);
             if (data.articles.length < 1) return <BlankContent />;
             return (
               <FlatList

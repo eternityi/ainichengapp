@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight, TouchableWithoutFeedback } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
@@ -14,45 +14,49 @@ class HomeArticleItem extends PureComponent {
 			return null;
 		}
 		return (
-			<View style={styles.articleContainer}>
-				<View style={styles.authorItem}>
-					<TouchableOpacity onPress={() => navigation.navigate("用户详情", { user: article.user })}>
-						<Avatar size={38} uri={article.user.avatar} />
-					</TouchableOpacity>
-					<View style={styles.userInfo}>
-						<Text style={styles.userName}>{article.user.name}</Text>
-						<Text style={styles.timeAgo}>{article.time_ago}</Text>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => navigation.navigate("文章详情", { article })}>
+				<View style={styles.articleContainer}>
+					<View style={styles.authorItem}>
+						<TouchableWithoutFeedback onPress={() => navigation.navigate("用户详情", { user: article.user })}>
+							<Avatar size={38} uri={article.user.avatar} />
+						</TouchableWithoutFeedback>
+						<View style={styles.userInfo}>
+							<Text style={styles.userName}>{article.user.name}</Text>
+							<Text style={styles.timeAgo}>{article.time_ago}</Text>
+						</View>
 					</View>
-				</View>
-				<View>
-					<Image style={styles.cover} source={{ uri: article.image_url }} />
-				</View>
-				<View style={styles.content}>
-					<Text numberOfLines={2} style={styles.title}>
-						{article.title}
-					</Text>
-					<Text numberOfLines={3} style={styles.abstract}>
-						{article.description}
-					</Text>
-					<View style={styles.meta}>
-						{article.category ? (
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("专题详情", {
-										category: article.category
-									})}
-							>
-								<Text style={styles.categoryName}>#{article.category.name}</Text>
-							</TouchableOpacity>
-						) : null}
-						<View style={styles.labels}>
-							{article.hits > 0 && <Text style={styles.count}>{article.hits || 0}次查看</Text>}
-							{article.count_likes > 0 && <Text style={styles.count}>{"· " + article.count_likes || 0}人喜欢</Text>}
-							{article.count_comments > 0 && <Text style={styles.count}>{"· " + article.count_comments || 0}条评论</Text>}
+					<View>
+						<Image style={styles.cover} source={{ uri: article.image_url }} />
+					</View>
+					<View style={styles.content}>
+						<Text numberOfLines={2} style={styles.title}>
+							{article.title}
+						</Text>
+						<Text numberOfLines={3} style={styles.abstract}>
+							{article.description}
+						</Text>
+						<View style={styles.meta}>
+							{article.category ? (
+								<TouchableWithoutFeedback
+									onPress={() =>
+										navigation.navigate("专题详情", {
+											category: article.category
+										})}
+								>
+									<View>
+										<Text style={styles.categoryName}>#{article.category.name}</Text>
+									</View>
+								</TouchableWithoutFeedback>
+							) : null}
+							<View style={styles.labels}>
+								{article.hits > 0 && <Text style={styles.count}>{article.hits || 0}次查看</Text>}
+								{article.count_likes > 0 && <Text style={styles.count}>{"· " + article.count_likes || 0}人喜欢</Text>}
+								{article.count_comments > 0 && <Text style={styles.count}>{"· " + article.count_comments || 0}条评论</Text>}
+							</View>
 						</View>
 					</View>
 				</View>
-			</View>
+			</TouchableHighlight>
 		);
 	}
 

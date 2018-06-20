@@ -59,7 +59,7 @@ class RecommendScreen extends React.Component {
                 }}
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={this._renderBasicArticleItem}
+                renderItem={({ item, index }) => <RecommendArticle article={item} navigation={navigation} />}
                 getItemLayout={(data, index) => ({
                   length: 176,
                   offset: 176 * index,
@@ -112,15 +112,6 @@ class RecommendScreen extends React.Component {
     });
     return posterList;
   }
-
-  _renderBasicArticleItem = ({ item, index }) => {
-    const { navigation } = this.props;
-    return (
-      <TouchableOpacity onPress={() => navigation.navigate("文章详情", { article: item })}>
-        <RecommendArticle article={item} navigation={navigation} />
-      </TouchableOpacity>
-    );
-  };
 }
 
 const styles = StyleSheet.create({

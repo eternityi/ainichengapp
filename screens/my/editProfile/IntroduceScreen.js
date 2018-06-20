@@ -25,7 +25,7 @@ class IntroduceScreen extends Component {
 
 	render() {
 		const { navigation } = this.props;
-		let { introduction } = this.state;
+		let defaultValue = navigation.getParam("introduction", "");
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -69,7 +69,7 @@ class IntroduceScreen extends Component {
 							autoFocus
 							style={styles.textInput}
 							onChangeText={introduction => this.setState({ introduction })}
-							value={introduction ? introduction + "" : ""}
+							value={defaultValue}
 						/>
 					</View>
 				</View>

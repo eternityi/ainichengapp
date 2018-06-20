@@ -18,7 +18,7 @@ import actions from "../../../store/actions";
 
 const { width, height } = Dimensions.get("window");
 
-class SelectScreen extends Component {
+class MoveArticleScreen extends Component {
 	static navigationOptions = {
 		header: null
 	};
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
 export default connect(store => ({
 	user: store.users.user,
 	collections: store.categories.collections
-}))(SelectScreen);
+}))(MoveArticleScreen);

@@ -1,5 +1,3 @@
-"use strict";
-
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import FollowButton from "../Button/Follow";
@@ -51,7 +49,7 @@ class AuthorCard extends Component {
 						</View>
 					</View>
 					<View style={styles.followAuthor}>
-						<FollowButton type={"user"} id={user.id} followed={user.followed_status} />
+						<FollowButton type={"user"} id={user.id} status={user.followed_status} />
 					</View>
 				</View>
 			</View>
