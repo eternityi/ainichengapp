@@ -37,7 +37,8 @@ class MoreTab extends Component {
 								onPress={() =>
 									navigation.navigate("个人文集", {
 										user
-									})}
+									})
+								}
 							>
 								<View style={{ alignItems: "center" }}>
 									<Iconfont
@@ -56,7 +57,8 @@ class MoreTab extends Component {
 								onPress={() =>
 									navigation.navigate("个人专题", {
 										user
-									})}
+									})
+								}
 							>
 								<View style={{ alignItems: "center" }}>
 									<Iconfont
@@ -73,7 +75,8 @@ class MoreTab extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity
 								onPress={() =>
-									navigation.navigate("关注", { user })}
+									navigation.navigate("关注", { user })
+								}
 							>
 								<View style={{ alignItems: "center" }}>
 									<Iconfont
@@ -90,7 +93,8 @@ class MoreTab extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity
 								onPress={() =>
-									navigation.navigate("粉丝", { user })}
+									navigation.navigate("粉丝", { user })
+								}
 							>
 								<View style={{ alignItems: "center" }}>
 									<Iconfont
@@ -114,7 +118,8 @@ class MoreTab extends Component {
 									onPress={() =>
 										navigation.navigate("喜欢的文章", {
 											user
-										})}
+										})
+									}
 								>
 									<View style={styles.userQuantityLeft}>
 										<Iconfont
@@ -143,9 +148,13 @@ class MoreTab extends Component {
 								<TouchableOpacity
 									style={styles.userQuantityItem}
 									onPress={() =>
-										navigation.navigate("关注的专题和文集", {
-											user
-										})}
+										navigation.navigate(
+											"关注的专题和文集",
+											{
+												user
+											}
+										)
+									}
 								>
 									<View style={styles.userQuantityLeft}>
 										<Iconfont

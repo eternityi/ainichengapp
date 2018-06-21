@@ -1,7 +1,21 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList
+} from "react-native";
 
-import { ContentEnd, LoadingMore, BlankContent, SpinnerLoading, LoadingError } from "../../components/Pure";
+import {
+  ContentEnd,
+  LoadingMore,
+  BlankContent,
+  SpinnerLoading,
+  LoadingError
+} from "../../components/Pure";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { CustomPopoverMenu } from "../../components/Modal";
@@ -20,7 +34,13 @@ class ArticlesTab extends Component {
   }
 
   render() {
-    let { scrollEnabled, navigation, onScroll, user, gotArticleLength } = this.props;
+    let {
+      scrollEnabled,
+      navigation,
+      onScroll,
+      user,
+      gotArticleLength
+    } = this.props;
     return (
       <View style={styles.container}>
         <Query
@@ -49,7 +69,11 @@ class ArticlesTab extends Component {
                       }}
                     >
                       <View>
-                        <Text style={{ fontSize: 14, color: Colors.themeColor }}>文章({data.articles.length})</Text>
+                        <Text
+                          style={{ fontSize: 14, color: Colors.themeColor }}
+                        >
+                          文章({data.articles.length})
+                        </Text>
                       </View>
                       <View>
                         <CustomPopoverMenu
@@ -62,7 +86,8 @@ class ArticlesTab extends Component {
                                 color: Colors.tintFontColor
                               }}
                             >
-                              最新文章 <Iconfont name={"downward-arrow"} size={12} />
+                              最新文章{" "}
+                              <Iconfont name={"downward-arrow"} size={12} />
                             </Text>
                           }
                           options={["最新文章", "热门文章"]}
@@ -74,7 +99,11 @@ class ArticlesTab extends Component {
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => navigation.navigate("文章详情", { article: item })}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("文章详情", { article: item })
+                    }
+                  >
                     <PlainArticleItem article={item} />
                   </TouchableOpacity>
                 )}
@@ -91,14 +120,23 @@ class ArticlesTab extends Component {
                         offset: data.articles.length
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                        if (
+                          !(
+                            fetchMoreResult &&
+                            fetchMoreResult.articles &&
+                            fetchMoreResult.articles.length > 0
+                          )
+                        ) {
                           this.setState({
                             fetchingMore: false
                           });
                           return prev;
                         }
                         return Object.assign({}, prev, {
-                          articles: [...prev.articles, ...fetchMoreResult.articles]
+                          articles: [
+                            ...prev.articles,
+                            ...fetchMoreResult.articles
+                          ]
                         });
                       }
                     });
@@ -109,7 +147,11 @@ class ArticlesTab extends Component {
                   }
                 }}
                 ListFooterComponent={() => {
-                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                  return this.state.fetchingMore ? (
+                    <LoadingMore />
+                  ) : (
+                    <ContentEnd />
+                  );
                 }}
               />
             );

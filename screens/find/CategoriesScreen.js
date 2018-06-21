@@ -1,8 +1,26 @@
 import React from "react";
-import { FlatList, StyleSheet, ScrollView, Text, View, Image, Button, TextInput, StatusBar, Dimensions, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  Image,
+  Button,
+  TextInput,
+  StatusBar,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 
 import Colors from "../../constants/Colors";
-import { DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
+import {
+  DivisionLine,
+  ContentEnd,
+  LoadingMore,
+  LoadingError,
+  SpinnerLoading
+} from "../../components/Pure";
 import OfficialColumn from "../../components/Category/OfficialColumn";
 import CategoryItem from "../../components/Category/CategoryItem";
 import Screen from "../Screen";
@@ -29,79 +47,79 @@ const official_categories = [
     type: "视频详情"
   },
   {
-    id: 60,
+    id: 51,
     avatar: "https://ainicheng.com/images/appicons/jingxuantougao.png",
     name: "精选投稿",
     type: "专题详情"
   },
   {
-    id: 60,
+    id: 5,
     avatar: "https://ainicheng.com/images/appicons/youxizixun.png",
     name: "游戏资讯",
     type: "专题详情"
   },
   {
-    id: 18,
+    id: 85,
     avatar: "https://ainicheng.com/images/appicons/steam.png",
     name: "steam",
     type: "专题详情"
   },
   {
-    id: 11,
+    id: 12,
     avatar: "https://ainicheng.com/images/appicons/yingxionglianmeng.png",
     name: "英雄联盟",
     type: "专题详情"
   },
   {
-    id: 101,
+    id: 87,
     avatar: "https://ainicheng.com/images/appicons/juedidataosha.png",
-    name: "绝地逃生",
+    name: "绝地求生",
     type: "专题详情"
   },
   {
-    id: 99,
+    id: 12,
     avatar: "https://ainicheng.com/images/appicons/wangzerongyao.png",
     name: "王者荣耀",
     type: "专题详情"
   },
   {
-    id: 69,
+    id: 6,
     avatar: "https://ainicheng.com/images/appicons/dota2.png",
     name: "dota2",
     type: "专题详情"
   },
   {
-    id: 58,
+    id: 86,
     avatar: "https://ainicheng.com/images/appicons/duanyou.png",
     name: "端游",
     type: "专题详情"
   },
   {
-    id: 100,
+    id: 84,
     avatar: "https://ainicheng.com/images/appicons/shouyou.png",
     name: "手游",
     type: "专题详情"
   },
   {
-    id: 19,
+    id: 46,
     avatar: "https://ainicheng.com/images/appicons/biaoqingbao.png",
     name: "表情包",
     type: "专题详情"
   },
   {
-    id: 60,
+    id: 47,
     avatar: "https://ainicheng.com/images/appicons/touxiang.png",
     name: "头像",
     type: "专题详情"
   },
   {
-    id: 99,
+    id: 1,
     avatar: "https://ainicheng.com/images/appicons/nicheng.png",
     name: "昵称",
     type: "专题详情"
   },
   {
-    id: 100,
+    id: 72,
     avatar: "https://ainicheng.com/images/appicons/xinqing.png",
     name: "心情",
     type: "专题详情"
@@ -131,10 +149,15 @@ class CategoriesScreen extends React.Component {
               <FlatList
                 data={data.categories}
                 ListHeaderComponent={this._renderHeader.bind(this)}
-                keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+                keyExtractor={(item, index) =>
+                  item.key ? item.key : index.toString()
+                }
                 renderItem={this._renderCategoryItem}
                 numColumns={3}
-                columnWrapperStyle={{ paddingBottom: 20, justifyContent: "space-around" }}
+                columnWrapperStyle={{
+                  paddingBottom: 20,
+                  justifyContent: "space-around"
+                }}
                 refreshing={loading}
                 onRefresh={() => {
                   refetch();
@@ -147,14 +170,23 @@ class CategoriesScreen extends React.Component {
                         offset: data.categories.length
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+                        if (
+                          !(
+                            fetchMoreResult &&
+                            fetchMoreResult.categories &&
+                            fetchMoreResult.categories.length > 0
+                          )
+                        ) {
                           this.setState({
                             fetchingMore: false
                           });
                           return prev;
                         }
                         return Object.assign({}, prev, {
-                          categories: [...prev.categories, ...fetchMoreResult.categories]
+                          categories: [
+                            ...prev.categories,
+                            ...fetchMoreResult.categories
+                          ]
                         });
                       }
                     });
@@ -165,7 +197,11 @@ class CategoriesScreen extends React.Component {
                   }
                 }}
                 ListFooterComponent={() => {
-                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                  return this.state.fetchingMore ? (
+                    <LoadingMore />
+                  ) : (
+                    <ContentEnd />
+                  );
                 }}
               />
             );
@@ -216,7 +252,14 @@ class CategoriesScreen extends React.Component {
       <TouchableOpacity
         key={index}
         style={{ flex: 1 }}
-        onPress={() => navigate(item.type, item.type == "专题详情" ? { category: item } : { filter: item.filter })}
+        onPress={() =>
+          navigate(
+            item.type,
+            item.type == "专题详情"
+              ? { category: item }
+              : { filter: item.filter }
+          )
+        }
       >
         <OfficialColumn data={item} />
       </TouchableOpacity>
@@ -226,7 +269,9 @@ class CategoriesScreen extends React.Component {
   _renderCategoryItem = ({ item, index }) => {
     const { navigate } = this.props.navigation;
     return (
-      <TouchableOpacity onPress={() => navigate("专题详情", { category: item })}>
+      <TouchableOpacity
+        onPress={() => navigate("专题详情", { category: item })}
+      >
         <CategoryItem category={item} />
       </TouchableOpacity>
     );
@@ -257,4 +302,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ categories: store.categories }))(CategoriesScreen);
+export default connect(store => ({ categories: store.categories }))(
+  CategoriesScreen
+);

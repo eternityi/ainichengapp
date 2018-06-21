@@ -2,7 +2,15 @@ import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar } from "../Pure";
-import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Dimensions } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	FlatList,
+	TouchableOpacity,
+	Dimensions
+} from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -14,7 +22,14 @@ class PlainArticleItem extends Component {
 				<View style={styles.main}>
 					<View style={styles.info}>
 						{showAuthorName && (
-							<Text style={styles.authorName} onPress={() => navigation.navigate("用户详情", { user: article.user })}>
+							<Text
+								style={styles.authorName}
+								onPress={() =>
+									navigation.navigate("用户详情", {
+										user: article.user
+									})
+								}
+							>
 								{article.user.name}
 							</Text>
 						)}
@@ -27,11 +42,25 @@ class PlainArticleItem extends Component {
 					</View>
 					<View>
 						<Text numberOfLines={1} style={styles.meta}>
-							{"阅读 · " + article.hits + " 喜欢 · " + article.count_likes + " 评论 · " + article.count_comments + "  赞赏 · " + article.count_tips}
+							{"阅读 · " +
+								article.hits +
+								" 喜欢 · " +
+								article.count_likes +
+								" 评论 · " +
+								article.count_comments +
+								"  赞赏 · " +
+								article.count_tips}
 						</Text>
 					</View>
 				</View>
-				<View>{article.has_image && <Image style={styles.image} source={{ uri: article.image_url }} />}</View>
+				<View>
+					{article.has_image && (
+						<Image
+							style={styles.image}
+							source={{ uri: article.image_url }}
+						/>
+					)}
+				</View>
 			</View>
 		);
 	}
