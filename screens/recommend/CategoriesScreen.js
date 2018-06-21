@@ -30,7 +30,7 @@ class CategoriesScreen extends Component {
 				<Header navigation={navigation} />
 				<View style={styles.container}>
 					<Query query={recommendFollowCategoriesQuery} variables={{ user_id: user.id }}>
-						{({ loading, error, data, fetchMore, fetch }) => {
+						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.follows)) return <SpinnerLoading />;
 							if (data.follows.length < 1) return <BlankContent />;
@@ -38,6 +38,10 @@ class CategoriesScreen extends Component {
 								<FlatList
 									data={data.follows}
 									keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+									onRefresh={() => {
+										refetch();
+									}}
+									refreshing={loading}
 									renderItem={this._renderItem}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
@@ -90,7 +94,8 @@ class CategoriesScreen extends Component {
 					onPress={() =>
 						navigation.navigate("专题详情", {
 							category: follow.category
-						})}
+						})
+					}
 				>
 					<FollowItem follow={follow} navigation={navigation} />
 				</TouchableOpacity>
