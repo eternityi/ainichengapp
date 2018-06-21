@@ -20,7 +20,7 @@ const official_categories = [
     avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
     name: "关注的专题",
     type: "全部关注",
-    filter: "关注的专题"
+    filter: "CATEGORY"
   },
   {
     id: 64,

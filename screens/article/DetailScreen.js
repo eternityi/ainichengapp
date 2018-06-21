@@ -221,7 +221,7 @@ class DetailScreen extends Component {
                   login={login}
                 />
                 {/*赞赏模态框**/}
-                <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
+                <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={article} />
                 {/*添加评论**/}
                 <Mutation mutation={addCommentMutation}>
                   {addComment => {

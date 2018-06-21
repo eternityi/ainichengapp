@@ -6,13 +6,14 @@ import Colors from "../../../constants/Colors";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { FollowedGroup } from "../../../components/MediaGroup";
 import { CustomPopoverMenu } from "../../../components/Modal";
-import { ContentEnd } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
+import { userFollows } from "../../../graphql/user.graphql";
 
 class AllFollowsScreen extends Component {
 	static navigationOptions = {
@@ -21,8 +22,8 @@ class AllFollowsScreen extends Component {
 
 	constructor(props) {
 		super(props);
-		let { params = {} } = this.props.navigation.state;
-		let { filter = "全部关注" } = params;
+		let filter = props.navigation.getParam("filter", "USER_CATEGORY");
+		this.menuOptions = ["全部关注", "只看用户", "只看专题", "只看文集"];
 		this.state = {
 			filter: filter
 		};
@@ -30,7 +31,7 @@ class AllFollowsScreen extends Component {
 
 	render() {
 		let { filter } = this.state;
-		let { navigation, all_follows } = this.props;
+		let { navigation, user } = this.props;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -50,16 +51,16 @@ class AllFollowsScreen extends Component {
 									selectHandler={index => {
 										switch (index) {
 											case 0:
-												this.setState({ filter: "全部关注" });
+												this.setState({ filter: "USER_CATEGORY" });
 												break;
 											case 1:
-												this.setState({ filter: "只看用户" });
+												this.setState({ filter: "USER" });
 												break;
 											case 2:
-												this.setState({ filter: "只看专题" });
+												this.setState({ filter: "CATEGORY" });
 												break;
 											case 3:
-												this.setState({ filter: "只看文集" });
+												this.setState({ filter: "COLLECTION" });
 												break;
 										}
 									}}
@@ -77,59 +78,94 @@ class AllFollowsScreen extends Component {
 													marginRight: 5
 												}}
 											>
-												{filter}
+												{this.followType(filter)}
 											</Text>
 											<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
 										</View>
 									}
-									options={["全部关注", "只看用户", "只看专题", "只看文集"]}
+									options={this.menuOptions}
 								/>
 							</HeaderLeft>
 						}
 					/>
-					{all_follows.length && (
-						<FlatList
-							data={all_follows}
-							keyExtractor={item => item.id.toString()}
-							renderItem={({ item }) => (
-								<TouchableOpacity
-									onPress={() =>
-										navigation.navigate(item.type == "user" ? "用户文章动态" : item.type == "category" ? "专题详情" : "文集详情", {
-											[item.type]: item
-										})}
-								>
-									<FollowedGroup followed={item} />
-								</TouchableOpacity>
-							)}
-							getItemLayout={(data, index) => ({
-								length: 85,
-								offset: 85 * index,
-								index
-							})}
-							ListFooterComponent={() => <ContentEnd />}
-						/>
-					)}
+					<Query query={userFollows} variables={{ user_id: user.id, filter }}>
+						{({ loading, error, data, refetch, fetchMore }) => {
+							if (error) return <LoadingError reload={() => refetch()} />;
+							if (!(data && data.follows)) return <SpinnerLoading />;
+							if (data.follows.length < 0) return <BlankContent />;
+							return (
+								<FlatList
+									data={data.follows}
+									keyExtractor={item => item.id.toString()}
+									renderItem={({ item }) => (
+										<TouchableOpacity
+											onPress={() =>
+												navigation.navigate(this.routeName(item.followed_type), {
+													[this.paramKey(item.followed_type)]: item
+												})}
+										>
+											<FollowedGroup follow={item} />
+										</TouchableOpacity>
+									)}
+									getItemLayout={(data, index) => ({
+										length: 85,
+										offset: 85 * index,
+										index
+									})}
+									ListFooterComponent={() => <ContentEnd />}
+								/>
+							);
+						}}
+					</Query>
 				</View>
 			</Screen>
-
-			/*<Query query={QUERY} variables={{filter}}>
-	    		{({ loading, data }) => {
-	    			if(!(data && data.allFollows)) return null;
-	    			return (
-	    				<View style={styles.container}>
-	    					<FlatList
-	    						data={data.drafts}
-	    						keyExtractor={item => item.id.toString()}
-	    						renderItem={this._renderItem.bind(this)}
-	    						getItemLayout={(data, index) => ( {length: 90, offset: 90 * index, index} )}
-	    						ListFooterComponent={() => <ContentEnd />}
-	    					/>
-	    				</View>
-	    			);
-	    		}}
-	    	</Query>**/
 		);
 	}
+
+	followType = filter => {
+		switch (filter) {
+			case "USER_CATEGORY":
+				return "全部关注";
+				break;
+			case "USER":
+				return "只看用户";
+				break;
+			case "CATEGORY":
+				return "只看专题";
+				break;
+			case "COLLECTION":
+				return "只看文集";
+				break;
+		}
+	};
+
+	routeName = followType => {
+		switch (followType) {
+			case "users":
+				return "用户详情";
+				break;
+			case "categories":
+				return "专题详情";
+				break;
+			case "collections":
+				return "文集详情";
+				break;
+		}
+	};
+
+	paramKey = followType => {
+		switch (followType) {
+			case "users":
+				return "user";
+				break;
+			case "categories":
+				return "category";
+				break;
+			case "collections":
+				return "collection";
+				break;
+		}
+	};
 }
 
 const styles = StyleSheet.create({
@@ -139,4 +175,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ all_follows: store.users.all_follows }))(AllFollowsScreen);
+export default connect(store => ({ user: store.users.user }))(AllFollowsScreen);

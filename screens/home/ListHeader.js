@@ -8,9 +8,9 @@ const official_categories = [
 	{
 		id: 1,
 		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
-		name: "关注的专题",
+		name: "全部关注",
 		type: "全部关注",
-		filter: "我的关注"
+		filter: "USER_CATEGORY"
 	},
 	{
 		id: 64,

@@ -1,3 +1,12 @@
+# 文章打赏
+mutation tipArticleMutation($id: Int!, $amount: Int!, $message: String) {
+	tipArticle(id: $id, amount: $amount, message: $message) {
+		id
+		title
+	}
+}
+
+# 创建文章
 mutation createdArticleMutation($title: String!, $body: String!, $is_publish: Boolean) {
 	createArticle(title: $title, body: $body, is_publish: $is_publish) {
 		id
@@ -7,6 +16,7 @@ mutation createdArticleMutation($title: String!, $body: String!, $is_publish: Bo
 	}
 }
 
+# 编辑文章
 mutation editArticleMutation($id: Int!, $title: String!, $body: String!, $is_publish: Boolean) {
 	editArticle(id: $id, title: $title, body: $body, is_publish: $is_publish) {
 		id
@@ -16,6 +26,7 @@ mutation editArticleMutation($id: Int!, $title: String!, $body: String!, $is_pub
 	}
 }
 
+# 发布文章
 mutation publishArticleMutation($id: Int!) {
 	publishArticle(id: $id) {
 		id
@@ -25,6 +36,7 @@ mutation publishArticleMutation($id: Int!) {
 	}
 }
 
+# 转为私密
 mutation unpublishArticleMutation($id: Int!) {
 	unpublishArticle(id: $id) {
 		id
@@ -34,6 +46,7 @@ mutation unpublishArticleMutation($id: Int!) {
 	}
 }
 
+# 移动文章
 mutation moveArticleMutation($article_id: Int!, $collection_id: Int!) {
 	moveArticle(article_id: $article_id, collection_id: $collection_id) {
 		id
@@ -55,6 +68,7 @@ mutation favoriteArticleMutation($article_id: Int!, $undo: Boolean) {
 	}
 }
 
+# 查询文章内容
 query articleContentQuery($id: Int!) {
 	article(id: $id) {
 		id
@@ -64,6 +78,7 @@ query articleContentQuery($id: Int!) {
 	}
 }
 
+# 文章排行
 query RankingArticleQuery($in_days: Int!) {
 	articles(in_days: $in_days, order: HOT) {
 		id

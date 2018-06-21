@@ -29,7 +29,7 @@
     "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-sortable-listview": "^0.2.8",
     "react-native-spinkit": "^1.1.1",
-    "react-native-swiper": "^1.5.13",
+    "react-native-swiper": "^1.5.8",
     "react-native-vector-icons": "^4.5.0",
     "react-native-video": "^2.1.1",
     "react-native-video-controls": "^2.2.1",
@@ -48,7 +48,9 @@
     "react-test-renderer": "^16.3.0-alpha.1"
   },
   "rnpm": {
-    "assets": ["./assets/fonts/"]
+    "assets": [
+      "./assets/fonts/"
+    ]
   },
   "jest": {
     "preset": "react-native"

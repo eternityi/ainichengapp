@@ -1,3 +1,15 @@
+# 用户关注
+query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilter) {
+    follows(user_id: $user_id, filter: $filter, offset: $offset, limit: $limit) {
+        id
+        followed_type
+        name
+        avatar
+        latest_article_title
+        dynamic_msg
+    }
+}
+
 # 用户个人资源统计
 query userResourceCountQuery($id: Int!) {
     user(id: $id) {
@@ -291,12 +303,11 @@ query userCategoriesQuery($user_id: Int!) {
         description
         count_follows
         count_articles
-        # followed_status
+        followed
         user {
             id
             name
         }
-        followed
         allow_submit
         need_approve
     }
@@ -324,12 +335,11 @@ query userFollowedCategoriesQuery($user_id: Int!) {
         logo
         count_follows
         count_articles
-        # followed_status
+        followed
         user {
             id
             name
         }
-        followed
     }
 }
 
@@ -357,7 +367,7 @@ query userCollectionsQuery($user_id: Int!) {
         logo
         count_articles
         count_follows
-        # followed_status
+        followed
         user {
             id
             name
@@ -372,7 +382,7 @@ query userFollowedCollectionsQuery($user_id: Int!) {
         logo
         count_articles
         count_follows
-        # followed_status
+        followed
         user {
             id
             name
@@ -498,6 +508,7 @@ query recommendFollowsQuery($user_id: Int!, $offset: Int) {
             name
             avatar
             introduction
+            followed_status
             articles(limit: 2) {
                 id
                 title
@@ -510,6 +521,7 @@ query recommendFollowsQuery($user_id: Int!, $offset: Int) {
             description
             count_articles
             count_follows
+            followed
             articles(filter: ALL, limit: 2) {
                 id
                 title
@@ -526,6 +538,7 @@ query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
             name
             avatar
             introduction
+            followed_status
             articles(limit: 2) {
                 id
                 title
@@ -538,6 +551,7 @@ query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
             description
             count_articles
             count_follows
+            followed
             articles(filter: ALL, limit: 2) {
                 id
                 title
@@ -554,6 +568,7 @@ query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
             name
             avatar
             introduction
+            followed_status
             articles(limit: 2) {
                 id
                 title
@@ -566,6 +581,7 @@ query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
             description
             count_articles
             count_follows
+            followed
             articles(filter: ALL, limit: 2) {
                 id
                 title

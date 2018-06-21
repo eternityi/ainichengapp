@@ -38,10 +38,10 @@ class HomeScreen extends Component {
 		this.tabSwitch = [];
 		this.authorHeight = 0;
 		this.membersHeight = 0;
+		this.currentTab = 0;
 		this.state = {
 			tabNames: ["最新发布", "最新评论", "目录", "成员"],
 			mainTopHeight: 0,
-			currentTab: 0,
 			scrollEnabled: true
 		};
 	}
@@ -176,6 +176,7 @@ class HomeScreen extends Component {
 	//内部滚动切换scrollEnabled
 	innerScroll(event) {
 		let { y } = event.nativeEvent.contentOffset;
+		console.log("testyyy", y);
 		if (y <= 1) {
 			this.setState({
 				scrollEnabled: true
@@ -184,16 +185,16 @@ class HomeScreen extends Component {
 	}
 
 	_changeTab(obj) {
-		this.setState({ currentTab: obj.i }, () => this._scrollEnabled());
+		this.currentTab = obj.i;
+		this._scrollEnabled();
 	}
 
 	// scrollEnabled判断逻辑
 	_scrollEnabled = () => {
-		let { currentTab } = this.state;
 		this.calcMembersTabSwitch();
-		if (currentTab == 3 && this.membersTabSwitch && this.topReached) {
+		if (this.currentTab == 3 && this.membersTabSwitch && this.topReached) {
 			this.setState({ scrollEnabled: false });
-		} else if (this.tabSwitch[currentTab] && this.topReached) {
+		} else if (this.tabSwitch[this.currentTab] && this.topReached) {
 			this.setState({ scrollEnabled: false });
 		} else {
 			this.setState({ scrollEnabled: true });

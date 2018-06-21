@@ -1,31 +1,31 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import Avatar from "../Pure/Avatar";
+import { Avatar } from "../Pure";
 import Colors from "../../constants/Colors";
 
 class FollowedGroup extends Component {
 	render() {
-		let { followed = {} } = this.props;
+		let { follow = {} } = this.props;
 		return (
 			<View style={styles.groupWrap}>
-				<Avatar type={followed.type == "user" ? "user" : "category"} uri={followed.type == "user" ? followed.avatar : followed.logo} />
-				<View style={styles.followedInfo}>
+				<Avatar type={follow.followed_type == "users" ? "user" : "category"} uri={follow.avatar} />
+				<View style={styles.followInfo}>
 					<View style={styles.topInfo}>
 						<Text numberOfLines={1} style={{ color: Colors.primaryFontColor, fontSize: 17 }}>
-							{followed.name || ""}
+							{follow.name || ""}
 						</Text>
-						{followed.updates > 0 && (
+						{follow.dynamic_msg ? (
 							<View style={styles.updates}>
 								<View style={styles.indicator} />
 								<Text numberOfLines={1} style={{ color: Colors.tintFontColor, fontSize: 12 }}>
-									{followed.updates + "篇文章"}
+									{follow.dynamic_msg}
 								</Text>
 							</View>
-						)}
+						) : null}
 					</View>
 					<View>
 						<Text numberOfLines={1} style={{ color: Colors.tintFontColor, fontSize: 13 }}>
-							{followed.latest_update || ""}
+							{follow.latest_article_title || ""}
 						</Text>
 					</View>
 				</View>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.lightBorderColor
 	},
-	followedInfo: {
+	followInfo: {
 		flex: 1,
 		paddingLeft: 15
 	},

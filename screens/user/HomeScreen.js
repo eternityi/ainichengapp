@@ -57,6 +57,7 @@ class HomeScreen extends Component {
     this._outerScroll = this._outerScroll.bind(this);
     this._mainTopLayout = this._mainTopLayout.bind(this);
     this.actionsHeight = 55;
+    this.currentTab = 1;
     this.state = {
       mainTopHeight: 0,
       backgroundOpacity: new Animated.Value(0),
@@ -67,7 +68,6 @@ class HomeScreen extends Component {
       rewardVisible: false,
       reportVisible: false,
       avatarViewerVisible: false,
-      currentTab: 1,
       cover: "https://www.dongmeiwei.com/storage/img/23433.top.jpg",
       isBlocked: false
     };
@@ -84,7 +84,6 @@ class HomeScreen extends Component {
       rewardVisible,
       reportVisible,
       avatarViewerVisible,
-      currentTab,
       cover,
       isBlocked
     } = this.state;
@@ -349,7 +348,7 @@ class HomeScreen extends Component {
 
   //根据scroll滚动高度 改变scrollenable状态以及执行头部动画
   _outerScroll(event) {
-    let { currentTab, mainTopHeight } = this.state;
+    let { mainTopHeight } = this.state;
     let { y } = event.nativeEvent.contentOffset;
     //到达顶部
     this.topReached = y >= mainTopHeight - headerHeight;
@@ -370,17 +369,17 @@ class HomeScreen extends Component {
 
   //切换tab页 判断scrollEnabled状态
   _changeTab(obj) {
-    this.setState({ currentTab: obj.i }, () => this._scrollEnabled());
+    this.currentTab = obj.i;
+    this._scrollEnabled();
   }
 
   // scrollEnabled判断逻辑
   _scrollEnabled = () => {
-    let { currentTab } = this.state;
-    if (currentTab == 2) {
+    if (this.currentTab == 2) {
       this.setState({ scrollEnabled: true });
-    } else if (currentTab == 0 && this.actionsTabSwitch && this.topReached) {
+    } else if (this.currentTab == 0 && this.actionsTabSwitch && this.topReached) {
       this.setState({ scrollEnabled: false });
-    } else if (currentTab == 1 && this.articlesTabSwitch && this.topReached) {
+    } else if (this.currentTab == 1 && this.articlesTabSwitch && this.topReached) {
       this.setState({ scrollEnabled: false });
     }
   };

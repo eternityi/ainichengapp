@@ -86,29 +86,6 @@ class ContributeManageScreen extends React.Component {
 							<HollowButton name={"撤回"} size={12} color={Colors.themeColor} onPress={() => null} />
 						</View>
 					</View>
-
-					<View
-						style={[
-							styles.categoryItem,
-							{
-								borderTopWidth: 1,
-								borderTopColor: Colors.lightBorderColor
-							}
-						]}
-					>
-						<View style={styles.itemInfo}>
-							<Text style={styles.darkText}>还有五次投稿机会</Text>
-						</View>
-						<View style={styles.button}>
-							<HollowButton
-								name={"去投稿"}
-								size={12}
-								onPress={() => {
-									navigation.navigate("文章投稿", { article });
-								}}
-							/>
-						</View>
-					</View>
 					<DivisionLine height={20} />
 					{/*
 							<Query query={beSelectedCategory}>
