@@ -10,11 +10,7 @@ const official_categories = [
 		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
 		name: "全部关注",
 		type: "全部关注",
-<<<<<<< Updated upstream
 		filter: "USER_CATEGORY"
-=======
-		filter: "关注的专题"
->>>>>>> Stashed changes
 	},
 	{
 		id: 64,
