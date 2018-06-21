@@ -114,7 +114,7 @@ class CommentItem extends Component {
 					!comment.replyComments && (
 						<Query query={replyCommentsQuery} variables={{ comment_id: comment.id }}>
 							{({ data }) => {
-								if (!(data && data.comments)) return null;
+								if (!(data && data.comments && data.comments.length < 1)) return null;
 								return this._renderReplyComments(data.comments);
 							}}
 						</Query>

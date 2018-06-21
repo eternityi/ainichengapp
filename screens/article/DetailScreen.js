@@ -76,7 +76,7 @@ class DetailScreen extends Component {
       rewardVisible: false,
       shareModalVisible: false,
       reply: false,
-      replyingComment: null,
+      replyingComment: null, //回复的comment
       imageViewerVisible: false,
       initImage: 0
     };

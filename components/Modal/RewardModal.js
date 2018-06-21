@@ -130,7 +130,7 @@ class RewardModal extends Component {
                     <Iconfont name={"RMB"} size={18} />
                     <Text>{amount}</Text>
                   </Text>
-                  <Text style={{ fontSize: 15, color: Colors.primaryFontColor, marginRight: 10 }}>使用{Config.AppName}余额支付</Text>
+                  <Text style={styles.paymentText}>当前余额¥{personal.balance}</Text>
                   {/*
                     // 更换支付方式
                       <TouchableOpacity onPress={this.handlePaymentVisible}>
@@ -143,7 +143,7 @@ class RewardModal extends Component {
                     style={{ fontSize: 16, color: Colors.themeColor }}
                     onPress={() => {
                       console.log("personal.blance", personal.blance, amount, article);
-                      if (personal.balance > amount) {
+                      if (personal.balance >= amount) {
                         if (message) {
                           tipArticle({
                             variables: {
@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
   },
   rewardModalAmount: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 20,
     borderBottomWidth: 1,
@@ -282,6 +283,11 @@ const styles = StyleSheet.create({
   rewardModalFooter: {
     marginTop: 20,
     flexDirection: "row-reverse"
+  },
+  paymentText: {
+    fontSize: 15,
+    color: Colors.primaryFontColor,
+    marginLeft: 10
   }
 });
 

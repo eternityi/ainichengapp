@@ -1,23 +1,9 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	Text,
-	ScrollView,
-	TouchableOpacity,
-	Dimensions,
-	Platform,
-	StatusBar
-} from "react-native";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, Platform, StatusBar } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import {
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading
-} from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import { Header, HeaderLeft, Search } from "../../components/Header";
 import { CustomPopoverMenu, ShareModal } from "../../components/Modal";
 import CategoryTopInfo from "./CategoryTopInfo";
@@ -37,10 +23,7 @@ let headerHeight = 70;
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import { Mutation, Query, graphql } from "react-apollo";
-import {
-	categoryQuery,
-	deleteCategoryMutation
-} from "../../graphql/category.graphql";
+import { categoryQuery, deleteCategoryMutation } from "../../graphql/category.graphql";
 import { userCategoriesQuery } from "../../../graphql/user.graphql";
 
 class HomeScreen extends Component {
@@ -64,20 +47,13 @@ class HomeScreen extends Component {
 	}
 
 	render() {
-		let {
-			category,
-			tabNames,
-			scrollEnabled,
-			mainTopHeight,
-			modalVisible
-		} = this.state;
+		let { category, tabNames, scrollEnabled, mainTopHeight, modalVisible } = this.state;
 		let { navigation, user, deleteCategory } = this.props;
 		return (
 			<Screen>
 				<Query query={categoryQuery} variables={{ id: category.id }}>
 					{({ loading, error, data, refetch }) => {
-						if (error)
-							return <LoadingError reload={() => refetch()} />;
+						if (error) return <LoadingError reload={() => refetch()} />;
 						if (!(data && data.category)) return <SpinnerLoading />;
 						let isSelf = data.category.user.id == user.id;
 						let followed = data.category.followed;
@@ -91,9 +67,8 @@ class HomeScreen extends Component {
 									customStyle={
 										!scrollEnabled
 											? {
-													borderBottomColor:
-														"transparent"
-											  }
+													borderBottomColor: "transparent"
+												}
 											: null
 									}
 									rightComponent={
@@ -104,10 +79,7 @@ class HomeScreen extends Component {
 											}}
 										>
 											<View style={{ marginRight: 15 }}>
-												<Search
-													navigation={navigation}
-													routeName={"搜索文章"}
-												/>
+												<Search navigation={navigation} routeName={"搜索文章"} />
 											</View>
 											<CustomPopoverMenu
 												width={160}
@@ -115,28 +87,20 @@ class HomeScreen extends Component {
 													if (isSelf) {
 														switch (index) {
 															case 0:
-																navigation.navigate(
-																	"新建专题",
-																	{
-																		category:
-																			data.category
-																	}
-																);
+																navigation.navigate("新建专题", {
+																	category: data.category
+																});
 																break;
 															case 1:
 																deleteCategory({
 																	variables: {
-																		id:
-																			data
-																				.category
-																				.id
+																		id: data.category.id
 																	},
 																	refetchQueries: deleteCategoryResult => [
 																		{
 																			query: userCategoriesQuery,
 																			variables: {
-																				user_id:
-																					user.id
+																				user_id: user.id
 																			}
 																		}
 																	]
@@ -147,49 +111,18 @@ class HomeScreen extends Component {
 																this.toggleModalVisible();
 																break;
 														}
-													} else if (followed) {
-														switch (index) {
-															case 0:
-																return "打开TA的推送更新";
-																break;
-															case 1:
-																this.toggleModalVisible();
-																break;
-														}
 													} else {
 														this.toggleModalVisible();
 													}
 												}}
-												triggerComponent={
-													<Iconfont
-														name={"more-vertical"}
-														size={20}
-														color={
-															Colors.tintFontColor
-														}
-													/>
-												}
+												triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
 												customOptionStyle={{
 													optionWrapper: {
-														alignItems:
-															"flex-start",
+														alignItems: "flex-start",
 														paddingHorizontal: 10
 													}
 												}}
-												options={
-													isSelf
-														? [
-																"编辑",
-																"删除专题",
-																"分享专题"
-														  ]
-														: followed
-															? [
-																	"打开TA的推送更新",
-																	"分享专题"
-															  ]
-															: ["分享专题"]
-												}
+												options={isSelf ? ["编辑", "删除专题", "分享专题"] : ["分享专题"]}
 											/>
 										</View>
 									}
@@ -203,10 +136,7 @@ class HomeScreen extends Component {
 									scrollEventThrottle={20}
 								>
 									<View onLayout={this._mainTopLayout}>
-										<CategoryTopInfo
-											category={data.category}
-											navigation={navigation}
-										/>
+										<CategoryTopInfo category={data.category} navigation={navigation} />
 									</View>
 									{!scrollEnabled && (
 										<View
@@ -223,7 +153,7 @@ class HomeScreen extends Component {
 												? {
 														position: "absolute",
 														top: mainTopHeight
-												  }
+													}
 												: null
 										]}
 									>
@@ -272,11 +202,7 @@ class HomeScreen extends Component {
 						);
 					}}
 				</Query>
-				<ShareModal
-					plain
-					visible={modalVisible}
-					toggleVisible={this.toggleModalVisible}
-				/>
+				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}

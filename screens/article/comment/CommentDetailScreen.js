@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
+import CommentItem from "./CommentItem";
+import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
 import Header from "../../../components/Header/Header";
-import CommentItem from "./CommentItem";
-import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
-import Screen from "../../Screen";
 import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
 import { Query, Mutation } from "react-apollo";
 

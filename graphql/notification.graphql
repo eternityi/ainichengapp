@@ -42,8 +42,15 @@ query commentNotificationQuery($offset: Int) {
             comment {
                 id
                 body
-                comment_id
+                likes
+                liked
                 time_ago
+                commentable_id
+                user {
+                    id
+                    avatar
+                    name
+                }
             }
             article {
                 id
@@ -146,6 +153,11 @@ query tipNotificationsQuery($offset: Int) {
             id
             type
             time_ago
+            user {
+                id
+                name
+                avatar
+            }
             article {
                 id
                 title

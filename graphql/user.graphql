@@ -52,12 +52,7 @@ mutation reportUserMutation($id: Int!, $type: String, $reason: String) {
     }
 }
 
-mutation reportUserCommentMutation(
-    $id: Int!
-    $type: String
-    $reason: String
-    $comment_id: Int!
-) {
+mutation reportUserCommentMutation($id: Int!, $type: String, $reason: String, $comment_id: Int!) {
     reportUser(id: $id, type: $type, reason: $reason, comment_id: $comment_id) {
         id
     }
@@ -441,6 +436,12 @@ query actionsQuery($offset: Int, $user_id: Int!) {
         postedComment {
             id
             body
+            time_ago
+            user {
+                id
+                name
+                avatar
+            }
             atUser {
                 id
                 name
@@ -602,16 +603,8 @@ mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
     }
 }
 
-mutation approveArticleMutation(
-    $article_id: Int!
-    $category_id: Int!
-    $is_reject: Boolean!
-) {
-    approveArticle(
-        article_id: $article_id
-        category_id: $category_id
-        is_reject: $is_reject
-    ) {
+mutation approveArticleMutation($article_id: Int!, $category_id: Int!, $is_reject: Boolean!) {
+    approveArticle(article_id: $article_id, category_id: $category_id, is_reject: $is_reject) {
         id
         pivot_status
     }

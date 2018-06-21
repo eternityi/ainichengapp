@@ -83,9 +83,14 @@ class HistoryScreen extends Component {
 			<TouchableOpacity
 				style={styles.historyItem}
 				onPress={() =>
-					navigation.navigate(item.type == "articles" ? "文章详情" : "视频详情", {
-						[item.type]: item.visited
-					})}
+					navigation.navigate(
+						item.type == "articles" ? "文章详情" : "视频详情",
+						item.type == "articles"
+							? {
+									article: item.visited
+								}
+							: { video: item.visited }
+					)}
 			>
 				<View style={{ flex: 1, marginRight: 20 }}>
 					<Text style={styles.title} numberOflines={2}>

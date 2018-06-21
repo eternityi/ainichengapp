@@ -80,7 +80,7 @@ class BeRewardScreen extends Component {
 	}
 
 	_renderItem = ({ item, index }) => {
-		let { navigation, user } = this.props;
+		let { navigation } = this.props;
 		let notification = item;
 		return (
 			<MediaGroup
@@ -92,7 +92,7 @@ class BeRewardScreen extends Component {
 							style={styles.customButton}
 							onPress={() =>
 								navigation.navigate("聊天页", {
-									chat: { with_user: notification.user }
+									withUser: notification.user
 								})}
 						>
 							<Text style={{ fontSize: 14, color: "#717171" }}>回复</Text>
@@ -131,8 +131,7 @@ class BeRewardScreen extends Component {
 				}
 				notification={{
 					content: notification.tip.message,
-					type: "交易记录",
-					info: { userId: user.id }
+					type: "交易记录"
 				}}
 				meta={notification.time_ago + " " + `支付宝支付，实时到账${notification.tip.amount}元`}
 			/>
@@ -169,6 +168,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({
-	be_rewards: store.users.be_rewards,
-	user: store.users.user
+	be_rewards: store.users.be_rewards
 }))(BeRewardScreen);

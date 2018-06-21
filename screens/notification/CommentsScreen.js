@@ -74,7 +74,7 @@ class CommentsScreen extends Component {
 											variables: {
 												commentable_id: commentedArticle.id,
 												body,
-												comment_id: replyingComment.comment_id ? replyingComment.comment_id : null,
+												comment_id: replyingComment.id,
 												at_uid: atUser.id
 											},
 											refetchQueries: addComment => [
@@ -162,7 +162,7 @@ class CommentsScreen extends Component {
 				notification={{
 					content: notification.comment ? notification.comment.body : "",
 					type: "评论详情",
-					info: { article: notification.article }
+					info: { comment: notification.comment }
 				}}
 				meta={notification.time_ago}
 			/>

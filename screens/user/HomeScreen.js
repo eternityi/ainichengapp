@@ -87,12 +87,11 @@ class HomeScreen extends Component {
       cover,
       isBlocked
     } = this.state;
-    let { navigation } = this.props;
-    let { user } = this.props.navigation.state.params;
-    let { user: currentUser, login } = this.props.users;
+    let { navigation, personal, login } = this.props;
+    let { user } = navigation.state.params;
     let is_self = false;
-    if (currentUser.id == user.id) {
-      user = currentUser;
+    if (personal.id == user.id) {
+      user = personal;
       is_self = true;
     }
     this.user = user;
@@ -167,7 +166,7 @@ class HomeScreen extends Component {
                           </Text>
                         </View>
                       </View>
-                      {currentUser.id == user.id ? (
+                      {personal.id == user.id ? (
                         <View style={styles.editorPersonData}>
                           <HollowButton onPress={() => navigation.navigate("编辑个人资料")}>
                             <Iconfont name={"editor"} size={16} color={"rgba(66,192,46,0.9)"} />
@@ -189,7 +188,7 @@ class HomeScreen extends Component {
                             <Mutation mutation={createChatMutation}>
                               {createChat => (
                                 <HollowButton
-                                  name={"发简讯"}
+                                  name={"发信息"}
                                   size={16}
                                   onPress={() => {
                                     login
@@ -514,6 +513,7 @@ const styles = StyleSheet.create({
 
 export default connect(store => {
   return {
-    users: store.users
+    personal: store.users.user,
+    login: store.users.login
   };
 })(compose(graphql(blockUserMutation, { name: "blockUserMutation" }))(HomeScreen));

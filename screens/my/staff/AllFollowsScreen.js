@@ -25,7 +25,8 @@ class AllFollowsScreen extends Component {
 		let filter = props.navigation.getParam("filter", "USER_CATEGORY");
 		this.menuOptions = ["全部关注", "只看用户", "只看专题", "只看文集"];
 		this.state = {
-			filter: filter
+			filter: filter,
+			fetchingMore: true
 		};
 	}
 
@@ -92,7 +93,7 @@ class AllFollowsScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.follows)) return <SpinnerLoading />;
-							if (data.follows.length < 0) return <BlankContent />;
+							if (data.follows.length < 1) return <BlankContent />;
 							return (
 								<FlatList
 									data={data.follows}
@@ -112,7 +113,34 @@ class AllFollowsScreen extends Component {
 										offset: 85 * index,
 										index
 									})}
-									ListFooterComponent={() => <ContentEnd />}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										if (data.follows) {
+											fetchMore({
+												variables: {
+													offset: data.follows.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (!(fetchMoreResult && fetchMoreResult.follows && fetchMoreResult.follows.length > 0)) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														follows: [...prev.follows, ...fetchMoreResult.follows]
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
 								/>
 							);
 						}}
