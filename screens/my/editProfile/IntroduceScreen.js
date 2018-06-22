@@ -25,6 +25,7 @@ class IntroduceScreen extends Component {
 
 	render() {
 		const { navigation } = this.props;
+		let { introduction } = this.state;
 		let defaultValue = navigation.getParam("introduction", "");
 		return (
 			<Screen>

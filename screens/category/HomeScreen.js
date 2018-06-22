@@ -57,8 +57,6 @@ class HomeScreen extends Component {
 						if (!(data && data.category)) return <SpinnerLoading />;
 						let isSelf = data.category.user.id == user.id;
 						let followed = data.category.followed;
-						console.log("专题ＩＤ");
-						console.log(data.category.id);
 						return (
 							<View style={styles.container}>
 								<Header
