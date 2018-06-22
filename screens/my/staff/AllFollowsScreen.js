@@ -98,16 +98,18 @@ class AllFollowsScreen extends Component {
 								<FlatList
 									data={data.follows}
 									keyExtractor={item => item.id.toString()}
-									renderItem={({ item }) => (
-										<TouchableOpacity
-											onPress={() =>
-												navigation.navigate(this.routeName(item.followed_type), {
-													[this.paramKey(item.followed_type)]: item
-												})}
-										>
-											<FollowedGroup follow={item} />
-										</TouchableOpacity>
-									)}
+									renderItem={({ item }) => {
+										return (
+											<TouchableOpacity
+												onPress={() =>
+													navigation.navigate(this.routeName(item.followed_type), {
+														[this.paramKey(item.followed_type)]: { ...item, id: item.followed_id }
+													})}
+											>
+												<FollowedGroup follow={item} />
+											</TouchableOpacity>
+										);
+									}}
 									getItemLayout={(data, index) => ({
 										length: 85,
 										offset: 85 * index,

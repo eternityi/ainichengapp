@@ -2,6 +2,7 @@
 query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilter) {
     follows(user_id: $user_id, filter: $filter, offset: $offset, limit: $limit) {
         id
+        followed_id
         followed_type
         name
         avatar
