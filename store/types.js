@@ -11,6 +11,7 @@ export default defineActionConstants([
 	"UPDATE_NAME",
 	"UPDATE_INTRODUCTION",
 	"UPDATE_RESOURCE_COUNT",
+	"UPDATA_PASSWORD",
 
 	//专题
 	"EDIT_CATEGORY_ADMINS",

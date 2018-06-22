@@ -5,7 +5,7 @@ import Colors from "../../constants/Colors";
 
 class PrettyButton extends Component {
 	render() {
-		let { onPress = () => null, name = "提交", disabled = false, buttonStyle = {}, fontStyle = {} } = this.props;
+		let { onPress, name = "提交", disabled = false, buttonStyle = {}, fontStyle = {} } = this.props;
 		return (
 			<TouchableOpacity onPress={onPress} disabled={disabled}>
 				<View style={[styles.button, buttonStyle, disabled && { opacity: 0.5 }]}>

@@ -37,6 +37,13 @@ export default {
     };
   },
 
+  updatePassword(Password) {
+    return {
+      type: types.UPDATA_PASSWORD,
+      Password
+    };
+  },
+
   signIn(user) {
     return {
       type: types.SIGN_IN,

@@ -178,7 +178,9 @@ class CreationScreen extends React.Component {
         .then(async ([body, title]) => {
           //文章已经创建
           if (this.gotArticle.id) {
-            let { data: { createArticle } } = await editArticle({
+            let {
+              data: { createArticle }
+            } = await editArticle({
               variables: {
                 id: this.gotArticle.id,
                 title,

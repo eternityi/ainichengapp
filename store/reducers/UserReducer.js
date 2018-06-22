@@ -36,12 +36,22 @@ class UserReducer {
 		return state.set("user", user);
 	}
 
+	static [types.UPDATA_PASSWORD](state, action) {
+		let { user } = state;
+		let { password } = action;
+		user = {
+			...user,
+			password
+		};
+		return state.set("user", user);
+	}
+
 	static [types.UPDATE_NAME](state, action) {
 		let { user } = state;
 		let { name } = action;
 		user = {
 			...user,
-			name
+			password
 		};
 		return state.set("user", user);
 	}

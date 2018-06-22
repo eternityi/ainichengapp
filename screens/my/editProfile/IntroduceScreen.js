@@ -70,7 +70,7 @@ class IntroduceScreen extends Component {
 							autoFocus
 							style={styles.textInput}
 							onChangeText={introduction => this.setState({ introduction })}
-							value={defaultValue}
+							defaultValue={defaultValue}
 						/>
 					</View>
 				</View>

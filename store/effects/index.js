@@ -29,7 +29,11 @@ export default [
 		effect: rememberUser,
 		error: genericErrorHandler
 	},
-
+	{
+		action: types.UPDATA_PASSWORD,
+		effect: rememberUser,
+		error: genericErrorHandler
+	},
 	{
 		action: types.SIGN_OUT,
 		effect: forgetUser,

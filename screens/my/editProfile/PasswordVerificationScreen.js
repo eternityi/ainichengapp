@@ -7,7 +7,10 @@ import SettingItem from "../../../components/Setting/SettingItem";
 import PrettyButton from "../../../components/Button/PrettyButton";
 import Screen from "../../Screen";
 
+import { connect } from "react-redux";
+import actions from "../../../store/actions";
 // import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
+import { updateUserPasswordMutation } from "../../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class PasswordVerificationScreen extends Component {
@@ -17,17 +20,15 @@ class PasswordVerificationScreen extends Component {
 
 	constructor(props) {
 		super(props);
-
 		this.state = {
-			oldPassword: "",
-			newPassword: "",
-			retypePassword: "",
+			oldpassword: "",
+			password: "",
 			disabled: true
 		};
 	}
 
 	render() {
-		let { oldPassword, newPassword, retypePassword, disabled } = this.state;
+		let { oldpassword, password, disabled } = this.state;
 		let { navigation } = this.props;
 		return (
 			<Screen>
@@ -42,8 +43,9 @@ class PasswordVerificationScreen extends Component {
 							placeholderText={Colors.tintFontColor}
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							onChangeText={oldPassword => this.setState({ oldPassword })}
-							value={oldPassword + ""}
+							onChangeText={oldpassword => {
+								this.setState({ oldpassword });
+							}}
 							secureTextEntry={true}
 						/>
 					</View>
@@ -55,12 +57,13 @@ class PasswordVerificationScreen extends Component {
 							placeholderText={Colors.tintFontColor}
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							onChangeText={newPassword => this.setState({ newPassword })}
-							value={newPassword + ""}
+							onChangeText={password => {
+								this.setState({ password });
+							}}
 							secureTextEntry={true}
 						/>
 					</View>
-					<View style={styles.textWrap}>
+					{/*<View style={styles.textWrap}>
 						<TextInput
 							textAlignVertical="center"
 							underlineColorAndroid="transparent"
@@ -68,17 +71,35 @@ class PasswordVerificationScreen extends Component {
 							placeholderText={Colors.tintFontColor}
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							onChangeText={retypePassword => this.setState({ retypePassword })}
-							value={retypePassword + ""}
+							onChangeText={password => this.setState({ password })}
 							secureTextEntry={true}
 						/>
-					</View>
+					</View>*/}
 					<View style={{ margin: 15 }}>
-						<PrettyButton
-							name="完成"
-							disabled={oldPassword && newPassword && retypePassword ? false : true}
-							buttonStyle={{ backgroundColor: Colors.themeColor, height: 48 }}
-						/>
+						<Mutation mutation={updateUserPasswordMutation}>
+							{updateUserPassword => {
+								return (
+									<PrettyButton
+										name="完成"
+										onPress={() => {
+											updateUserPassword({
+												variables: {
+													oldpassword,
+													password
+												}
+											});
+											console.log(oldpassword);
+											console.log(password);
+
+											this.props.dispatch(actions.updatePassword(password));
+											navigation.goBack();
+										}}
+										disabled={oldpassword && password && password ? false : true}
+										buttonStyle={{ backgroundColor: Colors.themeColor, height: 48 }}
+									/>
+								);
+							}}
+						</Mutation>
 					</View>
 				</View>
 			</Screen>
@@ -104,4 +125,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default PasswordVerificationScreen;
+export default connect(store => ({
+	user: store.users.user
+}))(PasswordVerificationScreen);
