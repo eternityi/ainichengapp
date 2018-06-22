@@ -51,7 +51,42 @@ class CommentsScreen extends Component {
 									data={data.user.notifications}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
-									ListFooterComponent={() => <ContentEnd />}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										if (data.user.notifications) {
+											fetchMore({
+												variables: {
+													offset: data.user.notifications.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user.notifications &&
+															fetchMoreResult.user.notifications.length > 0
+														)
+													) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														user: Object.assign({}, prev.user, {
+															notifications: [...prev.user.notifications, ...fetchMoreResult.user.notifications]
+														})
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
 								/>
 							);
 						}}
@@ -70,6 +105,7 @@ class CommentsScreen extends Component {
 									replyingComment={replyingComment}
 									atUser={atUser}
 									replyComment={({ body, replyingComment, atUser }) => {
+										console.log("variables", commentedArticle.id, replyingComment, atUser);
 										replyComment({
 											variables: {
 												commentable_id: commentedArticle.id,
@@ -109,6 +145,7 @@ class CommentsScreen extends Component {
 					<TouchableOpacity
 						style={styles.reply}
 						onPress={() => {
+							console.log("test", notification.article, notification.comment, notification.user);
 							this.setState(prevState => ({
 								replyCommentVisible: !prevState.replyCommentVisible,
 								commentedArticle: notification.article,

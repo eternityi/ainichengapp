@@ -110,15 +110,6 @@ class CommentItem extends Component {
 				</View>
 				{/*如果有subcoments就直接渲染，否则尝试去请求subcoments**/}
 				{comment.replyComments && comment.replyComments.length > 0 && this._renderReplyComments(replyComments)}
-				{detail &&
-					!comment.replyComments && (
-						<Query query={replyCommentsQuery} variables={{ comment_id: comment.id }}>
-							{({ data }) => {
-								if (!(data && data.comments && data.comments.length < 1)) return null;
-								return this._renderReplyComments(data.comments);
-							}}
-						</Query>
-					)}
 
 				<OperationModal
 					visible={operationModalVisible}

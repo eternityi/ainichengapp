@@ -9,8 +9,8 @@ import Header from "../../../components/Header/Header";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
-import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
-import { Query, Mutation } from "react-apollo";
+import { commentsQuery, addCommentMutation, replyCommentsQuery } from "../../../graphql/comment.graphql";
+import { Query, Mutation, withApollo } from "react-apollo";
 
 const { width } = Dimensions.get("window");
 
@@ -27,6 +27,13 @@ class CommentDetailScreen extends Component {
 			replyingComment: comment, //回复的评论
 			body: ""
 		};
+	}
+
+	componentWillMount() {
+		let { comment } = this.state;
+		if (!comment.replyComments) {
+			this.fetchReplyComments();
+		}
 	}
 
 	render() {
@@ -122,6 +129,17 @@ class CommentDetailScreen extends Component {
 		);
 	}
 
+	async fetchReplyComments() {
+		let { comment } = this.state;
+		let { data } = await this.props.client.query({ query: replyCommentsQuery, variables: { comment_id: comment.id } });
+		this.setState(prevState => ({
+			comment: {
+				...prevState.comment,
+				...{ replyComments: data.comments }
+			}
+		}));
+	}
+
 	// 输入框聚焦自带检测是否应该加上@用户名
 	_inputFocus() {
 		let { navigation, login } = this.props;
@@ -169,4 +187,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ login: store.users.login }))(CommentDetailScreen);
+export default connect(store => ({ login: store.users.login }))(withApollo(CommentDetailScreen));
