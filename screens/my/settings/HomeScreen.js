@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions } from "react-native";
 
+import codePush from "react-native-code-push";
+import Config from "../../../constants/Config";
 import Colors from "../../../constants/Colors";
 import { Iconfont } from "../../../utils/Fonts";
 import Header from "../../../components/Header/Header";
@@ -87,8 +89,15 @@ class HomeScreen extends Component {
 						>
 							<SettingItem rightSize={15} itemName="清除缓存" rightContent={"当前缓存1.2Mb"} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => null}>
-							<SettingItem itemName="版本更新" explain="当前版本: 1.0.0" />
+						<TouchableOpacity
+							onPress={() => {
+								codePush.sync({
+									updateDialog: true,
+									installMode: codePush.InstallMode.IMMEDIATE
+								});
+							}}
+						>
+							<SettingItem itemName="版本更新" explain={"当前版本: " + Config.AppVersion} />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => navigation.navigate("关于我们")}>
 							<SettingItem itemName="关于我们" />
