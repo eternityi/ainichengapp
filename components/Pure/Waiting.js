@@ -1,15 +1,20 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Spinner from "react-native-spinkit";
 
 import Colors from "../../constants/Colors";
 
+const { width, height } = Dimensions.get("window");
+
 class Waiting extends Component {
 	render() {
-		let { size = 50, color = Colors.themeColor, type = "WanderingCubes", isVisible = true } = this.props;
+		let { size = 50, color = Colors.themeColor, type = "WanderingCubes", isVisible } = this.props;
+		if (!isVisible) {
+			return null;
+		}
 		return (
 			<View style={styles.container}>
-				<Spinner isVisible={isVisible} size={size} type={type} color={color} />
+				<Spinner size={size} type={type} color={color} />
 			</View>
 		);
 	}
@@ -20,10 +25,11 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 0,
 		left: 0,
-		flex: 1,
+		width,
+		height,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "rgba(255,255,255, 0.5)"
+		backgroundColor: "rgba(255,255,255, 0.6)"
 	}
 });
 

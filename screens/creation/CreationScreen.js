@@ -8,7 +8,7 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
-import { ContentEnd, LoadingMore, LoadingError } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, Waiting } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -28,20 +28,30 @@ class CreationScreen extends React.Component {
     let article = props.navigation.getParam("article", {});
     this.publishing = false;
     this.state = {
-      article
+      article,
+      waitingVisible: false
     };
   }
+
+  backHandlerAction = () => {
+    if (!this.publishing) {
+      this.backAction();
+      return true;
+    }
+    return false;
+  };
 
   componentDidMount() {
     YellowBox.ignoreWarnings(["Warning: RichTextToolbar has a method called componentDidReceiveProps()"]);
     //监听安卓back
     if (Platform.OS === "android") {
-      BackHandler.addEventListener("hardwareBackPress", function() {
-        if (!this.publishing) {
-          this.backAction();
-        }
-        return true;
-      });
+      BackHandler.addEventListener("hardwareBackPress", this.backHandlerAction);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === "android") {
+      BackHandler.removeEventListener("hardwareBackPress", this.backHandlerAction);
     }
   }
 
@@ -49,12 +59,15 @@ class CreationScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    let { article } = this.state;
+    let { article, waitingVisible } = this.state;
     return (
       <Screen>
         <View style={styles.container}>
           <Header
             navigation={navigation}
+            backHandler={() => {
+              this.backAction();
+            }}
             rightComponent={
               <TouchableOpacity
                 onPress={() => {
@@ -87,6 +100,7 @@ class CreationScreen extends React.Component {
             this.renderEditor()
           )}
         </View>
+        <Waiting isVisible={waitingVisible} />
       </Screen>
     );
   }
@@ -161,6 +175,7 @@ class CreationScreen extends React.Component {
 
   //判断article内容是否change
   isChange(prevACont, currentCont) {
+    console.log("prevACont", prevACont, "currentCont", currentCont);
     if (prevACont.title != currentCont.title || prevACont.body != currentCont.body) {
       return true;
     }
@@ -171,31 +186,43 @@ class CreationScreen extends React.Component {
   backAction = () => {
     this.publishing = true;
     const { createArticle, editArticle, navigation } = this.props;
-    //内容有改动
-    if (isChange(this.gotArticle, { title, body })) {
-      // 异步获取编辑器内容
-      Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
-        .then(async ([body, title]) => {
+    // 异步获取编辑器内容
+    Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
+      .then(([body, title]) => {
+        //内容有改动
+        if (body && title && this.isChange(this.gotArticle, { title, body })) {
+          this.setState({
+            waitingVisible: true
+          });
           //文章已经创建
           if (this.gotArticle.id) {
-            let {
-              data: { createArticle }
-            } = await editArticle({
+            editArticle({
               variables: {
                 id: this.gotArticle.id,
                 title,
                 body
               }
-            });
-            this.publishing = false;
-            //文章发布状态
-            if (gotArticle.status > 0) {
-              navigation.replace("文章详情", { article: createArticle });
-            } else {
-              navigation.goBack();
-            }
+            })
+              .then(({ data }) => {
+                this.setState({
+                  waitingVisible: false
+                });
+                //文章发布状态
+                this.publishing = false;
+                if (this.gotArticle.status > 0) {
+                  navigation.replace("文章详情", { article: data.editArticle });
+                } else {
+                  navigation.goBack();
+                }
+              })
+              .catch(error => {
+                this.setState({
+                  waitingVisible: false
+                });
+                this.publishing = false;
+              });
           } else {
-            let { data } = await createArticle({
+            createArticle({
               variables: {
                 title,
                 body
@@ -205,18 +232,29 @@ class CreationScreen extends React.Component {
                   query: draftsQuery
                 }
               ]
-            });
-            this.publishing = false;
-            navigation.replace("私密文章");
+            })
+              .then(({ data }) => {
+                this.setState({
+                  waitingVisible: false
+                });
+                this.publishing = false;
+                navigation.replace("私密文章");
+              })
+              .catch(error => {
+                this.setState({
+                  waitingVisible: false
+                });
+                this.publishing = false;
+              });
           }
-        })
-        .catch(error => {
-          throw new Error(error);
-        });
-    } else {
-      this.publishing = false;
-      navigation.goBack();
-    }
+        } else {
+          this.publishing = false;
+          navigation.goBack();
+        }
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   };
 
   //点击发布
@@ -226,37 +264,65 @@ class CreationScreen extends React.Component {
     const { createArticle, editArticle, navigation } = this.props;
     //异步获取编辑器内容
     Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
-      .then(async ([body, title]) => {
+      .then(([body, title]) => {
+        if (!body && !title) {
+          return null;
+        }
+        this.setState({
+          waitingVisible: true
+        });
         //文章已经创建=>更新发布（或者发布更新）
         if (this.gotArticle.id) {
           let flag = { ...this.gotArticle }; //这里是保存第一次query的article（因为editArticleMutation后会使query重新fetch给gotArticle赋值）
           // 先提交编辑后的文章
-          let { data } = await editArticle({
+          editArticle({
             variables: {
               id: this.gotArticle.id,
               title,
               body,
               is_publish: this.gotArticle.status == 0
             }
-          });
-          this.publishing = false;
-          //如果没有发布就发布更新否则更新发布
-          if (flag.status < 1) {
-            navigation.replace("发布分享", { article: data.editArticle });
-          } else {
-            navigation.replace("文章详情", { article: data.editArticle });
-          }
+          })
+            .then(({ data }) => {
+              this.setState({
+                waitingVisible: false
+              });
+              this.publishing = false;
+              //如果没有发布就发布更新否则更新发布
+              if (flag.status < 1) {
+                navigation.replace("发布分享", { article: data.editArticle });
+              } else {
+                navigation.replace("文章详情", { article: data.editArticle });
+              }
+            })
+            .catch(error => {
+              this.setState({
+                waitingVisible: false
+              });
+              this.publishing = false;
+            });
         } else {
           //创建并发布
-          let { data } = await createArticle({
+          createArticle({
             variables: {
               title,
               body,
               is_publish: true
             }
-          });
-          this.publishing = false;
-          navigation.replace("发布分享", { article: data.createArticle });
+          })
+            .then(({ data }) => {
+              this.setState({
+                waitingVisible: false
+              });
+              this.publishing = false;
+              navigation.replace("发布分享", { article: data.createArticle });
+            })
+            .catch(error => {
+              this.setState({
+                waitingVisible: false
+              });
+              this.publishing = false;
+            });
         }
       })
       .catch(error => {
