@@ -15,9 +15,10 @@ class UploadMedia extends Component {
 			onPressPhotoUpload,
 			onPressVideoUpload,
 			selectMedia,
-			cancelUpload
+			cancelUpload,
+			completed,
+			uploadId
 		} = this.props;
-
 		return (
 			<ScrollView>
 				<View style={styles.inputText}>
@@ -59,11 +60,11 @@ class UploadMedia extends Component {
 							/>
 						</TouchableOpacity>
 					</View>
-					{progress == null ? null : !progress == 100 ? (
+					{uploadId == null ? null : !completed ? (
 						<View style={{ flexDirection: "row" }}>
 							<Text style={{ textAlign: "center" }}>上传进度:{progress}%</Text>
 							<TouchableOpacity onPress={cancelUpload}>
-								<Text style={{ color: Colors.themeColor, marginLeft: 5 }}>停止上传</Text>
+								<Text style={{ color: Colors.themeColor, marginLeft: 5 }}>取消上传</Text>
 							</TouchableOpacity>
 						</View>
 					) : (

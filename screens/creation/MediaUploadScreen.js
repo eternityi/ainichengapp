@@ -42,9 +42,9 @@ class MediaUploadScreen extends React.Component {
     super(props);
     this.showMediaSelect = this.showMediaSelect.bind(this);
     this.state = {
-      isImagePickerShowing: false,
       uploadId: null,
       progress: null,
+      completed: false,
       image_urls: [],
       routeName: "　",
       selectMedia: false
@@ -52,7 +52,7 @@ class MediaUploadScreen extends React.Component {
   }
 
   render() {
-    let { image_urls, routeName, selectMedia } = this.state;
+    let { image_urls, routeName, selectMedia, completed, progress, uploadId } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -83,8 +83,10 @@ class MediaUploadScreen extends React.Component {
           selectMedia={selectMedia}
           image_urls={image_urls}
           showMediaSelect={this.showMediaSelect}
-          progress={this.state.progress}
+          progress={progress}
           cancelUpload={this.cancelUpload}
+          completed={completed}
+          uploadId={uploadId}
           onPressPhotoUpload={() =>
             this.onPressPhotoUpload({
               url: "https://www.ainicheng.com/video",
@@ -103,6 +105,83 @@ class MediaUploadScreen extends React.Component {
       </View>
     );
   }
+
+  onPressVideoUpload = options => {
+    const imagePickerOptions = {
+      mediaType: "video"
+    };
+
+    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
+      let didChooseVideo = true;
+      const { customButton, didCancel, error, path, uri, data } = response;
+      let { image_urls } = this.state;
+
+      if (didCancel) {
+        didChooseVideo = false; //用户取消选择视频
+      }
+      if (error) {
+        console.warn("ImagePicker error:", response);
+        didChooseVideo = false;
+      }
+      if (!didChooseVideo) {
+        return;
+      }
+      if (Platform.OS === "android") {
+        if (path) {
+          this.startUpload(Object.assign({ path }, options));
+          let source = "file://" + path; //本地视频路径
+          image_urls.push(source);
+          this.setState({
+            image_urls
+          });
+        } else {
+          return;
+        }
+      } else {
+        // You can also display the image using data:
+        this.startUpload(Object.assign({ path: uri }, options));
+      }
+    });
+    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+  };
+
+  onPressPhotoUpload = options => {
+    const imagePickerOptions = {
+      mediaType: "photo"
+    };
+
+    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
+      let didChooseVideo = true;
+      const { customButton, didCancel, error, path, uri, data } = response;
+      let { image_urls } = this.state;
+
+      if (didCancel) {
+        didChooseVideo = false; //用户取消选择图片
+      }
+      if (error) {
+        console.warn("ImagePicker error:", response);
+        didChooseVideo = false;
+      }
+      if (!didChooseVideo) {
+        return;
+      }
+      if (Platform.OS === "android") {
+        if (path) {
+          this.startUpload(Object.assign({ path }, options));
+          image_urls.push(uri); //图片资源
+          this.setState({
+            image_urls
+          });
+        } else {
+          return;
+        }
+      } else {
+        // You can also display the image using data:
+        this.startUpload(Object.assign({ path: uri }, options));
+      }
+    });
+    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+  };
 
   handleProgress = throttle(progress => {
     this.setState({ progress });
@@ -123,154 +202,39 @@ class MediaUploadScreen extends React.Component {
       Upload.startUpload(options)
         .then(uploadId => {
           console.log(`Upload started with options: ${JSON.stringify(options)}`);
-          this.setState({ uploadId, progress: 0 });
+          this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
           Upload.addListener("progress", uploadId, data => {
-            this.handleProgress(+data.progress);
+            this.handleProgress(+data.progress); //上传进度
             console.log(`Progress: ${data.progress}%`);
           });
           Upload.addListener("error", uploadId, data => {
             console.log(`Error: ${data.error}%`);
           });
           Upload.addListener("completed", uploadId, data => {
-            console.log("Completed!");
+            this.setState({
+              completed: true
+            }); //上传完成
           });
         })
         .catch(function(err) {
           this.setState({ uploadId: null, progress: null });
-          console.log("Upload error!", err);
+          console.log("上传错误!", err);
         });
     });
   };
-  onPressVideoUpload = options => {
-    if (this.state.isImagePickerShowing) {
-      return;
-    }
-
-    this.setState({ isImagePickerShowing: true });
-
-    const imagePickerOptions = {
-      title: "选择",
-      cancelButtonTitle: "取消",
-      takePhotoButtonTitle: null,
-      chooseFromLibraryButtonTitle: null,
-      mediaType: "video"
-    };
-
-    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
-      let didChooseVideo = true;
-
-      console.log("ImagePicker response: ", response);
-      const { customButton, didCancel, error, path, uri, data } = response;
-
-      if (didCancel) {
-        didChooseVideo = false;
-      }
-
-      if (error) {
-        console.warn("ImagePicker error:", response);
-        didChooseVideo = false;
-      }
-
-      // TODO: Should this happen higher?
-      this.setState({ isImagePickerShowing: false });
-
-      if (!didChooseVideo) {
-        return;
-      }
-
-      if (Platform.OS === "android") {
-        if (path) {
-          // Video is stored locally on the device
-          // TODO: What here?
-          this.startUpload(Object.assign({ path }, options));
-          let source = { uri: "file://" + path };
-          this.setState({
-            image_urls: source
-          });
-        } else {
-          // Video is stored in google cloud
-          // TODO: What here?
-          this.props.onVideoNotFound();
-        }
-      } else {
-        // You can also display the image using data:
-        this.startUpload(Object.assign({ path: uri }, options));
-      }
-    });
-    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
-  };
-
-  onPressPhotoUpload = options => {
-    if (this.state.isImagePickerShowing) {
-      return;
-    }
-
-    this.setState({ isImagePickerShowing: true });
-
-    const imagePickerOptions = {
-      title: "选择",
-      cancelButtonTitle: "取消",
-      takePhotoButtonTitle: null,
-      chooseFromLibraryButtonTitle: null,
-      mediaType: "photo"
-    };
-
-    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
-      let didChooseVideo = true;
-
-      console.log("ImagePicker response: ", response);
-      const { customButton, didCancel, error, path, uri, data } = response;
-      let { image_urls } = this.state;
-
-      if (didCancel) {
-        didChooseVideo = false;
-      }
-
-      if (error) {
-        console.warn("ImagePicker error:", response);
-        didChooseVideo = false;
-      }
-
-      // TODO: Should this happen higher?
-      this.setState({ isImagePickerShowing: false });
-
-      if (!didChooseVideo) {
-        return;
-      }
-
-      if (Platform.OS === "android") {
-        if (path) {
-          // Video is stored locally on the device
-          // TODO: What here?
-          this.startUpload(Object.assign({ path }, options));
-          image_urls.push(uri);
-          this.setState({
-            image_urls
-          });
-          console.log("图片对象");
-          console.log(image_urls);
-        } else {
-          // Video is stored in google cloud
-          // TODO: What here?
-          this.props.onVideoNotFound();
-        }
-      } else {
-        // You can also display the image using data:
-        this.startUpload(Object.assign({ path: uri }, options));
-      }
-    });
-    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
-  };
-
   cancelUpload = () => {
+    let { image_urls } = this.state;
     if (!this.state.uploadId) {
-      console.log("Nothing to cancel!");
-      return;
+      return; //没有上传的文件ＩＤ
     }
 
     Upload.cancelUpload(this.state.uploadId).then(props => {
       console.log(`Upload ${this.state.uploadId} canceled`);
-      this.setState({ uploadId: null, progress: null });
+      this.setState({ uploadId: null, progress: null }); //取消上传,移除上传文件的ID与进度
+      image_urls.pop();
+      this.setState({
+        image_urls
+      }); //取消上传时移除数组的最后一个
     });
   };
 
