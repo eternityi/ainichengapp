@@ -35,7 +35,11 @@ class CustomMainTab extends React.Component {
     renderCreation() {
         const { navigation, login } = this.props;
         return (
-            <TouchableOpacity key={"creation"} onPress={() => navigation.navigate(login ? "创作" : "创作封面")}>
+            <TouchableOpacity
+                key={"creation"}
+                onPress={() => navigation.navigate(login ? "媒体上传" : "创作封面")}
+                onLongPress={() => navigation.navigate(login ? "创作" : "创作封面")}
+            >
                 <View>
                     <Iconfont name={"fill-add"} size={38} color={Color.themeColor} />
                 </View>

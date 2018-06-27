@@ -14,7 +14,7 @@ export default class Header extends React.Component {
 
 	render() {
 		let {
-			routeName = null,
+			routeName,
 			leftComponent,
 			rightComponent,
 			navigation,
