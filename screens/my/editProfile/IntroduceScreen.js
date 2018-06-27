@@ -18,15 +18,11 @@ class IntroduceScreen extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			introduction: props.navigation.getParam("introduction", "")
-		};
+		this.introduction = props.navigation.getParam("introduction", "");
 	}
 
 	render() {
 		const { navigation } = this.props;
-		let { introduction } = this.state;
-		let defaultValue = navigation.getParam("introduction", "");
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -40,10 +36,10 @@ class IntroduceScreen extends Component {
 											onPress={() => {
 												updateUserIntroduction({
 													variables: {
-														introduction
+														introduction: this.introduction
 													}
 												});
-												this.props.dispatch(actions.updateIntroduction(introduction));
+												this.props.dispatch(actions.updateIntroduction(this.introduction));
 												navigation.goBack();
 											}}
 										>
@@ -69,8 +65,10 @@ class IntroduceScreen extends Component {
 							multiline={true}
 							autoFocus
 							style={styles.textInput}
-							onChangeText={introduction => this.setState({ introduction })}
-							defaultValue={defaultValue}
+							onChangeText={introduction => {
+								this.introduction = introduction;
+							}}
+							defaultValue={this.introduction}
 						/>
 					</View>
 				</View>

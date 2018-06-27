@@ -1,31 +1,37 @@
 import React, { Component } from "react";
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions } from "react-native";
-import BasicModal from "./BasicModal";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
+import BasicModal from "./BasicModal";
+import SearchUserModal from "./SearchUserModal";
+
+import { withNavigation } from "react-navigation";
 
 const { width } = Dimensions.get("window");
 
 class ReplyCommentModal extends Component {
 	constructor(props) {
 		super(props);
-
+		this.atUser = null;
+		this.body = "";
+		this.toggleVisible = this.toggleVisible.bind(this);
 		this.state = {
-			body: ""
+			aiteModalVisible: false
 		};
 	}
 
 	// 输入框聚焦自带检测是否应该加上@用户名
 	_inputFocus() {
-		let { body } = this.state;
-		if (body.indexOf(`@${this.props.atUser.name}`) !== 0) {
-			body = `@${this.props.atUser.name} `;
-			this.setState({ body });
+		if (this.body.indexOf(`@${this.props.atUser.name}`) !== 0) {
+			this.body = `@${this.props.atUser.name} `;
 		}
 	}
 
 	render() {
-		const { visible, toggleReplyComment, replyComment, replyingComment, atUser } = this.props;
+		const { visible, toggleReplyComment, replyComment, replyingComment, atUser, navigation } = this.props;
+		let { aiteModalVisible } = this.state;
+
 		return (
 			<BasicModal
 				visible={visible}
@@ -45,16 +51,22 @@ class ReplyCommentModal extends Component {
 						multiline={true}
 						autoFocus
 						style={styles.textInput}
-						onChangeText={body => this.setState({ body })}
+						onChangeText={body => {
+							this.body = body;
+						}}
 						onFocus={this._inputFocus.bind(this)}
-						value={this.state.body + ""}
+						value={this.body}
 					/>
 					<View style={styles.textBottom}>
 						<View style={styles.textBottom}>
-							<TouchableOpacity onPress={() => null}>
+							<TouchableOpacity onPress={this.toggleVisible}>
 								<Iconfont name="aite" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
 							</TouchableOpacity>
-							<TouchableOpacity onPress={() => null}>
+							<TouchableOpacity
+								onPress={() => {
+									this.body += "🙂";
+								}}
+							>
 								<Iconfont name="smile" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
 							</TouchableOpacity>
 						</View>
@@ -62,13 +74,11 @@ class ReplyCommentModal extends Component {
 							onPress={() => {
 								toggleReplyComment();
 								replyComment({
-									body: this.state.body,
+									body: this.body,
 									replyingComment,
 									atUser
 								});
-								this.setState({
-									body: ""
-								});
+								this.body = "";
 							}}
 							style={styles.publishComment}
 						>
@@ -84,8 +94,22 @@ class ReplyCommentModal extends Component {
 						</TouchableOpacity>
 					</View>
 				</View>
+				<SearchUserModal
+					navigation={navigation}
+					visible={aiteModalVisible}
+					toggleVisible={this.toggleVisible}
+					handleSelectedUser={user => {
+						this.toggleVisible();
+						this.atUser = user;
+						this.body += `@${this.atUser.name} `;
+					}}
+				/>
 			</BasicModal>
 		);
+	}
+
+	toggleVisible() {
+		this.setState(prevState => ({ aiteModalVisible: !prevState.aiteModalVisible }));
 	}
 }
 
@@ -113,4 +137,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default ReplyCommentModal;
+export default withNavigation(ReplyCommentModal);

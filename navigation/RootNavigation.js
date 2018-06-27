@@ -12,6 +12,7 @@ const RootStackNavigator = StackNavigator(router, {
   navigationOptions: ({ navigation }) => {
     // Colors.resetStatusBar();
     return {
+      header: null,
       headerStyle: {
         paddingHorizontal: 15,
         backgroundColor: Colors.skinColor,

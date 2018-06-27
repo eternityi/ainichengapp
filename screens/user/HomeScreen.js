@@ -105,7 +105,6 @@ class HomeScreen extends Component {
             backgroundColor={"transparent"}
             barStyle={scrollEnabled ? (lightTabBar ? "light-content" : "dark-content") : "dark-content"}
           />
-
           <Query query={userDetailQuery} variables={{ id: user.id }}>
             {({ loading, error, data, refetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
-import CommentItem from "./CommentItem";
 import { ContentEnd, Diving } from "../../../components/Pure";
 import { CustomPopoverMenu, ReplyCommentModal } from "../../../components/Modal";
+import CommentItem from "./CommentItem";
+import CommentsModal from "./CommentsModal";
 
 import { commentsQuery } from "../../../graphql/comment.graphql";
 import { Query, Mutation } from "react-apollo";
@@ -12,16 +14,17 @@ import { Query, Mutation } from "react-apollo";
 class Comments extends Component {
   constructor(props) {
     super(props);
-
+    this.toggleMoreCommentsVisible = this.toggleMoreCommentsVisible.bind(this);
     this.state = {
       order: "LATEST_FIRST",
-      onlyAuthor: false
+      onlyAuthor: false,
+      moreCommentsModal: false
     };
   }
 
   render() {
     const { onLayout, navigation, article, toggleCommentModal } = this.props;
-    const { onlyAuthor, order } = this.state;
+    const { onlyAuthor, order, moreCommentsModal } = this.state;
     let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
     return (
       <View onLayout={onLayout}>
@@ -123,7 +126,7 @@ class Comments extends Component {
                       })}
                     </View>
                     {article.count_comments > 5 ? (
-                      <TouchableOpacity style={styles.loadMore} onPress={() => navigation.navigate("评论中心", { article })}>
+                      <TouchableOpacity style={styles.loadMore} onPress={this.toggleMoreCommentsVisible}>
                         <Text style={{ fontSize: 16, color: Colors.linkColor }}>查看更多评论</Text>
                         <Iconfont name={"right"} size={16} color={Colors.linkColor} />
                       </TouchableOpacity>
@@ -132,12 +135,17 @@ class Comments extends Component {
                     )}
                   </View>
                 )}
+                <CommentsModal visible={moreCommentsModal} toggleVisible={this.toggleMoreCommentsVisible} article={article} navigation={navigation} />
               </View>
             );
           }}
         </Query>
       </View>
     );
+  }
+
+  toggleMoreCommentsVisible() {
+    this.setState(prevState => ({ moreCommentsModal: !prevState.moreCommentsModal }));
   }
 }
 

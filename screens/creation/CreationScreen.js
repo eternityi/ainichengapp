@@ -105,6 +105,7 @@ class CreationScreen extends React.Component {
     );
   }
 
+  // this.gotArticle用来保存获取到的article
   renderEditor = (article = this.state.article) => {
     this.gotArticle = article;
     return (
@@ -175,7 +176,6 @@ class CreationScreen extends React.Component {
 
   //判断article内容是否change
   isChange(prevACont, currentCont) {
-    console.log("prevACont", prevACont, "currentCont", currentCont);
     if (prevACont.title != currentCont.title || prevACont.body != currentCont.body) {
       return true;
     }
@@ -273,7 +273,8 @@ class CreationScreen extends React.Component {
         });
         //文章已经创建=>更新发布（或者发布更新）
         if (this.gotArticle.id) {
-          let flag = { ...this.gotArticle }; //这里是保存第一次query的article（因为editArticleMutation后会使query重新fetch给gotArticle赋值）
+          //这里是保存第一次query的article（因为editArticleMutation后会使query重新fetch给gotArticle赋值），之后的status是1
+          let flag = { ...this.gotArticle };
           // 先提交编辑后的文章
           editArticle({
             variables: {
