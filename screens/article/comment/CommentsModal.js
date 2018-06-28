@@ -19,7 +19,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, SlideInUpModal } from "../../../components/Modal";
 import { CategoryGroup } from "../../../components/MediaGroup";
-import { ContentEnd } from "../../../components/Pure";
+import { LoadingMore, LoadingError, ContentEnd, Diving } from "../../../components/Pure";
 
 import { Query, Mutation } from "react-apollo";
 import { connect } from "react-redux";
@@ -31,9 +31,9 @@ class CommentsModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			fetchingMore: true,
 			order: "LATEST_FIRST",
 			onlyAuthor: false,
-			replyCommentVisible: false,
 			replyingComment: null,
 			body: ""
 		};
@@ -41,14 +41,23 @@ class CommentsModal extends Component {
 
 	render() {
 		let { visible, toggleVisible, article, navigation } = this.props;
-		let { replyCommentVisible, replyingComment, order, onlyAuthor, body } = this.state;
+		let { replyingComment, body, order, onlyAuthor } = this.state;
 		let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
 		return (
-			<SlideInUpModal visible={visible} toggleVisible={toggleVisible}>
+			<SlideInUpModal
+				visible={visible}
+				toggleVisible={toggleVisible}
+				customStyle={{
+					borderTopLeftRadius: 8,
+					borderTopRightRadius: 8
+				}}
+			>
 				<View style={styles.container}>
+					{this._renderListHeader()}
 					<Query query={commentsQuery} variables={{ article_id: article.id, order, filter }}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (!(data && data.comments)) return null;
+							if (data.comments.length < 1) return this.listEmpty();
 							return (
 								<View style={{ flex: 1 }}>
 									<FlatList
@@ -67,34 +76,60 @@ class CommentsModal extends Component {
 												style={styles.commentInput}
 												placeholder="添加一条评论吧~"
 												placeholderText={Colors.lightFontColor}
-												onFocus={this._inputFocus.bind(this)}
+												onFocus={this._focusHandler}
+												onBlur={this._blurHandler}
 												onChangeText={body => this.setState({ body })}
 												value={body + ""}
 												ref={ref => (this.commentInput = ref)}
 											/>
 										</View>
 										<Mutation mutation={addCommentMutation}>
-											{replyComment => {
+											{addComment => {
 												return (
 													<TouchableOpacity
 														onPress={() => {
-															this.commentInput.blur();
 															//验证是否为空
-															if (!(body.length > replyingComment.user.name.length + 2)) {
-																this.setState({
-																	comment,
-																	body: ""
-																});
-																return null;
-															}
-															replyComment({
-																variables: {
-																	commentable_id: comment.commentable_id,
-																	body: body,
-																	comment_id: replyingComment.id,
-																	at_uid: replyingComment.user.id
+															if (body.length > 0) {
+																if (replyingComment) {
+																	addComment({
+																		variables: {
+																			commentable_id: article.id,
+																			body: body,
+																			comment_id: replyingComment.id,
+																			at_uid: replyingComment.user.id
+																		},
+																		refetchQueries: addComment => [
+																			{
+																				query: commentsQuery,
+																				variables: {
+																					article_id: article.id,
+																					order,
+																					filter
+																				}
+																			}
+																		]
+																	});
+																} else {
+																	addComment({
+																		variables: {
+																			commentable_id: article.id,
+																			body
+																		},
+																		refetchQueries: addComment => [
+																			{
+																				query: commentsQuery,
+																				variables: {
+																					article_id: article.id,
+																					order,
+																					filter
+																				}
+																			}
+																		]
+																	});
 																}
-															});
+																this.setState({ body: "" });
+															}
+															this.commentInput.blur();
 														}}
 													>
 														<View style={{ marginHorizontal: 20 }}>
@@ -123,38 +158,28 @@ class CommentsModal extends Component {
 	}
 
 	_renderListHeader = () => {
-		const { onlyAuthor, order } = this.state;
-		const { article } = this.props;
+		let { onlyAuthor, order } = this.state;
+		const { article, toggleVisible } = this.props;
 		return (
 			<View style={styles.topTitle}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
+					<TouchableOpacity onPress={toggleVisible}>
+						<Iconfont name={"chacha"} size={20} color={Colors.primaryFontColor} />
+					</TouchableOpacity>
+					<Text style={styles.countCommentText}>评论</Text>
 					<Text
+						onPress={() => this.setState({ onlyAuthor: !onlyAuthor })}
 						style={{
 							fontSize: 13,
-							color: Colors.themeColor,
-							marginRight: 8
+							color: onlyAuthor ? Colors.themeColor : Colors.tintFontColor
 						}}
 					>
-						评论 {article.count_comments}
+						只看作者
 					</Text>
-					<TouchableOpacity
-						style={[styles.onlyAuthor, onlyAuthor ? styles.onlyAuthored : ""]}
-						onPress={() => this.setState({ onlyAuthor: !onlyAuthor })}
-					>
-						<Text
-							style={{
-								fontSize: 12,
-								color: onlyAuthor ? "#fff" : "#bbb"
-							}}
-						>
-							只看作者
-						</Text>
-					</TouchableOpacity>
 				</View>
 				<CustomPopoverMenu
 					width={110}
 					selectHandler={index => {
-						let { order } = this.state;
 						switch (index) {
 							case 0: {
 								order = "LATEST_FIRST";
@@ -191,75 +216,64 @@ class CommentsModal extends Component {
 	};
 
 	_renderCommentItem = ({ item, index }) => {
-		let { navigation } = this.props;
+		let { navigation, toggleVisible } = this.props;
+		let comment = item;
 		return (
 			<CommentItem
-				comment={item}
+				comment={comment}
 				toggleReplyComment={comment => {
 					this.setState(prevState => ({
-						replyCommentVisible: !prevState.replyCommentVisible,
-						replyingComment: comment
+						replyingComment: comment,
+						body: `@${comment.user.name} `
 					}));
+					this.commentInput.focus();
 				}}
+				toggleVisible={toggleVisible}
 				navigation={navigation}
 			/>
 		);
 	};
 
-	// 输入框聚焦自带检测是否应该加上@用户名
-	_inputFocus() {
-		let { navigation, login } = this.props;
-		if (login) {
-			let { body, replyingComment } = this.state;
-			if (body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-				body = `@${replyingComment.user.name} ` + body;
-				this.setState({ body });
-			}
-		} else {
-			navigation.navigate("登录注册");
-		}
-	}
+	listEmpty = () => {
+		return (
+			<Diving customStyle={{ paddingVertical: 40, backgroundColor: Colors.skinColor }}>
+				<Text style={styles.listEmpty}>作者还没有发表评论哦~</Text>
+			</Diving>
+		);
+	};
 
-	//点击回复评论  聚焦底部评论框并且set当前回复的该条评论
-	_handleFocus(replyingComment) {
-		let { navigation, login } = this.props;
-		if (login) {
-			this.setState({ replyingComment });
-			this.commentInput.focus();
-		} else {
-			navigation.navigate("登录注册");
+	_focusHandler = () => {
+		let { body, replyingComment } = this.state;
+		if (body.length < 1 && replyingComment) {
+			this.setState({
+				replyingComment: null
+			});
 		}
-	}
+	};
 }
 
 const styles = StyleSheet.create({
 	container: {
-		height: height * 0.8,
-		borderTopLeftRadius: 6,
-		borderTopRightRadius: 6,
+		height: height - 24,
 		backgroundColor: Colors.skinColor,
 		overflow: "hidden"
 	},
+	listEmpty: {
+		fontSize: 14,
+		color: Colors.lightFontColor,
+		marginTop: 12
+	},
 	topTitle: {
-		paddingVertical: 6,
-		paddingHorizontal: 20,
-		backgroundColor: Colors.lightGray,
+		padding: 20,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between",
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
-		borderColor: Colors.lightBorderColor
+		justifyContent: "space-between"
 	},
-	onlyAuthor: {
-		padding: 4,
-		borderWidth: 1,
-		borderColor: "#bbb",
-		borderRadius: 4
-	},
-	onlyAuthored: {
-		borderColor: Colors.themeColor,
-		backgroundColor: Colors.themeColor
+	countCommentText: {
+		fontSize: 15,
+		color: Colors.primaryFontColor,
+		marginLeft: 16,
+		marginRight: 10
 	},
 	addComment: {
 		flexDirection: "row",

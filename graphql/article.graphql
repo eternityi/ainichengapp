@@ -141,6 +141,7 @@ query articleQuery($id: Int!) {
 		count_likes
 		count_tips
 		count_comments
+		count_replies
 		collection {
 			id
 			name

@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get("window");
 
 class SlideInUpModal extends Component {
 	render() {
-		let { visible, toggleVisible, children } = this.props;
+		let { visible, toggleVisible, children, customStyle = {} } = this.props;
 		return (
 			<Modal
 				isVisible={visible}
@@ -17,7 +17,7 @@ class SlideInUpModal extends Component {
 				backdropOpacity={0.4}
 				style={{ justifyContent: "flex-end", margin: 0 }}
 			>
-				<View style={{ backgroundColor: Colors.skinColor }}>
+				<View style={[{ backgroundColor: Colors.skinColor, overflow: "hidden" }, customStyle]}>
 					<StatusBar backgroundColor={visible ? "rgba(105,105,105,0.7)" : "#fff"} barStyle={"dark-content"} />
 					{children}
 				</View>

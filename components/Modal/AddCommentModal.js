@@ -14,16 +14,16 @@ class AddCommentModal extends Component {
 	constructor(props) {
 		super(props);
 		this.atUser = null;
-		this.body = "";
 		this.toggleVisible = this.toggleVisible.bind(this);
 		this.state = {
-			aiteModalVisible: false
+			aiteModalVisible: false,
+			body: ""
 		};
 	}
 
 	render() {
 		const { visible, toggleCommentModal, navigation } = this.props;
-		let { aiteModalVisible } = this.state;
+		let { aiteModalVisible, body } = this.state;
 		return (
 			<BasicModal
 				visible={visible}
@@ -44,9 +44,9 @@ class AddCommentModal extends Component {
 						autoFocus
 						style={styles.textInput}
 						onChangeText={body => {
-							this.body = body;
+							this.setState({ body });
 						}}
-						value={this.body}
+						value={body}
 					/>
 					<View style={styles.textBottom}>
 						<View style={styles.textBottom}>
@@ -55,7 +55,7 @@ class AddCommentModal extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity
 								onPress={() => {
-									this.body += "🙂";
+									this.setState(prevState => ({ body: prevState.body + "🙂" }));
 								}}
 							>
 								<Iconfont name="smile" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
@@ -65,9 +65,9 @@ class AddCommentModal extends Component {
 							onPress={() => {
 								toggleCommentModal();
 								this.props.addComment({
-									body: this.body
+									body
 								});
-								this.body = "";
+								this.setState({ body: "" });
 							}}
 							style={styles.publishComment}
 						>
@@ -90,7 +90,7 @@ class AddCommentModal extends Component {
 					handleSelectedUser={user => {
 						this.toggleVisible();
 						this.atUser = user;
-						this.body += `@${this.atUser.name} `;
+						this.setState(prevState => ({ body: prevState.body + `@${this.atUser.name} ` }));
 					}}
 				/>
 			</BasicModal>

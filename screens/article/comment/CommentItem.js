@@ -108,7 +108,6 @@ class CommentItem extends Component {
 						<Text style={styles.commentBody}>{comment.body}</Text>
 					</TouchableOpacity>
 				</View>
-				{/*如果有subcoments就直接渲染，否则尝试去请求subcoments**/}
 				{comment.replyComments && comment.replyComments.length > 0 && this._renderReplyComments(replyComments)}
 
 				<OperationModal
@@ -137,7 +136,7 @@ class CommentItem extends Component {
 	}
 
 	_renderReplyComments(replyComments) {
-		const { detail = false, comment, navigation } = this.props;
+		const { detail = false, comment, navigation, toggleVisible = () => null } = this.props;
 		return (
 			<View style={styles.subComment}>
 				{replyComments &&
@@ -148,10 +147,13 @@ class CommentItem extends Component {
 					comment.replyComments.length > 3 && (
 						<TouchableOpacity
 							style={{ flexDirection: "row", alignItems: "center" }}
-							onPress={() =>
+							onPress={() => {
+								//关闭评论列表模态框
+								toggleVisible();
 								navigation.navigate("评论详情", {
 									comment: comment
-								})}
+								});
+							}}
 						>
 							<Text style={styles.unfoldMore}>共{comment.replyComments.length}条回复</Text>
 							<Iconfont name={"right"} size={16} color={Colors.linkColor} />

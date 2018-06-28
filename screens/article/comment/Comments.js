@@ -43,7 +43,7 @@ class Comments extends Component {
                         marginRight: 8
                       }}
                     >
-                      评论({article.count_comments ? article.count_comments : 0})
+                      评论({article.count_replies ? article.count_replies : 0})
                     </Text>
                     <TouchableOpacity
                       style={[styles.onlyAuthor, onlyAuthor ? styles.onlyAuthored : ""]}
@@ -125,7 +125,7 @@ class Comments extends Component {
                         );
                       })}
                     </View>
-                    {article.count_comments > 5 ? (
+                    {article.count_comments > 3 ? (
                       <TouchableOpacity style={styles.loadMore} onPress={this.toggleMoreCommentsVisible}>
                         <Text style={{ fontSize: 16, color: Colors.linkColor }}>查看更多评论</Text>
                         <Iconfont name={"right"} size={16} color={Colors.linkColor} />
@@ -135,7 +135,14 @@ class Comments extends Component {
                     )}
                   </View>
                 )}
-                <CommentsModal visible={moreCommentsModal} toggleVisible={this.toggleMoreCommentsVisible} article={article} navigation={navigation} />
+                <CommentsModal
+                  visible={moreCommentsModal}
+                  toggleVisible={this.toggleMoreCommentsVisible}
+                  article={article}
+                  order={order}
+                  filter={filter}
+                  navigation={navigation}
+                />
               </View>
             );
           }}

@@ -5,6 +5,7 @@ import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
+import { userOperationMiddleware } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
 import { UserMetaGroup } from "../../components/MediaGroup";
 
@@ -16,8 +17,8 @@ import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pur
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-import { Query, Mutation } from "react-apollo";
-import { articleQuery } from "../../graphql/article.graphql";
+import { Query, Mutation, graphql, compose } from "react-apollo";
+import { articleQuery, favoriteArticleMutation } from "../../graphql/article.graphql";
 import { likeArticleMutation } from "../../graphql/user.graphql";
 import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
 
@@ -81,7 +82,7 @@ class DetailScreen extends Component {
 			addCommentVisible,
 			shareModalVisible
 		} = this.state;
-		let { navigation, login } = this.props;
+		let { navigation, login, favoriteArticle, likeArticle } = this.props;
 		return (
 			<Screen>
 				<Query query={articleQuery} variables={{ id: 1102 }}>
@@ -90,6 +91,7 @@ class DetailScreen extends Component {
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
 						let article = data.article;
+						this.article = data.article;
 						return (
 							<View style={styles.container}>
 								<View style={styles.videoWrap}>
@@ -144,10 +146,20 @@ class DetailScreen extends Component {
 										</View>
 									</View>
 									<View style={styles.topOperation}>
-										<TouchableOpacity style={styles.operationItem}>
-											<Iconfont name="star-outline" size={20} color={Colors.tintFontColor} />
-											<Text style={styles.operationItemText}>收藏</Text>
-										</TouchableOpacity>
+										<Mutation mutation={likeArticleMutation}>
+											{likeArticle => {
+												return (
+													<TouchableOpacity style={styles.operationItem} onPress={() => this.likeHandler(likeArticle)}>
+														<Iconfont
+															name={article.liked ? "like" : "like-outline"}
+															color={article.liked ? Colors.themeColor : Colors.tintFontColor}
+															size={20}
+														/>
+														<Text style={styles.operationItemText}>喜欢</Text>
+													</TouchableOpacity>
+												);
+											}}
+										</Mutation>
 										<TouchableOpacity onPress={this.handleRewardVisible} style={styles.operationItem}>
 											<Iconfont name="reward" size={22} color={Colors.tintFontColor} />
 											<Text style={styles.operationItemText}>赞赏</Text>
@@ -175,13 +187,19 @@ class DetailScreen extends Component {
 								</ScrollView>
 								{/*文章底部工具**/}
 								<View style={styles.bottomTools}>
-									<TouchableOpacity onPress={() => null}>
-										<Iconfont
-											name={article.liked ? "like" : "like-outline"}
-											color={article.liked ? Colors.themeColor : Colors.tintFontColor}
-											size={20}
-										/>
-									</TouchableOpacity>
+									<Mutation mutation={favoriteArticleMutation}>
+										{favoriteArticle => {
+											return (
+												<TouchableOpacity onPress={() => this.favoriteHandler(favoriteArticle)}>
+													<Iconfont
+														name={article.favorited ? "star" : "star-outline"}
+														size={20}
+														color={article.favorited ? Colors.themeColor : Colors.tintFontColor}
+													/>
+												</TouchableOpacity>
+											);
+										}}
+									</Mutation>
 									<TouchableOpacity onPress={this.toggleAddCommentVisible} style={styles.commentInput}>
 										<Text style={{ fontSize: 13, color: Colors.lightFontColor }}>说点什么吧</Text>
 									</TouchableOpacity>
@@ -290,6 +308,38 @@ class DetailScreen extends Component {
 		);
 	}
 
+	// 喜欢文章
+	likeHandler = likeArticle => {
+		let { login, navigation } = this.props;
+		userOperationMiddleware({
+			login,
+			action: () =>
+				likeArticle({
+					variables: {
+						article_id: this.article.id,
+						undo: this.article.liked
+					}
+				}),
+			navigation
+		});
+	};
+
+	// 收藏文章
+	favoriteHandler = favoriteArticle => {
+		let { login, navigation } = this.props;
+		userOperationMiddleware({
+			login,
+			action: () =>
+				favoriteArticle({
+					variables: {
+						article_id: this.article.id
+					}
+				}),
+			navigation
+		});
+	};
+
+	// 播放暂停
 	togglePlay() {
 		this.setState(prevState => ({
 			paused: !prevState.paused
@@ -388,8 +438,12 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => {
-	return {
-		login: store.users.login
-	};
-})(DetailScreen);
+export default compose(
+	graphql(favoriteArticleMutation, { name: "favoriteArticle" }),
+	graphql(likeArticleMutation, { name: "likeArticle" }),
+	connect(store => {
+		return {
+			login: store.users.login
+		};
+	})
+)(DetailScreen);

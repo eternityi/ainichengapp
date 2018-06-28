@@ -14,23 +14,25 @@ class ReplyCommentModal extends Component {
 	constructor(props) {
 		super(props);
 		this.atUser = null;
-		this.body = "";
 		this.toggleVisible = this.toggleVisible.bind(this);
 		this.state = {
-			aiteModalVisible: false
+			aiteModalVisible: false,
+			body: ""
 		};
 	}
 
 	// 输入框聚焦自带检测是否应该加上@用户名
 	_inputFocus() {
-		if (this.body.indexOf(`@${this.props.atUser.name}`) !== 0) {
-			this.body = `@${this.props.atUser.name} `;
+		let { body } = this.state;
+		if (body.indexOf(`@${this.props.atUser.name}`) !== 0) {
+			body = `@${this.props.atUser.name} `;
+			this.setState({ body });
 		}
 	}
 
 	render() {
 		const { visible, toggleReplyComment, replyComment, replyingComment, atUser, navigation } = this.props;
-		let { aiteModalVisible } = this.state;
+		let { aiteModalVisible, body } = this.state;
 
 		return (
 			<BasicModal
@@ -51,11 +53,11 @@ class ReplyCommentModal extends Component {
 						multiline={true}
 						autoFocus
 						style={styles.textInput}
-						onChangeText={body => {
-							this.body = body;
-						}}
 						onFocus={this._inputFocus.bind(this)}
-						value={this.body}
+						onChangeText={body => {
+							this.setState({ body });
+						}}
+						value={body}
 					/>
 					<View style={styles.textBottom}>
 						<View style={styles.textBottom}>
@@ -64,7 +66,7 @@ class ReplyCommentModal extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity
 								onPress={() => {
-									this.body += "🙂";
+									this.setState(prevState => ({ body: prevState.body + "🙂" }));
 								}}
 							>
 								<Iconfont name="smile" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
@@ -74,11 +76,11 @@ class ReplyCommentModal extends Component {
 							onPress={() => {
 								toggleReplyComment();
 								replyComment({
-									body: this.body,
+									body,
 									replyingComment,
 									atUser
 								});
-								this.body = "";
+								this.setState({ body: "" });
 							}}
 							style={styles.publishComment}
 						>
@@ -101,7 +103,7 @@ class ReplyCommentModal extends Component {
 					handleSelectedUser={user => {
 						this.toggleVisible();
 						this.atUser = user;
-						this.body += `@${this.atUser.name} `;
+						this.setState(prevState => ({ body: prevState.body + `@${this.atUser.name} ` }));
 					}}
 				/>
 			</BasicModal>
