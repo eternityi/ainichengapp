@@ -80,7 +80,7 @@ class UploadMedia extends Component {
 						<Text style={{ position: "absolute", right: 15 }}>公开</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => navigation.navigate("视频上传")}>
+				<TouchableOpacity onPress={() => navigation.navigate("文章投稿")}>
 					<View style={styles.item}>
 						<Iconfont name={"aite"} size={22} style={{ paddingRight: 15 }} color={"#000000"} />
 						<Text style={{ color: "#000", fontSize: 15 }}>提醒谁看</Text>

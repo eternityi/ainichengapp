@@ -233,3 +233,16 @@ query recommendArticlesQuery($offset: Int) {
 		count_tips
 	}
 }
+
+query queryArticleRequesRecommend($id: Int) {
+	user(id: $id) {
+		id
+		categories(filter: RECOMMEND) {
+			id
+			name
+			count_articles
+			count_follows
+			logo
+		}
+	}
+}

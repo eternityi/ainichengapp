@@ -12,13 +12,14 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, graphql } from "react-apollo";
 import { topCategoriesQuery } from "../../graphql/category.graphql";
-import { submitArticleMutation, userAdminCategoriesQuery } from "../../graphql/user.graphql";
+import { submitArticleMutation, userAdminCategoriesQuery, queryArticleRequestCenter } from "../../graphql/user.graphql";
+import { queryArticleRequesRecommend } from "../../graphql/article.graphql";
 
 const { width, height } = Dimensions.get("window");
 
 class CategoryItem extends React.Component {
 	render() {
-		let { article, category, navigation } = this.props;
+		let { article, category, navigation, status } = this.props;
 		let { submit_status } = category;
 		return (
 			<TouchableOpacity style={{ marginRight: 25 }} onPress={() => navigation.navigate("专题详情", { category })}>
@@ -35,7 +36,7 @@ class CategoryItem extends React.Component {
 						{submitArticle => {
 							return (
 								<HollowButton
-									name={submit_status ? submit_status : "投稿"}
+									name={status}
 									size={12}
 									// color={submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
 									color={"rgba(66,192,46,0.9)"}
@@ -66,30 +67,33 @@ class ContributeScreen extends React.Component {
 		super(props);
 		this.state = {
 			fetchingMore: true,
-			keywords: ""
+			keywords: "",
+			collection: "收录",
+			submission: "投稿"
 		};
 	}
 
 	render() {
 		const { navigation, user } = this.props;
 		const article = navigation.getParam("article", {});
-		let { fetchingMore, keywords } = this.state;
+		let { fetchingMore, keywords, collection, submission } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
 					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
-					<Query query={topCategoriesQuery}>
+					<Query query={queryArticleRequesRecommend}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.categories)) return <SpinnerLoading />;
-							if (data.categories.length < 1) return <BlankContent />;
+							if (!(data && data.user && data.user.categories)) return <SpinnerLoading />;
+							if (data.user.categories.length < 1) return <BlankContent />;
+							let { categories } = data.user;
 							return (
 								<FlatList
 									ListHeaderComponent={this._renderHeader.bind(this)}
-									data={data.categories}
+									data={categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryContributeGroup article={article} category={item} navigation={navigation} />
+										<CategoryContributeGroup article={article} category={item} navigation={navigation} category={item} />
 									)}
 									refreshing={loading}
 									onRefresh={() => {
@@ -97,10 +101,10 @@ class ContributeScreen extends React.Component {
 									}}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
-										if (data.categories) {
+										if (categories) {
 											fetchMore({
 												variables: {
-													offset: data.categories.length
+													offset: categories.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
 													if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
@@ -134,6 +138,7 @@ class ContributeScreen extends React.Component {
 
 	_renderHeader() {
 		let { user, navigation } = this.props;
+		let { collection, submission } = this.state;
 		const article = navigation.getParam("article", {});
 		return (
 			<View>
@@ -156,16 +161,19 @@ class ContributeScreen extends React.Component {
 									horizontal={true}
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItem article={article} category={item} navigation={navigation} />}
+									renderItem={({ item, index }) => (
+										<CategoryItem article={article} category={item} navigation={navigation} status={collection} />
+									)}
 								/>
 							</View>
 						);
 					}}
 				</Query>
-				<Query query={topCategoriesQuery}>
+				<Query query={queryArticleRequestCenter}>
 					{({ loading, error, data, fetchMore, refetch }) => {
 						if (error) return null;
-						if (!(data && data.categories && data.categories.length > 0)) return null;
+						if (!(data && data.user && data.user.categories)) return null;
+						let { categories } = data.user;
 						return (
 							<View>
 								<View style={[styles.listHeader, styles.hListHeader]}>
@@ -179,9 +187,11 @@ class ContributeScreen extends React.Component {
 								<FlatList
 									style={{ paddingVertical: 10, paddingLeft: 15 }}
 									horizontal={true}
-									data={data.categories}
+									data={categories}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => <CategoryItem article={article} category={item} navigation={navigation} />}
+									renderItem={({ item, index }) => (
+										<CategoryItem article={article} category={item} navigation={navigation} status={submission} />
+									)}
 								/>
 							</View>
 						);

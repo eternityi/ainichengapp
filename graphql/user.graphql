@@ -604,6 +604,39 @@ query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+query querySubmitedArticles($offset: Int, $limit: Int) {
+    user {
+        submitedArticles(offset: $offset, limit: $limit) {
+            title
+            submit_status
+            submited_status
+            submitedCategory {
+                id
+                name
+            }
+        }
+    }
+}
+
+query queryIncomeHistory {
+    user {
+        incomeHistory
+    }
+}
+
+query queryArticleRequestCenter($id: Int) {
+    user(id: $id) {
+        id
+        categories(filter: LATEST_REQUEST) {
+            id
+            name
+            count_articles
+            count_follows
+            logo
+        }
+    }
+}
+
 mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
     submitArticle(article_id: $article_id, category_id: $category_id) {
         id
