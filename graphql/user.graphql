@@ -420,7 +420,21 @@ query userFollowersQuery($user_id: Int!, $offset: Int) {
     }
 }
 
-query actionsQuery($offset: Int, $user_id: Int!) {
+query userActionsQuery($offset: Int, $user_id: Int!) {
+    user(id: $user_id) {
+        id
+        name
+        avatar
+        introduction
+        count_likes
+        count_articles
+        count_follows
+        count_followers
+        count_followings
+        count_categories
+        count_collections
+        followed_status
+    }
     actions(offset: $offset, user_id: $user_id) {
         id
         type
@@ -440,6 +454,10 @@ query actionsQuery($offset: Int, $user_id: Int!) {
             id
             title
             description
+            image_url
+            count_likes
+            count_replies
+            hits
         }
         postedComment {
             id
@@ -453,6 +471,7 @@ query actionsQuery($offset: Int, $user_id: Int!) {
             atUser {
                 id
                 name
+                avatar
             }
             article {
                 id
@@ -479,6 +498,7 @@ query actionsQuery($offset: Int, $user_id: Int!) {
                 article {
                     id
                     title
+                    image_url
                 }
             }
         }

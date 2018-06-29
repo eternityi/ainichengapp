@@ -45,13 +45,24 @@ class Follow extends Component {
 	}
 
 	render() {
-		let { plain = false, customStyle = {}, fontSize = 15, status, user, id } = this.props;
+		let { plain = false, customStyle = {}, fontSize = 15, status, user, id, theme = Colors.weixinColor } = this.props;
 		let mergeStyle = StyleSheet.flatten([styles.followButton, customStyle]);
 		if (user.id == id) {
 			return null;
 		}
 		return (
-			<TouchableOpacity style={[mergeStyle, status ? styles.followed : styles.follow]} onPress={this.handleFollow.bind(this)}>
+			<TouchableOpacity
+				style={[
+					mergeStyle,
+					status
+						? styles.followed
+						: {
+								borderColor: theme,
+								backgroundColor: theme
+							}
+				]}
+				onPress={this.handleFollow.bind(this)}
+			>
 				<Text
 					style={[
 						{
@@ -77,10 +88,6 @@ const styles = StyleSheet.create({
 		borderRadius: 3,
 		width: 80,
 		height: 32
-	},
-	follow: {
-		borderColor: Colors.weixinColor,
-		backgroundColor: Colors.weixinColor
 	},
 	followed: {
 		borderColor: Colors.tintBorderColor,

@@ -136,13 +136,13 @@ class DetailScreen extends Component {
 								</View>
 								<ScrollView style={styles.container}>
 									<View style={styles.topInfo}>
-										<View style={styles.userInfo}>
-											<UserMetaGroup user={article.user} navigation={navigation} />
-										</View>
 										<View>
 											<Text style={styles.title} NumberOfLines={2}>
 												{article.title}
 											</Text>
+										</View>
+										<View style={styles.userInfo}>
+											<UserMetaGroup user={article.user} navigation={navigation} />
 										</View>
 									</View>
 									<View style={styles.topOperation}>
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	title: {
-		marginTop: 10,
+		marginBottom: 15,
 		fontSize: 18,
 		fontWeight: "500",
 		lineHeight: 24,

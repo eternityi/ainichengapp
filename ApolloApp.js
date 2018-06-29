@@ -30,6 +30,9 @@ class ApolloApp extends Component {
 	}
 
 	componentWillMount() {
+		this.timer = setTimeout(() => {
+			this.props.onReady();
+		}, 5000);
 		this._makeClient(this.props.user);
 		let { query } = this.client;
 		let promises = [
@@ -54,6 +57,10 @@ class ApolloApp extends Component {
 		if (nextProps.user !== this.props.user) {
 			this._makeClient(nextProps.user);
 		}
+	}
+
+	componentWillUnmount() {
+		this.timer && clearTimeout(this.timer);
 	}
 
 	render() {

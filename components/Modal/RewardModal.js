@@ -218,7 +218,7 @@ class RewardModal extends Component {
     return (
       <View style={styles.rewardModalHeader}>
         <Text style={{ fontSize: 18, marginRight: 8, color: Colors.primaryFontColor }}>给作者送糖</Text>
-        <Iconfont name={"sweets"} size={20} color={Colors.themeColor} />
+        <Iconfont name={"gift"} size={20} color={Colors.themeColor} />
       </View>
     );
   }

@@ -1,104 +1,162 @@
 import React, { Component } from "react";
-import ScrollableTabView from "react-native-scrollable-tab-view";
-import Screen from "../Screen";
-import Colors from "../../constants/Colors";
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions, Animated, Image, Modal } from "react-native";
 
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions, Animated } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
+import ImageViewer from "react-native-image-zoom-viewer";
+
+import { Iconfont } from "../../utils/Fonts";
+import Colors from "../../constants/Colors";
+import Screen from "../Screen";
+import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
+
+import { FollowButton, HollowButton, Button } from "../../components/Button";
+import { Avatar, CustomScrollTabBar, LoadingError, SpinnerLoading } from "../../components/Pure";
 
 const { width, height } = Dimensions.get("window");
-
-const HEADER_MAX_HEIGHT = 300;
-const HEADER_MIN_HEIGHT = 50;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
-// trouble:
-// 2.ScrollView嵌套ScrollableTabView在Android不能自适应高度
-// 3.tabView切换的时候是共用一个scrollView,切换之后要恢复当前tab的scroll状态，同时保持上一个tab的状态
-// 1.Animated.Value(0)才能保证动画的流畅性，但是无法获取offsetTop.value，造成状态也无法保存
 
 class HomeScreen extends Component {
 	constructor(props) {
 		super(props);
-		this.scrollRecord = [0, 0, 0]; //用来记录tabview最后scroll的距离
-		this.prevActiveTab = 1;
+		this.handleRewardVisible = this.handleRewardVisible.bind(this);
 		this.state = {
-			offsetTop: new Animated.Value(0)
+			offsetTop: new Animated.Value(0),
+			rewardVisible: false,
+			avatarViewerVisible: false,
+			login: false,
+			user: {},
+			personal: {}
 		};
 	}
 
 	componentWillMount() {}
 
 	render() {
-		let { offsetTop } = this.state;
-		const headerHeight = offsetTop.interpolate({
-			inputRange: [0, HEADER_SCROLL_DISTANCE],
-			outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
-			extrapolate: "clamp"
-		});
-		const imageOpacity = offsetTop.interpolate({
-			inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-			outputRange: [1, 1, 0],
-			extrapolate: "clamp"
-		});
+		let { offsetTop, rewardVisible, avatarViewerVisible, user, personal } = this.state;
+		let { navigation } = this.props;
+		let is_self = true;
 		const imageTranslate = offsetTop.interpolate({
-			inputRange: [0, HEADER_SCROLL_DISTANCE],
+			inputRange: [0, 100],
 			outputRange: [0, -100],
 			extrapolate: "clamp"
 		});
 		return (
 			<Screen noPadding>
-				<ScrollView
-					bounces={false}
-					scrollEventThrottle={16}
-					style={styles.container}
-					ref={ref => (this.scrollView = ref)}
-					onScroll={Animated.event([
-						{
-							nativeEvent: { contentOffset: { y: offsetTop } }
-						}
-					])}
-				>
-					<View style={{ marginTop: HEADER_MAX_HEIGHT }}>
-						<ScrollableTabView renderTabBar={() => <View ref={ref => (this.scrollTabRef = ref)} />} onChangeTab={this._changeTab}>
-							<View style={{ height: 1000, backgroundColor: "#ff0000" }} />
-							<View style={{ height: 2000, backgroundColor: "#00ff00" }} />
-							<View style={{ height: 500, backgroundColor: "#0000ff" }} />
-						</ScrollableTabView>
+				<ScrollView style={styles.container}>
+					<View style={styles.container}>
+						<View>
+							<Image
+								style={styles.backdrop}
+								source={{
+									uri: "https://ainicheng.com/storage/img/71234.top.jpg"
+								}}
+							/>
+							<View style={styles.userInfo}>
+								<View style={styles.baseInfo}>
+									<TouchableOpacity style={styles.userAvatar}>
+										<Avatar
+											uri={"https://ainicheng.com/storage/avatar/123.jpg"}
+											size={72}
+											borderStyle={{ borderWidth: 2, borderColor: "#fff" }}
+										/>
+									</TouchableOpacity>
+									<View style={{ flex: 1 }}>
+										<View style={styles.layoutRow}>
+											<Text numberOfLines={1} style={styles.name}>
+												眸若止水
+											</Text>
+											<Iconfont
+												name={user.gender == 1 ? "girl" : "boy"}
+												size={18}
+												color={user.gender == 1 ? Colors.softPink : Colors.skyBlue}
+											/>
+										</View>
+									</View>
+									<View style={{ marginLeft: 6, width: 60, height: 30 }}>
+										{is_self ? (
+											<Button name="编辑" fontSize={14} iconName={"write"} handler={this.handleRewardVisible} />
+										) : (
+											<Button name="送糖" fontSize={14} iconName={"gift"} handler={this.handleRewardVisible} />
+										)}
+									</View>
+								</View>
+								<View style={styles.metaInfo}>
+									<View style={styles.layoutRow}>
+										<TouchableOpacity style={styles.layoutRow}>
+											<Text style={styles.countText}>1580</Text>
+											<Text style={styles.tintText}>粉丝</Text>
+										</TouchableOpacity>
+										<TouchableOpacity style={[styles.layoutRow, styles.metaLine]}>
+											<Text style={styles.countText}>12</Text>
+											<Text style={styles.tintText}>关注</Text>
+										</TouchableOpacity>
+										<TouchableOpacity style={styles.layoutRow}>
+											<Text style={styles.countText}>23</Text>
+											<Text style={styles.tintText}>关注的专题</Text>
+										</TouchableOpacity>
+									</View>
+									<View style={styles.registerDate}>
+										<Text style={styles.countText}>城龄: 105天</Text>
+									</View>
+									<TouchableOpacity style={styles.introduce}>
+										<View style={{ flex: 1 }}>
+											<Text numberOfLines={1} style={styles.tintText}>
+												简介：ta还没有freestyle...
+											</Text>
+										</View>
+										<Iconfont name={"right"} size={15} color={Colors.tintFontColor} />
+									</TouchableOpacity>
+								</View>
+								{!is_self && (
+									<View style={styles.buttonGroup}>
+										<View style={{ flex: 1, marginRight: 5 }}>
+											<FollowButton
+												customStyle={{ flex: 1, width: "auto" }}
+												id={user.id}
+												type={"user"}
+												status={user.followed_status}
+												fontSize={16}
+											/>
+										</View>
+										<View style={{ marginLeft: 5, flex: 1 }}>
+											<HollowButton name={"聊天"} size={16} />
+										</View>
+										<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
+									</View>
+								)}
+							</View>
+							{/*查看头像大图**/}
+							<Modal
+								visible={avatarViewerVisible}
+								transparent={true}
+								onRequestClose={() => this.setState({ avatarViewerVisible: false })}
+							>
+								<ImageViewer
+									onClick={() => this.setState({ avatarViewerVisible: false })}
+									onSwipeDown={() => this.setState({ avatarViewerVisible: false })}
+									imageUrls={[
+										{
+											url: user.avatar,
+											width,
+											height: width,
+											resizeMode: "cover"
+										}
+									]}
+								/>
+							</Modal>
+						</View>
 					</View>
 				</ScrollView>
-				<Animated.View
-					style={[styles.header, { height: headerHeight }]}
-					onLayout={event => (this.tabBarHeight = event.nativeEvent.layout.height)}
-				>
-					<Animated.Image
-						style={[styles.backgroundImage, { opacity: imageOpacity, transform: [{ translateY: imageTranslate }] }]}
-						source={{ uri: "https://www.dongmeiwei.com/storage/img/23433.top.jpg" }}
-					/>
-					<View style={styles.tabBar}>
-						<TouchableOpacity style={styles.tabItem} onPress={() => this.scrollTabRef.props.goToPage(1)}>
-							<Text>1</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.tabItem} onPress={() => this.scrollTabRef.props.goToPage(2)}>
-							<Text>2</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.tabItem} onPress={() => this.scrollTabRef.props.goToPage(3)}>
-							<Text>3</Text>
-						</TouchableOpacity>
-					</View>
-				</Animated.View>
 			</Screen>
 		);
 	}
 
-	_changeTab(obj) {
-		console.log(this.state.offsetTop);
-		this.scrollRecord[this.prevActiveTab] = this.state.offsetTop;
-		if (this.scrollRecord[this.prevActiveTab] > HEADER_SCROLL_DISTANCE) {
-			this.scrollView.scrollTo({ x: 0, y: this.scrollRecord[obj.i] + 100 });
+	handleRewardVisible() {
+		let { login, navigation } = this.props;
+		if (login) {
+			this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
 		} else {
-			this.scrollView.scrollTo({ x: 0, y: this.scrollRecord[obj.i] });
+			navigation.navigate("登录注册");
 		}
-		this.prevActiveTab = obj.i;
 	}
 
 	_outerScroll(event) {
@@ -129,6 +187,76 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#fff"
 	},
+	layoutRow: {
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	tintText: {
+		fontSize: 15,
+		color: Colors.tintFontColor
+	},
+	countText: {
+		fontSize: 15,
+		color: Colors.darkFontColor,
+		marginRight: 3
+	},
+	backdrop: {
+		width,
+		height: 160
+	},
+	userInfo: {
+		paddingHorizontal: 15,
+		paddingBottom: 15,
+		borderBottomWidth: 4,
+		borderColor: Colors.lightBorderColor
+	},
+	baseInfo: {
+		height: 50,
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	userAvatar: {
+		marginRight: 20,
+		marginTop: -22
+	},
+	name: {
+		fontSize: 20,
+		color: Colors.primaryFontColor,
+		fontWeight: "500",
+		marginRight: 5
+	},
+	rewardButton: {
+		width: 40,
+		height: 40,
+		borderRadius: 3,
+		borderWidth: 1,
+		borderColor: Colors.themeColor,
+		justifyContent: "center",
+		alignItems: "center",
+		marginLeft: 12
+	},
+	metaInfo: {
+		marginTop: 15
+	},
+	metaLine: {
+		paddingHorizontal: 6,
+		marginHorizontal: 6,
+		borderRightWidth: 0.5,
+		borderLeftWidth: 0.5,
+		borderColor: Colors.lightBorderColor
+	},
+	registerDate: {
+		marginVertical: 10
+	},
+	introduce: {
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	buttonGroup: {
+		flexDirection: "row",
+		height: 40,
+		marginTop: 15
+	},
 	header: {
 		position: "absolute",
 		top: 0,
@@ -142,7 +270,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		width: null,
-		height: HEADER_MAX_HEIGHT,
+		height: 100,
 		resizeMode: "cover"
 	},
 	tabBar: {

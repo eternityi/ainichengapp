@@ -201,7 +201,7 @@ class HomeScreen extends Component {
                             </Mutation>
                           </View>
                           <TouchableOpacity style={styles.reward} onPress={this.handleRewardVisible}>
-                            <Iconfont name={"sweets"} size={16} color={Colors.themeColor} />
+                            <Iconfont name={"gift"} size={16} color={Colors.themeColor} />
                           </TouchableOpacity>
                           <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
                         </View>

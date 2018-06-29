@@ -65,7 +65,6 @@
   "follow-eachOther": 58888,
   "include": 58955,
   "hint-fill": 59178,
-  "sweets": 59340,
   "friends": 59205,
   "download": 58939,
   "RMB": 58987,
@@ -105,5 +104,10 @@
   "find": 59199,
   "balloon": 58917,
   "label": 58921,
-  "video": 58980
+  "video": 58980,
+  "boy": 58974,
+  "girl": 58910,
+  "gift": 58962,
+  "city": 58930,
+  "city-outline": 58982
 }
