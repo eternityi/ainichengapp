@@ -1,165 +1,350 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions, Animated, Image, Modal } from "react-native";
-
+import {
+	StyleSheet,
+	View,
+	ScrollView,
+	FlatList,
+	Text,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	Dimensions,
+	Animated,
+	Image,
+	Modal
+} from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import ImageViewer from "react-native-image-zoom-viewer";
 
+import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import Screen from "../Screen";
-import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
-
+import { userOperationMiddleware } from "../../constants/Methods";
 import { FollowButton, HollowButton, Button } from "../../components/Button";
-import { Avatar, CustomScrollTabBar, LoadingError, SpinnerLoading } from "../../components/Pure";
+import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
+import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
+import { Avatar, BlankContent, LoadingError, SpinnerLoading, LoadingMore } from "../../components/Pure";
+
+import { connect } from "react-redux";
+import { Query, Mutation, graphql, compose } from "react-apollo";
+import { createChatMutation } from "../../graphql/chat.graphql";
+import { userActionsQuery, blockUserMutation, blockedUsersQuery } from "../../graphql/user.graphql";
 
 const { width, height } = Dimensions.get("window");
+const HEADER_HEIGHT = 70;
 
 class HomeScreen extends Component {
 	constructor(props) {
 		super(props);
-		this.handleRewardVisible = this.handleRewardVisible.bind(this);
+		this.handleBackdropVisible = this.handleBackdropVisible.bind(this);
+		this.handleReportVisible = this.handleReportVisible.bind(this);
 		this.state = {
-			offsetTop: new Animated.Value(0),
-			rewardVisible: false,
+			cover: "https://ainicheng.com/storage/img/71234.top.jpg",
+			fetchingMore: true,
+			reportVisible: false,
+			backdropVisible: false,
 			avatarViewerVisible: false,
-			login: false,
-			user: {},
-			personal: {}
+			offsetTop: new Animated.Value(0)
 		};
 	}
 
 	componentWillMount() {}
 
 	render() {
-		let { offsetTop, rewardVisible, avatarViewerVisible, user, personal } = this.state;
-		let { navigation } = this.props;
-		let is_self = true;
-		const imageTranslate = offsetTop.interpolate({
-			inputRange: [0, 100],
-			outputRange: [0, -100],
+		const { navigation, personal, login } = this.props;
+		const user = navigation.getParam("user", {});
+		// user.id == personal.id
+		const self = true;
+		let { fetchingMore, backdropVisible, reportVisible, avatarViewerVisible, offsetTop } = this.state;
+		let headerTransparence = offsetTop.interpolate({
+			inputRange: [0, HEADER_HEIGHT * 2],
+			outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
+			extrapolate: "clamp"
+		});
+		let lightHeaderOpacity = offsetTop.interpolate({
+			inputRange: [0, HEADER_HEIGHT],
+			outputRange: [1, 0],
+			extrapolate: "clamp"
+		});
+		let darkHeaderOpacity = offsetTop.interpolate({
+			inputRange: [HEADER_HEIGHT, HEADER_HEIGHT * 2],
+			outputRange: [0, 1],
 			extrapolate: "clamp"
 		});
 		return (
 			<Screen noPadding>
-				<ScrollView style={styles.container}>
-					<View style={styles.container}>
-						<View>
-							<Image
-								style={styles.backdrop}
-								source={{
-									uri: "https://ainicheng.com/storage/img/71234.top.jpg"
-								}}
-							/>
-							<View style={styles.userInfo}>
-								<View style={styles.baseInfo}>
-									<TouchableOpacity style={styles.userAvatar}>
-										<Avatar
-											uri={"https://ainicheng.com/storage/avatar/123.jpg"}
-											size={72}
-											borderStyle={{ borderWidth: 2, borderColor: "#fff" }}
-										/>
-									</TouchableOpacity>
-									<View style={{ flex: 1 }}>
-										<View style={styles.layoutRow}>
-											<Text numberOfLines={1} style={styles.name}>
-												眸若止水
-											</Text>
-											<Iconfont
-												name={user.gender == 1 ? "girl" : "boy"}
-												size={18}
-												color={user.gender == 1 ? Colors.softPink : Colors.skyBlue}
-											/>
-										</View>
-									</View>
-									<View style={{ marginLeft: 6, width: 60, height: 30 }}>
-										{is_self ? (
-											<Button name="编辑" fontSize={14} iconName={"write"} handler={this.handleRewardVisible} />
-										) : (
-											<Button name="送糖" fontSize={14} iconName={"gift"} handler={this.handleRewardVisible} />
-										)}
-									</View>
-								</View>
-								<View style={styles.metaInfo}>
-									<View style={styles.layoutRow}>
-										<TouchableOpacity style={styles.layoutRow}>
-											<Text style={styles.countText}>1580</Text>
-											<Text style={styles.tintText}>粉丝</Text>
-										</TouchableOpacity>
-										<TouchableOpacity style={[styles.layoutRow, styles.metaLine]}>
-											<Text style={styles.countText}>12</Text>
-											<Text style={styles.tintText}>关注</Text>
-										</TouchableOpacity>
-										<TouchableOpacity style={styles.layoutRow}>
-											<Text style={styles.countText}>23</Text>
-											<Text style={styles.tintText}>关注的专题</Text>
-										</TouchableOpacity>
-									</View>
-									<View style={styles.registerDate}>
-										<Text style={styles.countText}>城龄: 105天</Text>
-									</View>
-									<TouchableOpacity style={styles.introduce}>
-										<View style={{ flex: 1 }}>
-											<Text numberOfLines={1} style={styles.tintText}>
-												简介：ta还没有freestyle...
-											</Text>
-										</View>
-										<Iconfont name={"right"} size={15} color={Colors.tintFontColor} />
-									</TouchableOpacity>
-								</View>
-								{!is_self && (
-									<View style={styles.buttonGroup}>
-										<View style={{ flex: 1, marginRight: 5 }}>
-											<FollowButton
-												customStyle={{ flex: 1, width: "auto" }}
-												id={user.id}
-												type={"user"}
-												status={user.followed_status}
-												fontSize={16}
-											/>
-										</View>
-										<View style={{ marginLeft: 5, flex: 1 }}>
-											<HollowButton name={"聊天"} size={16} />
-										</View>
-										<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
-									</View>
-								)}
-							</View>
-							{/*查看头像大图**/}
-							<Modal
-								visible={avatarViewerVisible}
-								transparent={true}
-								onRequestClose={() => this.setState({ avatarViewerVisible: false })}
-							>
-								<ImageViewer
-									onClick={() => this.setState({ avatarViewerVisible: false })}
-									onSwipeDown={() => this.setState({ avatarViewerVisible: false })}
-									imageUrls={[
+				<Query query={userActionsQuery} variables={{ user_id: 1 }}>
+					{({ loading, error, data, refetch, fetchMore }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.user && data.actions)) return <SpinnerLoading />;
+						let user = data.user;
+						let actions = data.actions;
+						return (
+							<View style={styles.container}>
+								<FlatList
+									bounces={false}
+									ListHeaderComponent={() => this._renderListHeader(user, self)}
+									data={actions}
+									refreshing={loading}
+									onRefresh={() => {
+										fetch();
+									}}
+									keyExtractor={(item, index) => index.toString()}
+									onScroll={Animated.event([
 										{
-											url: user.avatar,
-											width,
-											height: width,
-											resizeMode: "cover"
+											nativeEvent: { contentOffset: { y: offsetTop } }
 										}
-									]}
+									])}
+									renderItem={this._renderItem}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										if (actions) {
+											fetchMore({
+												variables: {
+													offset: actions.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (!(fetchMoreResult && fetchMoreResult.actions && fetchMoreResult.actions.length > 0)) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														actions: [...prev.actions, ...fetchMoreResult.actions]
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListEmptyComponent={() => <BlankContent />}
+									ListFooterComponent={() => {
+										if (actions.length < 1) return <View />;
+										return (
+											<View style={{ paddingBottom: 25, backgroundColor: "#fff" }}>
+												{fetchingMore ? <LoadingMore /> : <ContentEnd />}
+											</View>
+										);
+									}}
 								/>
-							</Modal>
-						</View>
-					</View>
-				</ScrollView>
+								<Animated.View
+									style={[
+										styles.header,
+										{ backgroundColor: headerTransparence },
+										avatarViewerVisible && { backgroundColor: "#000" }
+									]}
+								>
+									<Animated.View style={[styles.header, { opacity: lightHeaderOpacity }]}>
+										<Header
+											navigation={navigation}
+											routeName={user.name}
+											customStyle={styles.customStyle}
+											lightTabBar
+											rightComponent={this._headerRight("#fff", user, self)}
+										/>
+									</Animated.View>
+									<Animated.View style={[styles.header, { opacity: darkHeaderOpacity }]}>
+										<Header
+											navigation={navigation}
+											customStyle={styles.customStyle}
+											leftComponent={
+												<HeaderLeft navigation={navigation} routeName={true}>
+													<View style={styles.layoutRow}>
+														<Avatar size={28} uri={user.avatar} />
+														<Text style={[styles.tintText14, { marginLeft: 5 }]}>{user.name}</Text>
+													</View>
+												</HeaderLeft>
+											}
+											rightComponent={this._headerRight("#515151", user, self)}
+										/>
+									</Animated.View>
+								</Animated.View>
+							</View>
+						);
+					}}
+				</Query>
+				<OperationModal
+					visible={backdropVisible}
+					operation={["更换背景"]}
+					handleVisible={this.handleBackdropVisible}
+					handleOperation={() => {
+						//上传封面
+						ImagePicker.openPicker({
+							cropping: true
+						})
+							.then(image => {
+								this.setState({
+									backdropVisible: false,
+									cover: image.path
+								});
+							})
+							.catch(error => {});
+					}}
+				/>
+				<ReportModal visible={reportVisible} handleVisible={this.handleReportVisible} type="user" report={user} />
 			</Screen>
 		);
 	}
 
-	handleRewardVisible() {
-		let { login, navigation } = this.props;
-		if (login) {
-			this.setState(prevState => ({ rewardVisible: !prevState.rewardVisible }));
-		} else {
-			navigation.navigate("登录注册");
-		}
+	_headerRight = (color, user, self) => {
+		let { login } = this.props;
+		return (
+			<HeaderRight
+				color={color}
+				options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
+				selectHandler={index => {
+					switch (index) {
+						case 0:
+							navigation.navigate("个人介绍", { user });
+							break;
+						case 1:
+							this.handleReportVisible();
+							break;
+						case 2:
+							this.putBlacklist(user.id);
+							break;
+					}
+				}}
+			/>
+		);
+	};
+
+	_renderListHeader(user, self) {
+		let { cover, avatarViewerVisible } = this.state;
+		return (
+			<View style={styles.userHeader}>
+				<TouchableWithoutFeedback onPress={self ? this.handleBackdropVisible : null}>
+					<Image
+						style={styles.backdrop}
+						source={{
+							uri: cover
+						}}
+					/>
+				</TouchableWithoutFeedback>
+				<View style={styles.userInfo}>
+					<View style={styles.baseInfo}>
+						<TouchableOpacity style={styles.userAvatar} onPress={() => this.setState({ avatarViewerVisible: true })}>
+							<Avatar uri={user.avatar} size={86} borderStyle={{ borderWidth: 0 }} />
+						</TouchableOpacity>
+						{self ? (
+							<View style={styles.buttonGroup}>
+								<View style={{ width: 70 }}>
+									<Button name="编辑资料" fontSize={14} outline />
+								</View>
+							</View>
+						) : (
+							<View style={styles.buttonGroup}>
+								<View style={{ width: 70, marginRight: 6 }}>
+									<FollowButton
+										customStyle={{ flex: 1, width: "auto" }}
+										theme={Colors.themeColor}
+										status={user.followed_status}
+										id={user.id}
+										type={"user"}
+										fontSize={14}
+									/>
+								</View>
+								<View style={{ width: 70 }}>
+									<Button name="发信息" fontSize={14} outline />
+								</View>
+							</View>
+						)}
+					</View>
+					<View style={styles.userMetaInfo}>
+						<View style={styles.layoutRow}>
+							<Text numberOfLines={1} style={styles.name}>
+								{user.name}
+							</Text>
+							<Iconfont
+								name={user.gender == 1 ? "girl" : "boy"}
+								size={18}
+								color={user.gender == 1 ? Colors.softPink : Colors.skyBlue}
+							/>
+						</View>
+						<TouchableOpacity style={styles.userIntroduce}>
+							<View style={{ flex: 1 }}>
+								<Text numberOfLines={1} style={styles.tintText15}>
+									简介: {user.introduction ? user.introduction : "ta还没有freestyle..."}
+								</Text>
+							</View>
+							<Iconfont name={"right"} size={15} color={Colors.tintFontColor} />
+						</TouchableOpacity>
+						<View style={styles.layoutRow}>
+							<TouchableOpacity style={styles.layoutRow}>
+								<Text style={styles.darkText16}>{user.count_likes}</Text>
+								<Text style={styles.tintText16}>获赞</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={[styles.layoutRow, styles.metaLine]}>
+								<Text style={styles.darkText16}>{user.count_followings}</Text>
+								<Text style={styles.tintText16}>关注</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.layoutRow}>
+								<Text style={styles.darkText16}>{user.count_follows}</Text>
+								<Text style={styles.tintText16}>粉丝</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+				<View style={styles.tabList}>
+					<TouchableOpacity style={{ flex: 1 }}>
+						<View style={{ alignItems: "center" }}>
+							<Image source={require("../../assets/images/like.png")} style={styles.listItemImg} />
+							<View>
+								<Text style={styles.listItemName}>喜欢</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity style={{ flex: 1 }}>
+						<View style={{ alignItems: "center" }}>
+							<Image source={require("../../assets/images/actively.png")} style={styles.listItemImg} />
+							<View>
+								<Text style={styles.listItemName}>动态</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity style={{ flex: 1 }}>
+						<View style={{ alignItems: "center" }}>
+							<Image source={require("../../assets/images/collection.png")} style={styles.listItemImg} />
+							<View>
+								<Text style={styles.listItemName}>作品集</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity style={{ flex: 1 }}>
+						<View style={{ alignItems: "center" }}>
+							<Image source={require("../../assets/images/category.png")} style={styles.listItemImg} />
+							<View>
+								<Text style={styles.listItemName}>兴趣</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+				</View>
+				<Modal visible={avatarViewerVisible} transparent={true} onRequestClose={() => this.setState({ avatarViewerVisible: false })}>
+					<ImageViewer
+						onClick={() => this.setState({ avatarViewerVisible: false })}
+						onSwipeDown={() => this.setState({ avatarViewerVisible: false })}
+						imageUrls={[
+							{
+								url: user.avatar,
+								width,
+								height: width,
+								resizeMode: "cover"
+							}
+						]}
+					/>
+				</Modal>
+			</View>
+		);
 	}
 
-	_outerScroll(event) {
+	_renderItem = ({ item, index }) => {
+		return <Text>我是发布的作品</Text>;
+	};
+
+	_onScroll(event) {
 		let { y } = event.nativeEvent.contentOffset;
 		if (y >= 100) {
 			this.tabBar.setNativeProps({
@@ -180,6 +365,45 @@ class HomeScreen extends Component {
 			});
 		}
 	}
+
+	// 举报模态框
+	handleReportVisible() {
+		let { login, navigation } = this.props;
+		userOperationMiddleware({
+			login,
+			navigation,
+			action: () => this.setState(prevState => ({ reportVisible: !prevState.reportVisible }))
+		});
+	}
+
+	// 更换背景模态框
+	handleBackdropVisible() {
+		this.setState(prevState => ({ backdropVisible: !prevState.backdropVisible }));
+	}
+
+	// 加入黑名单
+	putBlacklist(id) {
+		let { login, navigation, blockUserMutation } = this.props;
+		userOperationMiddleware({
+			login,
+			navigation,
+			action: () => {
+				blockUserMutation({
+					variables: {
+						user_id: id
+					},
+					refetchQueries: result => [
+						{
+							query: blockedUsersQuery
+						}
+					]
+				});
+				this.setState(prevState => ({
+					isBlocked: !prevState.isBlocked
+				}));
+			}
+		});
+	}
 }
 
 const styles = StyleSheet.create({
@@ -191,14 +415,27 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center"
 	},
-	tintText: {
+	tintText16: {
+		fontSize: 16,
+		color: Colors.tintFontColor
+	},
+	tintText15: {
 		fontSize: 15,
 		color: Colors.tintFontColor
 	},
-	countText: {
-		fontSize: 15,
+	tintText14: {
+		fontSize: 14,
+		color: Colors.tintFontColor
+	},
+	darkText16: {
+		fontSize: 16,
+		fontWeight: "500",
 		color: Colors.darkFontColor,
 		marginRight: 3
+	},
+	userHeader: {
+		borderBottomWidth: 4,
+		borderColor: Colors.lightBorderColor
 	},
 	backdrop: {
 		width,
@@ -206,22 +443,41 @@ const styles = StyleSheet.create({
 	},
 	userInfo: {
 		paddingHorizontal: 15,
-		paddingBottom: 15,
-		borderBottomWidth: 4,
+		paddingBottom: 10,
+		borderBottomWidth: 1,
 		borderColor: Colors.lightBorderColor
 	},
 	baseInfo: {
-		height: 50,
+		height: 60,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between"
+	},
+	tabList: {
+		height: 80,
 		flexDirection: "row",
 		alignItems: "center"
 	},
+	listItemImg: {
+		width: 30,
+		height: 30,
+		resizeMode: "cover"
+	},
+	listItemName: {
+		marginTop: 8,
+		fontSize: 14,
+		color: Colors.primaryFontColor
+	},
 	userAvatar: {
 		marginRight: 20,
-		marginTop: -22
+		marginTop: -30,
+		borderWidth: 2,
+		borderColor: "#fff",
+		borderRadius: 45
 	},
 	name: {
 		fontSize: 20,
-		color: Colors.primaryFontColor,
+		color: Colors.darkFontColor,
 		fontWeight: "500",
 		marginRight: 5
 	},
@@ -235,7 +491,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginLeft: 12
 	},
-	metaInfo: {
+	userMetaInfo: {
 		marginTop: 15
 	},
 	metaLine: {
@@ -245,54 +501,36 @@ const styles = StyleSheet.create({
 		borderLeftWidth: 0.5,
 		borderColor: Colors.lightBorderColor
 	},
-	registerDate: {
-		marginVertical: 10
-	},
-	introduce: {
+	userIntroduce: {
 		flexDirection: "row",
-		alignItems: "center"
+		alignItems: "center",
+		marginBottom: 10,
+		paddingVertical: 10,
+		borderBottomWidth: 0.5,
+		borderBottomColor: Colors.lightBorderColor
 	},
 	buttonGroup: {
 		flexDirection: "row",
-		height: 40,
-		marginTop: 15
+		height: 30
+	},
+	userMetaWrap: {
+		height: 100,
+		flexDirection: "row",
+		justifyContent: "space-around",
+		alignItems: "center"
 	},
 	header: {
 		position: "absolute",
-		top: 0,
-		left: 0,
-		right: 0,
-		overflow: "hidden"
-	},
-	backgroundImage: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-		right: 0,
-		width: null,
-		height: 100,
-		resizeMode: "cover"
-	},
-	tabBar: {
-		position: "absolute",
-		bottom: 0,
-		left: 0,
 		width,
-		height: 50,
-		paddingHorizontal: 40,
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
-		borderColor: Colors.lightBorderColor,
-		backgroundColor: Colors.skinColor,
-		flexDirection: "row",
-		justifyContent: "center",
-		backgroundColor: "#ac85de"
+		height: HEADER_HEIGHT,
+		paddingTop: 24
 	},
-	tabItem: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center"
-	}
+	customStyle: { backgroundColor: "transparent", borderBottomColor: "transparent" }
 });
 
-export default HomeScreen;
+export default connect(store => {
+	return {
+		personal: store.users.user,
+		login: store.users.login
+	};
+})(compose(graphql(blockUserMutation, { name: "blockUserMutation" }))(HomeScreen));

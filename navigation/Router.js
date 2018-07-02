@@ -98,7 +98,7 @@ import CommentList from "../screens/article/comment/CommentListScreen";
 import ArticleRankingScreen from "../screens/article/ranking/ArticleRankingScreen";
 
 //video
-import VideoDetailScreen from "../screens/video/DetailScreen";
+import VideoDetailScreen from "../screens/video/HomeScreen";
 
 //category
 import CategoryHomeScreen from "../screens/category/HomeScreen";
