@@ -14,8 +14,8 @@ query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilte
 # 用户个人资源统计
 query userResourceCountQuery($id: Int!) {
     user(id: $id) {
-        count_words
         count_likes
+        count_words
         count_articles
         count_follows
         count_followers
@@ -127,8 +127,8 @@ mutation signInMutation($email: String!, $password: String!) {
         token
         introduction
         count_words
-        count_likes
         count_articles
+        count_likes
         count_follows
         count_followers
         count_followings
@@ -149,8 +149,8 @@ mutation signUpMutation($email: String!, $password: String!, $name: String!) {
         token
         introduction
         count_words
-        count_likes
         count_articles
+        count_likes
         count_follows
         count_followers
         count_followings
@@ -197,15 +197,16 @@ query recommendAuthors($offset: Int) {
     }
 }
 
-query userDetailQuery($id: Int!) {
+# 用户主页
+query userDetailQuery($id: Int!, $offset: Int) {
     user(id: $id) {
         id
         name
         avatar
         introduction
         count_words
-        count_likes
         count_articles
+        count_likes
         count_follows
         count_followers
         count_followings
@@ -215,20 +216,48 @@ query userDetailQuery($id: Int!) {
         count_collections
         followed_status
     }
+    articles(offset: $offset, user_id: $id) {
+        id
+        type
+        title
+        has_image
+        images
+        cover
+        description
+        time_ago
+        user {
+            id
+            name
+            avatar
+        }
+        category {
+            id
+            name
+            logo
+        }
+        liked
+        hits
+        count_tips
+        count_likes
+        count_replies
+    }
 }
 
 # 用户公开文章
 query userArticlesQuery($offset: Int, $user_id: Int!) {
     articles(offset: $offset, user_id: $user_id) {
         id
+        type
         title
+        has_image
         description
-        image_url
+        images
+        cover
         updated_at
         time_ago
         hits
         count_likes
-        count_comments
+        count_replies
         count_tips
         user {
             id
@@ -247,6 +276,7 @@ query draftsQuery($offset: Int) {
         id
         articles(offset: $offset, filter: DRAFTS) {
             id
+            type
             title
             updated_at
             time_ago
@@ -261,6 +291,7 @@ query draftsQuery($offset: Int) {
 query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
     articles(offset: $offset, user_id: $user_id, filter: LIKED) {
         id
+        type
         title
         time_ago
         user {
@@ -269,7 +300,7 @@ query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
         }
         hits
         count_likes
-        count_comments
+        count_replies
         count_tips
     }
 }
@@ -278,6 +309,7 @@ query removedArticlesQuery {
     user {
         articles(filter: TRASH) {
             id
+            type
             title
             time_ago
         }
@@ -289,6 +321,7 @@ query favoritedArticlesQuery($offset: Int) {
         id
         articles(offset: $offset, filter: FAVED) {
             id
+            type
             title
             time_ago
             user {
@@ -297,7 +330,7 @@ query favoritedArticlesQuery($offset: Int) {
             }
             hits
             count_likes
-            count_comments
+            count_replies
             count_tips
         }
     }
@@ -309,8 +342,8 @@ query userCategoriesQuery($user_id: Int!) {
         name
         logo
         description
-        count_follows
         count_articles
+        count_follows
         followed
         user {
             id
@@ -326,8 +359,8 @@ query userAdminCategoriesQuery($user_id: Int!) {
         id
         name
         logo
-        count_follows
         count_articles
+        count_follows
         user {
             id
             name
@@ -403,7 +436,7 @@ query userFollowingsQuery($user_id: Int!, $offset: Int) {
         id
         name
         avatar
-        count_words
+        count_articles
         count_likes
         followed_status
     }
@@ -414,27 +447,13 @@ query userFollowersQuery($user_id: Int!, $offset: Int) {
         id
         name
         avatar
-        count_words
+        count_articles
         count_likes
         followed_status
     }
 }
 
 query userActionsQuery($offset: Int, $user_id: Int!) {
-    user(id: $user_id) {
-        id
-        name
-        avatar
-        introduction
-        count_likes
-        count_articles
-        count_follows
-        count_followers
-        count_followings
-        count_categories
-        count_collections
-        followed_status
-    }
     actions(offset: $offset, user_id: $user_id) {
         id
         type
@@ -447,14 +466,16 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
             article {
                 id
                 title
-                image_url
+                images
+                cover
             }
         }
         postedArticle {
             id
             title
             description
-            image_url
+            images
+            cover
             count_likes
             count_replies
             hits
@@ -475,16 +496,20 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
             }
             article {
                 id
+                type
                 title
-                image_url
+                images
+                cover
             }
         }
         liked {
             id
             article {
                 id
+                type
                 title
-                image_url
+                images
+                cover
             }
             comment {
                 id
@@ -497,8 +522,10 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
                 }
                 article {
                     id
+                    type
                     title
-                    image_url
+                    images
+                    cover
                 }
             }
         }
@@ -528,6 +555,7 @@ query userArticlesSubmitStatusQuery($category_id: Int!) {
         id
         articles(filter: CATE_SUBMIT_STATUS, category_id: $category_id) {
             id
+            type
             title
             submit_status
         }

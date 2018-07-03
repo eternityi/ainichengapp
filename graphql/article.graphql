@@ -20,6 +20,7 @@ mutation createdArticleMutation($title: String!, $body: String!, $is_publish: Bo
 mutation editArticleMutation($id: Int!, $title: String!, $body: String!, $is_publish: Boolean) {
 	editArticle(id: $id, title: $title, body: $body, is_publish: $is_publish) {
 		id
+		type
 		title
 		status
 		body
@@ -72,6 +73,7 @@ mutation favoriteArticleMutation($article_id: Int!, $undo: Boolean) {
 query articleContentQuery($id: Int!) {
 	article(id: $id) {
 		id
+		type
 		title
 		status
 		body
@@ -82,16 +84,17 @@ query articleContentQuery($id: Int!) {
 query RankingArticleQuery($in_days: Int!) {
 	articles(in_days: $in_days, order: HOT) {
 		id
+		type
 		title
 		status
 		hits
 		body
 		time_ago
 		has_image
-		image_url
+		cover
 		hits
 		count_likes
-		count_comments
+		count_replies
 		count_tips
 		user {
 			id
@@ -109,6 +112,7 @@ query RankingArticleQuery($in_days: Int!) {
 query trashQuery($id: Int!) {
 	article(id: $id) {
 		id
+		type
 		title
 		body
 	}
@@ -123,13 +127,17 @@ mutation reportArticleMutation($id: Int!, $type: String!, $reason: String) {
 query articleQuery($id: Int!) {
 	article(id: $id) {
 		id
+		type
 		title
 		body
+		video_url
 		user {
 			id
 			name
 			avatar
 			introduction
+			count_articles
+			count_likes
 			tip_words
 			followed_status
 		}
@@ -140,7 +148,6 @@ query articleQuery($id: Int!) {
 		favorited
 		count_likes
 		count_tips
-		count_comments
 		count_replies
 		collection {
 			id
@@ -161,6 +168,7 @@ query articleQuery($id: Int!) {
 query articleLikesQuery($id: Int!) {
 	article(id: $id) {
 		id
+		type
 		liked
 		count_likes
 	}
@@ -169,6 +177,7 @@ query articleLikesQuery($id: Int!) {
 query draftQuery($id: Int!) {
 	article(id: $id) {
 		id
+		type
 		title
 		body
 		time_ago
@@ -179,6 +188,7 @@ query draftQuery($id: Int!) {
 query topArticleWithImagesQuery {
 	articles(filter: TOP, limit: 7) {
 		id
+		type
 		title
 		top_image
 	}
@@ -187,9 +197,10 @@ query topArticleWithImagesQuery {
 query hotArticlesQuery($offset: Int) {
 	articles(offset: $offset) {
 		id
+		type
 		title
 		has_image
-		image_url
+		cover
 		description
 		time_ago
 		user {
@@ -204,7 +215,7 @@ query hotArticlesQuery($offset: Int) {
 		}
 		hits
 		count_likes
-		count_comments
+		count_replies
 		count_tips
 	}
 }
@@ -212,9 +223,10 @@ query hotArticlesQuery($offset: Int) {
 query recommendArticlesQuery($offset: Int) {
 	articles(offset: $offset) {
 		id
+		type
 		title
 		has_image
-		image_url
+		cover
 		description
 		time_ago
 		user {
@@ -229,7 +241,7 @@ query recommendArticlesQuery($offset: Int) {
 		}
 		hits
 		count_likes
-		count_comments
+		count_replies
 		count_tips
 	}
 }

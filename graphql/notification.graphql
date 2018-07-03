@@ -54,6 +54,7 @@ query commentNotificationQuery($offset: Int) {
             }
             article {
                 id
+                type
                 title
             }
         }
@@ -69,6 +70,7 @@ query likeNotificationsQuery($offset: Int) {
             type
             article {
                 id
+                type
                 title
                 time_ago
             }
@@ -109,6 +111,7 @@ query categoryPendingArticlesQuery($category_id: Int!, $filter: ArticleFilter) {
         name
         articles(filter: $filter) {
             id
+            type
             title
             user {
                 id
@@ -130,6 +133,7 @@ query pendingArticlesQuery {
         id
         articles(filter: NEW_REQUESTED) {
             id
+            type
             title
             user {
                 id
@@ -160,6 +164,7 @@ query tipNotificationsQuery($offset: Int) {
             }
             article {
                 id
+                type
                 title
             }
             tip {
@@ -196,6 +201,7 @@ query otherNotificationsQuery($offset: Int) {
             }
             article {
                 id
+                type
                 title
             }
         }

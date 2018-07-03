@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import {
-	StyleSheet,
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	ScrollView,
-	Dimensions
-} from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -25,31 +17,19 @@ class MoreTab extends Component {
 
 		return (
 			<View style={styles.container}>
-				<ScrollView
-					style={styles.container}
-					scrollEnabled={scrollEnabled}
-					bounces={false}
-					removeClippedSubviews={true}
-				>
+				<ScrollView style={styles.container} scrollEnabled={scrollEnabled} bounces={false} removeClippedSubviews={true}>
 					<View>
 						<View style={styles.userMetaWrap}>
 							<TouchableOpacity
 								onPress={() =>
 									navigation.navigate("个人文集", {
 										user
-									})
-								}
+									})}
 							>
 								<View style={{ alignItems: "center" }}>
-									<Iconfont
-										name={"collection-two"}
-										size={18}
-										color={"#aaa"}
-									/>
+									<Iconfont name={"collection-two"} size={18} color={"#aaa"} />
 									<View style={{ marginTop: 10 }}>
-										<Text style={styles.metaCount}>
-											文集 {user.count_collections}
-										</Text>
+										<Text style={styles.metaCount}>文集 {user.count_collections}</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
@@ -57,55 +37,28 @@ class MoreTab extends Component {
 								onPress={() =>
 									navigation.navigate("个人专题", {
 										user
-									})
-								}
+									})}
 							>
 								<View style={{ alignItems: "center" }}>
-									<Iconfont
-										name={"category-rotate"}
-										size={20}
-										color={"#aaa"}
-									/>
+									<Iconfont name={"category-rotate"} size={20} color={"#aaa"} />
 									<View style={{ marginTop: 10 }}>
-										<Text style={styles.metaCount}>
-											专题 {user.count_categories}
-										</Text>
+										<Text style={styles.metaCount}>专题 {user.count_categories}</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("关注", { user })
-								}
-							>
+							<TouchableOpacity onPress={() => navigation.navigate("关注", { user })}>
 								<View style={{ alignItems: "center" }}>
-									<Iconfont
-										name={"add-person"}
-										size={20}
-										color={"#aaa"}
-									/>
+									<Iconfont name={"add-person"} size={20} color={"#aaa"} />
 									<View style={{ marginTop: 10 }}>
-										<Text style={styles.metaCount}>
-											关注 {user.count_followings}
-										</Text>
+										<Text style={styles.metaCount}>关注 {user.count_followings}</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("粉丝", { user })
-								}
-							>
+							<TouchableOpacity onPress={() => navigation.navigate("粉丝", { user })}>
 								<View style={{ alignItems: "center" }}>
-									<Iconfont
-										name={"friends"}
-										size={22}
-										color={"#aaa"}
-									/>
+									<Iconfont name={"friends"} size={22} color={"#aaa"} />
 									<View style={{ marginTop: 10 }}>
-										<Text style={styles.metaCount}>
-											粉丝 {user.count_followers}
-										</Text>
+										<Text style={styles.metaCount}>粉丝 {user.count_followers}</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
@@ -116,53 +69,34 @@ class MoreTab extends Component {
 								<TouchableOpacity
 									style={styles.userQuantityItem}
 									onPress={() =>
-										navigation.navigate("喜欢的文章", {
+										navigation.navigate("喜欢", {
 											user
-										})
-									}
+										})}
 								>
 									<View style={styles.userQuantityLeft}>
-										<Iconfont
-											name={"like"}
-											size={19}
-											color={"#aaa"}
-											style={{ marginRight: 10 }}
-										/>
+										<Iconfont name={"like"} size={19} color={"#aaa"} style={{ marginRight: 10 }} />
 										<Text
 											style={{
 												fontSize: 16,
 												color: "#666"
 											}}
 										>
-											喜欢的文章
+											喜欢
 										</Text>
 									</View>
-									<Text
-										style={{ fontSize: 16, color: "#666" }}
-									>
-										{user.count_likes}
-									</Text>
+									<Text style={{ fontSize: 16, color: "#666" }}>{user.count_likes}</Text>
 								</TouchableOpacity>
 							</TouchableOpacity>
 							<TouchableOpacity onPress={() => null}>
 								<TouchableOpacity
 									style={styles.userQuantityItem}
 									onPress={() =>
-										navigation.navigate(
-											"关注的专题和文集",
-											{
-												user
-											}
-										)
-									}
+										navigation.navigate("关注的专题和文集", {
+											user
+										})}
 								>
 									<View style={styles.userQuantityLeft}>
-										<Iconfont
-											name={"collection"}
-											size={19}
-											color={"#aaa"}
-											style={{ marginRight: 10 }}
-										/>
+										<Iconfont name={"collection"} size={19} color={"#aaa"} style={{ marginRight: 10 }} />
 										<Text
 											style={{
 												fontSize: 16,
@@ -175,19 +109,9 @@ class MoreTab extends Component {
 								</TouchableOpacity>
 							</TouchableOpacity>
 							<TouchableOpacity onPress={() => null}>
-								<View
-									style={[
-										styles.userQuantityItem,
-										{ borderBottomColor: "transparent" }
-									]}
-								>
+								<View style={[styles.userQuantityItem, { borderBottomColor: "transparent" }]}>
 									<View style={styles.userQuantityLeft}>
-										<Iconfont
-											name={"user"}
-											size={19}
-											color={"#aaa"}
-											style={{ marginRight: 10 }}
-										/>
+										<Iconfont name={"user"} size={19} color={"#aaa"} style={{ marginRight: 10 }} />
 										<Text
 											style={{
 												fontSize: 16,
@@ -205,15 +129,8 @@ class MoreTab extends Component {
 											}}
 										>
 											{user.email && (
-												<TouchableOpacity
-													style={{ marginRight: 15 }}
-													onPress={() => null}
-												>
-													<Iconfont
-														name={"email-fill"}
-														size={19}
-														color={Colors.linkColor}
-													/>
+												<TouchableOpacity style={{ marginRight: 15 }} onPress={() => null}>
+													<Iconfont name={"email-fill"} size={19} color={Colors.linkColor} />
 												</TouchableOpacity>
 											)}
 										</View>

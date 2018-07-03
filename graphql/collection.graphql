@@ -8,6 +8,7 @@ query collectionQuery($id: Int!) {
 			name
 			avatar
 			count_words
+			count_articles
 			count_likes
 		}
 		followed
@@ -19,9 +20,10 @@ query collectionQuery($id: Int!) {
 query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
 	articles(collection_id: $id, order: HOT, offset: $offset) {
 		id
+		type
 		title
 		description
-		image_url
+		cover
 		time_ago
 		status
 		user {
@@ -30,7 +32,7 @@ query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_comments
+		count_replies
 		count_tips
 		count_likes
 	}
@@ -39,9 +41,10 @@ query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
 query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
 	articles(collection_id: $id, order: COMMENTED, offset: $offset) {
 		id
+		type
 		title
 		description
-		image_url
+		cover
 		time_ago
 		status
 		user {
@@ -50,7 +53,7 @@ query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_comments
+		count_replies
 		count_tips
 		count_likes
 	}
@@ -59,9 +62,10 @@ query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
 query collectionArticlesByLatestQuery($id: Int!, $offset: Int) {
 	articles(collection_id: $id, order: LATEST, offset: $offset) {
 		id
+		type
 		title
 		description
-		image_url
+		cover
 		time_ago
 		status
 		user {
@@ -70,7 +74,7 @@ query collectionArticlesByLatestQuery($id: Int!, $offset: Int) {
 			avatar
 		}
 		hits
-		count_comments
+		count_replies
 		count_tips
 		count_likes
 	}
