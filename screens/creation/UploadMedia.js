@@ -8,7 +8,7 @@ class UploadMedia extends Component {
 	render() {
 		let {
 			navigation,
-			image_urls,
+			covers,
 			showMediaSelect,
 			progress,
 			cancelUploa,
@@ -46,9 +46,9 @@ class UploadMedia extends Component {
 							borderColor: Colors.lightGray
 						}}
 					>
-						{image_urls.map((image_url, index) => <Image key={index} style={styles.picture} source={{ uri: image_url }} />)}
+						{covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
 						<TouchableOpacity onPress={showMediaSelect}>
-							<View style={image_urls == "" ? styles.icon : styles.icon2}>
+							<View style={covers == "" ? styles.icon : styles.icon2}>
 								<Iconfont name={"add"} size={100} color={Colors.lightGray} />
 							</View>
 							<MediaModal

@@ -16,7 +16,7 @@ const official_categories = [
 		id: 64,
 		avatar: "https://www.ainicheng.com/images/appicons/guanfangketang.png",
 		name: "官方课堂",
-		type: "视频详情"
+		type: "专题详情"
 	},
 	{
 		id: 51,
@@ -101,11 +101,7 @@ const official_categories = [
 class ListHeader extends PureComponent {
 	render() {
 		return (
-			<ScrollView
-				horizontal={true}
-				showsHorizontalScrollIndicator={false}
-				removeClippedSubviews={true}
-			>
+			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} removeClippedSubviews={true}>
 				<View style={styles.officialColumnWarp}>
 					{official_categories.map((item, index) => {
 						return this._renderItem(item, index);

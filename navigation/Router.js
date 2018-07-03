@@ -69,9 +69,13 @@ import WithdrawDepositScreen from "../screens/my/wallet/WithdrawDepositScreen";
 //user home
 import UserHomeScreen from "../screens/user/HomeScreen";
 import UserIntroduceScreen from "../screens/user/IntroduceScreen";
+import LikedArticlesScreen from "../screens/user/LikedArticlesScreen";
+import UserActionsScreen from "../screens/user/ActionsScreen";
 
-//user articles
-import UserArticlesScreen from "../screens/user/articles/ArticlesScreen";
+//user follows
+import FollowersScreen from "../screens/user/follows/FollowersScreen";
+import FollowingsScreen from "../screens/user/follows/FollowingsScreen";
+import FollowedBooksScreen from "../screens/user/follows/FollowedBooksScreen";
 
 //user category
 import CategoriesScreen from "../screens/user/category/ListScreen";
@@ -83,14 +87,6 @@ import CollectionsScreen from "../screens/user/collection/ListScreen";
 import CollectionEditScreen from "../screens/user/collection/EditScreen";
 import CollectionRankScreen from "../screens/user/collection/RankScreen";
 
-//user follows
-import FollowersScreen from "../screens/user/follows/FollowersScreen";
-import FollowingsScreen from "../screens/user/follows/FollowingsScreen";
-import FollowedBooksScreen from "../screens/user/follows/FollowedBooksScreen";
-
-//user likes
-import LikedArticlesScreen from "../screens/user/likes/LikedArticlesScreen";
-
 //article
 import ArticleDetailScreen from "../screens/article/DetailScreen";
 import CommentDetail from "../screens/article/comment/CommentDetailScreen";
@@ -98,7 +94,7 @@ import CommentList from "../screens/article/comment/CommentListScreen";
 import ArticleRankingScreen from "../screens/article/ranking/ArticleRankingScreen";
 
 //video
-import VideoDetailScreen from "../screens/video/HomeScreen";
+import VideoDetailScreen from "../screens/video/DetailScreen";
 
 //category
 import CategoryHomeScreen from "../screens/category/HomeScreen";
@@ -224,14 +220,17 @@ export default {
   推荐专题: {
     screen: RecommendCategoriesScreen
   },
-  用户文章动态: {
-    screen: UserArticlesScreen
-  },
   用户详情: {
     screen: UserHomeScreen
   },
   个人介绍: {
     screen: UserIntroduceScreen
+  },
+  喜欢: {
+    screen: LikedArticlesScreen
+  },
+  动态: {
+    screen: UserActionsScreen
   },
   专题详情: {
     screen: CategoryHomeScreen
@@ -292,9 +291,6 @@ export default {
   },
   收藏的文章: {
     screen: FavoritedArticlesScreen
-  },
-  喜欢的文章: {
-    screen: LikedArticlesScreen
   },
   已购内容: {
     screen: PaidContentScreen

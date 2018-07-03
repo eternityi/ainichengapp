@@ -210,7 +210,7 @@ class DetailScreen extends Component {
                 {/*文章底部工具**/}
                 <ArticleBottomTools
                   rewards={article.count_tips}
-                  comments={article.count_comments}
+                  comments={article.count_replies}
                   article={article}
                   showWrite={showWrite}
                   toggleCommentModal={() => this.toggleAddCommentVisible()}
@@ -258,7 +258,7 @@ class DetailScreen extends Component {
                                 variables: { id: article.id },
                                 data: {
                                   article: Object.assign({}, prev_article, {
-                                    count_comments: prev_article.count_comments + 1
+                                    count_replies: prev_article.count_replies + 1
                                   })
                                 }
                               });

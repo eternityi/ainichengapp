@@ -9,8 +9,8 @@ class BlankContent extends Component {
 		let { size = 70, fontSize = 16, customStyle = {}, remind = "这里还木有内容哦 ~", children } = this.props;
 		return (
 			<View style={styles.container}>
-				{children ? children : <Text style={{ fontSize, color: Colors.tintFontColor, marginBottom: 12 }}>{remind}</Text>}
 				<Iconfont name={"blank"} size={size} color={Colors.lightFontColor} />
+				{children ? children : <Text style={{ fontSize, color: Colors.tintFontColor, marginTop: 12 }}>{remind}</Text>}
 			</View>
 		);
 	}

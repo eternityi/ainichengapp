@@ -125,7 +125,7 @@ class Comments extends Component {
                         );
                       })}
                     </View>
-                    {article.count_comments > 3 ? (
+                    {article.count_replies > 3 ? (
                       <TouchableOpacity style={styles.loadMore} onPress={this.toggleMoreCommentsVisible}>
                         <Text style={{ fontSize: 16, color: Colors.linkColor }}>查看更多评论</Text>
                         <Iconfont name={"right"} size={16} color={Colors.linkColor} />

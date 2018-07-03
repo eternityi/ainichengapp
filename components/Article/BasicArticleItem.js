@@ -39,7 +39,7 @@ class BasicArticleItem extends Component {
 				</View>
 				{article.has_image && (
 					<View>
-						<Image style={styles.articleImage} source={{ uri: article.image_url }} />
+						<Image style={styles.articleImage} source={{ uri: article.cover }} />
 					</View>
 				)}
 			</View>

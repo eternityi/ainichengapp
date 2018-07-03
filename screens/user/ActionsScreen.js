@@ -1,10 +1,8 @@
-"use strict";
-
 import React, { Component } from "react";
 
 import { StyleSheet, View } from "react-native";
 
-class HomeScreen extends Component {
+class ActionsScreen extends Component {
 	render() {
 		return <View />;
 	}
@@ -12,4 +10,4 @@ class HomeScreen extends Component {
 
 const styles = StyleSheet.create({});
 
-export default HomeScreen;
+export default ActionsScreen;

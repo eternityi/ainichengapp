@@ -15,6 +15,7 @@ import SearchBar from "./SearchBar";
 import SearchTypeBar from "./SearchTypeBar";
 import Find from "./Find";
 import Waiting from "./Waiting";
+import VideoMark from "./VideoMark";
 
 // export { SearchBar };
 // export { ContentEnd };
@@ -37,5 +38,6 @@ export {
 	SearchBar,
 	SearchTypeBar,
 	Find,
-	Waiting
+	Waiting,
+	VideoMark
 };

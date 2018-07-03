@@ -110,7 +110,7 @@ class CommentListScreen extends Component {
 							marginRight: 8
 						}}
 					>
-						评论 {article.count_comments}
+						评论 {article.count_replies}
 					</Text>
 					<TouchableOpacity
 						style={[styles.onlyAuthor, onlyAuthor ? styles.onlyAuthored : ""]}

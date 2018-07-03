@@ -45,14 +45,14 @@ class MediaUploadScreen extends React.Component {
       uploadId: null,
       progress: null,
       completed: false,
-      image_urls: [],
+      covers: [],
       routeName: "　",
       selectMedia: false
     };
   }
 
   render() {
-    let { image_urls, routeName, selectMedia, completed, progress, uploadId } = this.state;
+    let { covers, routeName, selectMedia, completed, progress, uploadId } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -81,7 +81,7 @@ class MediaUploadScreen extends React.Component {
         <UploadMedia
           navigation={navigation}
           selectMedia={selectMedia}
-          image_urls={image_urls}
+          covers={covers}
           showMediaSelect={this.showMediaSelect}
           progress={progress}
           cancelUpload={this.cancelUpload}
@@ -92,15 +92,13 @@ class MediaUploadScreen extends React.Component {
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })
-          }
+            })}
           onPressVideoUpload={() =>
             this.onPressVideoUpload({
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })
-          }
+            })}
         />
       </View>
     );
@@ -114,7 +112,7 @@ class MediaUploadScreen extends React.Component {
     ImagePicker.launchImageLibrary(imagePickerOptions, response => {
       let didChooseVideo = true;
       const { customButton, didCancel, error, path, uri, data } = response;
-      let { image_urls } = this.state;
+      let { covers } = this.state;
 
       if (didCancel) {
         didChooseVideo = false; //用户取消选择视频
@@ -130,9 +128,9 @@ class MediaUploadScreen extends React.Component {
         if (path) {
           this.startUpload(Object.assign({ path }, options));
           let source = "file://" + path; //本地视频路径
-          image_urls.push(source);
+          covers.push(source);
           this.setState({
-            image_urls
+            covers
           });
         } else {
           return;
@@ -153,7 +151,7 @@ class MediaUploadScreen extends React.Component {
     ImagePicker.launchImageLibrary(imagePickerOptions, response => {
       let didChooseVideo = true;
       const { customButton, didCancel, error, path, uri, data } = response;
-      let { image_urls } = this.state;
+      let { covers } = this.state;
 
       if (didCancel) {
         didChooseVideo = false; //用户取消选择图片
@@ -168,9 +166,9 @@ class MediaUploadScreen extends React.Component {
       if (Platform.OS === "android") {
         if (path) {
           this.startUpload(Object.assign({ path }, options));
-          image_urls.push(uri); //图片资源
+          covers.push(uri); //图片资源
           this.setState({
-            image_urls
+            covers
           });
         } else {
           return;
@@ -223,7 +221,7 @@ class MediaUploadScreen extends React.Component {
     });
   };
   cancelUpload = () => {
-    let { image_urls } = this.state;
+    let { covers } = this.state;
     if (!this.state.uploadId) {
       return; //没有上传的文件ＩＤ
     }
@@ -231,9 +229,9 @@ class MediaUploadScreen extends React.Component {
     Upload.cancelUpload(this.state.uploadId).then(props => {
       console.log(`Upload ${this.state.uploadId} canceled`);
       this.setState({ uploadId: null, progress: null }); //取消上传,移除上传文件的ID与进度
-      image_urls.pop();
+      covers.pop();
       this.setState({
-        image_urls
+        covers
       }); //取消上传时移除数组的最后一个
     });
   };

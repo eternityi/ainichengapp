@@ -46,8 +46,6 @@ class DetailScreen extends Component {
 			duration: 0,
 			currentTime: 0,
 			isBuffering: false,
-			footOffsetHeight: height,
-			commentsOffsetHeight: height,
 			replyCommentVisible: false,
 			addCommentVisible: false,
 			rewardVisible: false,
@@ -83,15 +81,17 @@ class DetailScreen extends Component {
 			shareModalVisible
 		} = this.state;
 		let { navigation, login, favoriteArticle, likeArticle } = this.props;
+		let video = navigation.getParam("video", {});
 		return (
 			<Screen>
-				<Query query={articleQuery} variables={{ id: 1102 }}>
+				<Query query={articleQuery} variables={{ id: video.id }}>
 					{({ loading, error, data, refetch }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
-						let article = data.article;
-						this.article = data.article;
+						this.video = data.article;
+						let video = data.article;
+						let { id, video_url, user, title, liked, favorited } = video;
 						return (
 							<View style={styles.container}>
 								<View style={styles.videoWrap}>
@@ -110,7 +110,7 @@ class DetailScreen extends Component {
 										// 	navigation.navigate("视频全屏")
 										// }}
 										navigator={navigation}
-										source={{ uri: "https://www.ainicheng.com/storage/video/236.mp4" }}
+										source={{ uri: video_url }}
 										// poster="https://www.ainicheng.com/storage/video/236.jpg"
 										// posterResizeMode="cover"
 										style={{
@@ -136,13 +136,9 @@ class DetailScreen extends Component {
 								</View>
 								<ScrollView style={styles.container}>
 									<View style={styles.topInfo}>
+										<UserMetaGroup user={user} navigation={navigation} />
 										<View>
-											<Text style={styles.title} NumberOfLines={2}>
-												{article.title}
-											</Text>
-										</View>
-										<View style={styles.userInfo}>
-											<UserMetaGroup user={article.user} navigation={navigation} />
+											<Text style={styles.title}>{title}</Text>
 										</View>
 									</View>
 									<View style={styles.topOperation}>
@@ -151,8 +147,8 @@ class DetailScreen extends Component {
 												return (
 													<TouchableOpacity style={styles.operationItem} onPress={() => this.likeHandler(likeArticle)}>
 														<Iconfont
-															name={article.liked ? "like" : "like-outline"}
-															color={article.liked ? Colors.themeColor : Colors.tintFontColor}
+															name={liked ? "like" : "like-outline"}
+															color={liked ? Colors.themeColor : Colors.tintFontColor}
 															size={20}
 														/>
 														<Text style={styles.operationItemText}>喜欢</Text>
@@ -165,12 +161,12 @@ class DetailScreen extends Component {
 											<Text style={styles.operationItemText}>赞赏</Text>
 										</TouchableOpacity>
 										<TouchableOpacity onPress={this.handleSlideShareMenu} style={styles.operationItem}>
-											<Iconfont name="share-square" size={16} color={Colors.tintFontColor} />
+											<Iconfont name="share-cycle" size={18} color={Colors.tintFontColor} />
 											<Text style={styles.operationItemText}>分享</Text>
 										</TouchableOpacity>
 									</View>
 									<Comments
-										article={article}
+										article={video}
 										navigation={navigation}
 										toggleCommentModal={this.toggleAddCommentVisible}
 										toggleReplyComment={comment => {
@@ -192,9 +188,9 @@ class DetailScreen extends Component {
 											return (
 												<TouchableOpacity onPress={() => this.favoriteHandler(favoriteArticle)}>
 													<Iconfont
-														name={article.favorited ? "star" : "star-outline"}
+														name={favorited ? "star" : "star-outline"}
 														size={20}
-														color={article.favorited ? Colors.themeColor : Colors.tintFontColor}
+														color={favorited ? Colors.themeColor : Colors.tintFontColor}
 													/>
 												</TouchableOpacity>
 											);
@@ -214,21 +210,21 @@ class DetailScreen extends Component {
 									{addComment => {
 										return (
 											<AddCommentModal
-												article={article}
+												article={video}
 												visible={addCommentVisible}
 												toggleCommentModal={this.toggleAddCommentVisible}
 												addComment={({ body }) => {
 													if (!body) return null;
 													addComment({
 														variables: {
-															commentable_id: article.id,
+															commentable_id: id,
 															body
 														},
 														refetchQueries: addComment => [
 															{
 																query: commentsQuery,
 																variables: {
-																	article_id: article.id,
+																	article_id: id,
 																	order: "LATEST_FIRST",
 																	filter: "ALL"
 																}
@@ -237,15 +233,15 @@ class DetailScreen extends Component {
 														update: (cache, { data: { addComment } }) => {
 															let data = cache.readQuery({
 																query: articleQuery,
-																variables: { id: article.id }
+																variables: { id }
 															});
-															let prev_article = data.article;
+															let prev_video = video;
 															cache.writeQuery({
 																query: articleQuery,
-																variables: { id: article.id },
+																variables: { id },
 																data: {
-																	article: Object.assign({}, prev_article, {
-																		count_comments: prev_article.count_comments + 1
+																	article: Object.assign({}, prev_video, {
+																		count_replies: prev_video.count_replies + 1
 																	})
 																}
 															});
@@ -278,7 +274,7 @@ class DetailScreen extends Component {
 													if (!(body.length > atUser.name.length + 2)) return null;
 													replyComment({
 														variables: {
-															commentable_id: article.id,
+															commentable_id: id,
 															body,
 															comment_id: replyingComment.id,
 															at_uid: atUser.id
@@ -287,7 +283,7 @@ class DetailScreen extends Component {
 															{
 																query: commentsQuery,
 																variables: {
-																	article_id: article.id,
+																	article_id: id,
 																	order: "LATEST_FIRST",
 																	filter: "ALL"
 																}
@@ -316,8 +312,8 @@ class DetailScreen extends Component {
 			action: () =>
 				likeArticle({
 					variables: {
-						article_id: this.article.id,
-						undo: this.article.liked
+						article_id: this.video.id,
+						undo: this.video.liked
 					}
 				}),
 			navigation
@@ -332,7 +328,7 @@ class DetailScreen extends Component {
 			action: () =>
 				favoriteArticle({
 					variables: {
-						article_id: this.article.id
+						article_id: this.video.id
 					}
 				}),
 			navigation
@@ -385,23 +381,24 @@ const styles = StyleSheet.create({
 		height: width * 9 / 16
 	},
 	topInfo: {
-		padding: 10
+		padding: 15
 	},
 	title: {
-		marginBottom: 15,
+		marginTop: 15,
 		fontSize: 18,
 		fontWeight: "500",
 		lineHeight: 24,
 		color: Colors.darkFontColor
 	},
 	topOperation: {
+		marginBottom: 15,
 		flexDirection: "row",
-		justifyContent: "space-around",
 		alignItems: "center",
-		marginVertical: 20
+		justifyContent: "space-around"
 	},
 	operationItem: {
 		flex: 1,
+		height: 50,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center"

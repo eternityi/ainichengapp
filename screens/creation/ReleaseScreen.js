@@ -28,7 +28,7 @@ class ReleaseScreen extends React.Component {
 
     this.state = {
       body: null,
-      image_urls: [],
+      covers: [],
       image_ids: [],
       routeName: "　"
     };
@@ -36,7 +36,7 @@ class ReleaseScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    let { image_urls, routeName } = this.state;
+    let { covers, routeName } = this.state;
     return (
       <View style={styles.container}>
         <Header
@@ -87,9 +87,9 @@ class ReleaseScreen extends React.Component {
                 borderColor: Colors.lightGray
               }}
             >
-              {image_urls.map((image_url, index) => <Image key={index} style={styles.picture} source={{ uri: image_url }} />)}
+              {covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
               <TouchableOpacity onPress={this._openPicker.bind(this)}>
-                <View style={image_urls == "" ? styles.icon : styles.icon2}>
+                <View style={covers == "" ? styles.icon : styles.icon2}>
                   <Iconfont name={"add"} size={100} color={Colors.lightGray} />
                 </View>
               </TouchableOpacity>
@@ -127,17 +127,17 @@ class ReleaseScreen extends React.Component {
       mediaType: "video"
     }).then(
       images => {
-        let { image_urls } = _this.state;
+        let { covers } = _this.state;
         images.map(image => {
           //optmistic update
-          image_urls.push(image.path);
+          covers.push(image.path);
           //upload ..
           _this.saveImage(image.path);
           console.log("视频地址path");
           console.log(image.path);
         });
         _this.setState({
-          image_urls
+          covers
         });
       },
       error => {

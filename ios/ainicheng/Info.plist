@@ -41,8 +41,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>爱你城需要访问您的相机</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string></string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>NSMicrophoneUsageDescription</key>

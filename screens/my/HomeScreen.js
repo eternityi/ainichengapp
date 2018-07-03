@@ -96,10 +96,10 @@ class HomeScreen extends React.Component {
                   <Text style={styles.columnQuantity}>{user.count_favorites || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢的文章", { user })}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>喜欢的文章</Text>
+                  <Text style={styles.columnType}>我喜欢的</Text>
                   <Text style={styles.columnQuantity}>{user.count_likes || ""}</Text>
                 </View>
               </TouchableOpacity>

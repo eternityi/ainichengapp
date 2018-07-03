@@ -44,7 +44,7 @@ class UserMetaGroup extends Component {
 								bottomInfo
 							) : (
 								<Text>
-									写了{user.count_words || "0"}字，获得了{user.count_likes || "0"}个喜欢
+									{user.count_articles || "0"}个作品，获得了{user.count_likes || "0"}个喜欢
 								</Text>
 							)}
 						</Text>

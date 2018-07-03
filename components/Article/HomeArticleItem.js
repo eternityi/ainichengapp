@@ -26,7 +26,7 @@ class HomeArticleItem extends PureComponent {
 						</View>
 					</View>
 					<View>
-						<Image style={styles.cover} source={{ uri: article.image_url }} />
+						<Image style={styles.cover} source={{ uri: article.cover }} />
 					</View>
 					<View style={styles.content}>
 						<Text numberOfLines={2} style={styles.title}>

@@ -80,7 +80,7 @@ class RecommendArticle extends Component {
 						</View>
 						{article.has_image && (
 							<View>
-								<Image style={styles.image} source={{ uri: article.image_url }} />
+								<Image style={styles.image} source={{ uri: article.cover }} />
 							</View>
 						)}
 					</View>
