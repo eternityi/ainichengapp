@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight
 import { withNavigation } from "react-navigation";
 
 import PostToolBar from "./PostToolBar";
-import { Avatar, VideoMark } from "../Pure";
+import { Avatar, VideoCover } from "../Pure";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { navigationAction } from "../../constants/Methods";
@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get("window");
 
 class PostItem extends PureComponent {
 	render() {
-		const { post, navigation } = this.props;
+		const { post, navigation, toggleShareModal } = this.props;
 		let { type, user, time_ago, title, description, images, cover, has_image } = post;
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
@@ -26,29 +26,34 @@ class PostItem extends PureComponent {
 							<Text style={styles.timeAgo}>{time_ago}</Text>
 						</View>
 					</View>
-					<View style={styles.abstract}>
-						<Text numberOfLines={2} style={styles.abstractText}>
-							{title ? title : description}
-						</Text>
-					</View>
+					{type == "article" ? (
+						<View style={styles.abstract}>
+							<Text numberOfLines={2} style={styles.title}>
+								{title}
+							</Text>
+							{description ? (
+								<Text numberOfLines={2} style={styles.description}>
+									{description}
+								</Text>
+							) : null}
+						</View>
+					) : (
+						<View style={styles.abstract}>
+							<Text numberOfLines={2} style={styles.title}>
+								{description ? description : title}
+							</Text>
+						</View>
+					)}
 					<View>{has_image && this.renderImage(type, images, cover)}</View>
-					<PostToolBar post={post} navigation={navigation} skip={this.skipScreen} />
+					<PostToolBar post={post} navigation={navigation} skip={this.skipScreen} toggleShareModal={toggleShareModal} />
 				</View>
 			</TouchableHighlight>
 		);
 	}
 
-	_keyExtractor = (item, index) => (item.key ? item.key : index.toString());
-
 	renderImage = (type, images, cover) => {
 		if (type == "video") {
-			return (
-				<View style={styles.coverView}>
-					<ImageBackground style={styles.cover} source={{ uri: cover }}>
-						<VideoMark width={40} size={20} />
-					</ImageBackground>
-				</View>
-			);
+			return <VideoCover width={IMG_WIDTH} height={IMG_WIDTH * 9 / 16} cover={cover} />;
 		} else if (images.length == 1) {
 			return (
 				<View style={styles.coverView}>
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
 	},
 	cover: {
 		width: IMG_WIDTH,
-		height: IMG_WIDTH * 0.6,
+		height: IMG_WIDTH * 9 / 16,
 		justifyContent: "center",
 		alignItems: "center"
 	},
@@ -124,12 +129,18 @@ const styles = StyleSheet.create({
 	},
 	abstract: {
 		marginTop: 15,
-		marginBottom: 5
+		marginBottom: 10
 	},
-	abstractText: {
+	title: {
 		fontSize: 16,
 		lineHeight: 22,
 		color: Colors.darkFontColor
+	},
+	description: {
+		marginTop: 10,
+		fontSize: 14,
+		lineHeight: 20,
+		color: Colors.tintFontColor
 	}
 });
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Platform } from "react-native";
+import { withNavigation } from "react-navigation";
 
 import Colors from "../../constants/Colors";
 import HeaderLeft from "./HeaderLeft";
@@ -7,7 +8,7 @@ import Search from "./Search";
 import NotificationSetting from "./NotificationSetting";
 import Setting from "./Setting";
 
-export default class Header extends React.Component {
+class Header extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -80,3 +81,5 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.skinColor
 	}
 });
+
+export default withNavigation(Header);

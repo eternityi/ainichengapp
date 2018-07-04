@@ -6,7 +6,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
-import { actionsQuery } from "../../graphql/user.graphql";
+import { userActionsQuery } from "../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class ActionsTab extends Component {
@@ -18,7 +18,7 @@ class ActionsTab extends Component {
     let { scrollEnabled, onScroll, user } = this.props;
     return (
       <View style={styles.container}>
-        <Query query={actionsQuery} variables={{ user_id: user.id }}>
+        <Query query={userActionsQuery} variables={{ user_id: user.id }}>
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.actions)) return <SpinnerLoading />;

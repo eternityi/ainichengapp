@@ -5,7 +5,7 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Header, RecommendFollow } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import HomeArticleItem from "../../components/Article/HomeArticleItem";
+import CoverItem from "../../components/Article/CoverItem";
 import ListHeader from "./ListHeader";
 
 import { connect } from "react-redux";
@@ -43,14 +43,18 @@ class HomeScreen extends React.Component {
               if (!(data && data.articles)) return <SpinnerLoading />;
               return (
                 <FlatList
-                  ListHeaderComponent={() => <ListHeader navigation={navigation} />}
+                  ListHeaderComponent={() => (
+                    <View style={styles.listHeader}>
+                      <ListHeader navigation={navigation} />
+                    </View>
+                  )}
                   refreshing={loading}
                   onRefresh={() => {
                     refetch();
                   }}
                   data={data.articles}
                   keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
-                  renderItem={({ item, index }) => <HomeArticleItem article={item} navigation={navigation} />}
+                  renderItem={({ item, index }) => <CoverItem post={item} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
                     if (data.articles) {
@@ -93,6 +97,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.skinColor
+  },
+  listHeader: {
+    borderBottomWidth: 6,
+    borderBottomColor: Colors.lightBorderColor
   }
 });
 

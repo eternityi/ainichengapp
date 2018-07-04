@@ -22,7 +22,8 @@ import { userOperationMiddleware } from "../../constants/Methods";
 import PostItem from "../../components/Article/PostItem";
 import { FollowButton, HollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
-import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
+import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
+
 import { Avatar, BlankContent, LoadingError, SpinnerLoading, LoadingMore, ContentEnd } from "../../components/Pure";
 
 import { connect } from "react-redux";
@@ -38,12 +39,14 @@ class HomeScreen extends Component {
     super(props);
     this.handleBackdropVisible = this.handleBackdropVisible.bind(this);
     this.handleReportVisible = this.handleReportVisible.bind(this);
+    this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
     this.state = {
       cover: "https://ainicheng.com/storage/img/71234.top.jpg",
       fetchingMore: true,
       reportVisible: false,
       backdropVisible: false,
       avatarViewerVisible: false,
+      shareModalVisible: false,
       offsetTop: new Animated.Value(0)
     };
   }
@@ -52,7 +55,7 @@ class HomeScreen extends Component {
     const { navigation, personal, login } = this.props;
     const user = navigation.getParam("user", {});
     const self = user.id == personal.id;
-    let { fetchingMore, backdropVisible, reportVisible, avatarViewerVisible, offsetTop } = this.state;
+    let { fetchingMore, backdropVisible, reportVisible, avatarViewerVisible, shareModalVisible, offsetTop } = this.state;
     let headerTransparence = offsetTop.interpolate({
       inputRange: [0, HEADER_HEIGHT * 2],
       outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
@@ -177,6 +180,7 @@ class HomeScreen extends Component {
           }}
         />
         <ReportModal visible={reportVisible} handleVisible={this.handleReportVisible} type="user" report={user} />
+        <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
   }
@@ -207,7 +211,7 @@ class HomeScreen extends Component {
 
   // 个人信息
   _renderListHeader(user, self) {
-    let { cover, avatarViewerVisible } = this.state;
+    let { cover, avatarViewerVisible, shareModalVisible } = this.state;
     let { navigation } = this.props;
     return (
       <View>
@@ -290,8 +294,9 @@ class HomeScreen extends Component {
           <TouchableOpacity
             style={{ flex: 1 }}
             onPress={() =>
-              navigation.navigate("全部动态", {
-                user
+              navigation.navigate("动态", {
+                user,
+                self
               })}
           >
             <View style={{ alignItems: "center" }}>
@@ -349,7 +354,7 @@ class HomeScreen extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    return <PostItem post={item} />;
+    return <PostItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
   };
 
   _onScroll(event) {
@@ -387,6 +392,13 @@ class HomeScreen extends Component {
   // 更换背景模态框
   handleBackdropVisible() {
     this.setState(prevState => ({ backdropVisible: !prevState.backdropVisible }));
+  }
+
+  // 分享模态框
+  handleSlideShareMenu(post) {
+    this.setState(prevState => ({
+      shareModalVisible: !prevState.shareModalVisible
+    }));
   }
 
   // 加入黑名单

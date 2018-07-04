@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, Toucha
 import Swiper from "react-native-swiper";
 
 import Color from "../../constants/Colors";
-import RecommendArticle from "../../components/Article/RecommendArticle";
+import NoteItem from "../../components/Article/NoteItem";
 import { DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import ScrollCard from "./ScrollCard";
 import Screen from "../Screen";
@@ -55,7 +55,7 @@ class RecommendScreen extends React.Component {
                 }}
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => <RecommendArticle article={item} navigation={navigation} />}
+                renderItem={({ item, index }) => <NoteItem post={item} navigation={navigation} />}
                 getItemLayout={(data, index) => ({
                   length: 176,
                   offset: 176 * index,
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   swiperContainer: {
-    height: width * 2 / 5
+    height: width * 9 / 16
   },
   posterImage: {
     width,
-    height: width * 2 / 5,
+    height: width * 9 / 16,
     resizeMode: "cover"
   }
 });

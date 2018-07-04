@@ -4,29 +4,20 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { navigationAction } from "../../constants/Methods";
-import { ShareModal } from "../../components/Modal";
 
 import { Query, Mutation } from "react-apollo";
 import { likeArticleMutation } from "../../graphql/user.graphql";
 
 class PostToolBar extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			shareModalVisible: false
-		};
-	}
-
 	render() {
-		let { post, navigation, skip } = this.props;
+		let { post, navigation, skip, toggleShareModal } = this.props;
 		let { id, liked, count_shares, count_replies, count_likes } = post;
 		return (
 			<Mutation mutation={likeArticleMutation}>
 				{likeArticle => {
 					return (
 						<View style={styles.toolBar}>
-							<TouchableOpacity style={styles.toolItem} onPress={this.handleSlideShareMenu}>
+							<TouchableOpacity style={styles.toolItem} onPress={() => toggleShareModal(post)}>
 								<Iconfont name={"share-outline"} size={18} color={Colors.tintFontColor} />
 								<Text style={styles.text}>{count_shares ? count_shares : "分享"}</Text>
 							</TouchableOpacity>
@@ -51,19 +42,12 @@ class PostToolBar extends Component {
 								/>
 								<Text style={styles.text}>{count_likes ? count_likes : "点赞"}</Text>
 							</TouchableOpacity>
-							<ShareModal visible={this.state.shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
 						</View>
 					);
 				}}
 			</Mutation>
 		);
 	}
-
-	handleSlideShareMenu = () => {
-		this.setState(prevState => ({
-			shareModalVisible: !prevState.shareModalVisible
-		}));
-	};
 }
 
 const styles = StyleSheet.create({

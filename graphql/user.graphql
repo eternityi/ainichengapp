@@ -293,6 +293,10 @@ query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
         id
         type
         title
+        description
+        has_image
+        images
+        cover
         time_ago
         user {
             id
@@ -323,6 +327,10 @@ query favoritedArticlesQuery($offset: Int) {
             id
             type
             title
+            description
+            has_image
+            images
+            cover
             time_ago
             user {
                 id

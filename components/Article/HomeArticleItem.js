@@ -65,8 +65,8 @@ class HomeArticleItem extends PureComponent {
 
 const styles = StyleSheet.create({
 	articleContainer: {
-		borderTopWidth: 8,
-		borderTopColor: Colors.lightBorderColor
+		borderBottomWidth: 6,
+		borderBottomColor: Colors.lightBorderColor
 	},
 	authorItem: {
 		flexDirection: "row",
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 	},
 	cover: {
 		width: width,
-		height: width * 0.5,
+		height: width * 9 / 16,
 		resizeMode: "cover"
 	},
 	content: {

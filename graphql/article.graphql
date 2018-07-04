@@ -91,6 +91,7 @@ query RankingArticleQuery($in_days: Int!) {
 		body
 		time_ago
 		has_image
+		images
 		cover
 		hits
 		count_likes
@@ -200,6 +201,7 @@ query hotArticlesQuery($offset: Int) {
 		type
 		title
 		has_image
+		images
 		cover
 		description
 		time_ago
@@ -225,10 +227,11 @@ query recommendArticlesQuery($offset: Int) {
 		id
 		type
 		title
-		has_image
-		cover
 		description
 		time_ago
+		has_image
+		images
+		cover
 		user {
 			avatar
 			name
