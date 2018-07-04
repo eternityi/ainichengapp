@@ -14,10 +14,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class LoginScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.handleSkip = this.handleSkip.bind(this);

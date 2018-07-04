@@ -11,10 +11,6 @@ import ThirtyDaysHot from "./ThirtyDaysHot";
 import Screen from "../../Screen";
 
 class ArticleRankingScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   render() {
     const { navigation } = this.props;
     return (

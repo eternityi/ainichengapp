@@ -15,10 +15,6 @@ import { hotArticlesQuery } from "../../graphql/article.graphql";
 
 // 搜索不同集合下的article
 class ArticlesScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.state = {

@@ -10,20 +10,13 @@ import LoadingMore from "../../components/Pure/LoadingMore";
 import Screen from "../Screen";
 
 class RecommendAuthorScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   render() {
     const { navigation } = this.props;
     let { data = [] } = navigation.state.params;
     return (
       <Screen>
         <View style={styles.container}>
-          <Header
-            routeName={"专题推荐作者(" + data.length + ")"}
-            navigation={navigation}
-          />
+          <Header routeName={"专题推荐作者(" + data.length + ")"} navigation={navigation} />
           <FlatList
             style={{ paddingHorizontal: 20 }}
             data={data}
@@ -47,11 +40,7 @@ class RecommendAuthorScreen extends Component {
     let { navigation } = this.props;
     return (
       <View style={styles.authorItem}>
-        <UserMetaGroup
-          user={item}
-          navigation={navigation}
-          customStyle={{ nameSize: 17 }}
-        />
+        <UserMetaGroup user={item} navigation={navigation} customStyle={{ nameSize: 17 }} />
       </View>
     );
   }

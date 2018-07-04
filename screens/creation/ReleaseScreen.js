@@ -19,10 +19,6 @@ import { Mutation } from "react-apollo";
 const { width, height } = Dimensions.get("window");
 
 class ReleaseScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
 

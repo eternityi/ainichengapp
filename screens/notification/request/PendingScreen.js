@@ -12,10 +12,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class PendingScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   render() {
     let { pendingRequests, navigation } = this.props;
     return (

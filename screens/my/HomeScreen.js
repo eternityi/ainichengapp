@@ -16,10 +16,6 @@ import { withApollo } from "react-apollo";
 import { userResourceCountQuery } from "../../graphql/user.graphql";
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.toggleModalVisible = this.toggleModalVisible.bind(this);

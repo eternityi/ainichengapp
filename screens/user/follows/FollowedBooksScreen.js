@@ -14,10 +14,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class FollowedBooksScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   render() {
     let { user } = this.props.navigation.state.params;
     let { navigation, followed_categories, followed_collections } = this.props;

@@ -16,10 +16,6 @@ import actions from "../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class RecommendScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     fetchingMore: true
   };

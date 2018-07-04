@@ -57,10 +57,6 @@ let js_fix = `
 `;
 
 class DetailScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
 

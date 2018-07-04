@@ -22,10 +22,6 @@ const QUERY = gql`
 `;
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.changeKeywords = this.changeKeywords.bind(this);

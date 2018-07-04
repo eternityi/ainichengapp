@@ -17,10 +17,6 @@ import { recommendFollowsQuery } from "../../graphql/user.graphql";
 const { width, height } = Dimensions.get("window");
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.state = {

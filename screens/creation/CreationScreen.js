@@ -19,10 +19,6 @@ import { withApollo, compose, graphql, Query } from "react-apollo";
 let { width, height } = Dimensions.get("window");
 
 class CreationScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     let article = props.navigation.getParam("article", {});

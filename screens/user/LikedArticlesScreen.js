@@ -16,10 +16,6 @@ import { Mutation, Query } from "react-apollo";
 const { width, height } = Dimensions.get("window");
 
 class LikedArticlesScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.handleModal = this.handleModal.bind(this);

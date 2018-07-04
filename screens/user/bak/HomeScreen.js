@@ -43,10 +43,6 @@ const { width, height } = Dimensions.get("window");
 let headerHeight = 70;
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.handleRewardVisible = this.handleRewardVisible.bind(this);

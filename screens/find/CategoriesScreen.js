@@ -1,26 +1,8 @@
 import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  ScrollView,
-  Text,
-  View,
-  Image,
-  Button,
-  TextInput,
-  StatusBar,
-  Dimensions,
-  TouchableOpacity
-} from "react-native";
+import { FlatList, StyleSheet, ScrollView, Text, View, Image, Button, TextInput, StatusBar, Dimensions, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
-import {
-  DivisionLine,
-  ContentEnd,
-  LoadingMore,
-  LoadingError,
-  SpinnerLoading
-} from "../../components/Pure";
+import { DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import OfficialColumn from "../../components/Category/OfficialColumn";
 import CategoryItem from "../../components/Category/CategoryItem";
 import Screen from "../Screen";
@@ -127,10 +109,6 @@ const official_categories = [
 ];
 
 class CategoriesScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -149,9 +127,7 @@ class CategoriesScreen extends React.Component {
               <FlatList
                 data={data.categories}
                 ListHeaderComponent={this._renderHeader.bind(this)}
-                keyExtractor={(item, index) =>
-                  item.key ? item.key : index.toString()
-                }
+                keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
                 renderItem={this._renderCategoryItem}
                 numColumns={3}
                 columnWrapperStyle={{
@@ -170,23 +146,14 @@ class CategoriesScreen extends React.Component {
                         offset: data.categories.length
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        if (
-                          !(
-                            fetchMoreResult &&
-                            fetchMoreResult.categories &&
-                            fetchMoreResult.categories.length > 0
-                          )
-                        ) {
+                        if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
                           this.setState({
                             fetchingMore: false
                           });
                           return prev;
                         }
                         return Object.assign({}, prev, {
-                          categories: [
-                            ...prev.categories,
-                            ...fetchMoreResult.categories
-                          ]
+                          categories: [...prev.categories, ...fetchMoreResult.categories]
                         });
                       }
                     });
@@ -197,11 +164,7 @@ class CategoriesScreen extends React.Component {
                   }
                 }}
                 ListFooterComponent={() => {
-                  return this.state.fetchingMore ? (
-                    <LoadingMore />
-                  ) : (
-                    <ContentEnd />
-                  );
+                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
                 }}
               />
             );
@@ -252,14 +215,7 @@ class CategoriesScreen extends React.Component {
       <TouchableOpacity
         key={index}
         style={{ flex: 1 }}
-        onPress={() =>
-          navigate(
-            item.type,
-            item.type == "专题详情"
-              ? { category: item }
-              : { filter: item.filter }
-          )
-        }
+        onPress={() => navigate(item.type, item.type == "专题详情" ? { category: item } : { filter: item.filter })}
       >
         <OfficialColumn data={item} />
       </TouchableOpacity>
@@ -269,9 +225,7 @@ class CategoriesScreen extends React.Component {
   _renderCategoryItem = ({ item, index }) => {
     const { navigate } = this.props.navigation;
     return (
-      <TouchableOpacity
-        onPress={() => navigate("专题详情", { category: item })}
-      >
+      <TouchableOpacity onPress={() => navigate("专题详情", { category: item })}>
         <CategoryItem category={item} />
       </TouchableOpacity>
     );
@@ -302,6 +256,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ categories: store.categories }))(
-  CategoriesScreen
-);
+export default connect(store => ({ categories: store.categories }))(CategoriesScreen);

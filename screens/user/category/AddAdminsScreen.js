@@ -15,10 +15,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class AddAdminsScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   constructor(props) {
     super(props);
     let { category } = this.props.navigation.state.params;

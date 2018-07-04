@@ -12,10 +12,6 @@ import actions from "../../../store/actions";
 import { queryIncomeHistory } from "../../../graphql/user.graphql";
 
 class AnnualIncomeScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
-
   render() {
     let { account, navigation } = this.props;
     let { general_income, monthly_income } = account.annual_income;

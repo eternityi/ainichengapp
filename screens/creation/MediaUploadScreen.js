@@ -35,9 +35,6 @@ import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 
 class MediaUploadScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
   constructor(props) {
     super(props);
     this.showMediaSelect = this.showMediaSelect.bind(this);
