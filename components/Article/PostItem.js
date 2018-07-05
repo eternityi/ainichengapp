@@ -19,12 +19,10 @@ class PostItem extends PureComponent {
 				<View style={styles.postContainer}>
 					<View style={styles.layoutFlexRow}>
 						<TouchableWithoutFeedback onPress={() => navigation.navigate("用户详情", { user: user })}>
-							<Avatar size={34} uri={user.avatar} />
+							<Avatar size={30} uri={user.avatar} />
 						</TouchableWithoutFeedback>
-						<View style={styles.userInfo}>
-							<Text style={styles.userName}>{user.name}</Text>
-							<Text style={styles.timeAgo}>{time_ago}</Text>
-						</View>
+						<Text style={styles.userName}>{user.name}</Text>
+						<Text style={styles.timeAgo}>{time_ago}</Text>
 					</View>
 					{type == "article" ? (
 						<View style={styles.abstract}>
@@ -40,7 +38,7 @@ class PostItem extends PureComponent {
 					) : (
 						<View style={styles.abstract}>
 							<Text numberOfLines={2} style={styles.title}>
-								{description ? description : title}
+								{title ? title : description}
 							</Text>
 						</View>
 					)}
@@ -56,7 +54,7 @@ class PostItem extends PureComponent {
 			return <VideoCover width={IMG_WIDTH} height={IMG_WIDTH * 9 / 16} cover={cover} />;
 		} else if (images.length == 1) {
 			return (
-				<View style={styles.coverView}>
+				<View>
 					<Image style={[styles.cover, { resizeMode: "cover" }]} source={{ uri: cover }} />
 				</View>
 			);
@@ -95,28 +93,18 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center"
 	},
-	userInfo: {
-		justifyContent: "space-between",
-		marginLeft: 10
-	},
 	userName: {
 		fontSize: 14,
-		lineHeight: 18,
+		marginHorizontal: 10,
 		color: Colors.primaryFontColor
 	},
 	timeAgo: {
-		fontSize: 12,
-		lineHeight: 18,
+		fontSize: 14,
 		color: Colors.tintFontColor
-	},
-	coverView: {
-		position: "relative"
 	},
 	cover: {
 		width: IMG_WIDTH,
-		height: IMG_WIDTH * 9 / 16,
-		justifyContent: "center",
-		alignItems: "center"
+		height: IMG_WIDTH * 0.5
 	},
 	gridView: {
 		marginLeft: -8

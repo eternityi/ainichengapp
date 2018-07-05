@@ -1,7 +1,7 @@
 import { NavigationActions } from "react-navigation";
 
 //navigation.dispatch(navigationAction)
-function navigationAction({ routeName, params = null, action = null, key = routeName }) {
+function navigationAction({ routeName, params = null, action = null, key = routeName + Math.random().toString() }) {
 	return NavigationActions.navigate({
 		routeName,
 		params,

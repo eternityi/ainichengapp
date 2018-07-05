@@ -91,7 +91,7 @@ class DetailScreen extends Component {
 						if (!(data && data.article)) return <BlankContent />;
 						this.video = data.article;
 						let video = data.article;
-						let { id, video_url, user, title, liked, favorited } = video;
+						let { id, video_url, user, title, description, liked, favorited } = video;
 						return (
 							<View style={styles.container}>
 								<View style={styles.videoWrap}>
@@ -138,7 +138,7 @@ class DetailScreen extends Component {
 									<View style={styles.topInfo}>
 										<UserMetaGroup user={user} navigation={navigation} />
 										<View>
-											<Text style={styles.title}>{title}</Text>
+											<Text style={styles.title}>{description ? description : title}</Text>
 										</View>
 									</View>
 									<View style={styles.topOperation}>

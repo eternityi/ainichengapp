@@ -4,7 +4,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
 import { ShareModal } from "../../components/Modal";
-import { Avatar, CommentContainer, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
 

@@ -1,17 +1,20 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { connect } from "react-redux";
 
+const { width } = Dimensions.get("window");
+const IMAGE_WIDTH = width * 0.6;
+
 class Find extends Component {
 	render() {
 		let { navigation, size = 70, fontSize = 16, customStyle = {}, remind = "更多有趣的作者和专题 ~", children, user } = this.props;
 		return (
 			<View style={styles.container}>
-				<Iconfont name={"find"} size={size} color={Colors.lightFontColor} />
+				<Image style={styles.image} source={require("../../assets/images/find.png")} />
 				<Text style={{ fontSize, color: Colors.tintFontColor, marginTop: 20 }}>
 					去发现
 					<Text
@@ -38,6 +41,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		paddingVertical: 20
+	},
+	image: {
+		width: IMAGE_WIDTH,
+		height: IMAGE_WIDTH / 2,
+		resizeMode: "contain"
 	}
 });
 

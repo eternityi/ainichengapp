@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Colors from "../../constants/Colors";
 import { StyleSheet, View } from "react-native";
 
-class CommentContainer extends Component {
+class TextContainer extends Component {
   render() {
     let { customStyle = {} } = this.props;
     return <View style={[styles.commentBox, customStyle]}>{this.props.children}</View>;
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.tintBorderColor,
     borderRadius: 4,
-    backgroundColor: "#f9f9f9"
+    backgroundColor: "#fafafa"
   }
 });
 
-export default CommentContainer;
+export default TextContainer;

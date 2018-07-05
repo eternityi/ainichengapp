@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity, TextInput } from "react-native";
+import Toast from "react-native-root-toast";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
@@ -21,6 +22,7 @@ class RewardModal extends Component {
     this.selectMoney = this.selectMoney.bind(this);
     this.emptySelectMoney = this.emptySelectMoney.bind(this);
     this.customMoney = this.customMoney.bind(this);
+    this.warning = "";
     this.state = {
       message: "",
       amount: 2,
@@ -104,7 +106,7 @@ class RewardModal extends Component {
                           keyboardType="numeric"
                           style={[styles.rewardModalInput, { fontSize: 19, color: Colors.themeColor }]}
                           onChangeText={this.customMoney}
-                          value=""
+                          value={inputMoney + ""}
                           underlineColorAndroid="transparent"
                           autoFocus={true}
                           maxLength={5}
@@ -144,24 +146,23 @@ class RewardModal extends Component {
                     onPress={() => {
                       console.log("personal.blance", personal.blance, amount, article);
                       if (personal.balance >= amount) {
-                        if (message) {
-                          tipArticle({
-                            variables: {
-                              id: article.id,
-                              amount: selectMoney ? selectMoney : inputMoney ? inputMoney : 0,
-                              message: message
-                            }
-                          });
+                        if (amount < 1) {
+                          this.handleWarningVisible("最少也给一颗糖果嘛~(*╹▽╹*)");
                         } else {
                           tipArticle({
                             variables: {
                               id: article.id,
-                              amount: selectMoney ? selectMoney : inputMoney ? inputMoney : 0
+                              amount: selectMoney ? selectMoney : inputMoney ? inputMoney : 0,
+                              message
+                            },
+                            update: (cache, { data: { likeArticle } }) => {
+                              handleVisible();
+                              this.toast();
                             }
                           });
                         }
                       } else {
-                        this.handleWarningVisible();
+                        this.handleWarningVisible("抱歉，余额不足");
                       }
                     }}
                   >
@@ -175,7 +176,7 @@ class RewardModal extends Component {
               <PaymentModal visible={paymentVisible} handleVisible={this.handlePaymentVisible} />
               <BasicModal visible={warningVisible} handleVisible={this.handleWarningVisible}>
                 <View>
-                  <Text style={{ fontSize: 16, color: Colors.themeColor }}>抱歉，余额不足</Text>
+                  <Text style={{ fontSize: 16, color: Colors.themeColor }}>{this.warning}</Text>
                 </View>
               </BasicModal>
             </BasicModal>
@@ -189,7 +190,8 @@ class RewardModal extends Component {
     this.setState(prevState => ({ paymentVisible: !prevState.paymentVisible }));
   }
 
-  handleWarningVisible() {
+  handleWarningVisible(warn) {
+    this.warning = warn;
     this.setState(prevState => ({ warningVisible: !prevState.warningVisible }));
   }
 
@@ -209,7 +211,7 @@ class RewardModal extends Component {
   }
 
   emptySelectMoney() {
-    this.setState({ selectMoney: "" });
+    this.setState({ selectMoney: 0, amount: 0 });
   }
 
   rewardModalHeader() {
@@ -221,6 +223,21 @@ class RewardModal extends Component {
         <Iconfont name={"gift"} size={20} color={Colors.themeColor} />
       </View>
     );
+  }
+
+  toast() {
+    let toast = Toast.show("感谢您的支持(づ￣3￣)づ╭❤～", {
+      duration: Toast.durations.LONG,
+      position: 70,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 100,
+      backgroundColor: Colors.nightColor
+    });
+    setTimeout(function() {
+      Toast.hide(toast);
+    }, 2500);
   }
 }
 

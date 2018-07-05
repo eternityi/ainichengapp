@@ -439,6 +439,7 @@ query userFollowedCollectionsQuery($user_id: Int!) {
     }
 }
 
+# 用户关注
 query userFollowingsQuery($user_id: Int!, $offset: Int) {
     users(user_id: $user_id, offset: $offset, filter: FOLLOWINGS) {
         id
@@ -450,6 +451,7 @@ query userFollowingsQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+# 用户粉丝
 query userFollowersQuery($user_id: Int!, $offset: Int) {
     users(user_id: $user_id, offset: $offset, filter: FOLLOWERS) {
         id
@@ -461,13 +463,14 @@ query userFollowersQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+# 用户动态
 query userActionsQuery($offset: Int, $user_id: Int!) {
     actions(offset: $offset, user_id: $user_id) {
         id
         type
         time_ago
         signUp {
-            name
+            time_ago
         }
         tiped {
             id
@@ -480,6 +483,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
         }
         postedArticle {
             id
+            type
             title
             description
             images

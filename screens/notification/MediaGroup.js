@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import Colors from "../../constants/Colors";
 import { UserGroup } from "../../components/MediaGroup";
-import { CommentContainer } from "../../components/Pure";
+import { TextContainer } from "../../components/Pure";
 
 class MediaGroup extends Component {
 	render() {
@@ -25,7 +25,7 @@ class MediaGroup extends Component {
 						style={styles.notificationContent}
 						onPress={() => navigation.navigate(notification.type, notification.info ? notification.info : {})}
 					>
-						<CommentContainer>
+						<TextContainer>
 							<Text
 								numberOfLines={3}
 								style={{
@@ -35,7 +35,7 @@ class MediaGroup extends Component {
 							>
 								{notification.content}
 							</Text>
-						</CommentContainer>
+						</TextContainer>
 					</TouchableOpacity>
 				) : null}
 				<View>

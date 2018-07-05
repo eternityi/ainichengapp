@@ -1,7 +1,7 @@
 import Avatar from "./Avatar";
 import Badge from "./Badge";
 import BlankContent from "./BlankContent";
-import CommentContainer from "./CommentContainer";
+import TextContainer from "./TextContainer";
 import ContentEnd from "./ContentEnd";
 import CustomScrollTabBar from "./CustomScrollTabBar";
 import Dashed from "./Dashed";
@@ -26,7 +26,7 @@ export {
 	Avatar,
 	Badge,
 	BlankContent,
-	CommentContainer,
+	TextContainer,
 	ContentEnd,
 	CustomScrollTabBar,
 	Dashed,

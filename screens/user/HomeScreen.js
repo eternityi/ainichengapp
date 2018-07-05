@@ -123,7 +123,7 @@ class HomeScreen extends Component {
                   }}
                   ListEmptyComponent={() => (
                     <View style={styles.listEmpty}>
-                      <BlankContent />
+                      <BlankContent remind="TA还没有发布任何作品" />
                     </View>
                   )}
                   ListFooterComponent={() => {
