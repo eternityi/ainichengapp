@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
-import BasicArticleItem from "../../components/Article/BasicArticleItem";
+import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, BlankContent, SpinnerLoading, LoadingError } from "../../components/Pure";
 
 import { categoryArticlesByLatestQuery } from "../../graphql/category.graphql";
@@ -45,7 +45,7 @@ class LatestTab extends Component {
 													article: item
 												})}
 										>
-											<BasicArticleItem article={item} navigation={navigation} />
+											<NoteItem post={item} navigation={navigation} />
 										</TouchableOpacity>
 									</View>
 								)}

@@ -45,7 +45,11 @@ class ArticleItem extends Component {
 								<HollowButton
 									name={submit_status}
 									size={12}
-									color={submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
+									color={
+										submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1
+											? "rgba(66,192,46,0.9)"
+											: Colors.themeColor
+									}
 									onPress={() => {
 										submitArticle({
 											variables: { category_id: category.id, article_id: article.id }
@@ -137,7 +141,14 @@ class CategoryTopInfo extends Component {
 				</View>
 				<View style={styles.categoryButton}>
 					<View style={{ flex: 1, marginRight: 6 }}>
-						<FollowCategoryButton size={15} id={category.id} type={"category"} user={user} followed={category.followed} follows={category.count_follows} />
+						<FollowCategoryButton
+							size={15}
+							id={category.id}
+							type={"category"}
+							user={user}
+							followed={category.followed}
+							follows={category.count_follows}
+						/>
 					</View>
 					<View style={{ flex: 1, marginLeft: 6 }}>
 						<HollowButton name={"投稿"} size={17} onPress={this.handleVisible} />
@@ -161,7 +172,7 @@ class CategoryTopInfo extends Component {
 										<FlatList
 											data={data.user.articles}
 											keyExtractor={item => item.id.toString()}
-											renderItem={({ item, index }) => <ArticleItem article={item} category={category} />}
+											renderItem={({ item, index }) => <ArticleItem post={item} category={category} />}
 											ListFooterComponent={() => <ContentEnd />}
 										/>
 									</View>

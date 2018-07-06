@@ -27,7 +27,7 @@ class PendingScreen extends Component {
                 <FlatList
                   data={data.user.articles}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => <NotificationItem article={item} navigation={navigation} />}
+                  renderItem={({ item }) => <NotificationItem post={item} navigation={navigation} />}
                   ListFooterComponent={() => <ContentEnd />}
                 />
               );

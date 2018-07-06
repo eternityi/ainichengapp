@@ -4,7 +4,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
 import { UserMetaGroup } from "../../../components/MediaGroup";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, Find } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query } from "react-apollo";
@@ -26,7 +26,8 @@ class FollowingsScreen extends Component {
 
 	render() {
 		const { user = {} } = this.props.navigation.state.params;
-		let { follows, navigation } = this.props;
+		let { follows, navigation, personal } = this.props;
+		let self = personal.id == user.id ? true : false;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -35,7 +36,7 @@ class FollowingsScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.users)) return <SpinnerLoading />;
-							if (data.users.length < 1) return <BlankContent />;
+							if (data.users.length < 1) self ? <Find /> : <BlankContent />;
 							return (
 								<FlatList
 									data={data.users}
@@ -117,5 +118,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({
-	follows: store.users.follows
+	follows: store.users.follows,
+	personal: store.users.user
 }))(FollowingsScreen);

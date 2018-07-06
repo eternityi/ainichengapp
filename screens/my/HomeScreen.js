@@ -56,10 +56,10 @@ class HomeScreen extends React.Component {
             <UserTopInfo user={user} login={login} navigation={navigation} />
             {login && (
               <View style={styles.flowContainer}>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("公开文章", { user })}>
+                <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("我的发布", { user })}>
                   <View style={styles.flowList}>
                     <Text style={styles.flowQuantity}>{user.count_articles || 0}</Text>
-                    <Text style={styles.flowType}>公开文章</Text>
+                    <Text style={styles.flowType}>发布</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("关注", { user })}>
@@ -78,17 +78,17 @@ class HomeScreen extends React.Component {
             )}
             <DivisionLine height={15} />
             <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("私密文章")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("私密作品")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>私密文章</Text>
+                  <Text style={styles.columnType}>私密作品</Text>
                   <Text style={styles.columnQuantity}>{user.count_drafts || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("收藏的文章")}>
+              <TouchableOpacity onPress={() => this.navigateMiddlewear("我的收藏")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>收藏的文章</Text>
+                  <Text style={styles.columnType}>我的收藏</Text>
                   <Text style={styles.columnQuantity}>{user.count_favorites || ""}</Text>
                 </View>
               </TouchableOpacity>

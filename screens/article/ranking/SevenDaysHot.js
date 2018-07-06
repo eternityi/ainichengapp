@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
 
 import Colors from "../../../constants/Colors";
-import BasicArticleItem from "../../../components/Article/BasicArticleItem";
+import NoteItem from "../../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError } from "../../../components/Pure";
 
 import { connect } from "react-redux";
@@ -44,7 +44,7 @@ class SevenDaysHot extends Component {
                           article: item
                         })}
                     >
-                      <BasicArticleItem article={item} navigation={navigation} />
+                      <NoteItem post={item} navigation={navigation} />
                     </TouchableOpacity>
                   </View>
                 )}

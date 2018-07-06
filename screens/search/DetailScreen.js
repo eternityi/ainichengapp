@@ -164,7 +164,7 @@ class DetailScreen extends Component {
 	_renderRelatedArticle({ item, index }) {
 		let { navigation } = this.props;
 		let { keywords } = this.state;
-		return <SearchArticleItem navigation={navigation} keywords={keywords} article={item} />;
+		return <SearchArticleItem navigation={navigation} keywords={keywords} post={item} />;
 	}
 
 	changeKeywords(keywords) {

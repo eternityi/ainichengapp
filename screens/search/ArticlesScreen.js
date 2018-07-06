@@ -51,7 +51,7 @@ class ArticlesScreen extends Component {
                     data={data.articles}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => {
-                      return <SearchArticleItem navigation={navigation} keywords={keywords} article={item} />;
+                      return <SearchArticleItem navigation={navigation} keywords={keywords} post={item} />;
                     }}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => {

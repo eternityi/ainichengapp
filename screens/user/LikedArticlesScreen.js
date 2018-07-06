@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions } from "
 
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import PlainArticleItem from "../../components/Article/PlainArticleItem";
+import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { OperationModal } from "../../components/Modal";
 import Screen from "../Screen";
@@ -46,19 +46,7 @@ class LikedArticlesScreen extends Component {
                 <FlatList
                   data={data.articles}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <View>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate("文章详情", {
-                            article: item
-                          })}
-                        onLongPress={this.handleModal}
-                      >
-                        <PlainArticleItem article={item} showAuthorName navigation={navigation} />
-                      </TouchableOpacity>
-                    </View>
-                  )}
+                  renderItem={({ item }) => <NoteItem post={item} />}
                   getItemLayout={(data, index) => ({
                     length: 130,
                     offset: 130 * index,

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 
 import Colors from "../../constants/Colors";
 import HollowButton from "../Button/Hollow";
@@ -13,10 +13,10 @@ class LoadingError extends Component {
 		return (
 			<View style={styles.container}>
 				<Image style={styles.image} source={require("../../assets/images/404.png")} />
-				{children ? children : <Text style={{ fontSize, color: Colors.tintFontColor, marginVertical: 12 }}>哎呀，好像出了点问题( ´◔ ‸◔`)</Text>}
-				<View style={styles.reload}>
-					<HollowButton size={16} onPress={reload} name="重新加载" color={Colors.themeColor} />
-				</View>
+				{children ? children : <Text style={{ fontSize, color: Colors.tintFontColor, marginVertical: 15 }}>哎呀，好像出了点问题</Text>}
+				<TouchableOpacity onPress={reload}>
+					<Text style={styles.reload}>重新加载( ´◔ ‸◔`)</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
 		resizeMode: "contain"
 	},
 	reload: {
-		width: 80,
-		height: 38
+		fontSize: 15,
+		color: Colors.linkColor,
+		textAlign: "center"
 	}
 });
 

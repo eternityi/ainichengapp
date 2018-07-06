@@ -137,6 +137,7 @@ mutation signInMutation($email: String!, $password: String!) {
         count_categories
         count_collections
         balance
+        error
     }
 }
 
@@ -279,6 +280,9 @@ query draftsQuery($offset: Int) {
             type
             title
             updated_at
+            has_image
+            images
+            cover
             time_ago
             collection {
                 id
@@ -301,6 +305,7 @@ query userLikedArticlesQuery($offset: Int, $user_id: Int!) {
         user {
             id
             name
+            avatar
         }
         hits
         count_likes

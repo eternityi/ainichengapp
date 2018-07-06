@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import PlainArticleItem from "../../../components/Article/PlainArticleItem";
+import NoteItem from "../../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, BlankContent, SpinnerLoading, LoadingError } from "../../../components/Pure";
 import Screen from "../../Screen";
 
@@ -39,18 +39,7 @@ class PaidContentScreen extends Component {
 								<FlatList
 									data={data.articles}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item }) => (
-										<View>
-											<TouchableOpacity
-												onPress={() =>
-													navigation.navigate("文章详情", {
-														article: item
-													})}
-											>
-												<PlainArticleItem article={item} />
-											</TouchableOpacity>
-										</View>
-									)}
+									renderItem={({ item, index }) => <NoteItem post={item} />}
 									getItemLayout={(data, index) => ({
 										length: 130,
 										offset: 130 * index,

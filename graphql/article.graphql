@@ -222,8 +222,8 @@ query hotArticlesQuery($offset: Int) {
 	}
 }
 
-query recommendArticlesQuery($offset: Int) {
-	articles(offset: $offset) {
+query recommendArticlesQuery($offset: Int, $limit: Int) {
+	articles(offset: $offset, limit: $limit) {
 		id
 		type
 		title

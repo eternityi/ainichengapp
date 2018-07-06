@@ -53,7 +53,7 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => <NotificationItem article={item} navigation={navigation} />}
+											renderItem={({ item }) => <NotificationItem post={item} navigation={navigation} />}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}
@@ -73,7 +73,7 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => <NotificationItem article={item} navigation={navigation} />}
+											renderItem={({ item }) => <NotificationItem post={item} navigation={navigation} />}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}

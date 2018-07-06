@@ -55,13 +55,12 @@ class RecommendScreen extends React.Component {
                 }}
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => <NoteItem post={item} navigation={navigation} />}
+                renderItem={({ item, index }) => <NoteItem post={item} navigation={navigation} recommend />}
                 getItemLayout={(data, index) => ({
                   length: 176,
                   offset: 176 * index,
                   index
                 })}
-                onEndReachedThreshold={0.3}
                 onEndReached={() => {
                   if (data.articles) {
                     fetchMore({

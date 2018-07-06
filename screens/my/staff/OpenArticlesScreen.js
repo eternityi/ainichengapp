@@ -1,29 +1,15 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	FlatList,
-	ScrollView,
-	TouchableOpacity
-} from "react-native";
+import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import PlainArticleItem from "../../../components/Article/PlainArticleItem";
+import NoteItem from "../../../components/Article/NoteItem";
 import { OperationModal } from "../../../components/Modal";
-import {
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	BlankContent
-} from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
-import {
-	userArticlesQuery,
-	removeArticleMutation
-} from "../../../graphql/user.graphql";
+import { userArticlesQuery, removeArticleMutation } from "../../../graphql/user.graphql";
 import { unpublishArticleMutation } from "../../../graphql/article.graphql";
 import { Mutation, Query, graphql } from "react-apollo";
 
@@ -48,11 +34,7 @@ class OpenArticlesScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						search
-						searchRouteName={"搜索文章"}
-					/>
+					<Header navigation={navigation} search searchRouteName={"搜索文章"} />
 					<Query
 						query={userArticlesQuery}
 						variables={{
@@ -60,42 +42,15 @@ class OpenArticlesScreen extends Component {
 						}}
 					>
 						{({ loading, error, data, refetch, fetchMore }) => {
-							if (error)
-								return (
-									<LoadingError reload={() => refetch()} />
-								);
-							if (!(data && data.articles)) return null;
-							if (data.articles.length < 1)
-								return <BlankContent />;
+							if (error) return <LoadingError reload={() => refetch()} />;
+							if (!(data && data.articles)) return <SpinnerLoading />;
+							if (data.articles.length < 1) return <BlankContent />;
 							return (
 								<View>
 									<FlatList
 										data={data.articles}
-										keyExtractor={(item, index) =>
-											index.toString()
-										}
-										renderItem={({ item }) => (
-											<View>
-												<TouchableOpacity
-													onPress={() =>
-														navigation.navigate(
-															"文章详情",
-															{
-																article: item
-															}
-														)
-													}
-													onLongPress={() => {
-														this.article = item;
-														this.handleModal();
-													}}
-												>
-													<PlainArticleItem
-														article={item}
-													/>
-												</TouchableOpacity>
-											</View>
-										)}
+										keyExtractor={(item, index) => index.toString()}
+										renderItem={({ item, index }) => <NoteItem post={item} compress />}
 										getItemLayout={(data, index) => ({
 											length: 130,
 											offset: 130 * index,
@@ -106,37 +61,18 @@ class OpenArticlesScreen extends Component {
 											if (data.articles) {
 												fetchMore({
 													variables: {
-														offset:
-															data.articles.length
+														offset: data.articles.length
 													},
-													updateQuery: (
-														prev,
-														{ fetchMoreResult }
-													) => {
-														if (
-															!(
-																fetchMoreResult &&
-																fetchMoreResult.articles &&
-																fetchMoreResult
-																	.articles
-																	.length > 0
-															)
-														) {
+													updateQuery: (prev, { fetchMoreResult }) => {
+														if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
 															this.setState({
 																fetchingMore: false
 															});
 															return prev;
 														}
-														return Object.assign(
-															{},
-															prev,
-															{
-																articles: [
-																	...prev.articles,
-																	...fetchMoreResult.articles
-																]
-															}
-														);
+														return Object.assign({}, prev, {
+															articles: [...prev.articles, ...fetchMoreResult.articles]
+														});
 													}
 												});
 											} else {
@@ -145,96 +81,62 @@ class OpenArticlesScreen extends Component {
 												});
 											}
 										}}
-										ListFooterComponent={
-											fetchingMore ? (
-												<LoadingMore />
-											) : (
-												<ContentEnd />
-											)
-										}
+										ListFooterComponent={fetchingMore ? <LoadingMore /> : <ContentEnd />}
 									/>
 									<Mutation mutation={removeArticleMutation}>
 										{removeArticle => {
 											return (
 												<OperationModal
-													operation={[
-														"编辑",
-														"删除文章",
-														"投稿管理",
-														"转为私密",
-														"文集设置"
-													]}
+													operation={["编辑", "删除文章", "投稿管理", "转为私密", "文集设置"]}
 													visible={modalVisible}
-													handleVisible={
-														this.handleModal
-													}
+													handleVisible={this.handleModal}
 													handleOperation={index => {
 														this.handleModal();
 														switch (index) {
 															case 0:
-																navigation.navigate(
-																	"创作",
-																	{
-																		article: this
-																			.article
-																	}
-																);
+																navigation.navigate("创作", {
+																	article: this.article
+																});
 																break;
 															case 1:
 																removeArticle({
 																	variables: {
-																		id: this
-																			.article
-																			.id
+																		id: this.article.id
 																	},
 																	refetchQueries: result => [
 																		{
 																			query: userArticlesQuery,
 																			variables: {
-																				user_id:
-																					user.id
+																				user_id: user.id
 																			}
 																		}
 																	]
 																});
 																break;
 															case 2:
-																navigation.navigate(
-																	"投稿管理",
-																	{
-																		article: this
-																			.article
-																	}
-																);
+																navigation.navigate("投稿管理", {
+																	article: this.article
+																});
 																break;
 															case 3:
-																unpublishArticle(
-																	{
-																		variables: {
-																			id: this
-																				.article
-																				.id
-																		},
-																		refetchQueries: result => [
-																			{
-																				query: userArticlesQuery,
-																				variables: {
-																					user_id:
-																						user.id
-																				}
+																unpublishArticle({
+																	variables: {
+																		id: this.article.id
+																	},
+																	refetchQueries: result => [
+																		{
+																			query: userArticlesQuery,
+																			variables: {
+																				user_id: user.id
 																			}
-																		]
-																	}
-																);
+																		}
+																	]
+																});
 																break;
 															case 4:
-																navigation.navigate(
-																	"选择文集",
-																	{
-																		article: this
-																			.article
-																	}
-																);
+																navigation.navigate("选择文集", {
+																	article: this.article
+																});
 																break;
 														}
 													}}
@@ -267,8 +169,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
 	open_articles: store.users.open_articles
-}))(
-	graphql(unpublishArticleMutation, { name: "unpublishArticle" })(
-		OpenArticlesScreen
-	)
-);
+}))(graphql(unpublishArticleMutation, { name: "unpublishArticle" })(OpenArticlesScreen));

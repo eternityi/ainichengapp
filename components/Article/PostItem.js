@@ -9,6 +9,9 @@ import Colors from "../../constants/Colors";
 import { navigationAction } from "../../constants/Methods";
 
 const { height, width } = Dimensions.get("window");
+const IMG_INTERVAL = 8;
+const COVER_WIDTH = width - 30;
+const IMG_WIDTH = (width - 46) / 3;
 
 class PostItem extends PureComponent {
 	render() {
@@ -51,18 +54,22 @@ class PostItem extends PureComponent {
 
 	renderImage = (type, images, cover) => {
 		if (type == "video") {
-			return <VideoCover width={IMG_WIDTH} height={IMG_WIDTH * 9 / 16} cover={cover} />;
+			return (
+				<View style={styles.coverWrap}>
+					<VideoCover width={COVER_WIDTH} height={COVER_WIDTH * 9 / 16} cover={cover} />
+				</View>
+			);
 		} else if (images.length == 1) {
 			return (
-				<View>
-					<Image style={[styles.cover, { resizeMode: "cover" }]} source={{ uri: cover }} />
+				<View style={styles.coverWrap}>
+					<Image style={styles.cover} source={{ uri: cover }} />
 				</View>
 			);
 		} else if (images.length > 1) {
 			return (
 				<View style={[styles.gridView, styles.layoutFlexRow]}>
 					{images.slice(0, 3).map(function(img, i) {
-						if (img) return <Image style={styles.gridImage} source={{ uri: img }} key={i} />;
+						if (img) return <Image style={[styles.gridImage, styles.imgWrap]} source={{ uri: img }} key={i} />;
 					})}
 				</View>
 			);
@@ -77,8 +84,6 @@ class PostItem extends PureComponent {
 		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }
-
-const IMG_WIDTH = width - 30;
 
 const styles = StyleSheet.create({
 	postContainer: {
@@ -103,17 +108,28 @@ const styles = StyleSheet.create({
 		color: Colors.tintFontColor
 	},
 	cover: {
-		width: IMG_WIDTH,
-		height: IMG_WIDTH * 0.5
+		width: COVER_WIDTH,
+		height: COVER_WIDTH * 0.5,
+		resizeMode: "cover"
 	},
 	gridView: {
-		marginLeft: -8
+		marginLeft: -IMG_INTERVAL
 	},
 	gridImage: {
-		width: (width - 46) / 3,
-		height: (width - 46) / 3,
-		marginLeft: 8,
+		width: IMG_WIDTH,
+		height: IMG_WIDTH,
 		resizeMode: "cover"
+	},
+	coverWrap: {
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		overflow: "hidden"
+	},
+	imgWrap: {
+		borderWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		marginLeft: IMG_INTERVAL
 	},
 	abstract: {
 		marginTop: 15,

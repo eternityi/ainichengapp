@@ -68,9 +68,9 @@ class CoverItem extends PureComponent {
 
 	_renderCover = (type, cover) => {
 		if (type == "video") {
-			return <VideoCover width={width} height={width * 9 / 16} cover={cover} markWidth={44} markSize={22} />;
+			return <VideoCover width={width} height={width * 9 / 16} cover={cover} markWidth={44} markSize={22} customStyle={styles.coverWrap} />;
 		} else {
-			return <Image style={styles.articleCover} source={{ uri: cover }} />;
+			return <Image style={[styles.articleCover, styles.coverWrap]} source={{ uri: cover }} />;
 		}
 	};
 
@@ -114,6 +114,12 @@ const styles = StyleSheet.create({
 		height: width * 0.5,
 		resizeMode: "cover"
 	},
+	coverWrap: {
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		overflow: "hidden"
+	},
 	postContent: {
 		paddingHorizontal: 15,
 		paddingVertical: 10
@@ -135,11 +141,11 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between"
 	},
 	categoryName: {
-		fontSize: 12,
+		fontSize: 13,
 		color: Colors.themeColor
 	},
 	metaCount: {
-		fontSize: 11,
+		fontSize: 12,
 		color: Colors.lightFontColor,
 		marginLeft: 3
 	}

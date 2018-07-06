@@ -35,7 +35,7 @@ class HomeScreen extends React.Component {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />}
         >
           <View style={styles.menuWrap}>
-            <Query query={unreadsQuery}>
+            <Query query={unreadsQuery} pollInterval={10000}>
               {({ loading, error, data }) => {
                 if (!(data && data.user)) {
                   data = {};
@@ -93,7 +93,7 @@ class HomeScreen extends React.Component {
               <Text style={[styles.chatsTitleText, { color: Color.themeColor }]}>新消息</Text>
             </TouchableOpacity>
           </View>
-          <Query query={chatsQuery} pollInterval={20000}>
+          <Query query={chatsQuery} pollInterval={10000}>
             {({ loading, error, data, refetch }) => {
               if (!login) return <Diving customStyle={{ marginTop: 20 }} />;
               if (error) return <LoadingError reload={() => refetch()} />;

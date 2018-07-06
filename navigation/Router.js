@@ -280,16 +280,16 @@ export default {
   登录注册: {
     screen: LoginScreen
   },
-  私密文章: {
+  私密作品: {
     screen: PrivacyArticle
   },
   私密文章详情: {
     screen: PrivacyArticleDetail
   },
-  公开文章: {
+  我的发布: {
     screen: OpenArticlesScreen
   },
-  收藏的文章: {
+  我的收藏: {
     screen: FavoritedArticlesScreen
   },
   已购内容: {

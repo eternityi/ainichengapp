@@ -123,9 +123,9 @@ class BeRewardScreen extends Component {
 						>
 							{" 《" + notification.article.title + "》 "}
 						</Text>
-						送了{notification.tip.amount}颗糖（赞赏
+						送了{notification.tip.amount.slice(0, -3)}颗糖（赞赏
 						<Iconfont name={"RMB"} size={16} color={Colors.themeColor} />
-						<Text style={{ color: Colors.themeColor }}>{notification.tip.amount + ".00"}</Text>
+						<Text style={{ color: Colors.themeColor }}>{notification.tip.amount}</Text>
 						）
 					</Text>
 				}

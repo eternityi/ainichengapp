@@ -27,7 +27,7 @@ class WalletScreen extends Component {
 						<View style={styles.walletTop}>
 							<View style={styles.balanceBanner}>
 								<View style={styles.walletMark}>
-									<Iconfont name={"discount-coupon"} size={100} color={"#f0f0f0"} />
+									<Iconfont name={"wallet"} size={100} color={"#f0f0f0"} />
 								</View>
 								<View
 									style={{
@@ -97,7 +97,10 @@ class WalletScreen extends Component {
 						</View>
 						<View style={styles.walletItemWrap}>
 							<Iconfont name={"modification"} size={26} color={Colors.linkColor} />
-							<TouchableOpacity style={[styles.walletItem, { borderBottomColor: "transparent" }]} onPress={() => navigation.navigate("交易记录")}>
+							<TouchableOpacity
+								style={[styles.walletItem, { borderBottomColor: "transparent" }]}
+								onPress={() => navigation.navigate("交易记录")}
+							>
 								<Text style={styles.walletItemName}>交易记录</Text>
 							</TouchableOpacity>
 						</View>

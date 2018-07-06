@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity } from "react-native";
 
-import BasicArticleItem from "../../components/Article/BasicArticleItem";
+import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, BlankContent, SpinnerLoading, LoadingError } from "../../components/Pure";
 
 import Colors from "../../constants/Colors";
@@ -46,7 +46,7 @@ class IndexTab extends Component {
 													article: item
 												})}
 										>
-											<BasicArticleItem article={item} navigation={navigation} />
+											<NoteItem post={item} navigation={navigation} />
 										</TouchableOpacity>
 									</View>
 								)}

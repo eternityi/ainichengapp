@@ -11,7 +11,7 @@ const IMAGE_WIDTH = width * 0.6;
 
 class Find extends Component {
 	render() {
-		let { navigation, size = 70, fontSize = 16, customStyle = {}, remind = "更多有趣的作者和专题 ~", children, user } = this.props;
+		let { navigation, size = 70, fontSize = 16, customStyle = {}, remind = "更多有趣的朋友和专题 ~", children, user } = this.props;
 		return (
 			<View style={styles.container}>
 				<Image style={styles.image} source={require("../../assets/images/find.png")} />

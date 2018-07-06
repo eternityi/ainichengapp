@@ -10,6 +10,7 @@ import { graphql, compose } from "react-apollo";
 import { signUpMutation, signInMutation } from "../../graphql/user.graphql";
 import { NavigationActions } from "react-navigation";
 
+import Colors from "../../constants/Colors";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -53,7 +54,8 @@ class LoginScreen extends Component {
           password
         }
       });
-      if (result.error) {
+      console.log(result);
+      if (result.data && result.data.signIn && result.data.signIn.error) {
         this.toast();
       } else {
         const user = result.data.signIn;

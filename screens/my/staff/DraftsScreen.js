@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
+import NoteItem from "../../../components/Article/NoteItem";
 import { CustomPopoverMenu, OperationModal } from "../../../components/Modal";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
@@ -36,36 +37,7 @@ class DraftsScreen extends Component {
 						navigation={navigation}
 						search
 						searchRouteName={"搜索文章"}
-						leftComponent={
-							<HeaderLeft navigation={navigation} routeName>
-								{
-									// 	<CustomPopoverMenu
-									// 	width={110}
-									// 	selectHandler={() => null}
-									// 	triggerComponent={
-									// 		<View
-									// 			style={{
-									// 				flexDirection: "row",
-									// 				alignItems: "center"
-									// 			}}
-									// 		>
-									// 			<Text
-									// 				style={{
-									// 					fontSize: 16,
-									// 					color: Colors.tintFontColor,
-									// 					marginRight: 5
-									// 				}}
-									// 			>
-									// 				私密文章
-									// 			</Text>
-									// 			<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
-									// 		</View>
-									// 	}
-									// 	options={["私密文章", "只看付费"]}
-									// />
-								}
-							</HeaderLeft>
-						}
+						leftComponent={<HeaderLeft navigation={navigation} routeName />}
 					/>
 					<Query query={draftsQuery}>
 						{({ loading, error, data, refetch, fetchMore }) => {
@@ -80,7 +52,7 @@ class DraftsScreen extends Component {
 										refetch();
 									}}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={this._renderItem.bind(this)}
+									renderItem={({ item, index }) => <NoteItem post={item} compress />}
 									getItemLayout={(data, index) => ({
 										length: 90,
 										offset: 90 * index,
@@ -168,32 +140,6 @@ class DraftsScreen extends Component {
 					}}
 				/>
 			</Screen>
-		);
-	}
-
-	_renderItem({ item }) {
-		let { navigation } = this.props;
-		return (
-			<TouchableOpacity
-				onPress={() => navigation.navigate("私密文章详情", { article: item })}
-				onLongPress={() => {
-					this.article = item;
-					this.handleModal();
-				}}
-			>
-				<View style={styles.draftsItem}>
-					<View>
-						<Text numberOfLines={1} style={styles.timeAgo}>
-							未公开 最后更新 {item.time_ago}
-						</Text>
-					</View>
-					<View>
-						<Text numberOfLines={2} style={styles.title}>
-							{item.title}
-						</Text>
-					</View>
-				</View>
-			</TouchableOpacity>
 		);
 	}
 

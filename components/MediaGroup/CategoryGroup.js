@@ -34,7 +34,7 @@ class CategoryGroup extends Component {
             plain
             type={"category"}
             id={category.id}
-            status={category.followed_status}
+            status={category.followed}
             customStyle={miniButton ? { height: 28, width: 72 } : null}
             fontSize={miniButton ? 14 : 15}
           />

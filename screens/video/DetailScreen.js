@@ -40,7 +40,7 @@ class DetailScreen extends Component {
 		this.state = {
 			fullScreen: false,
 			rate: 1,
-			paused: true,
+			paused: false,
 			volume: 1,
 			muted: false,
 			duration: 0,
@@ -91,7 +91,7 @@ class DetailScreen extends Component {
 						if (!(data && data.article)) return <BlankContent />;
 						this.video = data.article;
 						let video = data.article;
-						let { id, video_url, user, title, description, liked, favorited } = video;
+						let { id, video_url, user, title, description, liked, favorited, cover } = video;
 						return (
 							<View style={styles.container}>
 								<View style={styles.videoWrap}>
@@ -111,8 +111,8 @@ class DetailScreen extends Component {
 										// }}
 										navigator={navigation}
 										source={{ uri: video_url }}
-										// poster="https://www.ainicheng.com/storage/video/236.jpg"
-										// posterResizeMode="cover"
+										poster={cover}
+										posterResizeMode="cover"
 										style={{
 											width,
 											height: fullScreen ? height : width * 9 / 16

@@ -104,11 +104,7 @@ class ActionsScreen extends Component {
 					<View style={styles.activityInfo}>
 						<Text style={styles.typeText}>
 							{this.user.name}
-							{action.signUp ? (
-								<Text onPress={() => this.skipContent(action.postedArticle)}> 加入{Config.AppName}</Text>
-							) : (
-								this._activityType(action)
-							)}
+							{action.signUp ? <Text> 加入{Config.AppName}</Text> : this._activityType(action)}
 						</Text>
 					</View>
 					{action.postedComment && this._activityComment(action.postedComment)}
@@ -146,9 +142,11 @@ class ActionsScreen extends Component {
 						typeText = "发布了动态";
 					}
 					return (
-						<Text onPress={() => this.skipContent(action.postedArticle)}>
+						<Text>
 							{typeText}
-							<Text style={styles.linkText}>{title ? title : description}</Text>
+							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedArticle)}>
+								{title ? title : description}
+							</Text>
 						</Text>
 					);
 				}
@@ -165,9 +163,11 @@ class ActionsScreen extends Component {
 						typeText = "评论了动态";
 					}
 					return (
-						<Text onPress={() => this.skipContent(action.postedComment.article)}>
+						<Text>
 							{" " + typeText + " "}
-							<Text style={styles.linkText}>{title ? title : description}</Text>
+							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedComment.article)}>
+								{title ? title : description}
+							</Text>
 						</Text>
 					);
 				}
@@ -178,25 +178,31 @@ class ActionsScreen extends Component {
 					if (followed.user) {
 						let user = followed.user;
 						return (
-							<Text onPress={() => this.skipFollowed({ user })}>
+							<Text>
 								{" " + "关注了用户" + " "}
-								<Text style={styles.linkText}>{user.name}</Text>
+								<Text style={styles.linkText} onPress={() => this.skipFollowed({ user })}>
+									{user.name}
+								</Text>
 							</Text>
 						);
 					} else if (followed.category) {
 						let category = followed.category;
 						return (
-							<Text onPress={() => this.skipFollowed({ category })}>
+							<Text>
 								{" " + "关注了专题" + " "}
-								<Text style={styles.linkText}>{category.name}</Text>
+								<Text style={styles.linkText} onPress={() => this.skipFollowed({ category })}>
+									{category.name}
+								</Text>
 							</Text>
 						);
 					} else if (followed.collection) {
 						let collection = followed.collection;
 						return (
-							<Text onPress={() => this.skipFollowed({ collection })}>
+							<Text>
 								{" " + "关注了文集" + " "}
-								<Text style={styles.linkText}>{collection.name}</Text>
+								<Text style={styles.linkText} onPress={() => this.skipFollowed({ collection })}>
+									{collection.name}
+								</Text>
 							</Text>
 						);
 					}
@@ -215,9 +221,11 @@ class ActionsScreen extends Component {
 						typeText = "喜欢了动态";
 					}
 					return (
-						<Text onPress={() => this.skipContent(liked.article)}>
+						<Text>
 							{" " + typeText + " "}
-							<Text style={styles.linkText}>{title ? title : description}</Text>
+							<Text style={styles.linkText} onPress={() => this.skipContent(liked.article)}>
+								{title ? title : description}
+							</Text>
 						</Text>
 					);
 				}
@@ -234,9 +242,11 @@ class ActionsScreen extends Component {
 						typeText = "赞赏了动态";
 					}
 					return (
-						<Text onPress={() => this.skipContent(action.tiped.article)}>
+						<Text>
 							{" " + typeText + " "}
-							<Text style={styles.linkText}>{title ? title : description}</Text>
+							<Text style={styles.linkText} onPress={() => this.skipContent(action.tiped.article)}>
+								{title ? title : description}
+							</Text>
 						</Text>
 					);
 				}
@@ -339,7 +349,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff"
 	},
 	activityWrap: {
-		paddingTop: 20,
+		marginTop: 20,
 		flex: 1
 	},
 	activityTimeLine: {
