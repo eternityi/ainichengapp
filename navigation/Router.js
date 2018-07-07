@@ -7,7 +7,7 @@ import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
 import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
-import MediaUploadScreen from "../screens/creation/MediaUploadScreen";
+import CreatePostScreen from "../screens/creation/CreatePostScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -130,8 +130,8 @@ export default {
   发布分享: {
     screen: PublishedScreen
   },
-  媒体上传: {
-    screen: MediaUploadScreen
+  发布动态: {
+    screen: CreatePostScreen
   },
   文章投稿: {
     screen: ContributeArticleScreen

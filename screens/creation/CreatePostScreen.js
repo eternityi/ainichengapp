@@ -34,7 +34,7 @@ import { articleContentQuery, createdArticleMutation, editArticleMutation } from
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 
-class MediaUploadScreen extends React.Component {
+class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
     this.showMediaSelect = this.showMediaSelect.bind(this);
@@ -89,13 +89,15 @@ class MediaUploadScreen extends React.Component {
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })}
+            })
+          }
           onPressVideoUpload={() =>
             this.onPressVideoUpload({
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })}
+            })
+          }
         />
       </View>
     );
@@ -245,4 +247,4 @@ const styles = StyleSheet.create({
     paddingTop: 24
   }
 });
-export default connect(store => store)(MediaUploadScreen);
+export default connect(store => store)(CreatePostScreen);
