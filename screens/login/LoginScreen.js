@@ -48,30 +48,42 @@ class LoginScreen extends Component {
   handleSubmit = async childState => {
     const { name, email, password } = childState;
     if (this.state.login) {
-      const result = await this.props.signInMutation({
-        variables: {
-          email,
-          password
-        }
-      });
-      console.log(result);
-      if (result.data && result.data.signIn && result.data.signIn.error) {
-        this.toast();
+      let result = {};
+      try {
+        result = await this.props.signInMutation({
+          variables: {
+            email,
+            password
+          }
+        });
+      } catch (ex) {
+        result.errors = ex;
+      }
+      if (result && result.errors) {
+        this.toast("登录失败，请检查邮箱和密码是否正确");
       } else {
         const user = result.data.signIn;
         this._saveUserData(user);
       }
     } else {
-      console.log("name, email, password", name, email, password);
-      const result = await this.props.signUpMutation({
-        variables: {
-          name,
-          email,
-          password
-        }
-      });
-      const user = result.data.signUp;
-      this._saveUserData(user);
+      let result = {};
+      try {
+        result = await this.props.signUpMutation({
+          variables: {
+            name,
+            email,
+            password
+          }
+        });
+      } catch (ex) {
+        result.errors = ex;
+      }
+      if (result && result.errors) {
+        this.toast("注册失败，请检查邮箱地址是否已注册");
+      } else {
+        const user = result.data.signUp;
+        this._saveUserData(user);
+      }
     }
   };
 
@@ -88,8 +100,8 @@ class LoginScreen extends Component {
     this.props.navigation.dispatch(navigateAction);
   };
 
-  toast() {
-    let toast = Toast.show("登录失败，请检查用户名或者密码是否有误！", {
+  toast(message) {
+    let toast = Toast.show(message, {
       duration: Toast.durations.LONG,
       position: 70,
       shadow: true,
@@ -113,4 +125,9 @@ const styles = StyleSheet.create({
 
 export default connect(store => {
   return { ...store };
-})(compose(graphql(signUpMutation, { name: "signUpMutation" }), graphql(signInMutation, { name: "signInMutation" }))(LoginScreen));
+})(
+  compose(
+    graphql(signUpMutation, { name: "signUpMutation" }),
+    graphql(signInMutation, { name: "signInMutation" })
+  )(LoginScreen)
+);

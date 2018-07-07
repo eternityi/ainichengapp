@@ -102,7 +102,14 @@ class SignUp extends Component {
 						<View style={{ marginTop: 20 }}>
 							<TouchableOpacity
 								disabled={disableSubmit}
-								onPress={() => this.props.handleSubmit(this.state)}
+								onPress={() => {
+									if (!disableSubmit) {
+										this.props.handleSubmit(this.state);
+									}
+									this.setState({
+										disableSubmit: true
+									});
+								}}
 								style={[styles.signUpBtn, !disableSubmit && { backgroundColor: "rgba(66,192,2,1)" }]}
 							>
 								<Text style={styles.signUpBtnText}>注册</Text>
