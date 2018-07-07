@@ -13,6 +13,8 @@ target 'ainicheng' do
   
 
   platform :ios, '9.0'
+  pod 'BugsnagReactNative', :path => '../node_modules/bugsnag-react-native'
+
   target 'ainichengTests' do
     inherit! :search_paths
     # Pods for testing

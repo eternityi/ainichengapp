@@ -13,6 +13,7 @@
     "appcenter": "^1.6.0",
     "appcenter-analytics": "^1.6.0",
     "appcenter-crashes": "^1.6.0",
+    "bugsnag-react-native": "2.9.3",
     "graphql": "^0.13.2",
     "immutable": "^3.8.2",
     "react": "^16.3.0-alpha.1",
