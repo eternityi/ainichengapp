@@ -22,9 +22,11 @@ import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
 import MediaModal from "../../components/Modal/MediaModal";
+import DialogSelected from '../../components/Pure/AlertSelected';
+
 
 import Upload from "react-native-background-upload";
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
 import { throttle } from "lodash";
 
 import { connect } from "react-redux";
@@ -34,22 +36,29 @@ import { articleContentQuery, createdArticleMutation, editArticleMutation } from
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 
+
+const selectedArr = ["图片", "视频"];
+
 class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.showMediaSelect = this.showMediaSelect.bind(this);
+    this.showAlertSelected = this.showAlertSelected.bind(this);
+    this.callbackSelected = this.callbackSelected.bind(this);
     this.state = {
       uploadId: null,
       progress: null,
       completed: false,
       covers: [],
       routeName: "　",
-      selectMedia: false
+      selectMedia: false,
+      uri:'',
+      isImagePickerShowing: false,
+      retype:''
     };
   }
 
   render() {
-    let { covers, routeName, selectMedia, completed, progress, uploadId } = this.state;
+    let { covers, routeName, selectMedia, completed, progress, uploadId,retype,uri } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -79,11 +88,13 @@ class CreatePostScreen extends React.Component {
           navigation={navigation}
           selectMedia={selectMedia}
           covers={covers}
-          showMediaSelect={this.showMediaSelect}
+          showAlertSelected={() => {this.showAlertSelected()}}
           progress={progress}
           cancelUpload={this.cancelUpload}
           completed={completed}
           uploadId={uploadId}
+          retype={retype}
+          uri={uri}
           onPressPhotoUpload={() =>
             this.onPressPhotoUpload({
               url: "https://www.ainicheng.com/video",
@@ -91,94 +102,76 @@ class CreatePostScreen extends React.Component {
               type: "multipart"
             })
           }
-          onPressVideoUpload={() =>
-            this.onPressVideoUpload({
-              url: "https://www.ainicheng.com/video",
-              field: "uploaded_media",
-              type: "multipart"
-            })
-          }
         />
+        <DialogSelected ref={(dialog)=>{
+                    this.dialog = dialog;
+                }} /> 
       </View>
     );
   }
-
-  onPressVideoUpload = options => {
-    const imagePickerOptions = {
+ 
+   onPressVideoUpload=options=> {    //打开视频库
+    ImagePicker.openPicker({
+      multiple: false,
       mediaType: "video"
-    };
-
-    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
-      let didChooseVideo = true;
-      const { customButton, didCancel, error, path, uri, data } = response;
-      let { covers } = this.state;
-
-      if (didCancel) {
-        didChooseVideo = false; //用户取消选择视频
-      }
-      if (error) {
-        console.warn("ImagePicker error:", response);
-        didChooseVideo = false;
-      }
-      if (!didChooseVideo) {
-        return;
-      }
-      if (Platform.OS === "android") {
-        if (path) {
-          this.startUpload(Object.assign({ path }, options));
-          let source = "file://" + path; //本地视频路径
-          covers.push(source);
+    }).then(image => {
+          let { covers ,uri}=this.state;
+          covers.push(image.path); //图片资源
           this.setState({
             covers
           });
-        } else {
-          return;
-        }
-      } else {
-        // You can also display the image using data:
-        this.startUpload(Object.assign({ path: uri }, options));
+          console.log(image.mime);
+          if (Platform.OS === "android") {
+              this.startUpload(Object.assign({ path:image.path.substr(7)}, options));
+          }else{
+              this.startUpload(Object.assign({ path:image.path}, options));
+          }
+          this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+      },
+      error => {
+        console.log(error);
+        add;
       }
-    });
-    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+    );
   };
 
-  onPressPhotoUpload = options => {
-    const imagePickerOptions = {
-      mediaType: "photo"
-    };
 
-    ImagePicker.launchImageLibrary(imagePickerOptions, response => {
-      let didChooseVideo = true;
-      const { customButton, didCancel, error, path, uri, data } = response;
-      let { covers } = this.state;
+  onPressPhotoUpload=options=> {    //打开相册
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: "photo",
+    }).then(
+      images => {
+        let { covers,uri,retype } = this.state;
+        images.map(image => {
+          //optmistic update
+          covers.push(image.path);
+          //upload ..
+          if (Platform.OS === "android") {
+              this.setState({
+                  uri:image.path.substr(7)
+              });
+          }else{
+              this.setState({
+                 uri:image.path
+              });
+          }
+        });
+        this.setState({
+          covers
+        });
+        console.log(this.state.uri);
+        console.log(this.state.retype);
 
-      if (didCancel) {
-        didChooseVideo = false; //用户取消选择图片
+        this.startUpload(Object.assign({ path:this.state.uri}, options));
+      },
+      error => {
+        console.log(error);
+        add;
       }
-      if (error) {
-        console.warn("ImagePicker error:", response);
-        didChooseVideo = false;
-      }
-      if (!didChooseVideo) {
-        return;
-      }
-      if (Platform.OS === "android") {
-        if (path) {
-          this.startUpload(Object.assign({ path }, options));
-          covers.push(uri); //图片资源
-          this.setState({
-            covers
-          });
-        } else {
-          return;
-        }
-      } else {
-        // You can also display the image using data:
-        this.startUpload(Object.assign({ path: uri }, options));
-      }
-    });
-    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+    );
   };
+
 
   handleProgress = throttle(progress => {
     this.setState({ progress });
@@ -190,13 +183,17 @@ class CreatePostScreen extends React.Component {
         {
           method: "POST",
           headers: {
-            "content-type": metadata.mimeType // server requires a content-type header
+            "content-type": metadata.mimeType, // server requires a content-type header
           }
         },
         opts
       );
+      let uploadtype= metadata.mimeType.indexOf("image");
+      this.setState({
+             retype:uploadtype
+          });
 
-      Upload.startUpload(options)
+      Upload.startUpload(options)    //上传
         .then(uploadId => {
           console.log(`Upload started with options: ${JSON.stringify(options)}`);
           this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
@@ -213,12 +210,13 @@ class CreatePostScreen extends React.Component {
             }); //上传完成
           });
         })
-        .catch(function(err) {
+        .catch((err)=> {
           this.setState({ uploadId: null, progress: null });
           console.log("上传错误!", err);
         });
     });
   };
+
   cancelUpload = () => {
     let { covers } = this.state;
     if (!this.state.uploadId) {
@@ -235,9 +233,28 @@ class CreatePostScreen extends React.Component {
     });
   };
 
-  showMediaSelect() {
-    this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
-  }
+  showAlertSelected(){
+        this.dialog.show("请选择上传内容", selectedArr, '#333333', this.callbackSelected);
+    }
+    // 回调
+    callbackSelected(i){
+        switch (i){
+            case 0: //图库
+                this.onPressPhotoUpload({
+                  url: "https://www.ainicheng.com/video",
+                  field: "uploaded_media",
+                  type: "multipart"
+                });
+                break;
+            case 1: // 视频库
+                this.onPressVideoUpload({
+                  url: "https://www.ainicheng.com/video",
+                  field: "uploaded_media",
+                  type: "multipart"
+                });
+                break;
+        }
+    }
 }
 
 const styles = StyleSheet.create({

@@ -4823,6 +4823,12 @@ react-native-popup-menu@^0.12.2:
   version "0.12.6"
   resolved "http://registry.npm.taobao.org/react-native-popup-menu/download/react-native-popup-menu-0.12.6.tgz#6b599106b3934f672781716242780dc6c562cdf3"
 
+react-native-progress@^3.5.0:
+  version "3.5.0"
+  resolved "http://registry.npm.taobao.org/react-native-progress/download/react-native-progress-3.5.0.tgz#d1ccc7f96dc17c609aedb43b2e6695d67deae0ec"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-native-render-html@^3.9.0:
   version "3.10.0"
   resolved "http://registry.npm.taobao.org/react-native-render-html/download/react-native-render-html-3.10.0.tgz#fe72264bb8f2bc8a8e60b345d5c2ed10d7bde08d"

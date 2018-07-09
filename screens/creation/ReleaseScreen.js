@@ -3,6 +3,8 @@ import ReactNative from "react-native";
 import { ScrollView, Text, StyleSheet, Button, View, TextInput, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image } from "react-native";
 
 import ImagePicker from "react-native-image-crop-picker";
+import Upload from "react-native-background-upload";
+import { throttle } from "lodash";
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
@@ -26,13 +28,19 @@ class ReleaseScreen extends React.Component {
       body: null,
       covers: [],
       image_ids: [],
-      routeName: "　"
+      routeName: "　",
+      uploadId: null,
+      progress: null,
+      completed: false,
+      selectMedia: false,
+      isImagePickerShowing: false,
+      retype:null
     };
   }
 
   render() {
     const { navigation } = this.props;
-    let { covers, routeName } = this.state;
+    let { covers, routeName ,completed, progress, uploadId,retype,selectMedia} = this.state;
     return (
       <View style={styles.container}>
         <Header
@@ -84,7 +92,12 @@ class ReleaseScreen extends React.Component {
               }}
             >
               {covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
-              <TouchableOpacity onPress={this._openPicker.bind(this)}>
+              <TouchableOpacity onPress={() =>
+                                        this._openPicker({
+                                          url: "https://www.ainicheng.com/video",
+                                          field: "uploaded_media",
+                                          type: "multipart"
+                                        })}>
                 <View style={covers == "" ? styles.icon : styles.icon2}>
                   <Iconfont name={"add"} size={100} color={Colors.lightGray} />
                 </View>
@@ -116,14 +129,14 @@ class ReleaseScreen extends React.Component {
     );
   }
 
-  _openPicker() {
+  _openPicker=options=> {
     let _this = this;
     ImagePicker.openPicker({
       multiple: true,
-      mediaType: "video"
+      mediaType: "any"
     }).then(
       images => {
-        let { covers } = _this.state;
+        let { covers,selectMedia } = _this.state;
         images.map(image => {
           //optmistic update
           covers.push(image.path);
@@ -131,18 +144,68 @@ class ReleaseScreen extends React.Component {
           _this.saveImage(image.path);
           console.log("视频地址path");
           console.log(image.path);
+          console.log(image.sourceURL);
+          _this.setState({
+             selectMedia:image.sourceURL
+          });
         });
         _this.setState({
           covers
         });
+        console.log(_this.state.selectMedia);
+        _this.startUpload(Object.assign({ path:_this.state.selectMedia}, options));
       },
       error => {
         console.log(error);
         add;
       }
     );
-  }
+  };
 
+handleProgress = throttle(progress => {
+    this.setState({ progress });
+  }, 200);
+  startUpload = opts => {
+    Upload.getFileInfo(opts.path).then(metadata => {
+      const options = Object.assign(
+        {
+          method: "POST",
+          headers: {
+            "content-type": metadata.mimeType, // server requires a content-type header
+          }
+        },
+        opts
+      );
+      console.log(options);
+     
+      let uploadtype= metadata.mimeType;
+      this.setState({
+        retype:uploadtype.indexOf("image")
+      });
+
+      Upload.startUpload(options)
+        .then(uploadId => {
+          console.log(`Upload started with options: ${JSON.stringify(options)}`);
+          this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
+          Upload.addListener("progress", uploadId, data => {
+            this.handleProgress(+data.progress); //上传进度
+            console.log(`Progress: ${data.progress}%`);
+          });
+          Upload.addListener("error", uploadId, data => {
+            console.log(`Error: ${data.error}%`);
+          });
+          Upload.addListener("completed", uploadId, data => {
+            this.setState({
+              completed: true
+            }); //上传完成
+          });
+        })
+        .catch(function(err) {
+          this.setState({ uploadId: null, progress: null });
+          console.log("上传错误!", err);
+        });
+    });
+  };
   saveImage = imagePath => {
     const { token } = this.props.users.user;
     var data = new FormData();

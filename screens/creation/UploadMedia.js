@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput,Platform } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import MediaModal from "../../components/Modal/MediaModal";
+
+import DialogSelected from '../../components/Pure/AlertSelected';
+
+import * as Progress from 'react-native-progress';
+const selectedArr = ["图片", "视频"];
 
 class UploadMedia extends Component {
 	render() {
@@ -13,11 +17,13 @@ class UploadMedia extends Component {
 			progress,
 			cancelUploa,
 			onPressPhotoUpload,
-			onPressVideoUpload,
 			selectMedia,
 			cancelUpload,
 			completed,
-			uploadId
+			uploadId,
+			retype,
+			uri,
+			showAlertSelected
 		} = this.props;
 		return (
 			<ScrollView>
@@ -47,31 +53,25 @@ class UploadMedia extends Component {
 						}}
 					>
 						{covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
-						<TouchableOpacity onPress={showMediaSelect}>
-							<View style={covers == "" ? styles.icon : styles.icon2}>
-								<Iconfont name={"add"} size={100} color={Colors.lightGray} />
-							</View>
-							<MediaModal
-								visible={selectMedia}
-								handleVisible={showMediaSelect}
-								navigation={navigation}
-								onPressPhotoUpload={onPressPhotoUpload}
-								onPressVideoUpload={onPressVideoUpload}
-							/>
+						<TouchableOpacity onPress={covers.length>0 ? onPressPhotoUpload : showAlertSelected}>
+							{retype < 0 ?null:
+
+								(<View style={covers == "" ? styles.icon : styles.icon2}>
+									<Iconfont name={"add"} size={100} color={Colors.lightGray} />
+								</View>)
+						    }
 						</TouchableOpacity>
+						{retype < 0 ?(
+							<Progress.Circle
+					            style={ uploadId==null||completed ? styles.complete :styles.nocomplete}
+					            size={100}
+					            progress={progress/100}
+					            indeterminate={false}
+					            color={Colors.lightGray}
+					            showsText={true}
+					        />):null
+						}
 					</View>
-					{uploadId == null ? null : !completed ? (
-						<View style={{ flexDirection: "row" }}>
-							<Text style={{ textAlign: "center" }}>上传进度:{progress}%</Text>
-							<TouchableOpacity onPress={cancelUpload}>
-								<Text style={{ color: Colors.themeColor, marginLeft: 5 }}>取消上传</Text>
-							</TouchableOpacity>
-						</View>
-					) : (
-						<View style={{ flexDirection: "row" }}>
-							<Text style={{ color: Colors.themeColor }}>上传完成 !</Text>
-						</View>
-					)}
 				</View>
 				<TouchableOpacity>
 					<View style={styles.item}>
@@ -80,7 +80,7 @@ class UploadMedia extends Component {
 						<Text style={{ position: "absolute", right: 15 }}>公开</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => navigation.navigate("文章投稿")}>
+				<TouchableOpacity>
 					<View style={styles.item}>
 						<Iconfont name={"aite"} size={22} style={{ paddingRight: 15 }} color={"#000000"} />
 						<Text style={{ color: "#000", fontSize: 15 }}>提醒谁看</Text>
@@ -138,12 +138,21 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: Colors.lightGray
 	},
-	picture: {
-		borderWidth: 0.5,
+	picture: {		
 		height: 100,
 		width: 100,
 		marginHorizontal: 4,
-		marginTop: 8
+		marginTop: 8,
+		marginBottom: 70,
+	},
+	nocomplete:{
+	    position:'absolute',
+	    backgroundColor:'rgba(255,255,255,0.5)',
+	    marginTop:8,
+	    marginLeft:4
+	},
+ 	complete:{
+	    display:'none'
 	},
 	item: {
 		flexDirection: "row",

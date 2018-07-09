@@ -7,7 +7,8 @@ import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
 import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
-import CreatePostScreen from "../screens/creation/CreatePostScreen";
+import CreatePostScreen from "../screens/creation/CreatePostScreen";;
+
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
