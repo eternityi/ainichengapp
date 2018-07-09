@@ -1,31 +1,16 @@
 import React, { Component } from "react";
-import { ScrollView, Text, StyleSheet, Button, View, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeedback, Platform } from "react-native";
+import { ScrollView, Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import { NavigationActions } from "react-navigation";
 
+import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import SearchHeader from "../../components/Header/SearchHeader";
-import Avatar from "../../components/Pure/Avatar";
-import DivisionLine from "../../components/Pure/DivisionLine";
-import ContentEnd from "../../components/Pure/ContentEnd";
-import LoadingMore from "../../components/Pure/LoadingMore";
+import { SearchHeader } from "../../components/Header";
+import { Avatar, DivisionLine, ContentEnd, LoadingMore } from "../../components/Pure/Avatar";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
-import Screen from "../Screen";
 
 import { connect } from "react-redux";
-import gql from "graphql-tag";
 import { graphql, Query } from "react-apollo";
-
-const QUERY = gql`
-	query search_detail($keywords: String!) {
-		search_detail(keywords: $keywords) {
-			users
-			categories
-			collections
-			articles
-		}
-	}
-`;
 
 class DetailScreen extends Component {
 	static navigationOptions = {

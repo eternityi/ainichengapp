@@ -148,7 +148,7 @@ class HomeScreen extends React.Component {
     let follow = item;
     return (
       <View>
-        <DivisionLine height={18} noBorder />
+        <DivisionLine height={18} />
         <View style={{ paddingHorizontal: 15 }}>
           <View style={styles.officialRecommend}>
             <Iconfont name={follow.user ? "followed" : "ranking"} size={17} color={Colors.themeColor} />

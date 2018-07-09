@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, StatusBar } from "react-native";
+import ImagePicker from "react-native-image-crop-picker";
+
+import Screen from "../../Screen";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import Config from "../../../constants/Config";
-import Header from "../../../components/Header/Header";
-import DivisionLine from "../../../components/Pure/DivisionLine";
-import Avatar from "../../../components/Pure/Avatar";
+
+import { Header } from "../../../components/Header";
+import { DivisionLine, Avatar } from "../../../components/Pure";
+import { WriteModal } from "../../../components/Modal";
 import SettingType from "../../../components/Setting/SettingType";
 import SettingItem from "../../../components/Setting/SettingItem";
-import WriteModal from "../../../components/Modal/WriteModal";
-import ImagePicker from "react-native-image-crop-picker";
-import Screen from "../../Screen";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
-
 import { updateUserNameMutation } from "../../../graphql/user.graphql";
 import { Mutation } from "react-apollo";
 

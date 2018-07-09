@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 
+import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
+import { Header, HeaderLeft, Search } from "../../components/Header";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 
 import { categoryAdminsQuery, categoryAuthorsQuery, categoryFollowersQuery } from "../../graphql/category.graphql";
@@ -11,69 +13,77 @@ import { connect } from "react-redux";
 
 const { width, height } = Dimensions.get("window");
 
-class MembersTab extends Component {
+class MembersScreen extends Component {
+	constructor(props) {
+		super(props);
+		this.category = props.navigation.getParam("category", {});
+		this.state = {};
+	}
+
 	render() {
-		let { scrollEnabled, onScroll, category } = this.props;
+		let { navigation } = this.props;
+
 		return (
-			<View style={styles.container}>
-				<Query query={categoryFollowersQuery} variables={{ id: category.id }}>
-					{({ loading, error, data, fetchMore, refetch }) => {
-						if (error) return <LoadingError reload={() => refetch()} />;
-						if (!(data && data.users)) return null;
-						return (
-							<FlatList
-								ListHeaderComponent={this._renderHeader}
-								onScroll={onScroll}
-								scrollEnabled={scrollEnabled}
-								data={data.users}
-								keyExtractor={(item, index) => index.toString()}
-								numColumns={3}
-								renderItem={this._memberItem}
-								onEndReachedThreshold={0.3}
-								onEndReached={() => {
-									// if (follows) {
-									// 	fetchMore({
-									// 		variables: {
-									// 			offset: follows.length
-									// 		},
-									// 		updateQuery: (
-									// 			prev,
-									// 			{ fetchMoreResult }
-									// 		) => {
-									// 			if (fetchMoreResult) {
-									// 				return {
-									// 					...prev,
-									// 					...fetchMoreResult
-									// 				};
-									// 			}
-									// 		}
-									// 	});
-									// }
-								}}
-								ListFooterComponent={() => {
-									if (data.users.length > 0) {
-										return <ContentEnd />;
-									} else {
-										return <View />;
-									}
-								}}
-							/>
-						);
-					}}
-				</Query>
-			</View>
+			<Screen>
+				<Header />
+				<View style={styles.container}>
+					<Query query={categoryFollowersQuery} variables={{ id: this.category.id }}>
+						{({ loading, error, data, fetchMore, refetch }) => {
+							if (error) return <LoadingError reload={() => refetch()} />;
+							if (!(data && data.users)) return null;
+							return (
+								<FlatList
+									ListHeaderComponent={this._renderHeader}
+									data={data.users}
+									keyExtractor={(item, index) => index.toString()}
+									numColumns={3}
+									renderItem={this._memberItem}
+									onEndReachedThreshold={0.3}
+									onEndReached={() => {
+										// if (follows) {
+										// 	fetchMore({
+										// 		variables: {
+										// 			offset: follows.length
+										// 		},
+										// 		updateQuery: (
+										// 			prev,
+										// 			{ fetchMoreResult }
+										// 		) => {
+										// 			if (fetchMoreResult) {
+										// 				return {
+										// 					...prev,
+										// 					...fetchMoreResult
+										// 				};
+										// 			}
+										// 		}
+										// 	});
+										// }
+									}}
+									ListFooterComponent={() => {
+										if (data.users.length > 0) {
+											return <ContentEnd />;
+										} else {
+											return <View />;
+										}
+									}}
+								/>
+							);
+						}}
+					</Query>
+				</View>
+			</Screen>
 		);
 	}
 
 	_memberItem = ({ item }) => {
-		let { navigation, category } = this.props;
+		let { navigation } = this.props;
 		let user = item;
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate("用户详情", { user })}>
 				<View style={styles.memberItem}>
 					<View style={{ marginBottom: 12 }}>
 						<Avatar uri={user.avatar} size={46} />
-						{user.id == category.user.id && (
+						{user.id == this.category.user.id && (
 							<View style={styles.creatorMark}>
 								<Text style={{ fontSize: 10, color: "#fff" }}>创建者</Text>
 							</View>
@@ -95,10 +105,10 @@ class MembersTab extends Component {
 	};
 
 	_renderHeader = () => {
-		let { navigation, category } = this.props;
+		let { navigation } = this.props;
 		return (
 			<View>
-				<Query query={categoryAdminsQuery} variables={{ id: category.id }}>
+				<Query query={categoryAdminsQuery} variables={{ id: this.category.id }}>
 					{({ loading, error, data }) => {
 						if (!(data && data.users)) return null;
 						let admins = data.users;
@@ -139,7 +149,7 @@ class MembersTab extends Component {
 					}}
 				</Query>
 
-				<Query query={categoryAuthorsQuery} variables={{ id: category.id }}>
+				<Query query={categoryAuthorsQuery} variables={{ id: this.category.id }}>
 					{({ loading, error, data }) => {
 						if (!(data && data.users && data.users.length > 0)) return null;
 						return (
@@ -150,7 +160,7 @@ class MembersTab extends Component {
 								}}
 							>
 								<View style={styles.membersType}>
-									<Text style={styles.memberItemText}>推荐作者({category.count_authors || data.users.length})</Text>
+									<Text style={styles.memberItemText}>推荐作者({this.category.count_authors || data.users.length})</Text>
 									<Text
 										style={[styles.memberItemText, { color: Colors.lightFontColor }]}
 										onPress={() => {
@@ -183,9 +193,9 @@ class MembersTab extends Component {
 						);
 					}}
 				</Query>
-				{category.count_follows > 0 && (
+				{this.category.count_follows > 0 && (
 					<View style={styles.membersType}>
-						<Text style={styles.memberItemText}>关注的人({category.count_follows})</Text>
+						<Text style={styles.memberItemText}>关注的人({this.category.count_follows})</Text>
 					</View>
 				)}
 			</View>
@@ -229,4 +239,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
 	category_detail: store.categories.category_detail
-}))(MembersTab);
+}))(MembersScreen);

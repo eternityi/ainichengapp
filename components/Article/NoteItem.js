@@ -88,6 +88,7 @@ class NoteItem extends Component {
 	}
 
 	_renderFooter = (category, hits, count_comments, count_likes) => {
+		const { navigation } = this.props;
 		return (
 			<View style={styles.noteFooter}>
 				{category ? (

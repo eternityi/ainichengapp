@@ -4,7 +4,7 @@ import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import { DivisionLine, SearchBar, LoadingError, SpinnerLoading, BlankContent, LoadingMore, ContentEnd } from "../../components/Pure";
+import { SearchBar, LoadingError, SpinnerLoading, BlankContent, LoadingMore, ContentEnd } from "../../components/Pure";
 import FollowItem from "./FollowItem";
 
 import { recommendFollowCategoriesQuery } from "../../graphql/user.graphql";
@@ -94,8 +94,7 @@ class CategoriesScreen extends Component {
 					onPress={() =>
 						navigation.navigate("专题详情", {
 							category: follow.category
-						})
-					}
+						})}
 				>
 					<FollowItem follow={follow} navigation={navigation} />
 				</TouchableOpacity>

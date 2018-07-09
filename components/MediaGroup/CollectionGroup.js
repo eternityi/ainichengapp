@@ -40,7 +40,7 @@ class CollectionGroup extends Component {
 						plain
 						type={"collection"}
 						id={collection.id}
-						status={collection.followed_status}
+						status={collection.followed}
 						customStyle={miniButton ? { height: 28, width: 72 } : null}
 						fontSize={miniButton ? 14 : 15}
 					/>

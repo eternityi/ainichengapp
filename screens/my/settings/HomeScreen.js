@@ -1,18 +1,17 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions } from "react-native";
-
 import codePush from "react-native-code-push";
+
+import Screen from "../../Screen";
 import Config from "../../../constants/Config";
 import Colors from "../../../constants/Colors";
 import { Iconfont } from "../../../utils/Fonts";
-import Header from "../../../components/Header/Header";
-import DivisionLine from "../../../components/Pure/DivisionLine";
-import Avatar from "../../../components/Pure/Avatar";
+
+import { Header } from "../../../components/Header";
+import { Avatar } from "../../../components/Pure";
+import { BasicModal, DialogModal } from "../../../components/Modal";
 import SettingType from "../../../components/Setting/SettingType";
 import SettingItem from "../../../components/Setting/SettingItem";
-import DialogModal from "../../../components/Modal/DialogModal";
-import BasicModal from "../../../components/Modal/BasicModal";
-import Screen from "../../Screen";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions, Platform } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
@@ -40,11 +40,17 @@ class AddCommentModal extends Component {
 					<TextInput
 						textAlignVertical="top"
 						underlineColorAndroid="transparent"
-						multiline={true}
 						autoFocus
 						style={styles.textInput}
+						defaultValue=""
+						onSubmitEditing={this.sendTextMsg}
 						onChangeText={body => {
-							this.setState({ body });
+							if (Platform.OS === "android") {
+								this.setState({ body });
+							}
+						}}
+						ref={ref => {
+							this.inputText = ref;
 						}}
 						value={body}
 					/>
@@ -96,6 +102,20 @@ class AddCommentModal extends Component {
 			</BasicModal>
 		);
 	}
+
+	sendTextMsg = event => {
+		console.log("this.inputText", this.inputText._lastNativeText);
+		const { text } = event.nativeEvent;
+		if (text === "") {
+			return;
+		}
+		this.setState({ body: text });
+		setTimeout(() => {
+			console.log("this.inputText", this.inputText._lastNativeText);
+			this.inputText._lastNativeText = "";
+			this.setState({ body: text });
+		}, 0);
+	};
 
 	toggleVisible() {
 		this.setState(prevState => ({ aiteModalVisible: !prevState.aiteModalVisible }));

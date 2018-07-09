@@ -41,7 +41,7 @@ class HomeScreen extends Component {
     this.handleReportVisible = this.handleReportVisible.bind(this);
     this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
     this.state = {
-      cover: "https://ainicheng.com/storage/img/71234.top.jpg",
+      cover: "https://www.ainicheng.com/images/appicons/cover.jpg",
       fetchingMore: true,
       reportVisible: false,
       backdropVisible: false,
@@ -262,7 +262,7 @@ class HomeScreen extends Component {
             <TouchableOpacity style={[styles.layoutFlexRow, styles.userIntroduce]}>
               <View style={{ flex: 1 }}>
                 <Text numberOfLines={2} style={styles.introduceText}>
-                  {user.introduction ? user.introduction : "本宝宝暂时还没想到个性签名"}
+                  简介: {user.introduction ? user.introduction : "本宝宝暂时还没想到个性签名"}
                 </Text>
               </View>
             </TouchableOpacity>

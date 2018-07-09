@@ -93,65 +93,6 @@ class HomeScreen extends Component {
 										/>
 									}
 								/>
-
-								<ScrollView
-									style={styles.container}
-									bounces={false}
-									onScroll={this._outerScroll}
-									scrollEventThrottle={20}
-									scrollEnabled={scrollEnabled}
-								>
-									<View onLayout={this._mainTopLoaded}>
-										<CollectionTopInfo collection={collection} navigation={navigation} />
-									</View>
-									{!scrollEnabled && <View style={{ height: height - headerHeight }} /> /*position后撑开scrollview的空内容**/}
-									<View
-										style={[
-											styles.collectionDetailTabScreen,
-											/*根据scroll状态切换position**/
-											!scrollEnabled ? { position: "absolute", top: mainTopHeight } : null
-										]}
-									>
-										<ScrollableTabView
-											renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabBarStyle={{ paddingHorizontal: 20 }} />}
-											onChangeTab={this._changeTab.bind(this)}
-										>
-											<LatestTab
-												tabLabel="最新发布"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												collection={collection}
-												gotArticleLength={num => this.gotArticleLength(num, 0)}
-											/>
-											<CommentedTab
-												tabLabel="最新评论"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												collection={collection}
-												gotArticleLength={num => this.gotArticleLength(num, 1)}
-											/>
-											<IndexTab
-												tabLabel="目录"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												collection={collection}
-												gotArticleLength={num => this.gotArticleLength(num, 2)}
-											/>
-											<MembersTab
-												tabLabel="成员"
-												scrollEnabled={!scrollEnabled}
-												onScroll={this.innerScroll}
-												navigation={navigation}
-												collection={collection}
-												calcAuthorHeight={this.calcAuthorHeight}
-												calcMembersHeight={this.calcMembersHeight}
-											/>
-										</ScrollableTabView>
-									</View>
-								</ScrollView>
 							</View>
 						);
 					}}

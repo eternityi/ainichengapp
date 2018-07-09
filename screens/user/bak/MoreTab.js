@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { DivisionLine } from "../../components/Pure";
+
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-
-import DivisionLine from "../../components/Pure/DivisionLine";
 
 class MoreTab extends Component {
 	constructor(props) {

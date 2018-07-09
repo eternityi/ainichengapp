@@ -102,6 +102,7 @@ import CategoryHomeScreen from "../screens/category/HomeScreen";
 import CategoryIntroduceScreen from "../screens/category/IntroduceScreen";
 import CategoryRecommendAuthorScreen from "../screens/category/RecommendAuthorScreen";
 import CategoryAdminsScreen from "../screens/category/AdminsScreen";
+import CategoryMembersScreen from "../screens/category/MembersScreen";
 
 //collection
 import CollectionHomeScreen from "../screens/collection/HomeScreen";
@@ -238,6 +239,9 @@ export default {
   },
   专题介绍: {
     screen: CategoryIntroduceScreen
+  },
+  专题成员: {
+    screen: CategoryMembersScreen
   },
   专题推荐作者: {
     screen: CategoryRecommendAuthorScreen

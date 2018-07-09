@@ -4,7 +4,7 @@ import Swiper from "react-native-swiper";
 
 import Color from "../../constants/Colors";
 import NoteItem from "../../components/Article/NoteItem";
-import { DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import ScrollCard from "./ScrollCard";
 import Screen from "../Screen";
 
@@ -55,7 +55,7 @@ class RecommendScreen extends React.Component {
                 }}
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => <NoteItem post={item} />}
+                renderItem={({ item, index }) => <NoteItem post={item} recommend />}
                 onEndReached={() => {
                   if (data.articles) {
                     fetchMore({

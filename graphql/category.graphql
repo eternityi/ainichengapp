@@ -20,7 +20,8 @@ query topCategoriesQuery($offset: Int) {
 	}
 }
 
-query categoryQuery($id: Int!) {
+# COMMENTED/HOT/LATEST
+query categoryQuery($id: Int!, $order: ArticleOrder!, $offset: Int) {
 	category(id: $id) {
 		id
 		name
@@ -41,54 +42,7 @@ query categoryQuery($id: Int!) {
 			avatar
 		}
 	}
-}
-
-query categoryArticlesByHotQuery($id: Int!, $offset: Int) {
-	articles(category_id: $id, order: HOT, offset: $offset) {
-		id
-		type
-		title
-		description
-		has_image
-		images
-		cover
-		time_ago
-		user {
-			id
-			name
-			avatar
-		}
-		hits
-		count_replies
-		count_tips
-		count_likes
-	}
-}
-
-query categoryArticlesByCommentedQuery($id: Int!, $offset: Int) {
-	articles(category_id: $id, order: COMMENTED, offset: $offset) {
-		id
-		type
-		title
-		description
-		has_image
-		images
-		cover
-		time_ago
-		user {
-			id
-			name
-			avatar
-		}
-		hits
-		count_replies
-		count_tips
-		count_likes
-	}
-}
-
-query categoryArticlesByLatestQuery($id: Int!, $offset: Int) {
-	articles(category_id: $id, order: LATEST, offset: $offset) {
+	articles(category_id: $id, order: $order, offset: $offset) {
 		id
 		type
 		title

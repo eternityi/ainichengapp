@@ -1,4 +1,5 @@
-query collectionQuery($id: Int!) {
+# COMMENTED LATEST HOT
+query collectionQuery($id: Int!, $order: ArticleOrder!, $offset: Int) {
 	collection(id: $id) {
 		id
 		name
@@ -15,10 +16,7 @@ query collectionQuery($id: Int!) {
 		count_articles
 		count_follows
 	}
-}
-
-query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
-	articles(collection_id: $id, order: HOT, offset: $offset) {
+	articles(category_id: $id, order: $order, offset: $offset) {
 		id
 		type
 		title
@@ -27,53 +25,6 @@ query collectionArticlesByHotQuery($id: Int!, $offset: Int) {
 		images
 		cover
 		time_ago
-		status
-		user {
-			id
-			name
-			avatar
-		}
-		hits
-		count_replies
-		count_tips
-		count_likes
-	}
-}
-
-query collectionArticlesByCommentedQuery($id: Int!, $offset: Int) {
-	articles(collection_id: $id, order: COMMENTED, offset: $offset) {
-		id
-		type
-		title
-		description
-		has_image
-		images
-		cover
-		time_ago
-		status
-		user {
-			id
-			name
-			avatar
-		}
-		hits
-		count_replies
-		count_tips
-		count_likes
-	}
-}
-
-query collectionArticlesByLatestQuery($id: Int!, $offset: Int) {
-	articles(collection_id: $id, order: LATEST, offset: $offset) {
-		id
-		type
-		title
-		description
-		has_image
-		images
-		cover
-		time_ago
-		status
 		user {
 			id
 			name
