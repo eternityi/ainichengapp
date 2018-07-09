@@ -51,11 +51,6 @@ class OpenArticlesScreen extends Component {
 										data={data.articles}
 										keyExtractor={(item, index) => index.toString()}
 										renderItem={({ item, index }) => <NoteItem post={item} compress />}
-										getItemLayout={(data, index) => ({
-											length: 130,
-											offset: 130 * index,
-											index
-										})}
 										onEndReachedThreshold={0.3}
 										onEndReached={() => {
 											if (data.articles) {

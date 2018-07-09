@@ -232,4 +232,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default NoteItem;
+export default withNavigation(NoteItem);

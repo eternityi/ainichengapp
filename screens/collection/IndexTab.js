@@ -38,23 +38,7 @@ class IndexTab extends Component {
 								scrollEnabled={scrollEnabled}
 								data={data.articles}
 								keyExtractor={(item, index) => index.toString()}
-								renderItem={({ item }) => (
-									<View>
-										<TouchableOpacity
-											onPress={() =>
-												navigation.navigate("文章详情", {
-													article: item
-												})}
-										>
-											<NoteItem post={item} navigation={navigation} />
-										</TouchableOpacity>
-									</View>
-								)}
-								getItemLayout={(data, index) => ({
-									length: 150,
-									offset: 150 * index,
-									index
-								})}
+								renderItem={({ item }) => <NoteItem post={item} />}
 								onEndReached={() => {
 									if (data.articles) {
 										fetchMore({

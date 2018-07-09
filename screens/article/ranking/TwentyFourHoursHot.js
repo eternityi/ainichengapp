@@ -36,19 +36,7 @@ class TwentyFourHoursHot extends Component {
               <FlatList
                 data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("文章详情", {
-                          article: item
-                        })}
-                    >
-                      <NoteItem post={item} navigation={navigation} />
-                    </TouchableOpacity>
-                  </View>
-                )}
-                getItemLayout={(data, index) => ({ length: 180, offset: 180 * index, index })}
+                renderItem={({ item }) => <NoteItem post={item} />}
                 onEndReached={() => {
                   if (data.articles) {
                     fetchMore({

@@ -53,11 +53,6 @@ class DraftsScreen extends Component {
 									}}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => <NoteItem post={item} compress />}
-									getItemLayout={(data, index) => ({
-										length: 90,
-										offset: 90 * index,
-										index
-									})}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
 										if (data.user.articles) {

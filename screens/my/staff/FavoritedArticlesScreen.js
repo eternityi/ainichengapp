@@ -48,11 +48,6 @@ class FavoritedArticlesScreen extends Component {
 									data={data.user.articles}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item }) => <NoteItem post={item} />}
-									getItemLayout={(data, index) => ({
-										length: 130,
-										offset: 130 * index,
-										index
-									})}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
 										if (data.user.articles) {
