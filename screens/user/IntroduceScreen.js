@@ -41,11 +41,15 @@ class IntroduceScreen extends Component {
 						let user = data.user;
 						return (
 							<View style={styles.container}>
-								<Header navigation={navigation} customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }} lightTabBar />
+								<Header
+									navigation={navigation}
+									customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
+									lightTabBar
+								/>
 								<ScrollView style={styles.visitingCardContainer}>
 									<View style={styles.visitingCard}>
 										<View>
-											<Image style={styles.cover} source={{ uri: "https://www.dongmeiwei.com/storage/img/23433.top.jpg" }} />
+											<Image style={styles.cover} source={{ uri: "https://www.ainicheng.com/images/appicons/cover.jpg" }} />
 										</View>
 										<View style={{ alignItems: "center" }}>
 											<View style={{ marginTop: -10 }}>
@@ -72,9 +76,14 @@ class IntroduceScreen extends Component {
 												</Text>
 											</View>
 											<View style={styles.QRcodeRow}>
-												<Image style={styles.QRcode} source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }} />
+												<Image
+													style={styles.QRcode}
+													source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }}
+												/>
 												<View style={styles.QRcodeInfo}>
-													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>长按识别图中二维码，查看TA的{Config.AppName}主页</Text>
+													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
+														长按识别图中二维码，查看TA的{Config.AppName}主页
+													</Text>
 												</View>
 											</View>
 										</View>
@@ -89,7 +98,10 @@ class IntroduceScreen extends Component {
 											<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
 										</TouchableOpacity>
 										<TouchableOpacity>
-											<Image style={{ width: 32, height: 32, resizeMode: "contain" }} source={require("../../assets/images/pengyouquan.png")} />
+											<Image
+												style={{ width: 32, height: 32, resizeMode: "contain" }}
+												source={require("../../assets/images/pengyouquan.png")}
+											/>
 										</TouchableOpacity>
 										<TouchableOpacity onPress={this.toggleModalVisible}>
 											<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />

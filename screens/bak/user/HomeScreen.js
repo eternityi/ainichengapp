@@ -25,7 +25,7 @@ import Colors from "../../constants/Colors";
 import { Avatar, CustomScrollTabBar, LoadingError, SpinnerLoading } from "../../components/Pure";
 import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
 import { Header, HeaderLeft, HeaderRight, Search } from "../../components/Header";
-import { FollowButton, HollowButton } from "../../components/Button";
+import { FollowButton, Button } from "../../components/Button";
 import Screen from "../Screen";
 
 import ActionsTab from "./ActionsTab";
@@ -163,10 +163,7 @@ class HomeScreen extends Component {
                       </View>
                       {personal.id == user.id ? (
                         <View style={styles.editorPersonData}>
-                          <HollowButton onPress={() => navigation.navigate("编辑个人资料")}>
-                            <Iconfont name={"editor"} size={16} color={"rgba(66,192,46,0.9)"} />
-                            <Text style={{ fontSize: 14, color: "rgba(66,192,46,0.9)" }}> 编辑个人资料</Text>
-                          </HollowButton>
+                          <Button outline handler={() => navigation.navigate("编辑个人资料")} iconName="editor" iconSize={16} name="编辑个人资料" />
                         </View>
                       ) : (
                         <View style={{ flexDirection: "row", height: 40 }}>
@@ -182,10 +179,11 @@ class HomeScreen extends Component {
                           <View style={{ marginLeft: 6, flex: 1 }}>
                             <Mutation mutation={createChatMutation}>
                               {createChat => (
-                                <HollowButton
+                                <Button
+                                  outline
                                   name={"发信息"}
-                                  size={16}
-                                  onPress={() => {
+                                  fontSize={16}
+                                  handler={() => {
                                     login
                                       ? navigation.navigate("聊天页", {
                                           withUser: user

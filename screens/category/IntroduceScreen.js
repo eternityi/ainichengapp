@@ -40,15 +40,15 @@ class IntroduceScreen extends Component {
 					<ScrollView style={styles.visitingCardContainer}>
 						<View style={styles.visitingCard}>
 							<View style={{ alignItems: "center" }}>
-								<View style={{ marginTop: -10 }}>
+								<View style={{ marginVertical: 15 }}>
 									<Avatar uri={category.logo} type="category" size={90} borderStyle={{ borderColor: "#fff", borderWidth: 2 }} />
 								</View>
-								<View style={{ marginTop: 5 }}>
+								<View>
 									<Text style={{ fontSize: 22, fontWeight: "500", color: Colors.primaryFontColor }}>{category.name}</Text>
 								</View>
 								<View style={{ marginTop: 15 }}>
 									<Text style={{ fontSize: 15, color: "#666" }}>
-										{category.user.name}编·{category.count_articles}篇文章
+										{category.count_follows}人关注·{category.count_articles}篇帖子
 									</Text>
 								</View>
 							</View>
@@ -59,7 +59,9 @@ class IntroduceScreen extends Component {
 							</View>
 							<View style={styles.cardBottom}>
 								<View>
-									<Text style={{ fontSize: 15, color: Colors.primaryFontColor, lineHeight: 21 }}>{category.description ? category.description : "暂无简介"}</Text>
+									<Text style={{ fontSize: 15, color: Colors.primaryFontColor, lineHeight: 21 }}>
+										{category.description ? category.description : "暂无简介"}
+									</Text>
 								</View>
 								<View style={styles.QRcodeRow}>
 									<Image style={styles.QRcode} source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }} />
@@ -79,7 +81,10 @@ class IntroduceScreen extends Component {
 								<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
 							</TouchableOpacity>
 							<TouchableOpacity>
-								<Image style={{ width: 32, height: 32, resizeMode: "contain" }} source={require("../../assets/images/pengyouquan.png")} />
+								<Image
+									style={{ width: 32, height: 32, resizeMode: "contain" }}
+									source={require("../../assets/images/pengyouquan.png")}
+								/>
 							</TouchableOpacity>
 							<TouchableOpacity onPress={this.toggleModalVisible}>
 								<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />
@@ -113,11 +118,6 @@ const styles = StyleSheet.create({
 		marginBottom: 25,
 		borderRadius: 5,
 		backgroundColor: "#fff"
-	},
-	cover: {
-		width: width - 40,
-		height: (width - 40) / 3,
-		resizeMode: "cover"
 	},
 	gutterWrap: {
 		marginTop: 25,

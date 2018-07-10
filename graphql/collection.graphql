@@ -16,7 +16,7 @@ query collectionQuery($id: Int!, $order: ArticleOrder!, $offset: Int) {
 		count_articles
 		count_follows
 	}
-	articles(category_id: $id, order: $order, offset: $offset) {
+	articles(collection_id: $id, order: $order, offset: $offset) {
 		id
 		type
 		title

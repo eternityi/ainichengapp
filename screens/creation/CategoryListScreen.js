@@ -5,7 +5,6 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
-import { HollowButton } from "../../components/Button";
 import { CategoryContributeGroup } from "../../components/MediaGroup";
 
 import { connect } from "react-redux";

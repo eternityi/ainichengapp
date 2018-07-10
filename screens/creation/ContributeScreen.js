@@ -5,7 +5,7 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
-import { HollowButton } from "../../components/Button";
+import { Button } from "../../components/Button";
 import { CategoryContributeGroup } from "../../components/MediaGroup";
 
 import { connect } from "react-redux";
@@ -35,12 +35,16 @@ class CategoryItem extends React.Component {
 					<Mutation mutation={submitArticleMutation}>
 						{submitArticle => {
 							return (
-								<HollowButton
+								<Button
+									outline
 									name={status}
-									size={12}
-									// color={submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-									color={"rgba(66,192,46,0.9)"}
-									onPress={() => {
+									fontSize={12}
+									theme={
+										submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1
+											? "rgba(66,192,46,0.9)"
+											: Colors.themeColor
+									}
+									handler={() => {
 										submitArticle({
 											variables: {
 												category_id: category.id,

@@ -20,7 +20,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { userOperationMiddleware } from "../../constants/Methods";
 import PostItem from "../../components/Article/PostItem";
-import { FollowButton, HollowButton, Button } from "../../components/Button";
+import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
 import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
 
@@ -231,7 +231,7 @@ class HomeScreen extends Component {
             {self ? (
               <View style={[styles.layoutFlexRow, styles.buttonGroup]}>
                 <View style={{ width: 70 }}>
-                  <Button name="编辑资料" fontSize={14} outline handler={() => navigation.navigate("编辑个人资料")} />
+                  <Button name="编辑资料" outline handler={() => navigation.navigate("编辑个人资料")} />
                 </View>
               </View>
             ) : (
@@ -247,7 +247,7 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ width: 70 }}>
-                  <Button name="发信息" fontSize={14} outline handler={() => this.chatting(user)} />
+                  <Button name="发信息" outline handler={() => this.chatting(user)} />
                 </View>
               </View>
             )}
@@ -477,6 +477,7 @@ const styles = StyleSheet.create({
     height: 80,
     marginTop: 10,
     borderTopWidth: 1,
+    borderBottomWidth: 6,
     borderColor: Colors.lightBorderColor
   },
   listItemImg: {

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { Avatar } from "../../components/Pure";
-import { HollowButton } from "../../components/Button";
+import { Button } from "../../components/Button";
 
 import { Query, Mutation, graphql } from "react-apollo";
 import { submitArticleMutation } from "../../graphql/user.graphql";
@@ -37,12 +37,12 @@ class CategoryContributeGroup extends React.Component {
 						<Mutation mutation={submitArticleMutation}>
 							{submitArticle => {
 								return (
-									<HollowButton
+									<Button
 										name={submit_status ? submit_status : "投稿"}
-										size={12}
+										fontSize={12}
 										// color={submit_status.indexOf("投稿") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-										color={"rgba(66,192,46,0.9)"}
-										onPress={() => {
+										theme={"rgba(66,192,46,0.9)"}
+										handler={() => {
 											submitArticle({
 												variables: {
 													category_id: category.id,

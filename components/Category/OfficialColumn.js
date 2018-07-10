@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Image, Text } from "react-native";
 
 import Colors from "../../constants/Colors";
-
-const { width, height } = Dimensions.get("window");
 
 class OfficialColumn extends Component {
   render() {

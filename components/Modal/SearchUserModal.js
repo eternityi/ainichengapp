@@ -5,7 +5,6 @@ import Modal from "react-native-modal";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { SearchTypeHeader } from "../../components/Header";
-import { HollowButton } from "../../components/Button";
 import { UserMetaGroup } from "../../components/MediaGroup";
 import { ContentEnd, LoadingMore } from "../../components/Pure";
 

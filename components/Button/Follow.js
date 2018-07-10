@@ -45,9 +45,9 @@ class Follow extends Component {
 	}
 
 	render() {
-		let { plain = false, customStyle = {}, fontSize = 15, status, user, id, theme = Colors.weixinColor } = this.props;
+		let { type, plain = false, customStyle = {}, fontSize = 15, status, personal, id, theme = Colors.weixinColor } = this.props;
 		let mergeStyle = StyleSheet.flatten([styles.followButton, customStyle]);
-		if (user.id == id) {
+		if (type == "user" && personal.id == id) {
 			return null;
 		}
 		return (
@@ -99,5 +99,5 @@ export default compose(
 	graphql(followUserMutation, { name: "followUser" }),
 	graphql(followCollectionMutation, { name: "followCollection" }),
 	graphql(followCategoryMutation, { name: "followCategory" }),
-	connect(store => ({ login: store.users.login, user: store.users.user }))
+	connect(store => ({ login: store.users.login, personal: store.users.user }))
 )(Follow);

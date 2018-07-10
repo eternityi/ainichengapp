@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, Platform, StatusBar } from "react-native";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, Platform, FlatList } from "react-native";
 
-import Screen from "../Screen";
-import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
-import { Header, HeaderLeft, Search } from "../../components/Header";
-import { CustomPopoverMenu, ShareModal } from "../../components/Modal";
-import { CommunityInfo } from "../../components/MediaGroup";
-import NoteItem from "../../components/Article/NoteItem";
+import Screen from "../../Screen";
+import { Iconfont } from "../../../utils/Fonts";
+import Colors from "../../../constants/Colors";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { Header, HeaderLeft } from "../../../components/Header";
+import { CustomPopoverMenu, ShareModal } from "../../../components/Modal";
+import { CommunityInfo } from "../../../components/MediaGroup";
+import NoteItem from "../../../components/Article/NoteItem";
 
-import actions from "../../store/actions";
+import actions from "../../../store/actions";
 import { connect } from "react-redux";
-import { Mutation, Query, graphql } from "react-apollo";
-import { categoryQuery, deleteCategoryMutation } from "../../graphql/category.graphql";
-import { userCategoriesQuery } from "../../../graphql/user.graphql";
+import { Mutation, Query } from "react-apollo";
+import { collectionQuery } from "../../../graphql/collection.graphql";
 
 class HomeScreen extends Component {
 	static navigationOptions = {
@@ -34,80 +33,54 @@ class HomeScreen extends Component {
 	render() {
 		let { order, modalVisible, fetchingMore } = this.state;
 		let { navigation, personal, deleteCategory } = this.props;
-		let category = navigation.getParam("category", {});
+		let collection = navigation.getParam("collection", {});
 		return (
 			<Screen>
-				<Query query={categoryQuery} variables={{ id: category.id, order }}>
+				<Query query={collectionQuery} variables={{ id: collection.id, order }}>
 					{({ loading, error, data, refetch, fetchMore }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
-						if (!(data && data.category && data.articles)) return <SpinnerLoading />;
-						let category = data.category;
+						if (!(data && data.collection && data.articles)) return <SpinnerLoading />;
+						let collection = data.collection;
 						let articles = data.articles;
-						let self = category.user.id == personal.id;
+						let self = collection.user.id == personal.id;
 						return (
 							<View style={styles.container}>
 								<Header
-									routeName
+									routeName={true}
 									rightComponent={
-										<View
-											style={{
-												flexDirection: "row",
-												alignItems: "center"
-											}}
-										>
-											<View style={{ marginRight: 15 }}>
-												<Search navigation={navigation} routeName={"搜索文章"} />
-											</View>
-											<CustomPopoverMenu
-												width={160}
-												selectHandler={index => {
-													if (self) {
-														switch (index) {
-															case 0:
-																navigation.navigate("新建专题", {
-																	category
-																});
-																break;
-															case 1:
-																deleteCategory({
-																	variables: {
-																		id: category.id
-																	},
-																	refetchQueries: deleteCategoryResult => [
-																		{
-																			query: userCategoriesQuery,
-																			variables: {
-																				user_id: personal.id
-																			}
-																		}
-																	]
-																});
-																navigation.goBack();
-																break;
-															case 2:
-																this.toggleModalVisible();
-																break;
+										<CustomPopoverMenu
+											width={160}
+											selectHandler={index => {
+												switch (index) {
+													case 0:
+														if (self) {
+															navigation.navigate("编辑文集", {
+																collection
+															});
+														} else {
+															this.toggleModalVisible();
 														}
-													} else {
+														break;
+													case 1:
 														this.toggleModalVisible();
-													}
-												}}
-												triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
-												customOptionStyle={{
-													optionWrapper: {
-														alignItems: "flex-start",
-														paddingHorizontal: 10
-													}
-												}}
-												options={self ? ["编辑", "删除专题", "分享专题"] : ["分享专题"]}
-											/>
-										</View>
+														break;
+												}
+											}}
+											triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
+											customOptionStyle={{
+												optionWrapper: {
+													alignItems: "flex-start",
+													paddingHorizontal: 10
+												}
+											}}
+											options={self ? ["编辑", "分享文集"] : ["分享文集"]}
+										/>
 									}
 								/>
 
 								<FlatList
 									bounces={false}
-									ListHeaderComponent={() => this._renderListHeader(category)}
+									ListHeaderComponent={() => this._renderListHeader(collection)}
 									data={articles}
 									refreshing={loading}
 									onRefresh={() => {
@@ -159,12 +132,12 @@ class HomeScreen extends Component {
 		);
 	}
 
-	_renderListHeader = category => {
+	_renderListHeader = collection => {
 		let { order } = this.state;
 		let { navigation } = this.props;
 		return (
 			<View>
-				<CommunityInfo category={category} navigation={navigation} />
+				<CommunityInfo collection={collection} navigation={navigation} />
 				<View style={styles.orderHeader}>
 					<View>
 						<Text style={styles.orderText}>
@@ -243,4 +216,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
 	personal: store.users.user
-}))(graphql(deleteCategoryMutation, { name: "deleteCategory" })(HomeScreen));
+}))(HomeScreen);

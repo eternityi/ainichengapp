@@ -1,12 +1,12 @@
 import React from "react";
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, Dimensions } from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, FlatList, Dimensions } from "react-native";
 
 import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
 import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
 import { DivisionLine, ContentEnd, LoadingError } from "../../../components/Pure";
-import { HollowButton } from "../../../components/Button";
+import { Button } from "../../../components/Button";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
@@ -63,11 +63,11 @@ class ContributeManageScreen extends React.Component {
 					</View>
 				</View>
 				<View style={styles.button}>
-					<HollowButton
+					<Button
+						outline
 						name={item.submit_status}
-						size={12}
-						color={Colors.themeColor}
-						onPress={() => {
+						fontSize={12}
+						handler={() => {
 							submitArticle({
 								variables: {
 									category_id: category.id,
@@ -99,11 +99,11 @@ class ContributeManageScreen extends React.Component {
 							</View>
 						</View>
 						<View style={styles.button}>
-							<HollowButton
+							<Button
+								outline
 								name={"移除"}
-								size={12}
-								color={Colors.themeColor}
-								onPress={() => {
+								fontSize={12}
+								handler={() => {
 									removeContribute({
 										variables: {
 											category_id: category.id,

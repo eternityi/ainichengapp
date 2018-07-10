@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 
 import Colors from "../../constants/Colors";
-import HollowButton from "../Button/Hollow";
 
 const { width } = Dimensions.get("window");
 const IMAGE_WIDTH = width * 0.6;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Colors from "../../../constants/Colors";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
-import { HollowButton } from "../../../components/Button";
+import { Button } from "../../../components/Button";
 import MediaGroup from "../MediaGroup";
 
 import { Mutation } from "react-apollo";
@@ -18,10 +18,12 @@ class ContributeStatus extends Component {
 							return (
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
 									<View style={[styles.handleButton, { marginRight: 10 }]}>
-										<HollowButton
+										<Button
+											outline
 											name="接受"
-											size={15}
-											onPress={() => {
+											theme="rgba(66,192,46,0.9)"
+											fontSize={15}
+											handler={() => {
 												// this.setState({ status: "已收录" });
 												approveArticle({
 													variables: {
@@ -34,11 +36,11 @@ class ContributeStatus extends Component {
 										/>
 									</View>
 									<View style={styles.handleButton}>
-										<HollowButton
+										<Button
+											outline
 											name="拒绝"
-											size={15}
-											color={Colors.themeColor}
-											onPress={() => {
+											fontSize={15}
+											handler={() => {
 												// this.setState({ status: "已拒绝" });
 												approveArticle({
 													variables: {

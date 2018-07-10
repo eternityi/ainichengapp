@@ -7,8 +7,7 @@ import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
 import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
-import CreatePostScreen from "../screens/creation/CreatePostScreen";;
-
+import CreatePostScreen from "../screens/creation/CreatePostScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -84,6 +83,7 @@ import CategoryCreateScreen from "../screens/user/category/CreateScreen";
 import CategoryEditorsScreen from "../screens/user/category/AddAdminsScreen";
 
 //user collection
+import CollectionHomeScreen from "../screens/user/collection/HomeScreen";
 import CollectionsScreen from "../screens/user/collection/ListScreen";
 import CollectionEditScreen from "../screens/user/collection/EditScreen";
 import CollectionRankScreen from "../screens/user/collection/RankScreen";
@@ -100,12 +100,7 @@ import VideoDetailScreen from "../screens/video/DetailScreen";
 //category
 import CategoryHomeScreen from "../screens/category/HomeScreen";
 import CategoryIntroduceScreen from "../screens/category/IntroduceScreen";
-import CategoryRecommendAuthorScreen from "../screens/category/RecommendAuthorScreen";
-import CategoryAdminsScreen from "../screens/category/AdminsScreen";
 import CategoryMembersScreen from "../screens/category/MembersScreen";
-
-//collection
-import CollectionHomeScreen from "../screens/collection/HomeScreen";
 
 // search
 import SearchHomeScreen from "../screens/search/HomeScreen";
@@ -242,12 +237,6 @@ export default {
   },
   专题成员: {
     screen: CategoryMembersScreen
-  },
-  专题推荐作者: {
-    screen: CategoryRecommendAuthorScreen
-  },
-  管理员: {
-    screen: CategoryAdminsScreen
   },
   个人专题: {
     screen: CategoriesScreen

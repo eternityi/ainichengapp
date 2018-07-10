@@ -110,11 +110,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   swiperContainer: {
-    height: width * 9 / 16
+    height: width * 0.5
   },
   posterImage: {
     width,
-    height: width * 9 / 16,
+    height: width * 0.5,
     resizeMode: "cover"
   }
 });

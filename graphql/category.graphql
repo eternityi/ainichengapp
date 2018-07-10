@@ -13,10 +13,8 @@ query topCategoriesQuery($offset: Int) {
 		name
 		logo
 		count_follows
-		latest_follower {
-			id
-			name
-		}
+		followed
+		description
 	}
 }
 
@@ -37,6 +35,11 @@ query categoryQuery($id: Int!, $order: ArticleOrder!, $offset: Int) {
 		count_follows
 		count_authors
 		authors {
+			id
+			name
+			avatar
+		}
+		admins {
 			id
 			name
 			avatar

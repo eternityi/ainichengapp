@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, Text, TouchableOpacity, TextInput, Platform
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchTypeHeader } from "../../components/Header";
-import { HollowButton } from "../../components/Button";
+import { Button } from "../../components/Button";
 import { UserGroup } from "../../components/MediaGroup";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import Screen from "../Screen";
@@ -104,10 +104,11 @@ class NewChatScreen extends Component {
 					user={user}
 					rightButton={
 						<View style={{ width: 56, height: 28 }}>
-							<HollowButton
-								size={13}
+							<Button
+								outline
+								fontSize={13}
 								name="写信"
-								onPress={() =>
+								handler={() =>
 									navigation.navigate("聊天页", {
 										withUser: user
 									})}

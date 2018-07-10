@@ -22,7 +22,7 @@ class MembersScreen extends Component {
 
 	render() {
 		let { navigation } = this.props;
-
+		let { authors, admins } = this.category;
 		return (
 			<Screen>
 				<Header />
@@ -33,7 +33,7 @@ class MembersScreen extends Component {
 							if (!(data && data.users)) return null;
 							return (
 								<FlatList
-									ListHeaderComponent={this._renderHeader}
+									ListHeaderComponent={() => this._renderHeader(authors, admins)}
 									data={data.users}
 									keyExtractor={(item, index) => index.toString()}
 									numColumns={3}
@@ -104,95 +104,61 @@ class MembersScreen extends Component {
 		);
 	};
 
-	_renderHeader = () => {
+	_renderHeader = (authors, admins) => {
 		let { navigation } = this.props;
 		return (
 			<View>
-				<Query query={categoryAdminsQuery} variables={{ id: this.category.id }}>
-					{({ loading, error, data }) => {
-						if (!(data && data.users)) return null;
-						let admins = data.users;
-						return (
-							<View
-								style={{
-									borderBottomWidth: 1,
-									borderBottomColor: Colors.lightBorderColor
-								}}
-							>
-								<View style={styles.membersType}>
-									<Text style={styles.memberItemText}>管理员({admins.length})</Text>
-									<Text
-										style={[styles.memberItemText, { color: Colors.lightFontColor }]}
-										onPress={() => {
-											navigation.navigate("管理员", {
-												data: admins
-											});
-										}}
-									>
-										查看全部
-										<Iconfont name={"right"} color={Colors.lightFontColor} size={15} />
-									</Text>
-								</View>
-								<View style={{ flexDirection: "row" }}>
-									{admins.slice(0, 3).map((user, index) => {
-										return (
-											<View key={index.toString()}>
-												{this._memberItem({
-													item: user
-												})}
-											</View>
-										);
-									})}
-								</View>
-							</View>
-						);
-					}}
-				</Query>
-
-				<Query query={categoryAuthorsQuery} variables={{ id: this.category.id }}>
-					{({ loading, error, data }) => {
-						if (!(data && data.users && data.users.length > 0)) return null;
-						return (
-							<View
-								style={{
-									borderBottomWidth: 1,
-									borderBottomColor: Colors.lightBorderColor
-								}}
-							>
-								<View style={styles.membersType}>
-									<Text style={styles.memberItemText}>推荐作者({this.category.count_authors || data.users.length})</Text>
-									<Text
-										style={[styles.memberItemText, { color: Colors.lightFontColor }]}
-										onPress={() => {
-											navigation.navigate("专题推荐作者", {
-												data: data.users
-											});
-										}}
-									>
-										查看全部
-										<Iconfont name={"right"} color={Colors.lightFontColor} size={15} />
-									</Text>
-								</View>
-								<View
-									style={{
-										flexDirection: "row",
-										flexWrap: "wrap"
-									}}
-								>
-									{data.users.slice(0, 6).map((user, index) => {
-										return (
-											<View key={index.toString()}>
-												{this._memberItem({
-													item: user
-												})}
-											</View>
-										);
-									})}
-								</View>
-							</View>
-						);
-					}}
-				</Query>
+				{admins.length > 0 && (
+					<View
+						style={{
+							borderBottomWidth: 1,
+							borderBottomColor: Colors.lightBorderColor
+						}}
+					>
+						<View style={styles.membersType}>
+							<Text style={styles.memberItemText}>管理员({admins.length})</Text>
+						</View>
+						<View style={{ flexDirection: "row" }}>
+							{admins.slice(0, 3).map((user, index) => {
+								return (
+									<View key={index.toString()}>
+										{this._memberItem({
+											item: user
+										})}
+									</View>
+								);
+							})}
+						</View>
+					</View>
+				)}
+				{authors.length > 0 && (
+					<View
+						style={{
+							borderBottomWidth: 1,
+							borderBottomColor: Colors.lightBorderColor
+						}}
+					>
+						<View style={styles.membersType}>
+							<Text style={styles.memberItemText}>活跃用户({authors.length})</Text>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								flexWrap: "wrap"
+							}}
+						>
+							{authors.slice(0, 6).map((user, index) => {
+								return (
+									<View key={index.toString()}>
+										{this._memberItem({
+											item: user
+										})}
+									</View>
+								);
+							})}
+						</View>
+					</View>
+				)}
 				{this.category.count_follows > 0 && (
 					<View style={styles.membersType}>
 						<Text style={styles.memberItemText}>关注的人({this.category.count_follows})</Text>
@@ -226,10 +192,7 @@ const styles = StyleSheet.create({
 	},
 	membersType: {
 		paddingHorizontal: 15,
-		marginVertical: 15,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center"
+		marginVertical: 15
 	},
 	memberItemText: {
 		fontSize: 15,

@@ -2,9 +2,9 @@ import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Button, TextInput, StatusBar, Dimensions, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
-import { DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import OfficialColumn from "../../components/Category/OfficialColumn";
-import CategoryItem from "../../components/Category/CategoryItem";
+import CategoryCard from "../../components/Card/CategoryCard";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
@@ -129,11 +129,6 @@ class CategoriesScreen extends React.Component {
                 ListHeaderComponent={this._renderHeader.bind(this)}
                 keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
                 renderItem={this._renderCategoryItem}
-                numColumns={3}
-                columnWrapperStyle={{
-                  paddingBottom: 20,
-                  justifyContent: "space-around"
-                }}
                 refreshing={loading}
                 onRefresh={() => {
                   refetch();
@@ -175,36 +170,35 @@ class CategoriesScreen extends React.Component {
   }
 
   _renderHeader = () => {
-    // let { official_categories } = this.state;
     return (
-      <View style={{ marginBottom: 15 }}>
-        <View style={{ flex: 1, paddingBottom: 20 }}>
-          <View style={styles.officialList}>
-            {official_categories.slice(0, 5).map((elem, index) => {
-              return this._renderColumnItem({
-                item: elem,
-                index
-              });
-            })}
-          </View>
-          <View style={styles.officialList}>
-            {official_categories.slice(5, 10).map((elem, index) => {
-              return this._renderColumnItem({
-                item: elem,
-                index
-              });
-            })}
-          </View>
-          <View style={styles.officialList}>
-            {official_categories.slice(10, 15).map((elem, index) => {
-              return this._renderColumnItem({
-                item: elem,
-                index
-              });
-            })}
-          </View>
+      <View style={styles.officialWrap}>
+        <View style={styles.officialList}>
+          {official_categories.slice(0, 5).map((elem, index) => {
+            return this._renderColumnItem({
+              item: elem,
+              index
+            });
+          })}
         </View>
-        <DivisionLine />
+        <View style={styles.officialList}>
+          {official_categories.slice(5, 10).map((elem, index) => {
+            return this._renderColumnItem({
+              item: elem,
+              index
+            });
+          })}
+        </View>
+        <View style={styles.officialList}>
+          {official_categories.slice(10, 15).map((elem, index) => {
+            return this._renderColumnItem({
+              item: elem,
+              index
+            });
+          })}
+        </View>
+        <View style={styles.categoryHeader}>
+          <Text style={styles.boldText}>全部专题</Text>
+        </View>
       </View>
     );
   };
@@ -223,11 +217,10 @@ class CategoriesScreen extends React.Component {
   };
 
   _renderCategoryItem = ({ item, index }) => {
-    const { navigate } = this.props.navigation;
     return (
-      <TouchableOpacity onPress={() => navigate("专题详情", { category: item })}>
-        <CategoryItem category={item} />
-      </TouchableOpacity>
+      <View style={styles.categoryCardWrap}>
+        <CategoryCard category={item} />
+      </View>
     );
   };
 }
@@ -235,19 +228,38 @@ class CategoriesScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.skinColor
+    backgroundColor: Colors.lightGray
   },
-  followCategory: {
-    flex: 1,
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center"
+  officialWrap: {
+    backgroundColor: Colors.skinColor
   },
   officialList: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     paddingTop: 20
+  },
+  categoryHeader: {
+    marginTop: 20,
+    paddingTop: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 5,
+    backgroundColor: Colors.lightGray
+  },
+  categoryCardWrap: {
+    marginHorizontal: 15,
+    marginBottom: 15
+  },
+  boldText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: Colors.darkFontColor
+  },
+  followCategory: {
+    flex: 1,
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center"
   },
   categoryListWrap: {
     flex: 1,

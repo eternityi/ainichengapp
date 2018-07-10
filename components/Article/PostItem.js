@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.skinColor,
 		paddingHorizontal: 15,
 		paddingTop: 10,
-		borderTopWidth: 6,
-		borderTopColor: Colors.lightBorderColor
+		borderBottomWidth: 6,
+		borderBottomColor: Colors.lightBorderColor
 	},
 	layoutFlexRow: {
 		flexDirection: "row",

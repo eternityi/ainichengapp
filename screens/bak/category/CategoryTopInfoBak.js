@@ -5,7 +5,7 @@ import Modal from "react-native-modal";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Avatar, ContentEnd } from "../../components/Pure";
-import { FollowCategoryButton, HollowButton } from "../../components/Button";
+import { FollowCategoryButton, Button } from "../../components/Button";
 import UserListHorizontal from "../../components/User/UserListHorizontal";
 import { MenuOption } from "react-native-popup-menu";
 
@@ -42,15 +42,16 @@ class ArticleItem extends Component {
 					<Mutation mutation={submitArticleMutation}>
 						{submitArticle => {
 							return (
-								<HollowButton
+								<Button
+									outline
 									name={submit_status}
-									size={12}
-									color={
+									fontSize={12}
+									theme={
 										submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1
 											? "rgba(66,192,46,0.9)"
 											: Colors.themeColor
 									}
-									onPress={() => {
+									handler={() => {
 										submitArticle({
 											variables: { category_id: category.id, article_id: article.id }
 										});
@@ -151,7 +152,7 @@ class CategoryTopInfo extends Component {
 						/>
 					</View>
 					<View style={{ flex: 1, marginLeft: 6 }}>
-						<HollowButton name={"投稿"} size={17} onPress={this.handleVisible} />
+						<Button outline name={"投稿"} fontSize={17} handler={this.handleVisible} />
 					</View>
 
 					<Query query={userArticlesSubmitStatusQuery} variables={{ category_id: category.id }}>
@@ -207,11 +208,12 @@ class CategoryTopInfo extends Component {
 					</Text>
 				</View>
 				<View style={{ width: 52, height: 28 }}>
-					<HollowButton
+					<Button
+						outline
 						name={item.submited_status !== "已收录" ? "投稿" : "撤回"}
-						size={14}
-						color={item.submited_status !== "已收录" ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-						onPress={() => null}
+						fontSize={14}
+						theme={item.submited_status !== "已收录" ? "rgba(66,192,46,0.9)" : Colors.themeColor}
+						handler={() => null}
 					/>
 				</View>
 			</MenuOption>

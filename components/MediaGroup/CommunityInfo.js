@@ -11,17 +11,19 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 
-class CategoryTopInfo extends Component {
+class CommunityInfo extends Component {
 	render() {
-		let { category = {}, navigation } = this.props;
-		let { logo, name, count_follows, count_articles, followed, id, description, authors } = category;
+		let { category = {}, collection = {}, navigation } = this.props;
+		let info = category.id ? category : collection;
+		let type = category.id ? "category" : "collection";
+		let { logo, name, count_follows, count_articles, followed, id, description, admins } = info;
 		return (
 			<View>
 				<View style={styles.infoTop}>
 					<View>
-						<Avatar type={"category"} uri={logo} size={70} />
+						<Avatar type={"category"} uri={logo} size={60} />
 					</View>
-					<View style={{ flex: 1, marginHorizontal: 10 }}>
+					<View style={styles.middle}>
 						<View>
 							<Text
 								style={{
@@ -32,7 +34,7 @@ class CategoryTopInfo extends Component {
 								{name}
 							</Text>
 						</View>
-						<View style={[styles.layoutFlexRow, { marginVertical: 8 }]}>
+						<View style={[styles.layoutFlexRow, { marginTop: 10 }]}>
 							<View style={{ marginRight: 10 }}>
 								<Text style={styles.metaText}>{"关注 " + count_follows}</Text>
 							</View>
@@ -47,34 +49,36 @@ class CategoryTopInfo extends Component {
 							theme={Colors.themeColor}
 							status={followed}
 							id={id}
-							type={"category"}
+							type={type}
 							fontSize={14}
 						/>
 					</View>
 				</View>
-				<View style={styles.setTopBox}>
-					<TouchableOpacity style={styles.topItem} onPress={() => navigation.navigate("专题介绍", { category })}>
-						<View>
-							<Text style={styles.linkText}>简介</Text>
-						</View>
-						<View style={{ flex: 1, marginLeft: 10 }}>
-							<Text style={styles.metaText} numberOfLines={1}>
-								{description ? description : "暂时还没有freestyle"}
-							</Text>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[styles.topItem, { borderBottomColor: "transparent" }]}
-						onPress={() => navigation.navigate("专题成员", { category })}
-					>
-						<View>
-							<Text style={styles.linkText}>成员</Text>
-						</View>
-						<View style={{ marginLeft: 10 }}>
-							<UserListHorizontal users={authors.slice(0, 6)} radius={14} />
-						</View>
-					</TouchableOpacity>
-				</View>
+				{type == "category" ? (
+					<View style={styles.setTopBox}>
+						<TouchableOpacity style={styles.topItem} onPress={() => navigation.navigate("专题介绍", { category })}>
+							<View>
+								<Text style={styles.linkText}>简介</Text>
+							</View>
+							<View style={{ flex: 1, marginLeft: 10 }}>
+								<Text style={styles.metaText} numberOfLines={1}>
+									{description ? description : "暂时还没有freestyle"}
+								</Text>
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.topItem, { borderBottomColor: "transparent" }]}
+							onPress={() => navigation.navigate("专题成员", { category })}
+						>
+							<View>
+								<Text style={styles.linkText}>成员</Text>
+							</View>
+							<View style={{ marginLeft: 10 }}>
+								<UserListHorizontal users={admins.slice(0, 6)} radius={14} />
+							</View>
+						</TouchableOpacity>
+					</View>
+				) : null}
 			</View>
 		);
 	}
@@ -87,6 +91,10 @@ const styles = StyleSheet.create({
 		padding: 15,
 		borderBottomWidth: 6,
 		borderBottomColor: Colors.lightBorderColor
+	},
+	middle: {
+		flex: 1,
+		marginHorizontal: 10
 	},
 	setTopBox: {
 		paddingHorizontal: 15,
@@ -114,4 +122,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default CategoryTopInfo;
+export default CommunityInfo;
