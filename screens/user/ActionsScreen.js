@@ -37,7 +37,6 @@ class ActionsScreen extends Component {
 							this.firstActivity = actions.length;
 							return (
 								<View style={styles.container}>
-									<View style={styles.activityTimeLine} />
 									<FlatList
 										style={styles.activityWrap}
 										data={actions}
@@ -72,6 +71,7 @@ class ActionsScreen extends Component {
 												});
 											}
 										}}
+										ListHeaderComponent={this._renderListHeader}
 										ListFooterComponent={() => {
 											return (
 												<View style={{ backgroundColor: "#fff", paddingBottom: 20 }}>
@@ -89,13 +89,22 @@ class ActionsScreen extends Component {
 		);
 	}
 
+	_renderListHeader = () => {
+		return (
+			<View style={{ height: 20 }}>
+				<View style={styles.activityTimeLine} />
+			</View>
+		);
+	};
+
 	_renderItem = ({ item, index }) => {
 		let action = item;
 		if (!this._activityFilter(action)) {
 			return <View />;
 		}
 		return (
-			<View style={[styles.activity, action.signUp && { backgroundColor: "#fff", paddingBottom: 20 }]}>
+			<View style={[styles.activity, action.signUp && { paddingBottom: 0 }]}>
+				{!action.signUp && <View style={styles.activityTimeLine} />}
 				<View style={styles.activitySide}>
 					<Avatar size={42} uri={this.user.avatar} borderStyle={{ borderWidth: 0 }} />
 					{this._activityMark(action.type)}
@@ -349,7 +358,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff"
 	},
 	activityWrap: {
-		marginTop: 20,
 		flex: 1
 	},
 	activityTimeLine: {

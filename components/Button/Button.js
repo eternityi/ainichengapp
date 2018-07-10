@@ -6,10 +6,27 @@ import Colors from "../../constants/Colors";
 
 class Button extends Component {
 	render() {
-		let { bthStyle = {}, outline, theme = Colors.themeColor, name, fontSize = 14, icon, iconName, iconSize = fontSize, handler } = this.props;
-		let mergeButton = StyleSheet.flatten([styles.button, { borderColor: theme }, !outline && { backgroundColor: theme }, bthStyle]);
+		let {
+			style = {},
+			outline, //镂空按钮
+			theme = Colors.themeColor, //边框/背景/文字颜色
+			name,
+			fontSize = 14,
+			icon, //自定义icon
+			iconName, //iconName
+			iconSize = fontSize,
+			handler,
+			disabled = false
+		} = this.props;
+		let mergeButton = StyleSheet.flatten([
+			styles.button,
+			{ borderColor: theme },
+			!outline && { backgroundColor: theme },
+			style,
+			disabled && { opacity: 0.5 }
+		]);
 		return (
-			<TouchableOpacity onPress={handler} style={mergeButton}>
+			<TouchableOpacity onPress={handler} style={mergeButton} disabled={disabled}>
 				{icon ? icon : iconName && <Iconfont name={iconName} size={iconSize} color={outline ? theme : "#fff"} />}
 				<Text style={[{ fontSize, color: theme }, !outline && { color: "#fff" }]}>{name}</Text>
 			</TouchableOpacity>

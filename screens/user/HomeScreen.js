@@ -121,11 +121,7 @@ class HomeScreen extends Component {
                       });
                     }
                   }}
-                  ListEmptyComponent={() => (
-                    <View style={styles.listEmpty}>
-                      <BlankContent remind="TA还没有发布任何作品" />
-                    </View>
-                  )}
+                  ListEmptyComponent={() => <BlankContent remind="TA还没有发布任何作品" />}
                   ListFooterComponent={() => {
                     if (articles.length < 1) return <View />;
                     return <View style={{ paddingBottom: 25, backgroundColor: "#fff" }}>{fetchingMore ? <LoadingMore /> : <ContentEnd />}</View>;
@@ -259,7 +255,7 @@ class HomeScreen extends Component {
               </Text>
               <Iconfont name={user.gender == 1 ? "girl" : "boy"} size={18} color={user.gender == 1 ? Colors.softPink : Colors.skyBlue} />
             </View>
-            <TouchableOpacity style={[styles.layoutFlexRow, styles.userIntroduce]}>
+            <TouchableOpacity style={[styles.layoutFlexRow, styles.userIntroduce]} onPress={() => navigation.navigate("个人介绍", { user })}>
               <View style={{ flex: 1 }}>
                 <Text numberOfLines={2} style={styles.introduceText}>
                   简介: {user.introduction ? user.introduction : "本宝宝暂时还没想到个性签名"}
@@ -534,12 +530,7 @@ const styles = StyleSheet.create({
     height: HEADER_HEIGHT,
     paddingTop: 24
   },
-  customStyle: { backgroundColor: "transparent", borderBottomColor: "transparent" },
-  listEmpty: {
-    borderTopWidth: 6,
-    borderTopColor: Colors.lightBorderColor,
-    justifyContent: "center"
-  }
+  customStyle: { backgroundColor: "transparent", borderBottomColor: "transparent" }
 });
 
 export default connect(store => {

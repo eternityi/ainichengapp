@@ -8,6 +8,9 @@ import { UserGroup, CategoryGroup } from "../../components/MediaGroup";
 class FollowItem extends Component {
 	render() {
 		let { follow, navigation } = this.props;
+		if (!(follow.user ? follow.user : follow.category)) {
+			return null;
+		}
 		return (
 			<View>
 				{follow.user ? (

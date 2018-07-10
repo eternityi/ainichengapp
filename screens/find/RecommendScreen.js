@@ -30,6 +30,7 @@ class RecommendScreen extends React.Component {
             if (!(data && data.articles)) return <SpinnerLoading />;
             return (
               <FlatList
+                removeClippedSubviews
                 ListHeaderComponent={() => {
                   return (
                     <View>

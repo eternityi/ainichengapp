@@ -45,28 +45,21 @@ class Follow extends Component {
 	}
 
 	render() {
-		let { type, plain = false, customStyle = {}, fontSize = 15, status, personal, id, theme = Colors.weixinColor } = this.props;
+		let { type, plain = false, customStyle = {}, fontSize = 15, status, personal, id, theme = Colors.weixinColor, outline } = this.props;
 		let mergeStyle = StyleSheet.flatten([styles.followButton, customStyle]);
+		let statusStyle = outline
+			? status ? styles.outlineFollwed : { borderColor: theme, backgroundColor: "#fff" }
+			: status ? styles.followed : { borderColor: theme, backgroundColor: theme };
+		let color = outline ? (status ? "#666" : theme) : status ? Colors.tintFontColor : "#fff";
 		if (type == "user" && personal.id == id) {
 			return null;
 		}
 		return (
-			<TouchableOpacity
-				style={[
-					mergeStyle,
-					status
-						? styles.followed
-						: {
-								borderColor: theme,
-								backgroundColor: theme
-							}
-				]}
-				onPress={this.handleFollow.bind(this)}
-			>
+			<TouchableOpacity style={[statusStyle, mergeStyle]} onPress={this.handleFollow.bind(this)}>
 				<Text
 					style={[
 						{
-							color: status ? Colors.tintFontColor : "#fff",
+							color,
 							fontSize: fontSize
 						}
 					]}
@@ -92,6 +85,10 @@ const styles = StyleSheet.create({
 	followed: {
 		borderColor: Colors.tintBorderColor,
 		backgroundColor: Colors.skinColor
+	},
+	outlineFollwed: {
+		borderColor: Colors.darkGray,
+		backgroundColor: Colors.darkGray
 	}
 });
 export default compose(

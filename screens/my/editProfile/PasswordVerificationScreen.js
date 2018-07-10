@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from "react-native";
 
+import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
+import { Button } from "../../../components/Button";
 import Header from "../../../components/Header/Header";
 import SettingItem from "../../../components/Setting/SettingItem";
-import PrettyButton from "../../../components/Button/PrettyButton";
-import Screen from "../../Screen";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
@@ -75,27 +75,23 @@ class PasswordVerificationScreen extends Component {
 							secureTextEntry={true}
 						/>
 					</View>*/}
-					<View style={{ margin: 15 }}>
+					<View style={{ margin: 15, height: 48 }}>
 						<Mutation mutation={updateUserPasswordMutation}>
 							{updateUserPassword => {
 								return (
-									<PrettyButton
+									<Button
 										name="完成"
-										onPress={() => {
+										handler={() => {
 											updateUserPassword({
 												variables: {
 													oldpassword,
 													password
 												}
 											});
-											console.log(oldpassword);
-											console.log(password);
-
 											this.props.dispatch(actions.updatePassword(password));
 											navigation.goBack();
 										}}
 										disabled={oldpassword && password && password ? false : true}
-										buttonStyle={{ backgroundColor: Colors.themeColor, height: 48 }}
 									/>
 								);
 							}}

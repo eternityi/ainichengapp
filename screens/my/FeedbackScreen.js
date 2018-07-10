@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, Image, View, Text, TextInput, TouchableOpacity, Platform } from "react-native";
-import Header from "../../components/Header/Header";
 import ImagePicker from "react-native-image-crop-picker";
 import KeyboardSpacer from "react-native-keyboard-spacer";
+
+import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import PrettyButton from "../../components/Button/PrettyButton";
-import Screen from "../Screen";
+import { Button } from "../../components/Button";
+import { Header } from "../../components/Header";
 
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
@@ -91,12 +92,7 @@ class FeedbackScreen extends Component {
 							/>
 						</View>
 						<View style={styles.buttonWrap}>
-							<PrettyButton
-								buttonStyle={{ height: 45 }}
-								disabled={body.length < 1 ? true : false}
-								onPress={this.submitFeddBack}
-								name={"提交反馈"}
-							/>
+							<Button disabled={body.length < 1 ? true : false} handler={this.submitFeddBack} name="提交反馈" />
 						</View>
 					</ScrollView>
 					{Platform.OS == "ios" && <KeyboardSpacer />}
@@ -192,7 +188,8 @@ const styles = StyleSheet.create({
 	},
 	buttonWrap: {
 		marginTop: 40,
-		marginHorizontal: 15
+		marginHorizontal: 15,
+		height: 45
 	}
 });
 

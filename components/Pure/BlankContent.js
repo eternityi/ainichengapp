@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
-		paddingVertical: 20
+		paddingVertical: 20,
+		backgroundColor: Colors.skinColor
 	},
 	image: {
 		width: IMAGE_WIDTH,

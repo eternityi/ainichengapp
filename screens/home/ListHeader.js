@@ -1,135 +1,81 @@
 import React, { PureComponent } from "react";
-import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
-import Colors from "../../constants/Colors";
-import OfficialColumn from "../../components/Category/OfficialColumn";
+import { ScrollView, StyleSheet, View, TouchableOpacity, Text, FlatList } from "react-native";
 import { NavigationActions } from "react-navigation";
 
-const official_categories = [
-	{
-		id: 1,
-		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
-		name: "全部关注",
-		type: "全部关注",
-		filter: "USER_CATEGORY"
-	},
-	{
-		id: 64,
-		avatar: "https://www.ainicheng.com/images/appicons/guanfangketang.png",
-		name: "官方课堂",
-		type: "专题详情"
-	},
-	{
-		id: 51,
-		avatar: "https://ainicheng.com/images/appicons/jingxuantougao.png",
-		name: "精选投稿",
-		type: "专题详情"
-	},
-	{
-		id: 5,
-		avatar: "https://ainicheng.com/images/appicons/youxizixun.png",
-		name: "游戏资讯",
-		type: "专题详情"
-	},
-	{
-		id: 85,
-		avatar: "https://ainicheng.com/images/appicons/steam.png",
-		name: "steam",
-		type: "专题详情"
-	},
-	{
-		id: 12,
-		avatar: "https://ainicheng.com/images/appicons/yingxionglianmeng.png",
-		name: "英雄联盟",
-		type: "专题详情"
-	},
-	{
-		id: 87,
-		avatar: "https://ainicheng.com/images/appicons/juedidataosha.png",
-		name: "绝地求生",
-		type: "专题详情"
-	},
-	{
-		id: 12,
-		avatar: "https://ainicheng.com/images/appicons/wangzerongyao.png",
-		name: "王者荣耀",
-		type: "专题详情"
-	},
-	{
-		id: 6,
-		avatar: "https://ainicheng.com/images/appicons/dota2.png",
-		name: "dota2",
-		type: "专题详情"
-	},
-	{
-		id: 86,
-		avatar: "https://ainicheng.com/images/appicons/duanyou.png",
-		name: "端游",
-		type: "专题详情"
-	},
-	{
-		id: 84,
-		avatar: "https://ainicheng.com/images/appicons/shouyou.png",
-		name: "手游",
-		type: "专题详情"
-	},
-	{
-		id: 46,
-		avatar: "https://ainicheng.com/images/appicons/biaoqingbao.png",
-		name: "表情包",
-		type: "专题详情"
-	},
-	{
-		id: 47,
-		avatar: "https://ainicheng.com/images/appicons/touxiang.png",
-		name: "头像",
-		type: "专题详情"
-	},
-	{
-		id: 1,
-		avatar: "https://ainicheng.com/images/appicons/nicheng.png",
-		name: "昵称",
-		type: "专题详情"
-	},
-	{
-		id: 72,
-		avatar: "https://ainicheng.com/images/appicons/xinqing.png",
-		name: "心情",
-		type: "专题详情"
-	}
-];
+import Colors from "../../constants/Colors";
+import { Iconfont } from "../../utils/Fonts";
+import { Avatar } from "../../components/Pure";
+import { userFollowedCategoriesQuery } from "../../graphql/user.graphql";
+import { connect } from "react-redux";
+import { Query } from "react-apollo";
 
 class ListHeader extends PureComponent {
 	render() {
+		let { id } = this.props;
+		if (!id) {
+			return null;
+		}
 		return (
-			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} removeClippedSubviews={true}>
-				<View style={styles.officialColumnWarp}>
-					{official_categories.map((item, index) => {
-						return this._renderItem(item, index);
-					})}
-				</View>
-			</ScrollView>
+			<View style={styles.officialColumnWarp}>
+				<Query query={userFollowedCategoriesQuery} variables={{ user_id: id }}>
+					{({ loading, error, data, refetch }) => {
+						if (!(data && data.categories)) return null;
+						if (data.categories.length < 1) return null;
+						return (
+							<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
+								<FlatList
+									style={{ flex: 1 }}
+									horizontal={true}
+									data={data.categories}
+									keyExtractor={item => item.id.toString()}
+									renderItem={this._renderItem}
+									ListFooterComponent={this._renderFooter}
+								/>
+							</ScrollView>
+						);
+					}}
+				</Query>
+			</View>
 		);
 	}
 
-	_renderItem = (item, index) => {
+	_renderItem = ({ item, index }) => {
 		const { navigation } = this.props;
+		let { logo, name } = item;
 		return (
 			<TouchableOpacity
 				key={index.toString()}
-				style={{ marginRight: 25 }}
+				style={styles.category}
 				onPress={() => {
-					// navigation.navigate(item.type, { category: item }, {}, "official_column");
 					const navigateAction = NavigationActions.navigate({
-						routeName: item.type,
-						params: { category: item },
-						action: null,
-						key: "screen-123"
+						routeName: "专题详情",
+						params: { category: item }
 					});
-
 					navigation.dispatch(navigateAction);
 				}}
 			>
-				<OfficialColumn data={item} />
+				<Avatar uri={logo} size={50} type="category" />
+				<View>
+					<Text style={styles.text} numberOfLines={1}>
+						{name}
+					</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	};
+
+	_renderFooter = () => {
+		const { navigation } = this.props;
+		return (
+			<TouchableOpacity style={[styles.category, { marginHorizontal: 20 }]} onPress={() => navigation.navigate("推荐专题")}>
+				<View style={styles.addMore}>
+					<Iconfont name="add" size={25} color={Colors.tintFontColor} />
+				</View>
+				<View>
+					<Text style={styles.text} numberOfLines={1}>
+						发现更多专题
+					</Text>
+				</View>
 			</TouchableOpacity>
 		);
 	};
@@ -139,9 +85,31 @@ const styles = StyleSheet.create({
 	officialColumnWarp: {
 		flexDirection: "row",
 		alignItems: "center",
+		height: 100,
 		paddingVertical: 12,
-		paddingLeft: 20
+		borderBottomWidth: 6,
+		borderBottomColor: Colors.lightBorderColor
+	},
+	category: {
+		width: 50,
+		height: 70,
+		marginLeft: 20,
+		justifyContent: "space-between"
+	},
+	text: {
+		fontSize: 12,
+		color: Colors.primaryFontColor,
+		textAlign: "center"
+	},
+	addMore: {
+		width: 50,
+		height: 50,
+		borderWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		borderRadius: 5,
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });
 
-export default ListHeader;
+export default connect(store => ({ id: store.users.user.id }))(ListHeader);

@@ -43,11 +43,8 @@ class HomeScreen extends React.Component {
               if (!(data && data.articles)) return <SpinnerLoading />;
               return (
                 <FlatList
-                  ListHeaderComponent={() => (
-                    <View style={styles.listHeader}>
-                      <ListHeader navigation={navigation} />
-                    </View>
-                  )}
+                  removeClippedSubviews
+                  ListHeaderComponent={() => <ListHeader navigation={navigation} />}
                   refreshing={loading}
                   onRefresh={() => {
                     refetch();
@@ -97,10 +94,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.skinColor
-  },
-  listHeader: {
-    borderBottomWidth: 6,
-    borderBottomColor: Colors.lightBorderColor
   }
 });
 

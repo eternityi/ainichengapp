@@ -10,7 +10,8 @@ import Screen from "../Screen";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { topCategoriesQuery } from "../../graphql/category.graphql";
-import { Query } from "react-apollo";
+import { followCategoryMutation } from "../../graphql/user.graphql";
+import { Query, Mutation } from "react-apollo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -125,6 +126,7 @@ class CategoriesScreen extends React.Component {
             if (!(data && data.categories)) return null;
             return (
               <FlatList
+                removeClippedSubviews
                 data={data.categories}
                 ListHeaderComponent={this._renderHeader.bind(this)}
                 keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
@@ -219,7 +221,22 @@ class CategoriesScreen extends React.Component {
   _renderCategoryItem = ({ item, index }) => {
     return (
       <View style={styles.categoryCardWrap}>
-        <CategoryCard category={item} />
+        <Mutation mutation={followCategoryMutation}>
+          {followCategory => {
+            return (
+              <CategoryCard
+                category={item}
+                followHandler={() =>
+                  followCategory({
+                    variables: {
+                      category_id: item.id,
+                      undo: item.followed
+                    }
+                  })}
+              />
+            );
+          }}
+        </Mutation>
       </View>
     );
   };
@@ -243,7 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingTop: 15,
     paddingHorizontal: 15,
-    paddingBottom: 5,
+    paddingBottom: 10,
     backgroundColor: Colors.lightGray
   },
   categoryCardWrap: {

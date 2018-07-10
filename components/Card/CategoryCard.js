@@ -4,7 +4,7 @@ import { withNavigation } from "react-navigation";
 
 import Colors from "../../constants/Colors";
 import { Avatar } from "../../components/Pure";
-import { Button } from "../../components/Button";
+import { FollowButton } from "../../components/Button";
 import { navigationAction } from "../../constants/Methods";
 
 class CategoryCard extends Component {
@@ -32,9 +32,15 @@ class CategoryCard extends Component {
 							</Text>
 						</View>
 					</View>
-					<View style={{ width: 66, height: 30 }}>
-						<Button outline iconName="add" Handler={followHandler} bthStyle={{ borderRadius: 15, paddingHorizontal: 5 }} name="关注" />
-					</View>
+					<FollowButton
+						outline
+						customStyle={{ width: 66, height: 30, borderRadius: 15 }}
+						theme={Colors.themeColor}
+						type={"category"}
+						id={id}
+						status={followed}
+						fontSize={14}
+					/>
 				</View>
 			</TouchableWithoutFeedback>
 		);

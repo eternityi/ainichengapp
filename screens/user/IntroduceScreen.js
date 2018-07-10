@@ -60,7 +60,7 @@ class IntroduceScreen extends Component {
 											</View>
 											<View style={{ marginTop: 15 }}>
 												<Text style={{ fontSize: 15, color: "#666" }}>
-													写了{user.count_words}字，获得了{user.count_likes}个喜欢
+													{user.count_articles || 0}个作品，获得了{user.count_likes || 0}个喜欢
 												</Text>
 											</View>
 										</View>
@@ -72,7 +72,7 @@ class IntroduceScreen extends Component {
 										<View style={styles.cardBottom}>
 											<View>
 												<Text style={{ fontSize: 15, color: Colors.primaryFontColor, lineHeight: 21 }}>
-													{user.introduction ? user.introduction : "暂无简介"}
+													{user.introduction ? user.introduction : "本宝宝暂时还没想到个性签名"}
 												</Text>
 											</View>
 											<View style={styles.QRcodeRow}>
