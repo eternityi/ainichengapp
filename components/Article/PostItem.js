@@ -124,11 +124,13 @@ const styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderBottomWidth: 1,
 		borderColor: Colors.lightBorderColor,
+		backgroundColor: Colors.tintGray,
 		overflow: "hidden"
 	},
 	imgWrap: {
 		borderWidth: 1,
 		borderColor: Colors.lightBorderColor,
+		backgroundColor: Colors.tintGray,
 		marginLeft: IMG_INTERVAL
 	},
 	abstract: {

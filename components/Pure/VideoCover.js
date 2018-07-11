@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, ImageBackground } from "react-native";
 import VideoMark from "./VideoMark";
 
+import Colors from "../../constants/Colors";
+
 class VideoCover extends Component {
 	render() {
 		let { width, height, cover, markWidth, markSize, customStyle = {} } = this.props;
@@ -18,7 +20,8 @@ class VideoCover extends Component {
 
 const styles = StyleSheet.create({
 	coverView: {
-		position: "relative"
+		position: "relative",
+		backgroundColor: Colors.tintGray
 	},
 	cover: {
 		justifyContent: "center",

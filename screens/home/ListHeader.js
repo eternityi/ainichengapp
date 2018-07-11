@@ -7,40 +7,33 @@ import { Iconfont } from "../../utils/Fonts";
 import { Avatar } from "../../components/Pure";
 import { userFollowedCategoriesQuery } from "../../graphql/user.graphql";
 import { connect } from "react-redux";
-import { Query } from "react-apollo";
+import { Query, compose, graphql } from "react-apollo";
 
 class ListHeader extends PureComponent {
 	render() {
-		let { id } = this.props;
-		if (!id) {
-			return null;
-		}
 		return (
-			<Query query={userFollowedCategoriesQuery} variables={{ user_id: id }}>
-				{({ loading, error, data, refetch }) => {
-					if (!(data && data.categories)) return null;
-					if (data.categories.length < 1) return null;
-					return (
-						<View style={styles.officialColumnWarp}>
-							<View style={{ padding: 15 }}>
-								<Text style={styles.tintText}>最近逛的专题</Text>
-							</View>
-							<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
-								<FlatList
-									style={{ flex: 1 }}
-									horizontal={true}
-									data={data.categories}
-									keyExtractor={item => item.id.toString()}
-									renderItem={this._renderItem}
-									ListFooterComponent={this._renderFooter}
-								/>
-							</ScrollView>
-						</View>
-					);
-				}}
-			</Query>
+			<View style={styles.officialColumnWarp}>
+				<View style={{ padding: 15 }}>
+					<Text style={styles.tintText}>最近逛的专题</Text>
+				</View>
+				<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
+					{this._renderContent()}
+					{this._renderFooter()}
+				</ScrollView>
+			</View>
 		);
 	}
+
+	_renderContent = () => {
+		let { data } = this.props;
+		if (!(data && data.categories && data.categories.length > 0)) {
+			return null;
+		} else {
+			return data.categories.map((item, index) => {
+				return this._renderItem({ item, index });
+			});
+		}
+	};
 
 	_renderItem = ({ item, index }) => {
 		const { navigation } = this.props;
@@ -124,4 +117,13 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ id: store.users.user.id }))(ListHeader);
+export default compose(
+	connect(store => ({ id: store.users.user.id })),
+	graphql(userFollowedCategoriesQuery, {
+		options: props => ({
+			variables: {
+				user_id: props.id
+			}
+		})
+	})
+)(ListHeader);

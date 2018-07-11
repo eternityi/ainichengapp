@@ -185,7 +185,6 @@ class DetailScreen extends Component {
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
                   <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
-                  {/*评论中心**/}
                   <Comments
                     article={article}
                     navigation={navigation}

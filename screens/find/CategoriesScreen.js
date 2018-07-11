@@ -60,7 +60,7 @@ const official_categories = [
     type: "专题详情"
   },
   {
-    id: 12,
+    id: 13,
     avatar: "https://ainicheng.com/images/appicons/wangzerongyao.png",
     name: "王者荣耀",
     type: "专题详情"

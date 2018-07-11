@@ -91,8 +91,6 @@ import CollectionRankScreen from "../screens/user/collection/RankScreen";
 //article
 import ArticleDetailScreen from "../screens/article/DetailScreen";
 import CommentDetail from "../screens/article/comment/CommentDetailScreen";
-import CommentList from "../screens/article/comment/CommentListScreen";
-import ArticleRankingScreen from "../screens/article/ranking/ArticleRankingScreen";
 
 //video
 import VideoDetailScreen from "../screens/video/DetailScreen";
@@ -268,9 +266,6 @@ export default {
   评论详情: {
     screen: CommentDetail
   },
-  评论中心: {
-    screen: CommentList
-  },
   登录注册: {
     screen: LoginScreen
   },
@@ -312,9 +307,6 @@ export default {
   },
   投稿管理: {
     screen: ContributeManageScreen
-  },
-  排行榜: {
-    screen: ArticleRankingScreen
   },
   评论: {
     screen: CommentsScreen

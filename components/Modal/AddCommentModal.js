@@ -6,6 +6,8 @@ import Colors from "../../constants/Colors";
 import BasicModal from "./BasicModal";
 import SearchUserModal from "./SearchUserModal";
 
+import Input from "../../components/Native/Input";
+
 import { withNavigation } from "react-navigation";
 
 const { width } = Dimensions.get("window");
@@ -14,16 +16,23 @@ class AddCommentModal extends Component {
 	constructor(props) {
 		super(props);
 		this.atUser = null;
+		this.body = "";
 		this.toggleVisible = this.toggleVisible.bind(this);
 		this.state = {
-			aiteModalVisible: false,
-			body: ""
+			aiteModalVisible: false
 		};
 	}
 
+	onEmitterReady = emitter => {
+		this.thingEmitter = emitter;
+		this.thingEmitter.addListener("addCommentChanged", text => {
+			this.body = text;
+		});
+	};
+
 	render() {
 		const { visible, toggleCommentModal, navigation } = this.props;
-		let { aiteModalVisible, body } = this.state;
+		let { aiteModalVisible } = this.state;
 		return (
 			<BasicModal
 				visible={visible}
@@ -37,22 +46,15 @@ class AddCommentModal extends Component {
 				}}
 			>
 				<View>
-					<TextInput
-						textAlignVertical="top"
-						underlineColorAndroid="transparent"
+					<Input
 						autoFocus
 						style={styles.textInput}
-						defaultValue=""
-						onSubmitEditing={this.sendTextMsg}
-						onChangeText={body => {
-							if (Platform.OS === "android") {
-								this.setState({ body });
-							}
-						}}
+						name="addComment"
+						defaultValue={this.body}
+						onEmitterReady={this.onEmitterReady}
 						ref={ref => {
 							this.inputText = ref;
 						}}
-						value={body}
 					/>
 					<View style={styles.textBottom}>
 						<View style={styles.textBottom}>
@@ -61,7 +63,7 @@ class AddCommentModal extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity
 								onPress={() => {
-									this.setState(prevState => ({ body: prevState.body + "🙂" }));
+									this.changeBody(this.body + "😊");
 								}}
 							>
 								<Iconfont name="smile" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
@@ -71,9 +73,9 @@ class AddCommentModal extends Component {
 							onPress={() => {
 								toggleCommentModal();
 								this.props.addComment({
-									body
+									body: this.body
 								});
-								this.setState({ body: "" });
+								this.changeBody("");
 							}}
 							style={styles.publishComment}
 						>
@@ -96,30 +98,30 @@ class AddCommentModal extends Component {
 					handleSelectedUser={user => {
 						this.toggleVisible();
 						this.atUser = user;
-						this.setState(prevState => ({ body: prevState.body + `@${this.atUser.name} ` }));
+						this.changeBody(this.body + `@${this.atUser.name} `);
 					}}
 				/>
 			</BasicModal>
 		);
 	}
 
-	sendTextMsg = event => {
-		console.log("this.inputText", this.inputText._lastNativeText);
-		const { text } = event.nativeEvent;
-		if (text === "") {
-			return;
-		}
-		this.setState({ body: text });
-		setTimeout(() => {
-			console.log("this.inputText", this.inputText._lastNativeText);
-			this.inputText._lastNativeText = "";
-			this.setState({ body: text });
-		}, 0);
+	changeBody = body => {
+		this.body = body;
+		this.inputText.changeText(this.body);
 	};
 
 	toggleVisible() {
 		this.setState(prevState => ({ aiteModalVisible: !prevState.aiteModalVisible }));
 	}
+
+	// sendTextMsg = event => {
+	// 	console.log("this.inputText", this.inputText._lastNativeText);
+	// 	const { text } = event.nativeEvent;
+	// 	if (text === "") {
+	// 		return;
+	// 	}
+	// 	this.setState({ body: text });
+	// };
 }
 
 const styles = StyleSheet.create({

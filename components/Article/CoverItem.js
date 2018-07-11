@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderBottomWidth: 1,
 		borderColor: Colors.lightBorderColor,
+		backgroundColor: Colors.tintGray,
 		overflow: "hidden"
 	},
 	postContent: {
@@ -125,10 +126,10 @@ const styles = StyleSheet.create({
 		paddingVertical: 10
 	},
 	title: {
-		fontSize: 18,
+		fontSize: 17,
 		lineHeight: 24,
 		fontWeight: "500",
-		color: Colors.darkFontColor
+		color: Colors.primaryFontColor
 	},
 	abstract: {
 		marginTop: 10,
