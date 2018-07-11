@@ -10,10 +10,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class AboutUsScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		const { navigation } = this.props;
 		return (

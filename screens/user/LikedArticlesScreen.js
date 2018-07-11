@@ -46,7 +46,7 @@ class LikedArticlesScreen extends Component {
                 <FlatList
                   data={data.articles}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => <NoteItem post={item} />}
+                  renderItem={({ item }) => <NoteItem post={item} longPress={this.handleModal} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
                     if (data.articles) {

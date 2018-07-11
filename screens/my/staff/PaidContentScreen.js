@@ -12,10 +12,6 @@ import { userArticlesQuery } from "../../../graphql/user.graphql";
 import { Mutation, Query } from "react-apollo";
 
 class PaidContentScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 

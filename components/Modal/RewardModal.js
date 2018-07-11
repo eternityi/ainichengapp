@@ -144,7 +144,6 @@ class RewardModal extends Component {
                   <Text
                     style={{ fontSize: 16, color: Colors.themeColor }}
                     onPress={() => {
-                      console.log("personal.blance", personal.blance, amount, article);
                       if (personal.balance >= amount) {
                         if (amount < 1) {
                           this.handleWarningVisible("最少也给一颗糖果嘛~(*╹▽╹*)");

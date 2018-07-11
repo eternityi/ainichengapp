@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, Text, Platform, TextInput, Dimensions, View, TouchableOpacity, YellowBox, BackHandler } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
+import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
@@ -261,8 +262,8 @@ class CreationScreen extends React.Component {
     //异步获取编辑器内容
     Promise.all([this.richtext.getContentHtml(), this.richtext.getTitleText()])
       .then(([body, title]) => {
-        if (!body && !title) {
-          return null;
+        if (!(body && title)) {
+          this.toast();
         }
         this.setState({
           waitingVisible: true
@@ -326,6 +327,21 @@ class CreationScreen extends React.Component {
         throw new Error(error);
       });
   };
+
+  toast() {
+    let toast = Toast.show("标题或者内容不能为空哦~", {
+      duration: Toast.durations.LONG,
+      position: 70,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 100,
+      backgroundColor: Colors.nightColor
+    });
+    setTimeout(function() {
+      Toast.hide(toast);
+    }, 2000);
+  }
 }
 
 const styles = StyleSheet.create({

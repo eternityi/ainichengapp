@@ -17,10 +17,6 @@ import { userDetailQuery } from "../../graphql/user.graphql";
 const { width, height } = Dimensions.get("window");
 
 class IntroduceScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);

@@ -12,10 +12,6 @@ import { userTrashQuery, restoreArticleMutation, deleteArticleMutation } from ".
 import { connect } from "react-redux";
 
 class RecycleScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handleModal = this.handleModal.bind(this);

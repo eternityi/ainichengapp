@@ -13,10 +13,6 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 class FeedbackScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.selectImage = this.selectImage.bind(this);

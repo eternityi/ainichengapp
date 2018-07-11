@@ -13,10 +13,6 @@ import actions from "../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class PublishedScreen extends React.Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		const { navigation } = this.props;
 		const article = navigation.getParam("article", {});

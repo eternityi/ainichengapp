@@ -47,10 +47,6 @@ let js_fix = `
   </html>`;
 
 class RecycleDetailScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

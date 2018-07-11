@@ -14,10 +14,6 @@ import { chatsQuery, chatQuery, messagesQuery, sendMessageMutation } from "../..
 import { blockUserMutation, blockedUsersQuery } from "../../graphql/user.graphql";
 
 class ChatScreen extends React.Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handleReportVisible = this.handleReportVisible.bind(this);

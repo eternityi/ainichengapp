@@ -12,10 +12,6 @@ import { updateUserIntroductionMutation } from "../../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class RewardDescriptionScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 

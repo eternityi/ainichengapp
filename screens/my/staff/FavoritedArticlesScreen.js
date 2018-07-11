@@ -17,10 +17,6 @@ import { Mutation, Query } from "react-apollo";
 const { width, height } = Dimensions.get("window");
 
 class FavoritedArticlesScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handleModal = this.handleModal.bind(this);
@@ -47,7 +43,15 @@ class FavoritedArticlesScreen extends Component {
 								<FlatList
 									data={data.user.articles}
 									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item }) => <NoteItem post={item} />}
+									renderItem={({ item }) => (
+										<NoteItem
+											post={item}
+											longPress={() => {
+												this.article = item;
+												this.handleModal();
+											}}
+										/>
+									)}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
 										if (data.user.articles) {

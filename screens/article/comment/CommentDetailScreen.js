@@ -15,10 +15,6 @@ import { Query, Mutation, withApollo } from "react-apollo";
 const { width } = Dimensions.get("window");
 
 class CommentDetailScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		let comment = props.navigation.getParam("comment", {});

@@ -14,10 +14,6 @@ import { updateUserPasswordMutation } from "../../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class PasswordVerificationScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

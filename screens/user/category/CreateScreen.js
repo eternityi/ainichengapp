@@ -19,10 +19,6 @@ import actions from "../../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class CreateScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		//清空category admin_uids

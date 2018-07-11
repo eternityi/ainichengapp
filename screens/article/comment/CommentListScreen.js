@@ -15,10 +15,6 @@ import { Query, Mutation } from "react-apollo";
 import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
 
 class CommentListScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

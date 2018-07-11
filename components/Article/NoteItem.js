@@ -14,11 +14,11 @@ const IMG_WIDTH = (width - 46) / 3;
 
 class NoteItem extends Component {
 	render() {
-		const { post, navigation, compress, recommend } = this.props;
+		const { post, navigation, compress, recommend, longPress = () => null } = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_comments } = post;
 		let layout = images.length > 1 ? "vertical" : "horizontal";
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen} onLongPress={longPress}>
 				<View style={styles.noteContainer}>
 					{!compress ? (
 						<View style={styles.noteUser}>

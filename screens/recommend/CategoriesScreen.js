@@ -12,10 +12,6 @@ import { graphql, Query } from "react-apollo";
 import { connect } from "react-redux";
 
 class CategoriesScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -82,7 +78,6 @@ class CategoriesScreen extends Component {
 
 	_renderItem = ({ item }) => {
 		let { navigation } = this.props;
-		let follow = item;
 		return (
 			<View style={{ paddingHorizontal: 15 }}>
 				<TouchableOpacity
@@ -93,10 +88,10 @@ class CategoriesScreen extends Component {
 					}}
 					onPress={() =>
 						navigation.navigate("专题详情", {
-							category: follow.category
+							category: item.category
 						})}
 				>
-					<FollowItem follow={follow} navigation={navigation} />
+					<FollowItem follow={item} />
 				</TouchableOpacity>
 			</View>
 		);

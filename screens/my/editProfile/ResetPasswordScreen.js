@@ -10,10 +10,6 @@ import Screen from "../../Screen";
 import { Query, Mutation } from "react-apollo";
 
 class ResetPasswordScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		const { navigation, users } = this.props;
 		return (

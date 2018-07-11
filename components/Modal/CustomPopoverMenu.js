@@ -9,15 +9,7 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-m
 class CustomPopoverMenu extends Component {
   render() {
     //selectHandler 根据value处理不同的逻辑
-    let {
-      selectHandler = value => {
-        console.log("onSelect:" + value);
-      },
-      triggerComponent,
-      options = [],
-      width,
-      children
-    } = this.props;
+    let { selectHandler = value => null, triggerComponent, options = [], width, children } = this.props;
     // menu options样式
     const optionsStyle = {
       optionsWrapper: {

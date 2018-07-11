@@ -12,10 +12,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class BeLikedScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		return (
 			<Screen>

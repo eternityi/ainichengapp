@@ -14,10 +14,6 @@ import { Query, Mutation, graphql } from "react-apollo";
 import { querySubmitedArticles } from "../../../graphql/user.graphql";
 
 class ContributeManageScreen extends React.Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { article, navigation } = this.props;
 		return (

@@ -25,10 +25,6 @@ import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql
 const { width, height } = Dimensions.get("window");
 
 class DetailScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.onProgress = this.onProgress.bind(this);

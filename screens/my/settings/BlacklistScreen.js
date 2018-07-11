@@ -13,10 +13,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class BlacklistScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { follows, navigation } = this.props;
 		return (

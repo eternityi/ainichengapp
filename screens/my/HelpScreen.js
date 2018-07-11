@@ -16,10 +16,6 @@ import actions from "../../store/actions";
 let { width, height } = Dimensions.get("window");
 
 class HelpScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

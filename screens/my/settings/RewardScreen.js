@@ -10,10 +10,6 @@ import Screen from "../../Screen";
 import { Query, Mutation } from "react-apollo";
 
 class ResetPasswordScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -77,7 +73,10 @@ class ResetPasswordScreen extends Component {
 					<View style={styles.settingStateWrap}>
 						<Text style={styles.settingState}>{loose ? "已启用,低于10.00元的支付不用输入密码" : "开启后,低于10.00元的支付不用输入密码"}</Text>
 					</View>
-					<TouchableOpacity style={{ borderBottomWidth: 1, borderBottomColor: Colors.lightBorderColor }} onPress={() => navigation.navigate("更改赞赏描述")}>
+					<TouchableOpacity
+						style={{ borderBottomWidth: 1, borderBottomColor: Colors.lightBorderColor }}
+						onPress={() => navigation.navigate("更改赞赏描述")}
+					>
 						<SettingItem endItem itemName="更改赞赏描述" />
 					</TouchableOpacity>
 				</View>

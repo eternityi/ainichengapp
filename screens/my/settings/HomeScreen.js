@@ -28,10 +28,6 @@ const navigateAction = NavigationActions.navigate({
 });
 
 class HomeScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handlePromotModalVisible = this.handlePromotModalVisible.bind(this);

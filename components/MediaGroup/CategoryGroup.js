@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { withNavigation } from "react-navigation";
+
 import Avatar from "../Pure/Avatar";
 import FollowButton from "../Button/Follow";
 import Colors from "../../constants/Colors";
 
 class CategoryGroup extends Component {
   render() {
-    const { category = {}, customStyle = {}, miniButton = false, hideButton = false, showCreator = false, navigation } = this.props;
+    const { category = {}, customStyle = {}, plain = false, hideButton = false, showCreator = false, navigation } = this.props;
     let { logo = 36, nameSize = 16, mateSize = 14 } = customStyle;
     return (
       <View style={styles.groupWrap}>
@@ -31,12 +33,12 @@ class CategoryGroup extends Component {
         </View>
         {!hideButton && (
           <FollowButton
-            plain
+            plain={plain}
             type={"category"}
             id={category.id}
             status={category.followed}
-            customStyle={miniButton ? { height: 28, width: 72 } : null}
-            fontSize={miniButton ? 14 : 15}
+            customStyle={plain ? { height: 28, width: 72 } : null}
+            fontSize={plain ? 14 : 15}
           />
         )}
       </View>
@@ -62,4 +64,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CategoryGroup;
+export default withNavigation(CategoryGroup);

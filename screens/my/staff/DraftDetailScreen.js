@@ -46,10 +46,6 @@ let js_fix = `
   </html>`;
 
 class DraftDetailScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);

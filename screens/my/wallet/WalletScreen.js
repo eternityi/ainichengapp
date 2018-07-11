@@ -13,10 +13,6 @@ import actions from "../../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class WalletScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { user, navigation } = this.props;
 		return (

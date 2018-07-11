@@ -56,7 +56,7 @@ class BeSelectedCategory extends Component {
                     navigation.navigate("专题详情", { category: item });
                   }}
                 >
-                  <CategoryGroup category={item} miniButton />
+                  <CategoryGroup category={item} plain />
                 </TouchableOpacity>
               )}
               getItemLayout={(data, index) => ({

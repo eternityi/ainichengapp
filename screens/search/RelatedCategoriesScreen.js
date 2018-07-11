@@ -13,10 +13,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class RelatedCategoriesScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { search_detail, navigation } = this.props;
 		let { categories } = search_detail;

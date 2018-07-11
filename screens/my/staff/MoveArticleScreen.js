@@ -19,10 +19,6 @@ import actions from "../../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class MoveArticleScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleCreateModal = this.toggleCreateModal.bind(this);

@@ -56,7 +56,7 @@ class FollowedBooksScreen extends Component {
                               category: item
                             })}
                         >
-                          <CategoryGroup navigation={navigation} category={item} showCreator customStyle={{ logo: 44, mateSize: 13 }} miniButton />
+                          <CategoryGroup navigation={navigation} category={item} showCreator customStyle={{ logo: 44, mateSize: 13 }} plain />
                         </TouchableOpacity>
                       )}
                       ListFooterComponent={() => <ContentEnd />}
@@ -88,7 +88,7 @@ class FollowedBooksScreen extends Component {
                               collection: item
                             })}
                         >
-                          <CollectionGroup navigation={navigation} collection={item} customStyle={{ logo: 44, mateSize: 13 }} miniButton />
+                          <CollectionGroup navigation={navigation} collection={item} customStyle={{ logo: 44, mateSize: 13 }} plain />
                         </TouchableOpacity>
                       )}
                       ListFooterComponent={() => <ContentEnd />}

@@ -6,10 +6,6 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Screen from "../Screen";
 
 class IntroduceScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		const { navigation } = this.props;
 		return (

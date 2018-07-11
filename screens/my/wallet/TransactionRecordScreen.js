@@ -13,10 +13,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class TransactionRecordScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { account, navigation } = this.props;
 		let { transaction_record } = account;
@@ -41,31 +37,15 @@ class TransactionRecordScreen extends Component {
 	_renderItem = ({ item, index }) => {
 		switch (item.type) {
 			case "recharge":
-				return (
-					<TransactionRecordItem
-						type={"充值"}
-						money={item.money}
-						time={item.time_ago}
-						status={item.status}
-					/>
-				);
+				return <TransactionRecordItem type={"充值"} money={item.money} time={item.time_ago} status={item.status} />;
 				break;
 			case "receive_reward":
 				return (
-					<TransactionRecordItem
-						type={"收到赞赏"}
-						money={item.money}
-						time={item.time_ago}
-						status={item.status}
-					>
+					<TransactionRecordItem type={"收到赞赏"} money={item.money} time={item.time_ago} status={item.status}>
 						<Text style={styles.recordText}>
-							<Text style={styles.linkText}>
-								{item.user.name + " "}
-							</Text>
+							<Text style={styles.linkText}>{item.user.name + " "}</Text>
 							向你的文章
-							<Text style={styles.linkText}>
-								{" 《" + item.article.title + "》 "}
-							</Text>
+							<Text style={styles.linkText}>{" 《" + item.article.title + "》 "}</Text>
 							送了{item.money}颗糖
 						</Text>
 					</TransactionRecordItem>
@@ -73,21 +53,12 @@ class TransactionRecordScreen extends Component {
 				break;
 			case "reward":
 				return (
-					<TransactionRecordItem
-						type={"赞赏"}
-						money={item.money}
-						time={item.time_ago}
-						status={item.status}
-					>
+					<TransactionRecordItem type={"赞赏"} money={item.money} time={item.time_ago} status={item.status}>
 						<Text style={styles.recordText}>
 							你向
-							<Text style={styles.linkText}>
-								{item.user.name + " "}
-							</Text>
+							<Text style={styles.linkText}>{item.user.name + " "}</Text>
 							的文章
-							<Text style={styles.linkText}>
-								{" 《" + item.article.title + "》 "}
-							</Text>
+							<Text style={styles.linkText}>{" 《" + item.article.title + "》 "}</Text>
 							送了{item.money}颗糖
 						</Text>
 					</TransactionRecordItem>
@@ -95,16 +66,9 @@ class TransactionRecordScreen extends Component {
 				break;
 			case "receive_award":
 				return (
-					<TransactionRecordItem
-						type={"奖励"}
-						money={item.money}
-						time={item.time_ago}
-						status={item.status}
-					>
+					<TransactionRecordItem type={"奖励"} money={item.money} time={item.time_ago} status={item.status}>
 						<Text style={styles.recordText}>
-							<Text style={styles.linkText}>
-								{item.user.name + " "}
-							</Text>
+							<Text style={styles.linkText}>{item.user.name + " "}</Text>
 							送了你{item.money}颗糖
 						</Text>
 					</TransactionRecordItem>
@@ -112,17 +76,10 @@ class TransactionRecordScreen extends Component {
 				break;
 			case "award":
 				return (
-					<TransactionRecordItem
-						type={"收到奖励"}
-						money={item.money}
-						time={item.time_ago}
-						status={item.status}
-					>
+					<TransactionRecordItem type={"收到奖励"} money={item.money} time={item.time_ago} status={item.status}>
 						<Text style={styles.recordText}>
 							你送了
-							<Text style={styles.linkText}>
-								{" " + item.user.name + " "}
-							</Text>
+							<Text style={styles.linkText}>{" " + item.user.name + " "}</Text>
 							{item.money}颗糖
 						</Text>
 					</TransactionRecordItem>
@@ -148,6 +105,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default connect(store => ({ account: store.users.account }))(
-	TransactionRecordScreen
-);
+export default connect(store => ({ account: store.users.account }))(TransactionRecordScreen);

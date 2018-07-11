@@ -12,10 +12,6 @@ import { graphql, Query } from "react-apollo";
 import { connect } from "react-redux";
 
 class AuthorsScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

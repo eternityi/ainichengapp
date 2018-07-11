@@ -16,10 +16,6 @@ import actions from "../../../store/actions";
 import { userFollows } from "../../../graphql/user.graphql";
 
 class AllFollowsScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		let filter = props.navigation.getParam("filter", "USER_CATEGORY");

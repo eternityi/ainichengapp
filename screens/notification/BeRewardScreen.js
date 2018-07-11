@@ -14,10 +14,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class BeRewardScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);

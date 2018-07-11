@@ -14,10 +14,6 @@ import { topCategoriesQuery } from "../../graphql/category.graphql";
 
 //搜索专题 给文章投稿
 class CategoriesScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

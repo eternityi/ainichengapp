@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { ScrollView, StyleSheet, View, TouchableOpacity, Text, FlatList } from "react-native";
+import { ScrollView, StyleSheet, View, Image, TouchableOpacity, Text, FlatList } from "react-native";
 import { NavigationActions } from "react-navigation";
 
 import Colors from "../../constants/Colors";
@@ -16,12 +16,15 @@ class ListHeader extends PureComponent {
 			return null;
 		}
 		return (
-			<View style={styles.officialColumnWarp}>
-				<Query query={userFollowedCategoriesQuery} variables={{ user_id: id }}>
-					{({ loading, error, data, refetch }) => {
-						if (!(data && data.categories)) return null;
-						if (data.categories.length < 1) return null;
-						return (
+			<Query query={userFollowedCategoriesQuery} variables={{ user_id: id }}>
+				{({ loading, error, data, refetch }) => {
+					if (!(data && data.categories)) return null;
+					if (data.categories.length < 1) return null;
+					return (
+						<View style={styles.officialColumnWarp}>
+							<View style={{ padding: 15 }}>
+								<Text style={styles.tintText}>最近逛的专题</Text>
+							</View>
 							<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
 								<FlatList
 									style={{ flex: 1 }}
@@ -32,10 +35,10 @@ class ListHeader extends PureComponent {
 									ListFooterComponent={this._renderFooter}
 								/>
 							</ScrollView>
-						);
-					}}
-				</Query>
-			</View>
+						</View>
+					);
+				}}
+			</Query>
 		);
 	}
 
@@ -56,7 +59,7 @@ class ListHeader extends PureComponent {
 			>
 				<Avatar uri={logo} size={50} type="category" />
 				<View>
-					<Text style={styles.text} numberOfLines={1}>
+					<Text style={styles.darkText} numberOfLines={1}>
 						{name}
 					</Text>
 				</View>
@@ -67,14 +70,12 @@ class ListHeader extends PureComponent {
 	_renderFooter = () => {
 		const { navigation } = this.props;
 		return (
-			<TouchableOpacity style={[styles.category, { marginHorizontal: 20 }]} onPress={() => navigation.navigate("推荐专题")}>
+			<TouchableOpacity style={styles.lastChild} onPress={() => navigation.navigate("推荐专题")}>
 				<View style={styles.addMore}>
-					<Iconfont name="add" size={25} color={Colors.tintFontColor} />
+					<Iconfont name="add" size={30} color={Colors.tintFontColor} />
 				</View>
 				<View>
-					<Text style={styles.text} numberOfLines={1}>
-						发现更多专题
-					</Text>
+					<Text style={styles.darkText}>发现更多</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -83,32 +84,43 @@ class ListHeader extends PureComponent {
 
 const styles = StyleSheet.create({
 	officialColumnWarp: {
-		flexDirection: "row",
-		alignItems: "center",
-		height: 100,
-		paddingVertical: 12,
+		paddingBottom: 15,
 		borderBottomWidth: 6,
 		borderBottomColor: Colors.lightBorderColor
 	},
 	category: {
 		width: 50,
 		height: 70,
-		marginLeft: 20,
+		marginLeft: 15,
 		justifyContent: "space-between"
 	},
-	text: {
-		fontSize: 12,
-		color: Colors.primaryFontColor,
-		textAlign: "center"
+	logo: {
+		width: 50,
+		height: 50,
+		resizeMode: "cover"
+	},
+	lastChild: {
+		height: 70,
+		marginHorizontal: 15,
+		justifyContent: "space-between"
 	},
 	addMore: {
 		width: 50,
 		height: 50,
 		borderWidth: 1,
-		borderColor: Colors.lightBorderColor,
 		borderRadius: 5,
+		borderColor: Colors.lightBorderColor,
 		alignItems: "center",
 		justifyContent: "center"
+	},
+	darkText: {
+		fontSize: 12,
+		color: Colors.primaryFontColor,
+		textAlign: "center"
+	},
+	tintText: {
+		fontSize: 13,
+		color: Colors.tintFontColor
 	}
 });
 

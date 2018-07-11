@@ -14,10 +14,6 @@ import { unpublishArticleMutation } from "../../../graphql/article.graphql";
 import { Mutation, Query, graphql } from "react-apollo";
 
 class OpenArticlesScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handleModal = this.handleModal.bind(this);
@@ -50,7 +46,16 @@ class OpenArticlesScreen extends Component {
 									<FlatList
 										data={data.articles}
 										keyExtractor={(item, index) => index.toString()}
-										renderItem={({ item, index }) => <NoteItem post={item} compress />}
+										renderItem={({ item, index }) => (
+											<NoteItem
+												post={item}
+												compress
+												longPress={() => {
+													this.article = item;
+													this.handleModal();
+												}}
+											/>
+										)}
 										onEndReachedThreshold={0.3}
 										onEndReached={() => {
 											if (data.articles) {

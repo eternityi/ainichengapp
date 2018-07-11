@@ -11,10 +11,6 @@ import Screen from "../Screen";
 import { Query, Mutation } from "react-apollo";
 
 class SettingScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 

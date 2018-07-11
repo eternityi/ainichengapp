@@ -17,10 +17,6 @@ import { categoryQuery, deleteCategoryMutation } from "../../graphql/category.gr
 import { userCategoriesQuery } from "../../../graphql/user.graphql";
 
 class HomeScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);

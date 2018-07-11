@@ -10,10 +10,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class WithdrawDepositScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 

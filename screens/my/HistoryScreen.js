@@ -15,10 +15,6 @@ import actions from "../../store/actions";
 import { visitsQuery, myReadsQuery } from "../../graphql/user.graphql";
 
 class HistoryScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { today, earlier, navigation } = this.props;
 		return (

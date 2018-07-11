@@ -18,10 +18,6 @@ import actions from "../../../store/actions";
 const { width, height } = Dimensions.get("window");
 
 class ListScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.toggleEditModal = this.toggleEditModal.bind(this);
@@ -111,7 +107,7 @@ class ListScreen extends Component {
 															logo: 44,
 															mateSize: 13
 														}}
-														miniButton
+														plain
 													/>
 												</TouchableOpacity>
 											)}
@@ -148,7 +144,7 @@ class ListScreen extends Component {
 														navigation={navigation}
 														category={item}
 														showCreator
-														miniButton
+														plain
 														customStyle={{
 															logo: 44,
 															mateSize: 13

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import FollowButton from "../Button/Follow";
-import Avatar from "../Pure/Avatar";
-import Colors from "../../constants/Colors";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { withNavigation } from "react-navigation";
+
+import { FollowButton } from "../Button";
+import { Avatar } from "../Pure";
+import Colors from "../../constants/Colors";
 
 class UserGroup extends Component {
   render() {
@@ -57,4 +59,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UserGroup;
+export default withNavigation(UserGroup);

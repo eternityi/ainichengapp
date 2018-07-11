@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
-import FollowButton from "../Button/Follow";
-import Avatar from "../Pure/Avatar";
+import { withNavigation } from "react-navigation";
+
+import { FollowButton } from "../Button";
+import { Avatar } from "../Pure";
 import Colors from "../../constants/Colors";
 
 class UserMetaGroup extends Component {
@@ -83,4 +85,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default UserMetaGroup;
+export default withNavigation(UserMetaGroup);

@@ -12,10 +12,6 @@ import { updateUserIntroductionMutation } from "../../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class IntroduceScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.introduction = props.navigation.getParam("introduction", "");

@@ -118,8 +118,8 @@ class MembersScreen extends Component {
 						<View style={styles.membersType}>
 							<Text style={styles.memberItemText}>管理员({admins.length})</Text>
 						</View>
-						<View style={{ flexDirection: "row" }}>
-							{admins.slice(0, 3).map((user, index) => {
+						<View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+							{admins.map((user, index) => {
 								return (
 									<View key={index.toString()}>
 										{this._memberItem({
@@ -147,7 +147,7 @@ class MembersScreen extends Component {
 								flexWrap: "wrap"
 							}}
 						>
-							{authors.slice(0, 6).map((user, index) => {
+							{authors.map((user, index) => {
 								return (
 									<View key={index.toString()}>
 										{this._memberItem({

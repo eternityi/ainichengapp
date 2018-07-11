@@ -7,16 +7,16 @@ import { UserGroup, CategoryGroup } from "../../components/MediaGroup";
 
 class FollowItem extends Component {
 	render() {
-		let { follow, navigation } = this.props;
+		let { follow } = this.props;
 		if (!(follow.user ? follow.user : follow.category)) {
 			return null;
 		}
 		return (
 			<View>
 				{follow.user ? (
-					<UserGroup navigation={navigation} customStyle={{ avatar: 42, height: 45, nameSize: 17 }} user={follow.user} />
+					<UserGroup customStyle={{ avatar: 42, height: 45, nameSize: 17 }} user={follow.user} />
 				) : (
-					<CategoryGroup navigation={navigation} customStyle={{ logo: 42, height: 45, nameSize: 17 }} category={follow.category} />
+					<CategoryGroup customStyle={{ logo: 42, height: 45, nameSize: 17 }} category={follow.category} />
 				)}
 				<View style={{ paddingLeft: 50, marginTop: 20 }}>
 					<View>

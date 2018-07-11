@@ -13,10 +13,6 @@ import { connect } from "react-redux";
 import actions from "../../../store/actions";
 
 class FollowingsScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = {

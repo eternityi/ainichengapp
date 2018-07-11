@@ -13,10 +13,6 @@ import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
 
 class DetailScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);

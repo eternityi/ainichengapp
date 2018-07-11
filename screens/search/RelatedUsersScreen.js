@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	FlatList,
-	Text,
-	TouchableOpacity
-} from "react-native";
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
 import Header from "../../components/Header/Header";
@@ -20,10 +14,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class RelatedUsersScreen extends Component {
-	static navigationOptions = {
-		header: null
-	};
-
 	render() {
 		let { search_detail, navigation } = this.props;
 		let { users } = search_detail;
