@@ -12,7 +12,7 @@ import { UserMetaGroup } from "../../components/MediaGroup";
 import RewardPanel from "../article/RewardPanel";
 import ArticleBottomTools from "../article/ArticleBottomTools";
 import Comments from "../article/comment/Comments";
-import { RewardModal, AddCommentModal, ReplyCommentModal, ShareModal } from "../../components/Modal";
+import { RewardModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
@@ -20,7 +20,6 @@ import actions from "../../store/actions";
 import { Query, Mutation, graphql, compose } from "react-apollo";
 import { articleQuery, favoriteArticleMutation } from "../../graphql/article.graphql";
 import { likeArticleMutation } from "../../graphql/user.graphql";
-import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
 
 const { width, height } = Dimensions.get("window");
 
@@ -42,7 +41,6 @@ class DetailScreen extends Component {
 			duration: 0,
 			currentTime: 0,
 			isBuffering: false,
-			replyCommentVisible: false,
 			addCommentVisible: false,
 			rewardVisible: false,
 			shareModalVisible: false,
@@ -72,7 +70,6 @@ class DetailScreen extends Component {
 			ignoreSilentSwitch,
 			replyingComment,
 			rewardVisible,
-			replyCommentVisible,
 			addCommentVisible,
 			shareModalVisible
 		} = this.state;
@@ -130,7 +127,7 @@ class DetailScreen extends Component {
 										repeat={true}
 									/>
 								</View>
-								<ScrollView style={styles.container}>
+								<ScrollView style={styles.container} keyboardShouldPersistTaps={"handled"}>
 									<View style={styles.topInfo}>
 										<UserMetaGroup user={user} navigation={navigation} />
 										<View>
@@ -163,18 +160,9 @@ class DetailScreen extends Component {
 									</View>
 									<Comments
 										article={video}
-										navigation={navigation}
+										addCommentVisible={addCommentVisible}
 										toggleCommentModal={this.toggleAddCommentVisible}
-										toggleReplyComment={comment => {
-											if (login) {
-												this.setState(prevState => ({
-													replyCommentVisible: !prevState.replyCommentVisible,
-													replyingComment: comment
-												}));
-											} else {
-												navigation.navigate("登录注册");
-											}
-										}}
+										navigation={navigation}
 									/>
 								</ScrollView>
 								{/*文章底部工具**/}
@@ -201,96 +189,6 @@ class DetailScreen extends Component {
 								</View>
 								{/*赞赏模态框**/}
 								<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} />
-								{/*添加评论**/}
-								<Mutation mutation={addCommentMutation}>
-									{addComment => {
-										return (
-											<AddCommentModal
-												article={video}
-												visible={addCommentVisible}
-												toggleCommentModal={this.toggleAddCommentVisible}
-												addComment={({ body }) => {
-													if (!body) return null;
-													addComment({
-														variables: {
-															commentable_id: id,
-															body
-														},
-														refetchQueries: addComment => [
-															{
-																query: commentsQuery,
-																variables: {
-																	article_id: id,
-																	order: "LATEST_FIRST",
-																	filter: "ALL"
-																}
-															}
-														],
-														update: (cache, { data: { addComment } }) => {
-															let data = cache.readQuery({
-																query: articleQuery,
-																variables: { id }
-															});
-															let prev_video = video;
-															cache.writeQuery({
-																query: articleQuery,
-																variables: { id },
-																data: {
-																	article: Object.assign({}, prev_video, {
-																		count_replies: prev_video.count_replies + 1
-																	})
-																}
-															});
-														}
-													});
-												}}
-											/>
-										);
-									}}
-								</Mutation>
-								{/*回复评论**/}
-								<Mutation mutation={addCommentMutation}>
-									{replyComment => {
-										return (
-											<ReplyCommentModal
-												visible={replyCommentVisible}
-												toggleReplyComment={() => {
-													if (login) {
-														this.setState(prevState => ({
-															replyCommentVisible: !prevState.replyCommentVisible
-														}));
-													} else {
-														navigation.navigate("登录注册");
-													}
-												}}
-												replyingComment={this.state.replyingComment}
-												atUser={this.state.replyingComment ? this.state.replyingComment.user : null}
-												replyComment={({ body, replyingComment, atUser }) => {
-													//验证是否为空
-													if (!(body.length > atUser.name.length + 2)) return null;
-													replyComment({
-														variables: {
-															commentable_id: id,
-															body,
-															comment_id: replyingComment.id,
-															at_uid: atUser.id
-														},
-														refetchQueries: addComment => [
-															{
-																query: commentsQuery,
-																variables: {
-																	article_id: id,
-																	order: "LATEST_FIRST",
-																	filter: "ALL"
-																}
-															}
-														]
-													});
-												}}
-											/>
-										);
-									}}
-								</Mutation>
 							</View>
 						);
 					}}

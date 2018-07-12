@@ -6,7 +6,7 @@ import Colors from "../../constants/Colors";
 
 class VideoMark extends Component {
 	render() {
-		let { width = 50, size = 25 } = this.props;
+		let { width = 46, size = 22 } = this.props;
 		let fix = Math.floor(size / 4);
 		return (
 			<View style={[styles.videoMark, { width, height: width, borderRadius: width / 2 }]}>

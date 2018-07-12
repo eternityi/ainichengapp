@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Dimensions, ScrollView, FlatList } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Modal, Dimensions, ScrollView, FlatList } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";

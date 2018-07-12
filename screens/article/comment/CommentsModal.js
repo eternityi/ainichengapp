@@ -1,25 +1,15 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	TouchableOpacity,
-	TouchableNativeFeedback,
-	Text,
-	TextInput,
-	FlatList,
-	ScrollView,
-	Dimensions,
-	Platform
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text, FlatList, ScrollView, Dimensions, Platform } from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
-
-import CommentItem from "./CommentItem";
+import { MenuProvider } from "react-native-popup-menu";
 
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, SlideInUpModal } from "../../../components/Modal";
 import { CategoryGroup } from "../../../components/MediaGroup";
 import { LoadingMore, LoadingError, ContentEnd, Diving } from "../../../components/Pure";
+import Input from "../../../components/Native/Input";
+import CommentItem from "./CommentItem";
 
 import { Query, Mutation } from "react-apollo";
 import { connect } from "react-redux";
@@ -30,18 +20,25 @@ const { width, height } = Dimensions.get("window");
 class CommentsModal extends Component {
 	constructor(props) {
 		super(props);
+		this.body = "";
 		this.state = {
 			fetchingMore: true,
-			order: "LATEST_FIRST",
-			onlyAuthor: false,
-			replyingComment: null,
-			body: ""
+			order: props.order,
+			onlyAuthor: props.onlyAuthor,
+			replyingComment: null
 		};
 	}
 
+	onEmitterReady = emitter => {
+		this.thingEmitter = emitter;
+		this.thingEmitter.addListener("addCommentModalChanged", text => {
+			this.body = text;
+		});
+	};
+
 	render() {
 		let { visible, toggleVisible, article, navigation } = this.props;
-		let { replyingComment, body, order, onlyAuthor } = this.state;
+		let { replyingComment, order, onlyAuthor } = this.state;
 		let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
 		return (
 			<SlideInUpModal
@@ -53,105 +50,86 @@ class CommentsModal extends Component {
 				}}
 			>
 				<View style={styles.container}>
-					{this._renderListHeader()}
-					<Query query={commentsQuery} variables={{ article_id: article.id, order, filter }}>
-						{({ loading, error, data, refetch, fetchMore }) => {
-							if (!(data && data.comments)) return null;
-							if (data.comments.length < 1) return this.listEmpty();
-							return (
-								<View style={{ flex: 1 }}>
-									<FlatList
-										style={{ flex: 1 }}
-										data={data.comments}
-										keyExtractor={(item, index) => index.toString()}
-										renderItem={this._renderCommentItem}
-										ListFooterComponent={() => {
-											return <ContentEnd />;
-										}}
-									/>
-									<View style={styles.addComment}>
-										<View style={{ marginLeft: 10, flex: 1 }}>
-											<TextInput
-												underlineColorAndroid="transparent"
-												style={styles.commentInput}
-												placeholder="添加一条评论吧~"
-												placeholderText={Colors.lightFontColor}
-												onFocus={this._focusHandler}
-												onBlur={this._blurHandler}
-												onChangeText={body => this.setState({ body })}
-												value={body + ""}
-												ref={ref => (this.commentInput = ref)}
-											/>
-										</View>
-										<Mutation mutation={addCommentMutation}>
-											{addComment => {
-												return (
-													<TouchableOpacity
-														onPress={() => {
-															//验证是否为空
-															if (body.length > 0) {
-																if (replyingComment) {
-																	addComment({
-																		variables: {
-																			commentable_id: article.id,
-																			body: body,
-																			comment_id: replyingComment.id,
-																			at_uid: replyingComment.user.id
-																		},
-																		refetchQueries: addComment => [
-																			{
-																				query: commentsQuery,
-																				variables: {
-																					article_id: article.id,
-																					order,
-																					filter
-																				}
-																			}
-																		]
-																	});
-																} else {
-																	addComment({
-																		variables: {
-																			commentable_id: article.id,
-																			body
-																		},
-																		refetchQueries: addComment => [
-																			{
-																				query: commentsQuery,
-																				variables: {
-																					article_id: article.id,
-																					order,
-																					filter
-																				}
-																			}
-																		]
-																	});
-																}
-																this.setState({ body: "" });
-															}
-															this.commentInput.blur();
-														}}
-													>
-														<View style={{ marginHorizontal: 20 }}>
-															<Text
-																style={{
-																	fontSize: 16,
-																	color: Colors.themeColor
-																}}
-															>
-																发表
-															</Text>
-														</View>
-													</TouchableOpacity>
-												);
+					<MenuProvider style={{ flex: 1 }}>
+						{this._renderListHeader()}
+						<Query query={commentsQuery} variables={{ article_id: article.id, order, filter }}>
+							{({ loading, error, data, refetch, fetchMore }) => {
+								if (!(data && data.comments)) return null;
+								if (data.comments.length < 1) return this.listEmpty();
+								return (
+									<View style={{ flex: 1 }}>
+										<FlatList
+											style={{ flex: 1 }}
+											data={data.comments}
+											keyExtractor={(item, index) => index.toString()}
+											renderItem={this._renderCommentItem}
+											ListFooterComponent={() => {
+												return <ContentEnd />;
 											}}
-										</Mutation>
+										/>
+										<View style={styles.addComment}>
+											<View style={{ marginLeft: 10, flex: 1 }}>
+												<Input
+													style={styles.commentInput}
+													placeholder="添加一条评论吧~"
+													name="addCommentModal"
+													defaultValue={this.body}
+													onEmitterReady={this.onEmitterReady}
+													onFocus={this._focusHandler.bind(this)}
+													ref={ref => (this.commentInput = ref)}
+												/>
+											</View>
+											<Mutation mutation={addCommentMutation}>
+												{addComment => {
+													return (
+														<TouchableOpacity
+															onPress={() => {
+																//验证是否为空
+																if (this.body.length > 0) {
+																	addComment({
+																		variables: {
+																			commentable_id: article.id,
+																			body: this.body,
+																			comment_id: replyingComment ? replyingComment.id : "",
+																			at_uid: replyingComment ? replyingComment.user.id : ""
+																		},
+																		refetchQueries: addComment => [
+																			{
+																				query: commentsQuery,
+																				variables: {
+																					article_id: article.id,
+																					order,
+																					filter
+																				}
+																			}
+																		]
+																	});
+																	this.changeBody("");
+																}
+																this.commentInput.input.blur();
+															}}
+														>
+															<View style={{ marginHorizontal: 20 }}>
+																<Text
+																	style={{
+																		fontSize: 16,
+																		color: Colors.themeColor
+																	}}
+																>
+																	发表
+																</Text>
+															</View>
+														</TouchableOpacity>
+													);
+												}}
+											</Mutation>
+										</View>
 									</View>
-								</View>
-							);
-						}}
-					</Query>
-					{Platform.OS === "ios" && <KeyboardSpacer />}
+								);
+							}}
+						</Query>
+						{Platform.OS === "ios" && <KeyboardSpacer />}
+					</MenuProvider>
 				</View>
 			</SlideInUpModal>
 		);
@@ -223,10 +201,10 @@ class CommentsModal extends Component {
 				comment={comment}
 				toggleReplyComment={comment => {
 					this.setState(prevState => ({
-						replyingComment: comment,
-						body: `@${comment.user.name} `
+						replyingComment: comment
 					}));
-					this.commentInput.focus();
+					this.changeBody(`@${comment.user.name} `);
+					this.commentInput.input.focus();
 				}}
 				toggleVisible={toggleVisible}
 				navigation={navigation}
@@ -243,12 +221,17 @@ class CommentsModal extends Component {
 	};
 
 	_focusHandler = () => {
-		let { body, replyingComment } = this.state;
-		if (body.length < 1 && replyingComment) {
+		let { replyingComment } = this.state;
+		if (this.body.length < 1 && replyingComment) {
 			this.setState({
 				replyingComment: null
 			});
 		}
+	};
+
+	changeBody = body => {
+		this.body = body;
+		this.commentInput.changeText(this.body);
 	};
 }
 

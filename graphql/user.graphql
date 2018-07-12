@@ -279,6 +279,7 @@ query draftsQuery($offset: Int) {
             id
             type
             title
+            description
             updated_at
             has_image
             images

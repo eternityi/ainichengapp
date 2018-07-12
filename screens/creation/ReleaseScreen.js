@@ -1,6 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TextInput, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image } from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image } from "react-native";
 
 import ImagePicker from "react-native-image-crop-picker";
 import Upload from "react-native-background-upload";
@@ -10,6 +10,7 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
+import Input from "../../components/Native/Input";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -25,7 +26,6 @@ class ReleaseScreen extends React.Component {
     super(props);
 
     this.state = {
-      body: null,
       covers: [],
       image_ids: [],
       routeName: "　",
@@ -34,13 +34,20 @@ class ReleaseScreen extends React.Component {
       completed: false,
       selectMedia: false,
       isImagePickerShowing: false,
-      retype:null
+      retype: null
     };
   }
 
+  onEmitterReady = emitter => {
+    this.thingEmitter = emitter;
+    this.thingEmitter.addListener("releaseChanged", text => {
+      this.body = text;
+    });
+  };
+
   render() {
     const { navigation } = this.props;
-    let { covers, routeName ,completed, progress, uploadId,retype,selectMedia} = this.state;
+    let { covers, routeName, completed, progress, uploadId, retype, selectMedia } = this.state;
     return (
       <View style={styles.container}>
         <Header
@@ -67,19 +74,16 @@ class ReleaseScreen extends React.Component {
         />
         <ScrollView>
           <View style={styles.inputText}>
-            <TextInput
-              ref="textInput"
+            <Input
               style={styles.input}
               placeholder="这一刻的想法"
-              underlineColorAndroid="transparent"
               selectionColor="#000"
               multiline={true}
-              textAlignVertical={"top"}
-              onChangeText={body => {
-                this.setState({
-                  body
-                });
-              }}
+              name="release"
+              defaultValue={this.body}
+              onEmitterReady={this.onEmitterReady}
+              ref={ref => (this.commentInput = ref)}
+            />
             />
           </View>
           <View style={styles.add}>
@@ -92,12 +96,14 @@ class ReleaseScreen extends React.Component {
               }}
             >
               {covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
-              <TouchableOpacity onPress={() =>
-                                        this._openPicker({
-                                          url: "https://www.ainicheng.com/video",
-                                          field: "uploaded_media",
-                                          type: "multipart"
-                                        })}>
+              <TouchableOpacity
+                onPress={() =>
+                  this._openPicker({
+                    url: "https://www.ainicheng.com/video",
+                    field: "uploaded_media",
+                    type: "multipart"
+                  })}
+              >
                 <View style={covers == "" ? styles.icon : styles.icon2}>
                   <Iconfont name={"add"} size={100} color={Colors.lightGray} />
                 </View>
@@ -129,14 +135,14 @@ class ReleaseScreen extends React.Component {
     );
   }
 
-  _openPicker=options=> {
+  _openPicker = options => {
     let _this = this;
     ImagePicker.openPicker({
       multiple: true,
       mediaType: "any"
     }).then(
       images => {
-        let { covers,selectMedia } = _this.state;
+        let { covers, selectMedia } = _this.state;
         images.map(image => {
           //optmistic update
           covers.push(image.path);
@@ -146,14 +152,14 @@ class ReleaseScreen extends React.Component {
           console.log(image.path);
           console.log(image.sourceURL);
           _this.setState({
-             selectMedia:image.sourceURL
+            selectMedia: image.sourceURL
           });
         });
         _this.setState({
           covers
         });
         console.log(_this.state.selectMedia);
-        _this.startUpload(Object.assign({ path:_this.state.selectMedia}, options));
+        _this.startUpload(Object.assign({ path: _this.state.selectMedia }, options));
       },
       error => {
         console.log(error);
@@ -162,7 +168,7 @@ class ReleaseScreen extends React.Component {
     );
   };
 
-handleProgress = throttle(progress => {
+  handleProgress = throttle(progress => {
     this.setState({ progress });
   }, 200);
   startUpload = opts => {
@@ -171,16 +177,16 @@ handleProgress = throttle(progress => {
         {
           method: "POST",
           headers: {
-            "content-type": metadata.mimeType, // server requires a content-type header
+            "content-type": metadata.mimeType // server requires a content-type header
           }
         },
         opts
       );
       console.log(options);
-     
-      let uploadtype= metadata.mimeType;
+
+      let uploadtype = metadata.mimeType;
       this.setState({
-        retype:uploadtype.indexOf("image")
+        retype: uploadtype.indexOf("image")
       });
 
       Upload.startUpload(options)
@@ -237,6 +243,11 @@ handleProgress = throttle(progress => {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  changeBody = body => {
+    this.body = body;
+    this.commentInput.changeText(this.body);
   };
 }
 

@@ -221,22 +221,7 @@ class CategoriesScreen extends React.Component {
   _renderCategoryItem = ({ item, index }) => {
     return (
       <View style={styles.categoryCardWrap}>
-        <Mutation mutation={followCategoryMutation}>
-          {followCategory => {
-            return (
-              <CategoryCard
-                category={item}
-                followHandler={() =>
-                  followCategory({
-                    variables: {
-                      category_id: item.id,
-                      undo: item.followed
-                    }
-                  })}
-              />
-            );
-          }}
-        </Mutation>
+        <CategoryCard category={item} />
       </View>
     );
   };

@@ -14,14 +14,13 @@ import ArticleBottomTools from "./ArticleBottomTools";
 import Comments from "./comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
 import AuthorCard from "../../components/Card/AuthorCard";
-import { RewardModal, AddCommentModal, ReplyCommentModal, ShareModal } from "../../components/Modal";
+import { RewardModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 import { articleQuery } from "../../graphql/article.graphql";
-import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
 
 const { width, height } = Dimensions.get("window");
 
@@ -62,36 +61,24 @@ class DetailScreen extends Component {
 
     this.handleRewardVisible = this.handleRewardVisible.bind(this);
     this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
+    this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
     this.state = {
-      article: props.navigation.state.params.article,
       footOffsetHeight: height,
       commentsOffsetHeight: height,
       showWrite: false,
-      replyCommentVisible: false,
       addCommentVisible: false,
       rewardVisible: false,
       shareModalVisible: false,
       reply: false,
-      replyingComment: null, //回复的comment
       imageViewerVisible: false,
       initImage: 0
     };
   }
 
   render() {
-    let {
-      replyingComment,
-      showWrite,
-      rewardVisible,
-      replyCommentVisible,
-      addCommentVisible,
-      shareModalVisible,
-      imageViewerVisible,
-      initImage
-    } = this.state;
-    const { article = {} } = this.state;
+    let { showWrite, rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible, initImage } = this.state;
     let { navigation, login } = this.props;
-
+    const article = navigation.getParam("article", {});
     return (
       <Screen>
         <Query query={articleQuery} variables={{ id: article.id }}>
@@ -111,6 +98,8 @@ class DetailScreen extends Component {
                   onScroll={this._onScroll.bind(this)}
                   ref={ref => (this.scrollRef = ref)}
                   removeClippedSubviews={true}
+                  keyboardShouldPersistTaps={"handled"}
+                  scrollEventThrottle={16}
                 >
                   <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
                     <View>
@@ -186,20 +175,11 @@ class DetailScreen extends Component {
                   </View>
                   <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
                   <Comments
+                    addCommentVisible={addCommentVisible}
                     article={article}
                     navigation={navigation}
                     onLayout={this._commentsOnLayout.bind(this)}
-                    toggleCommentModal={() => this.toggleAddCommentVisible()}
-                    toggleReplyComment={comment => {
-                      if (login) {
-                        this.setState(prevState => ({
-                          replyCommentVisible: !prevState.replyCommentVisible,
-                          replyingComment: comment
-                        }));
-                      } else {
-                        navigation.navigate("登录注册");
-                      }
-                    }}
+                    toggleCommentModal={this.toggleAddCommentVisible}
                   />
                 </ScrollView>
                 {/*文章底部工具**/}
@@ -208,7 +188,7 @@ class DetailScreen extends Component {
                   comments={article.count_replies}
                   article={article}
                   showWrite={showWrite}
-                  toggleCommentModal={() => this.toggleAddCommentVisible()}
+                  toggleCommentModal={this.toggleAddCommentVisible}
                   handleRewardVisible={this.handleRewardVisible}
                   handleSlideShareMenu={this.handleSlideShareMenu}
                   commentHandler={this._scrollToComments.bind(this)}
@@ -217,96 +197,6 @@ class DetailScreen extends Component {
                 />
                 {/*赞赏模态框**/}
                 <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={article} />
-                {/*添加评论**/}
-                <Mutation mutation={addCommentMutation}>
-                  {addComment => {
-                    return (
-                      <AddCommentModal
-                        article={article}
-                        visible={addCommentVisible}
-                        toggleCommentModal={() => this.toggleAddCommentVisible()}
-                        addComment={({ body }) => {
-                          if (!body) return null;
-                          addComment({
-                            variables: {
-                              commentable_id: article.id,
-                              body
-                            },
-                            refetchQueries: addComment => [
-                              {
-                                query: commentsQuery,
-                                variables: {
-                                  article_id: article.id,
-                                  order: "LATEST_FIRST",
-                                  filter: "ALL"
-                                }
-                              }
-                            ],
-                            update: (cache, { data: { addComment } }) => {
-                              let data = cache.readQuery({
-                                query: articleQuery,
-                                variables: { id: article.id }
-                              });
-                              let prev_article = data.article;
-                              cache.writeQuery({
-                                query: articleQuery,
-                                variables: { id: article.id },
-                                data: {
-                                  article: Object.assign({}, prev_article, {
-                                    count_replies: prev_article.count_replies + 1
-                                  })
-                                }
-                              });
-                            }
-                          });
-                        }}
-                      />
-                    );
-                  }}
-                </Mutation>
-                {/*回复评论**/}
-                <Mutation mutation={addCommentMutation}>
-                  {replyComment => {
-                    return (
-                      <ReplyCommentModal
-                        visible={replyCommentVisible}
-                        toggleReplyComment={() => {
-                          if (login) {
-                            this.setState(prevState => ({
-                              replyCommentVisible: !prevState.replyCommentVisible
-                            }));
-                          } else {
-                            navigation.navigate("登录注册");
-                          }
-                        }}
-                        replyingComment={this.state.replyingComment}
-                        atUser={this.state.replyingComment ? this.state.replyingComment.user : null}
-                        replyComment={({ body, replyingComment, atUser }) => {
-                          //验证是否为空
-                          if (!(body.length > atUser.name.length + 2)) return null;
-                          replyComment({
-                            variables: {
-                              commentable_id: article.id,
-                              body,
-                              comment_id: replyingComment.id,
-                              at_uid: atUser.id
-                            },
-                            refetchQueries: addComment => [
-                              {
-                                query: commentsQuery,
-                                variables: {
-                                  article_id: article.id,
-                                  order: "LATEST_FIRST",
-                                  filter: "ALL"
-                                }
-                              }
-                            ]
-                          });
-                        }}
-                      />
-                    );
-                  }}
-                </Mutation>
               </View>
             );
           }}

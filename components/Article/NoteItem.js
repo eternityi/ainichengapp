@@ -11,29 +11,9 @@ import { CustomPopoverMenu } from "../../components/Modal";
 const { width, height } = Dimensions.get("window");
 const IMG_INTERVAL = 8;
 const IMG_WIDTH = (width - 46) / 3;
-const VIDEO_COVER_WIDTH = width - 30;
-const COVER_WIDTH = width / 2;
+const COVER_WIDTH = width - 30;
 
 class NoteItem extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			coverImage: {
-				width: IMG_WIDTH,
-				height: IMG_WIDTH,
-				resizeMode: "cover"
-			}
-		};
-	}
-
-	componentWillMount() {
-		let { type, images, cover } = this.props.post;
-		if (type !== "video" && images.length < 2 && cover) {
-			this.smartImage(cover);
-		}
-	}
-
 	render() {
 		const { post, navigation, compress, recommend, longPress = () => null } = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_comments } = post;
@@ -67,38 +47,26 @@ class NoteItem extends Component {
 							<Text style={{ fontSize: 14, color: Colors.tintFontColor }}>{time_ago}</Text>
 						</View>
 					)}
-					{type == "video" ? (
-						<View>
-							<View style={{ flex: 1 }}>
-								<Text numberOfLines={2} style={styles.title}>
-									{description ? description : title}
+					{type == "article" ? (
+						<View style={styles.abstract}>
+							<Text numberOfLines={2} style={styles.title}>
+								{title}
+							</Text>
+							{description ? (
+								<Text numberOfLines={2} style={styles.description}>
+									{description}
 								</Text>
-							</View>
-							<View>{this._renderCover(layout, has_image, type, cover, images)}</View>
-							{this._renderFooter(category, hits, count_comments, count_likes)}
+							) : null}
 						</View>
 					) : (
-						<View>
-							<View>
-								{title ? (
-									<View>
-										<Text numberOfLines={2} style={styles.title}>
-											{title}
-										</Text>
-									</View>
-								) : null}
-								{description ? (
-									<View>
-										<Text numberOfLines={2} style={styles.description}>
-											{description}
-										</Text>
-									</View>
-								) : null}
-							</View>
-							<View>{this._renderCover(layout, has_image, type, cover, images)}</View>
-							{this._renderFooter(category, hits, count_comments, count_likes)}
+						<View style={styles.abstract}>
+							<Text numberOfLines={2} style={styles.title}>
+								{title ? title : description}
+							</Text>
 						</View>
 					)}
+					<View>{has_image && this.renderImage(type, images, cover)}</View>
+					{this._renderFooter(category, hits, count_comments, count_likes)}
 				</View>
 			</TouchableHighlight>
 		);
@@ -134,53 +102,28 @@ class NoteItem extends Component {
 		);
 	};
 
-	_renderCover = (layout, has_image, type, cover, images) => {
-		let { coverImage } = this.state;
+	renderImage = (type, images, cover) => {
 		if (type == "video") {
 			return (
 				<View style={styles.coverWrap}>
-					<VideoCover width={VIDEO_COVER_WIDTH} height={VIDEO_COVER_WIDTH * 9 / 16} cover={cover} />
+					<VideoCover width={COVER_WIDTH} height={COVER_WIDTH * 9 / 16} cover={cover} />
 				</View>
 			);
-		} else {
-			if (has_image) {
-				if (images.length < 2) {
-					return (
-						<View style={{ marginTop: 10 }}>
-							<Image style={coverImage} source={{ uri: cover }} />
-						</View>
-					);
-				}
-				return (
-					<View style={[styles.gridView, styles.layoutFlexRow]}>
-						{images.slice(0, 3).map(function(img, i) {
-							if (img) return <Image key={i} style={styles.noteImage} source={{ uri: img }} />;
-						})}
-					</View>
-				);
-			}
+		} else if (images.length == 1) {
+			return (
+				<View style={styles.coverWrap}>
+					<Image style={styles.cover} source={{ uri: cover }} />
+				</View>
+			);
+		} else if (images.length > 1) {
+			return (
+				<View style={[styles.gridView, styles.layoutFlexRow]}>
+					{images.slice(0, 3).map(function(img, i) {
+						if (img) return <Image style={[styles.gridImage, styles.imgWrap]} source={{ uri: img }} key={i} />;
+					})}
+				</View>
+			);
 		}
-	};
-
-	smartImage = image => {
-		Image.getSize(image, (width, height) => {
-			let imgWidth, imgHeight;
-			let scale = width / height;
-			if (scale >= 1) {
-				imgWidth = COVER_WIDTH;
-				imgHeight = COVER_WIDTH / scale;
-			} else {
-				imgWidth = COVER_WIDTH / scale;
-				imgHeight = COVER_WIDTH;
-			}
-			this.setState({
-				coverImage: {
-					width: imgWidth,
-					height: imgHeight,
-					resizeMode: "cover"
-				}
-			});
-		});
 	};
 
 	skipScreen = () => {
@@ -204,7 +147,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		paddingRight: 5,
-		marginBottom: 10
+		marginBottom: 15
 	},
 	userInfo: {
 		flexDirection: "row",
@@ -215,29 +158,38 @@ const styles = StyleSheet.create({
 		color: Colors.primaryFontColor,
 		marginLeft: 6
 	},
-	layoutFlexRow: {
-		flexDirection: "row",
-		alignItems: "center"
+	cover: {
+		width: COVER_WIDTH,
+		height: COVER_WIDTH * 0.5,
+		resizeMode: "cover"
 	},
-	noteImage: {
+	gridView: {
+		marginLeft: -IMG_INTERVAL
+	},
+	gridImage: {
 		width: IMG_WIDTH,
 		height: IMG_WIDTH,
-		resizeMode: "cover",
+		resizeMode: "cover"
+	},
+	coverWrap: {
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		backgroundColor: Colors.tintGray,
+		overflow: "hidden"
+	},
+	imgWrap: {
 		borderWidth: 1,
 		borderColor: Colors.lightBorderColor,
 		backgroundColor: Colors.tintGray,
 		marginLeft: IMG_INTERVAL
 	},
-	coverWrap: {
-		marginTop: 10
-	},
-	gridView: {
-		marginLeft: -IMG_INTERVAL,
-		marginTop: 10
+	abstract: {
+		marginBottom: 10
 	},
 	title: {
-		fontSize: 17,
-		lineHeight: 23,
+		fontSize: 16,
+		lineHeight: 22,
 		color: Colors.darkFontColor
 	},
 	description: {
@@ -266,6 +218,10 @@ const styles = StyleSheet.create({
 		fontSize: 11,
 		color: Colors.lightFontColor,
 		marginLeft: 3
+	},
+	layoutFlexRow: {
+		flexDirection: "row",
+		alignItems: "center"
 	}
 });
 

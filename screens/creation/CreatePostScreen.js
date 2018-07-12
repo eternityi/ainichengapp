@@ -1,19 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  Button,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-  Modal,
-  TouchableHighlight,
-  Image,
-  Platform
-} from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image, Platform } from "react-native";
 
 import Screen from "../Screen";
 import UploadMedia from "./UploadMedia";
@@ -22,8 +9,7 @@ import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
 import MediaModal from "../../components/Modal/MediaModal";
-import DialogSelected from '../../components/Pure/AlertSelected';
-
+import DialogSelected from "../../components/Pure/AlertSelected";
 
 import Upload from "react-native-background-upload";
 import ImagePicker from "react-native-image-crop-picker";
@@ -35,7 +21,6 @@ import { draftsQuery } from "../../graphql/user.graphql";
 import { articleContentQuery, createdArticleMutation, editArticleMutation } from "../../graphql/article.graphql";
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
-
 
 const selectedArr = ["图片", "视频"];
 
@@ -51,14 +36,14 @@ class CreatePostScreen extends React.Component {
       covers: [],
       routeName: "　",
       selectMedia: false,
-      uri:'',
+      uri: "",
       isImagePickerShowing: false,
-      retype:''
+      retype: ""
     };
   }
 
   render() {
-    let { covers, routeName, selectMedia, completed, progress, uploadId,retype,uri } = this.state;
+    let { covers, routeName, selectMedia, completed, progress, uploadId, retype, uri } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -88,7 +73,9 @@ class CreatePostScreen extends React.Component {
           navigation={navigation}
           selectMedia={selectMedia}
           covers={covers}
-          showAlertSelected={() => {this.showAlertSelected()}}
+          showAlertSelected={() => {
+            this.showAlertSelected();
+          }}
           progress={progress}
           cancelUpload={this.cancelUpload}
           completed={completed}
@@ -100,33 +87,36 @@ class CreatePostScreen extends React.Component {
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })
-          }
+            })}
         />
-        <DialogSelected ref={(dialog)=>{
-                    this.dialog = dialog;
-                }} /> 
+        <DialogSelected
+          ref={dialog => {
+            this.dialog = dialog;
+          }}
+        />
       </View>
     );
   }
- 
-   onPressVideoUpload=options=> {    //打开视频库
+
+  onPressVideoUpload = options => {
+    //打开视频库
     ImagePicker.openPicker({
       multiple: false,
       mediaType: "video"
-    }).then(image => {
-          let { covers ,uri}=this.state;
-          covers.push(image.path); //图片资源
-          this.setState({
-            covers
-          });
-          console.log(image.mime);
-          if (Platform.OS === "android") {
-              this.startUpload(Object.assign({ path:image.path.substr(7)}, options));
-          }else{
-              this.startUpload(Object.assign({ path:image.path}, options));
-          }
-          this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
+    }).then(
+      image => {
+        let { covers, uri } = this.state;
+        covers.push(image.path); //图片资源
+        this.setState({
+          covers
+        });
+        console.log(image.mime);
+        if (Platform.OS === "android") {
+          this.startUpload(Object.assign({ path: image.path.substr(7) }, options));
+        } else {
+          this.startUpload(Object.assign({ path: image.path }, options));
+        }
+        this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
       },
       error => {
         console.log(error);
@@ -135,26 +125,26 @@ class CreatePostScreen extends React.Component {
     );
   };
 
-
-  onPressPhotoUpload=options=> {    //打开相册
+  onPressPhotoUpload = options => {
+    //打开相册
     ImagePicker.openPicker({
       multiple: true,
-      mediaType: "photo",
+      mediaType: "photo"
     }).then(
       images => {
-        let { covers,uri,retype } = this.state;
+        let { covers, uri, retype } = this.state;
         images.map(image => {
           //optmistic update
           covers.push(image.path);
           //upload ..
           if (Platform.OS === "android") {
-              this.setState({
-                  uri:image.path.substr(7)
-              });
-          }else{
-              this.setState({
-                 uri:image.path
-              });
+            this.setState({
+              uri: image.path.substr(7)
+            });
+          } else {
+            this.setState({
+              uri: image.path
+            });
           }
         });
         this.setState({
@@ -163,7 +153,7 @@ class CreatePostScreen extends React.Component {
         console.log(this.state.uri);
         console.log(this.state.retype);
 
-        this.startUpload(Object.assign({ path:this.state.uri}, options));
+        this.startUpload(Object.assign({ path: this.state.uri }, options));
       },
       error => {
         console.log(error);
@@ -171,7 +161,6 @@ class CreatePostScreen extends React.Component {
       }
     );
   };
-
 
   handleProgress = throttle(progress => {
     this.setState({ progress });
@@ -183,17 +172,17 @@ class CreatePostScreen extends React.Component {
         {
           method: "POST",
           headers: {
-            "content-type": metadata.mimeType, // server requires a content-type header
+            "content-type": metadata.mimeType // server requires a content-type header
           }
         },
         opts
       );
-      let uploadtype= metadata.mimeType.indexOf("image");
+      let uploadtype = metadata.mimeType.indexOf("image");
       this.setState({
-             retype:uploadtype
-          });
+        retype: uploadtype
+      });
 
-      Upload.startUpload(options)    //上传
+      Upload.startUpload(options) //上传
         .then(uploadId => {
           console.log(`Upload started with options: ${JSON.stringify(options)}`);
           this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
@@ -210,7 +199,7 @@ class CreatePostScreen extends React.Component {
             }); //上传完成
           });
         })
-        .catch((err)=> {
+        .catch(err => {
           this.setState({ uploadId: null, progress: null });
           console.log("上传错误!", err);
         });
@@ -233,28 +222,28 @@ class CreatePostScreen extends React.Component {
     });
   };
 
-  showAlertSelected(){
-        this.dialog.show("请选择上传内容", selectedArr, '#333333', this.callbackSelected);
+  showAlertSelected() {
+    this.dialog.show("请选择上传内容", selectedArr, "#333333", this.callbackSelected);
+  }
+  // 回调
+  callbackSelected(i) {
+    switch (i) {
+      case 0: //图库
+        this.onPressPhotoUpload({
+          url: "https://www.ainicheng.com/video",
+          field: "uploaded_media",
+          type: "multipart"
+        });
+        break;
+      case 1: // 视频库
+        this.onPressVideoUpload({
+          url: "https://www.ainicheng.com/video",
+          field: "uploaded_media",
+          type: "multipart"
+        });
+        break;
     }
-    // 回调
-    callbackSelected(i){
-        switch (i){
-            case 0: //图库
-                this.onPressPhotoUpload({
-                  url: "https://www.ainicheng.com/video",
-                  field: "uploaded_media",
-                  type: "multipart"
-                });
-                break;
-            case 1: // 视频库
-                this.onPressVideoUpload({
-                  url: "https://www.ainicheng.com/video",
-                  field: "uploaded_media",
-                  type: "multipart"
-                });
-                break;
-        }
-    }
+  }
 }
 
 const styles = StyleSheet.create({

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { ContentEnd, Diving } from "../../../components/Pure";
-import { CustomPopoverMenu, ReplyCommentModal } from "../../../components/Modal";
+import { CustomPopoverMenu, AddCommentModal } from "../../../components/Modal";
+
 import CommentItem from "./CommentItem";
 import CommentsModal from "./CommentsModal";
 
@@ -14,17 +15,19 @@ import { Query, Mutation } from "react-apollo";
 class Comments extends Component {
   constructor(props) {
     super(props);
-    this.toggleMoreCommentsVisible = this.toggleMoreCommentsVisible.bind(this);
+    this.toggleCommentsVisible = this.toggleCommentsVisible.bind(this);
+    this.toggleReplyCommentVisible = this.toggleReplyCommentVisible.bind(this);
     this.state = {
       order: "LATEST_FIRST",
       onlyAuthor: false,
-      moreCommentsModal: false
+      replyCommentVisible: false,
+      commentsVisible: false
     };
   }
 
   render() {
-    const { onLayout, navigation, article, toggleCommentModal } = this.props;
-    const { onlyAuthor, order, moreCommentsModal } = this.state;
+    const { onLayout, navigation, article, addCommentVisible, toggleCommentModal } = this.props;
+    const { onlyAuthor, order, replyCommentVisible, commentsVisible } = this.state;
     let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
     return (
       <View onLayout={onLayout}>
@@ -116,9 +119,8 @@ class Comments extends Component {
                             key={i}
                             comment={comment}
                             toggleReplyComment={comment => {
-                              if (this.props.toggleReplyComment) {
-                                this.props.toggleReplyComment(comment);
-                              }
+                              this.replyingComment = comment;
+                              this.toggleReplyCommentVisible();
                             }}
                             navigation={navigation}
                           />
@@ -126,7 +128,7 @@ class Comments extends Component {
                       })}
                     </View>
                     {article.count_replies > 3 ? (
-                      <TouchableOpacity style={styles.loadMore} onPress={this.toggleMoreCommentsVisible}>
+                      <TouchableOpacity style={styles.loadMore} onPress={this.toggleCommentsVisible}>
                         <Text style={{ fontSize: 16, color: Colors.linkColor }}>查看更多评论</Text>
                         <Iconfont name={"right"} size={16} color={Colors.linkColor} />
                       </TouchableOpacity>
@@ -135,24 +137,47 @@ class Comments extends Component {
                     )}
                   </View>
                 )}
-                <CommentsModal
-                  visible={moreCommentsModal}
-                  toggleVisible={this.toggleMoreCommentsVisible}
-                  article={article}
-                  order={order}
-                  filter={filter}
-                  navigation={navigation}
-                />
               </View>
             );
           }}
         </Query>
+        <CommentsModal
+          visible={commentsVisible}
+          toggleVisible={this.toggleCommentsVisible}
+          article={article}
+          order={order}
+          filter={filter}
+          navigation={navigation}
+        />
+        <AddCommentModal
+          emitter="replyComment"
+          visible={replyCommentVisible}
+          toggleCommentModal={this.toggleReplyCommentVisible}
+          article={article}
+          replyingComment={this.replyingComment}
+          order={order}
+          filter={filter}
+          navigation={navigation}
+        />
+        <AddCommentModal
+          emitter="addComment"
+          visible={addCommentVisible}
+          toggleCommentModal={toggleCommentModal}
+          article={article}
+          order={order}
+          filter={filter}
+          navigation={navigation}
+        />
       </View>
     );
   }
 
-  toggleMoreCommentsVisible() {
-    this.setState(prevState => ({ moreCommentsModal: !prevState.moreCommentsModal }));
+  toggleCommentsVisible() {
+    this.setState(prevState => ({ commentsVisible: !prevState.commentsVisible }));
+  }
+
+  toggleReplyCommentVisible() {
+    this.setState(prevState => ({ replyCommentVisible: !prevState.replyCommentVisible }));
   }
 }
 

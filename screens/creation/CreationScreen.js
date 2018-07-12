@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, Platform, TextInput, Dimensions, View, TouchableOpacity, YellowBox, BackHandler } from "react-native";
+import { FlatList, StyleSheet, Text, Platform, Dimensions, View, TouchableOpacity, YellowBox, BackHandler } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
 import Toast from "react-native-root-toast";

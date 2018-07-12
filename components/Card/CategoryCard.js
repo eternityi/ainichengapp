@@ -9,7 +9,7 @@ import { navigationAction } from "../../constants/Methods";
 
 class CategoryCard extends Component {
 	render() {
-		let { category, navigation, followHandler } = this.props;
+		let { category, navigation } = this.props;
 		let { id, logo, name, description, count_follows, followed } = category;
 		return (
 			<TouchableWithoutFeedback onPress={() => navigation.dispatch(navigationAction({ routeName: "专题详情", params: { category } }))}>
@@ -17,12 +17,9 @@ class CategoryCard extends Component {
 					<Avatar size={50} uri={logo} type="category" />
 					<View style={styles.middle}>
 						<View style={styles.layoutFlexRow}>
-							<View>
-								<Text style={styles.name}>{name}</Text>
-							</View>
-							<View style={{ flex: 1, marginLeft: 4 }}>
-								<Text style={styles.metaText} numberOfLines={1}>
-									{count_follows}人关注
+							<View style={{ flex: 1 }}>
+								<Text style={styles.name} numberOfLines={1}>
+									{name}
 								</Text>
 							</View>
 						</View>

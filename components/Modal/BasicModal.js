@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Modal, Text, Dimensions, Platform, BackHandler, StatusBar } from "react-native";
+import { StyleSheet, View, Modal, Text, Dimensions, Platform, BackHandler, StatusBar, Keyboard } from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 const { width, height } = Dimensions.get("window");
