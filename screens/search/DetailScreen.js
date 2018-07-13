@@ -6,7 +6,7 @@ import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchHeader } from "../../components/Header";
-import { Avatar, DivisionLine, ContentEnd, LoadingMore } from "../../components/Pure/Avatar";
+import { Avatar, DivisionLine, ContentEnd, LoadingMore } from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 
 import { connect } from "react-redux";

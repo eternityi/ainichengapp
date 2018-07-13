@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import SortableListView from "react-native-sortable-listview";
 
 import { Iconfont } from "../../../utils/Fonts";

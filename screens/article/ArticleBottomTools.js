@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import * as Animatable from "react-native-animatable";
-import { StyleSheet, View, Text, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from "react-native";
 import CommentsInput from "./CommentsInput";
 
 import { articleQuery } from "../../graphql/article.graphql";
@@ -35,19 +35,20 @@ class ArticleBottomTools extends Component {
                 <CommentsInput showWrite={showWrite} toggleCommentModal={toggleCommentModal} />
               </View>
               <View style={styles.articleTools}>
-                <TouchableWithoutFeedback onPress={handleRewardVisible}>
+                <TouchableOpacity onPress={handleRewardVisible} style={{ flex: 1 }}>
                   <View style={styles.articleToolItem}>
                     <Iconfont name={"reward"} size={19} color={Colors.tintFontColor} style={{ marginBottom: -1 }} />
                     <Text style={styles.articleToolItemText}>赞赏 {rewards}</Text>
                   </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={commentHandler}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={commentHandler} style={{ flex: 1 }}>
                   <View style={styles.articleToolItem}>
                     <Iconfont name={"comment-hollow"} size={17} color={Colors.tintFontColor} />
                     <Text style={styles.articleToolItemText}>评论 {comments || 0}</Text>
                   </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ flex: 1 }}
                   onPress={() => {
                     if (login) {
                       likeArticle({
@@ -65,13 +66,13 @@ class ArticleBottomTools extends Component {
                     <Iconfont name={liked ? "like" : "like-outline"} size={17} color={liked ? Colors.themeColor : Colors.tintFontColor} />
                     <Text style={styles.articleToolItemText}>喜欢 {count_likes}</Text>
                   </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={handleSlideShareMenu}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSlideShareMenu} style={{ flex: 1 }}>
                   <View style={styles.articleToolItem}>
                     <Iconfont name={"share"} size={16} color={Colors.tintFontColor} />
                     <Text style={styles.articleToolItemText}>分享</Text>
                   </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
               </View>
             </View>
           );

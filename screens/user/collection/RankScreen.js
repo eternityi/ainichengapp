@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TouchableOpacity, TouchableHighlight, FlatList, Text, TextInput } from "react-native";
+import { StyleSheet, View, TouchableOpacity, TouchableHighlight, FlatList, Text } from "react-native";
 import SortableListView from "react-native-sortable-listview";
 
 import Screen from "../../Screen";

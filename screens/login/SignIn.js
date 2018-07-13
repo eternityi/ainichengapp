@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
@@ -17,9 +17,11 @@ class SignIn extends Component {
 		this.focusKey = this.focusKey.bind(this);
 		this.changeValue = this.changeValue.bind(this);
 		this.emptyValue = this.emptyValue.bind(this);
-		this.state = {
+		this.accountState = {
 			email: "",
-			password: "",
+			password: ""
+		};
+		this.state = {
 			focusItem: "email",
 			modalVisible: false,
 			disableSubmit: true
@@ -31,8 +33,8 @@ class SignIn extends Component {
 	}
 
 	changeValue(key, value) {
-		this.setState({ [key]: value + "" });
-		if (this.state.email && this.state.password) {
+		this.accountState[key] = value;
+		if (this.accountState.email && this.accountState.password) {
 			this.setState({ disableSubmit: false });
 		} else if (!this.state.disableSubmit) {
 			this.setState({ disableSubmit: true });
@@ -48,7 +50,7 @@ class SignIn extends Component {
 	}
 
 	render() {
-		let { email, password, focusItem, modalVisible, disableSubmit } = this.state;
+		let { focusItem, modalVisible, disableSubmit } = this.state;
 		let { handleSkip } = this.props;
 		return (
 			<View style={styles.container}>
@@ -67,7 +69,7 @@ class SignIn extends Component {
 								name={"user"}
 								keys={"email"}
 								focusItem={focusItem}
-								value={email}
+								value={this.accountState.email}
 								focusKey={this.focusKey}
 								emptyValue={this.emptyValue}
 								placeholder={"账户Email"}
@@ -81,7 +83,7 @@ class SignIn extends Component {
 								name={"lock"}
 								keys={"password"}
 								focusItem={focusItem}
-								value={password}
+								value={this.accountState.password}
 								secure={true}
 								focusKey={this.focusKey}
 								placeholder={"密码"}
@@ -98,7 +100,7 @@ class SignIn extends Component {
 								disabled={disableSubmit}
 								onPress={() => {
 									if (!disableSubmit) {
-										this.props.handleSubmit(this.state);
+										this.props.handleSubmit(this.accountState);
 									}
 									this.setState({
 										disableSubmit: true

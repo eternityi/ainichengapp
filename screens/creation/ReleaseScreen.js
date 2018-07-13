@@ -1,6 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image } from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image, TextInput } from "react-native";
 
 import ImagePicker from "react-native-image-crop-picker";
 import Upload from "react-native-background-upload";
@@ -10,7 +10,6 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
-import Input from "../../components/Native/Input";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -27,6 +26,7 @@ class ReleaseScreen extends React.Component {
 
     this.state = {
       covers: [],
+      body: "",
       image_ids: [],
       routeName: "　",
       uploadId: null,
@@ -37,13 +37,6 @@ class ReleaseScreen extends React.Component {
       retype: null
     };
   }
-
-  onEmitterReady = emitter => {
-    this.thingEmitter = emitter;
-    this.thingEmitter.addListener("releaseChanged", text => {
-      this.body = text;
-    });
-  };
 
   render() {
     const { navigation } = this.props;
@@ -74,16 +67,19 @@ class ReleaseScreen extends React.Component {
         />
         <ScrollView>
           <View style={styles.inputText}>
-            <Input
+            <TextInput
+              ref="textInput"
               style={styles.input}
               placeholder="这一刻的想法"
+              underlineColorAndroid="transparent"
               selectionColor="#000"
               multiline={true}
-              name="release"
-              defaultValue={this.body}
-              onEmitterReady={this.onEmitterReady}
-              ref={ref => (this.commentInput = ref)}
-            />
+              textAlignVertical={"top"}
+              onChangeText={body => {
+                this.setState({
+                  body
+                });
+              }}
             />
           </View>
           <View style={styles.add}>
@@ -243,11 +239,6 @@ class ReleaseScreen extends React.Component {
       .catch(err => {
         console.log(err);
       });
-  };
-
-  changeBody = body => {
-    this.body = body;
-    this.commentInput.changeText(this.body);
   };
 }
 

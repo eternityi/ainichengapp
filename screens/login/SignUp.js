@@ -13,10 +13,12 @@ class SignUp extends Component {
 		this.focusKey = this.focusKey.bind(this);
 		this.changeValue = this.changeValue.bind(this);
 		this.emptyValue = this.emptyValue.bind(this);
-		this.state = {
+		this.accountState = {
 			name: "",
 			email: "",
-			password: "",
+			password: ""
+		};
+		this.state = {
 			focusItem: "name",
 			disableSubmit: true
 		};
@@ -27,9 +29,8 @@ class SignUp extends Component {
 	}
 
 	changeValue(key, value) {
-		console.log("key", key, value);
-		this.setState({ [key]: value + "" });
-		if (this.state.name && this.state.email && this.state.password) {
+		this.accountState[key] = value;
+		if (this.accountState.name && this.accountState.email && this.accountState.password) {
 			this.setState({ disableSubmit: false });
 		} else if (!this.state.disableSubmit) {
 			this.setState({ disableSubmit: true });
@@ -41,7 +42,7 @@ class SignUp extends Component {
 	}
 
 	render() {
-		let { name, email, password, focusItem, disableSubmit } = this.state;
+		let { focusItem, disableSubmit } = this.state;
 		let { handleSkip } = this.props;
 		return (
 			<View style={styles.container}>
@@ -60,7 +61,7 @@ class SignUp extends Component {
 								name={"user"}
 								keys={"name"}
 								focusItem={focusItem}
-								value={name}
+								value={this.accountState.name}
 								focusKey={this.focusKey}
 								emptyValue={this.emptyValue}
 								placeholder={"你的昵称"}
@@ -74,7 +75,7 @@ class SignUp extends Component {
 								name={"email-fill"}
 								keys={"email"}
 								focusItem={focusItem}
-								value={email}
+								value={this.accountState.email}
 								focusKey={this.focusKey}
 								emptyValue={this.emptyValue}
 								placeholder={"Email"}
@@ -88,7 +89,7 @@ class SignUp extends Component {
 								name={"lock"}
 								keys={"password"}
 								focusItem={focusItem}
-								value={password}
+								value={this.accountState.password}
 								secure={true}
 								focusKey={this.focusKey}
 								placeholder={"设置密码"}
@@ -104,7 +105,7 @@ class SignUp extends Component {
 								disabled={disableSubmit}
 								onPress={() => {
 									if (!disableSubmit) {
-										this.props.handleSubmit(this.state);
+										this.props.handleSubmit(this.accountState);
 									}
 									this.setState({
 										disableSubmit: true

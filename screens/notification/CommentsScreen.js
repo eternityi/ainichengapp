@@ -2,31 +2,29 @@ import React, { Component } from "react";
 import Colors from "../../constants/Colors";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Header } from "../../components/Header";
-import { ReplyCommentModal } from "../../components/Modal";
+import { AddCommentModal } from "../../components/Modal";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
 
 import { Query, Mutation } from "react-apollo";
 import { commentNotificationQuery, unreadsQuery } from "../../graphql/notification.graphql";
-import { addCommentMutation, commentsQuery } from "../../graphql/comment.graphql";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class CommentsScreen extends Component {
 	constructor(props) {
 		super(props);
+		this.commentedArticle = {};
+		this.replyingComment = {};
 		this.state = {
 			fetchingMore: true,
-			replyCommentVisible: false,
-			commentedArticle: null,
-			replyingComment: null,
-			atUser: null
+			replyCommentVisible: false
 		};
 	}
 
 	render() {
-		let { replyCommentVisible, atUser, replyingComment, commentedArticle, fetchingMore } = this.state;
+		let { replyCommentVisible, fetchingMore } = this.state;
 		const { navigation } = this.props;
 		return (
 			<Screen>
@@ -87,44 +85,18 @@ class CommentsScreen extends Component {
 							);
 						}}
 					</Query>
-
-					<Mutation mutation={addCommentMutation}>
-						{replyComment => {
-							return (
-								<ReplyCommentModal
-									visible={replyCommentVisible}
-									toggleReplyComment={() => {
-										this.setState(prevState => ({
-											replyCommentVisible: !prevState.replyCommentVisible
-										}));
-									}}
-									replyingComment={replyingComment}
-									atUser={atUser}
-									replyComment={({ body, replyingComment, atUser }) => {
-										console.log("variables", commentedArticle.id, replyingComment, atUser);
-										replyComment({
-											variables: {
-												commentable_id: commentedArticle.id,
-												body,
-												comment_id: replyingComment.id,
-												at_uid: atUser.id
-											},
-											refetchQueries: addComment => [
-												{
-													query: commentsQuery,
-													variables: {
-														article_id: commentedArticle.id,
-														order: "LATEST_FIRST",
-														filter: "ALL"
-													}
-												}
-											]
-										});
-									}}
-								/>
-							);
+					<AddCommentModal
+						emitter="replyComment"
+						visible={replyCommentVisible}
+						toggleCommentModal={() => {
+							this.setState(prevState => ({
+								replyCommentVisible: !prevState.replyCommentVisible
+							}));
 						}}
-					</Mutation>
+						article={this.commentedArticle}
+						replyingComment={this.replyingComment}
+						navigation={navigation}
+					/>
 				</View>
 			</Screen>
 		);
@@ -141,12 +113,10 @@ class CommentsScreen extends Component {
 					<TouchableOpacity
 						style={styles.reply}
 						onPress={() => {
-							console.log("test", notification.article, notification.comment, notification.user);
+							this.commentedArticle = notification.article;
+							this.replyingComment = { ...notification.comment, ...notification.user };
 							this.setState(prevState => ({
-								replyCommentVisible: !prevState.replyCommentVisible,
-								commentedArticle: notification.article,
-								replyingComment: notification.comment,
-								atUser: notification.user
+								replyCommentVisible: !prevState.replyCommentVisible
 							}));
 						}}
 					>

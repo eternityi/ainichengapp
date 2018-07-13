@@ -5,7 +5,7 @@ import KeyboardSpacer from "react-native-keyboard-spacer";
 import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import Input from "../../../components/Native/Input";
+import EmitInput from "../../../components/Native/EmitInput";
 import CommentItem from "./CommentItem";
 
 import { connect } from "react-redux";
@@ -58,7 +58,7 @@ class CommentDetailScreen extends Component {
 					</ScrollView>
 					<View style={styles.addComment}>
 						<View style={{ marginLeft: 10, flex: 1 }}>
-							<Input
+							<EmitInput
 								style={styles.commentInput}
 								placeholder="添加一条评论吧~"
 								name="addComment"

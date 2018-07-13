@@ -1,29 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TextInput, Platform } from "react-native";
-import EventEmitter from "EventEmitter";
+import { StyleSheet, View, TextInput } from "react-native";
 
 import Colors from "../../constants/Colors";
 
-const emiter = new EventEmitter();
-
-const ANDROID = Platform.OS == "android";
-
 class Input extends Component {
-	constructor(props) {
-		super(props);
-		this.text = props.defaultValue;
-		this.state = {
-			changes: 0
-		};
-	}
-
-	componentWillMount() {
-		let { onEmitterReady } = this.props;
-		if (onEmitterReady) {
-			onEmitterReady(emiter);
-		}
-	}
-
 	render() {
 		let {
 			placeholder = "说点什么呗~",
@@ -34,7 +14,9 @@ class Input extends Component {
 			autoFocus,
 			onFocus,
 			style = {},
-			name
+			onChangeText,
+			defaultValue,
+			ref
 		} = this.props;
 		return (
 			<TextInput
@@ -47,27 +29,11 @@ class Input extends Component {
 				autoFocus={autoFocus}
 				onFocus={onFocus}
 				style={style}
-				onChangeText={text => {
-					this.text = text;
-					emiter.emit(name + "Changed", text);
-				}}
-				defaultValue={this.text}
-				ref={ref => {
-					this.input = ref;
-				}}
+				onChangeText={onChangeText}
+				defaultValue={defaultValue}
+				ref={ref}
 			/>
 		);
-	}
-
-	// getText() {
-	// 	return this.text;
-	// }
-
-	changeText(text) {
-		this.text = text;
-		this.setState({
-			changes: this.state.changes++
-		});
 	}
 }
 

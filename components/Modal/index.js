@@ -6,7 +6,6 @@ import DialogModal from "./DialogModal";
 import ModificationModal from "./ModificationModal";
 import OperationModal from "./OperationModal";
 import PaymentModal from "./PaymentModal";
-import ReplyCommentModal from "./ReplyCommentModal";
 import ReportModal from "./ReportModal";
 import RewardModal from "./RewardModal";
 import SearchUserModal from "./SearchUserModal";
@@ -22,7 +21,6 @@ export {
 	ModificationModal,
 	OperationModal,
 	PaymentModal,
-	ReplyCommentModal,
 	ReportModal,
 	RewardModal,
 	SearchUserModal,

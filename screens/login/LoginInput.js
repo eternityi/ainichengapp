@@ -29,12 +29,15 @@ class LoginInput extends Component {
 					placeholderText={Colors.tintFontColor}
 					onChangeText={value => changeValue(keys, value)}
 					onFocus={() => focusKey(keys)}
-					value={value}
+					defaultValue={value}
 					secureTextEntry={!this.state.visibility}
 				/>
 				{secure ? (
 					focusItem == keys ? (
-						<TouchableOpacity style={styles.inputOperation} onPress={() => this.setState(prevState => ({ visibility: !prevState.visibility }))}>
+						<TouchableOpacity
+							style={styles.inputOperation}
+							onPress={() => this.setState(prevState => ({ visibility: !prevState.visibility }))}
+						>
 							<Iconfont name={"browse"} size={19} color={this.state.visibility ? Colors.themeColor : Colors.lightFontColor} />
 						</TouchableOpacity>
 					) : (

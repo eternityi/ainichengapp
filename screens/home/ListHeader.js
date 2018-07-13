@@ -9,7 +9,7 @@ import { userFollowedCategoriesQuery } from "../../graphql/user.graphql";
 import { connect } from "react-redux";
 import { Query, compose, graphql } from "react-apollo";
 
-class ListHeader extends PureComponent {
+class ListHeader extends React.Component {
 	render() {
 		return (
 			<View style={styles.officialColumnWarp}>

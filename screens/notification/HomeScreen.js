@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, FlatList, StyleSheet, Text, View, Button, TextInput, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
+import { ScrollView, FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Color from "../../constants/Colors";
 import { Header } from "../../components/Header";

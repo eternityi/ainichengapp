@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { SectionList, FlatList, Image, StyleSheet, Text, View, Button, TextInput, TouchableOpacity } from "react-native";
+import { SectionList, FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { GiftedChat, Bubble, Send, Composer, InputToolbar } from "react-native-gifted-chat";

@@ -8,7 +8,7 @@ import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, SlideInUpModal } from "../../../components/Modal";
 import { CategoryGroup } from "../../../components/MediaGroup";
 import { LoadingMore, LoadingError, ContentEnd, Diving } from "../../../components/Pure";
-import Input from "../../../components/Native/Input";
+import EmitInput from "../../../components/Native/EmitInput";
 import CommentItem from "./CommentItem";
 
 import { Query, Mutation } from "react-apollo";
@@ -38,7 +38,7 @@ class CommentsModal extends Component {
 
 	render() {
 		let { visible, toggleVisible, article, navigation } = this.props;
-		let { replyingComment, order, onlyAuthor } = this.state;
+		let { replyingComment, order, onlyAuthor, fetchingMore } = this.state;
 		let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
 		return (
 			<SlideInUpModal
@@ -63,13 +63,40 @@ class CommentsModal extends Component {
 											data={data.comments}
 											keyExtractor={(item, index) => index.toString()}
 											renderItem={this._renderCommentItem}
+											onEndReachedThreshold={0.3}
+											onEndReached={() => {
+												if (data.comments) {
+													fetchMore({
+														variables: {
+															offset: data.comments.length
+														},
+														updateQuery: (prev, { fetchMoreResult }) => {
+															if (
+																!(fetchMoreResult && fetchMoreResult.comments && fetchMoreResult.comments.length > 0)
+															) {
+																this.setState({
+																	fetchingMore: false
+																});
+																return prev;
+															}
+															return Object.assign({}, prev, {
+																comments: [...prev.comments, ...fetchMoreResult.comments]
+															});
+														}
+													});
+												} else {
+													this.setState({
+														fetchingMore: false
+													});
+												}
+											}}
 											ListFooterComponent={() => {
-												return <ContentEnd />;
+												return fetchingMore ? <LoadingMore /> : <ContentEnd />;
 											}}
 										/>
 										<View style={styles.addComment}>
 											<View style={{ marginLeft: 10, flex: 1 }}>
-												<Input
+												<EmitInput
 													style={styles.commentInput}
 													placeholder="添加一条评论吧~"
 													name="addCommentModal"

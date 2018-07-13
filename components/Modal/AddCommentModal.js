@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions, Platfo
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import Input from "../../components/Native/Input";
+import EmitInput from "../../components/Native/EmitInput";
 import BasicModal from "./BasicModal";
 import SearchUserModal from "./SearchUserModal";
 
@@ -36,7 +36,7 @@ class AddCommentModal extends Component {
 	}
 
 	render() {
-		const { visible, toggleCommentModal, article, replyingComment, order, filter, emitter, navigation } = this.props;
+		const { visible, toggleCommentModal, article, replyingComment, order = "LATEST_FIRST", filter = "ALL", emitter, navigation } = this.props;
 		let { aiteModalVisible } = this.state;
 		return (
 			<Mutation mutation={addCommentMutation}>
@@ -54,7 +54,7 @@ class AddCommentModal extends Component {
 							}}
 						>
 							<View>
-								<Input
+								<EmitInput
 									autoFocus
 									onFocus={this._inputFocus.bind(this)}
 									style={styles.textInput}
@@ -145,10 +145,10 @@ class AddCommentModal extends Component {
 	_inputFocus() {
 		let { replyingComment } = this.props;
 		if (replyingComment && this.prevReplyingComment.id !== replyingComment.id) {
-			console.log(this.prevReplyingComment);
+			this.atUser = replyingComment.user;
 			this.changeBody(`@${replyingComment.user.name} `);
 		} else if (replyingComment && this.body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-			console.log(this.replyingComment);
+			this.atUser = replyingComment.user;
 			this.changeBody(`@${replyingComment.user.name} `);
 		}
 	}

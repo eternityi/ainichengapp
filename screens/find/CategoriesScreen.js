@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, ScrollView, Text, View, Image, Button, TextInput, StatusBar, Dimensions, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
