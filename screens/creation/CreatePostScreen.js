@@ -172,6 +172,7 @@ class CreatePostScreen extends React.Component {
         {
           method: "POST",
           headers: {
+            'Accept': 'application/json',
             "content-type": metadata.mimeType // server requires a content-type header
           }
         },
@@ -197,6 +198,8 @@ class CreatePostScreen extends React.Component {
             this.setState({
               completed: true
             }); //上传完成
+            console.log(data.responseCode);//http状态码
+            console.log(data.responseBody);//http响应正文
           });
         })
         .catch(err => {
@@ -227,6 +230,8 @@ class CreatePostScreen extends React.Component {
   }
   // 回调
   callbackSelected(i) {
+    const { token } = this.props.users.user;
+    console.log(token);
     switch (i) {
       case 0: //图库
         this.onPressPhotoUpload({
@@ -237,9 +242,9 @@ class CreatePostScreen extends React.Component {
         break;
       case 1: // 视频库
         this.onPressVideoUpload({
-          url: "https://www.ainicheng.com/video",
-          field: "uploaded_media",
-          type: "multipart"
+          url: "https://ainicheng.com/api/video/save?api_token="+token,
+          field: "video",
+          type: "multipart" 
         });
         break;
     }
