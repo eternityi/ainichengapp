@@ -5,12 +5,14 @@ import { NavigationActions } from "react-navigation";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchHeader } from "../../components/Header";
-import { RefreshControl } from "../../components/Pure";
+import { RefreshControl ,LoadingError,SpinnerLoading} from "../../components/Pure";
 import Screen from "../Screen";
 import SearchResult from "./SearchResult";
 
 import { connect } from "react-redux";
-import { graphql, Query } from "react-apollo";
+import { graphql, Query ,Mutation} from "react-apollo";
+import { queriesHotQuery,queryLogsQuery ,deleteQueryLogMutation} from "../../graphql/user.graphql";
+
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class HomeScreen extends Component {
   };
 
   render() {
-    let { none_keywords, histories } = this.state;
+    let { none_keywords } = this.state;
     let { navigation, hot_search } = this.props;
     return (
       <Screen>
@@ -62,35 +64,57 @@ class HomeScreen extends Component {
                     <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
                   </View>
                 </TouchableOpacity>
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: Colors.lightBorderColor
-                  }}
-                >
-                  <View style={[styles.searchItem, { borderBottomColor: "transparent" }]}>
-                    <View style={styles.verticalCenter}>
-                      <Iconfont name={"hot"} size={21} color={Colors.weiboColor} style={{ marginRight: 8 }} />
-                      <Text style={{ fontSize: 16, color: "#666" }}>热门搜索</Text>
-                    </View>
-                    <RefreshControl size={16} refresh={() => null} />
-                  </View>
-                  {hot_search && this._renderHotKeywords(hot_search)}
-                </View>
-                {histories.length > 0 && (
-                  <View style={styles.historyWrap}>
-                    {this._renderHistories(histories)}
-                    <TouchableOpacity onPress={this.clearHistories}>
-                      <View style={[styles.searchItem, { justifyContent: "center" }]}>
-                        <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
+                <Query query={queriesHotQuery}>
+                  {({ loading, error, data, fetchMore, refetch }) => {
+                      if (error) return <LoadingError reload={() => refetch()} />;
+                      let hotsearch = data.queries;
+                      return (
+                          <View
+                            style={{
+                              borderBottomWidth: 1,
+                              borderBottomColor: Colors.lightBorderColor
+                            }}
+                          >
+                              <View style={[styles.searchItem, { borderBottomColor: "transparent" }]}>
+                                  <View style={styles.verticalCenter}>
+                                      <Iconfont name={"hot"} size={21} color={Colors.weiboColor} style={{ marginRight: 8 }} />
+                                      <Text style={{ fontSize: 16, color: "#666" }}>热门搜索</Text>
+                                  </View>
+                                  <RefreshControl size={16} refresh={() => null} />
+                              </View>
+                             { hotsearch && this._renderHotKeywords(hotsearch)};
+                          </View>
+                       );
+                   }}
+                </Query>
+                <Query query={queryLogsQuery}>
+                  {({ loading, error, data, fetchMore, refetch }) => {
+                      if (error) return <LoadingError reload={() => refetch()} />;
+                      if (!(data && data.queryLogs)) return <SpinnerLoading />;
+                      if (data.queryLogs.length < 1) return null;
+                      let histories = data.queryLogs;
+                      return (
+                         <Mutation mutation={deleteQueryLogMutation}>
+                           {clearHistories=>{ 
+                            return(         
+                              <View style={styles.historyWrap}>
+                                {this._renderHistories(histories)}
+                                <TouchableOpacity onPress={() => this.clearHistories(1)}>
+                                  <View style={[styles.searchItem, { justifyContent: "center" }]}>
+                                    <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
+                            )
+                          }}
+                        </Mutation>
+                      );
+                   }}
+                </Query>   
               </View>
             </ScrollView>
           ) : (
-            <SearchResult keywords={this.keywords} />
+            <SearchResult keywords={this.keywords} navigation={navigation} />
           )}
         </View>
       </Screen>
@@ -102,7 +126,7 @@ class HomeScreen extends Component {
     let searchList = data.map((elem, index) => {
       return (
         <TouchableOpacity key={elem.id} style={styles.hotSearchItemWrap} onPress={() => this.handleSearch(elem.keywords)}>
-          <Text style={styles.hotSearchItem}>{elem.keywords}</Text>
+          <Text style={styles.hotSearchItem}>{elem.query}</Text>
         </TouchableOpacity>
       );
     });
@@ -113,24 +137,24 @@ class HomeScreen extends Component {
     let { navigation } = this.props;
     let histories = data.map((elem, index) => {
       return (
-        <TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.keywords)}>
+        <TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.query)}>
           <View style={styles.searchItem}>
             <View style={styles.verticalCenter}>
               <Iconfont name={"time-outline"} size={21} color={Colors.lightFontColor} style={{ marginRight: 20 }} />
-              <Text style={{ fontSize: 16, color: "#666" }}>{elem.keywords}</Text>
+              <Text style={{ fontSize: 16, color: "#666" }}>{elem.query}</Text>
             </View>
-            <TouchableOpacity onPress={() => this.closeHistory(elem.id)}>
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Iconfont name={"close"} size={20} color={Colors.lightFontColor} />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.clearHistories(elem.id)}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <Iconfont name={"close"} size={20} color={Colors.lightFontColor} />
+                </View>
+              </TouchableOpacity>
           </View>
         </TouchableOpacity>
       );
@@ -158,8 +182,9 @@ class HomeScreen extends Component {
     });
   }
 
-  clearHistories() {
+  clearHistories(id) {
     this.setState({ histories: [] });
+    variables:{ id }
   }
 
   changeKeywords = keywords => {

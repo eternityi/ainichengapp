@@ -15,7 +15,7 @@ import actions from "../../store/actions";
 class RelatedCategoriesScreen extends Component {
 	render() {
 		let { search_detail, navigation } = this.props;
-		let { categories } = search_detail;
+		let { categories } = navigation.state.params;
 		return (
 			<Screen>
 				<View style={styles.container}>

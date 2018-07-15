@@ -703,6 +703,92 @@ query queryArticleRequestCenter($id: Int) {
     }
 }
 
+#查询用户
+#keyword，查询关键字
+query queriesQuery($keyword: String!,$offset: Int) {
+  users(keyword: $keyword,offset: $offset,limit: 10){
+    id
+    name
+    avatar
+  }
+}
+
+#查询用户
+#keyword，查询关键字
+query queriesCategoriesQuery($keyword: String!,$offset: Int) {
+  categories(keyword: $keyword,offset: $offset,limit: 10){
+    id
+    name
+    logo_app
+    logo
+    count_articles
+    count_follows
+    followed
+    user{
+     name
+     id
+    }
+  }
+}
+
+#查询文集
+#输入keyword，会去模糊匹配文集名字
+query queriesCollectionsQuery($keyword: String!,$offset: Int) {
+  collections(keyword: $keyword,offset: $offset,limit: 10){
+    id
+    name
+    logo
+    count_articles
+    count_follows
+    followed
+    user{
+     name
+     id
+    }
+  }
+}
+
+#查询文章
+#keyword:搜索的关键字
+#type        :VIDEO代表视频，ARTICLE代表文章.默认查询查询所有
+#order  :排序规则。 HOT：按热度排序 ，默认是按照时间排序
+query queriesArticlesQuery($keyword: String!,$type:ArticleType,$order:ArticleOrder,$offset: Int) {
+  articles(keyword: $keyword,type:$type,order:$order,offset: $offset,limit: 100){
+    id
+    title
+    type
+    user{
+      name
+    }
+    description
+    video_url
+  }
+}
+
+#热门搜索
+query queriesHotQuery($offset: Int) {
+  queries(offset: $offset,limit: 15){
+    id
+    query
+  }
+}
+
+#删除查询日志
+#id：查询日志的ID，如果不传参则删除该用户所有的查询记录
+mutation deleteQueryLogMutation($id: Int) {
+    deleteQueryLog(id: $id) {
+    id
+    query
+    }
+}
+#查询当前登录用户的搜索记录，如果未登录返回空。
+query queryLogsQuery($offset: Int, $limit: Int) {
+    queryLogs(offset: $offset, limit: $limit) {
+        id
+        query
+    }   
+}
+
 mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
     submitArticle(article_id: $article_id, category_id: $category_id) {
         id

@@ -16,7 +16,7 @@ import actions from "../../store/actions";
 class RelatedUsersScreen extends Component {
 	render() {
 		let { search_detail, navigation } = this.props;
-		let { users } = search_detail;
+		let { users } = navigation.state.params;
 		return (
 			<Screen>
 				<View style={styles.container}>

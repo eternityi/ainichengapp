@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import { ScrollView, Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
+import { ScrollView, Text, StyleSheet, View, FlatList, TouchableOpacity,Dimensions } from "react-native";
 import { NavigationActions } from "react-navigation";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { SearchHeader } from "../../components/Header";
-import { Avatar, DivisionLine, ContentEnd, LoadingMore } from "../../components/Pure";
+import { Avatar, DivisionLine, ContentEnd, LoadingMore , LoadingError, SpinnerLoading, BlankContent,} from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 
 import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
+import { queriesQuery,queriesCategoriesQuery,queriesCollectionsQuery,queriesArticlesQuery} from "../../graphql/user.graphql";
+
+const { width, height } = Dimensions.get("window");
 
 class SearchResult extends Component {
 	constructor(props) {
@@ -21,25 +24,35 @@ class SearchResult extends Component {
 		this._renderSearchHeader = this._renderSearchHeader.bind(this);
 		this._renderRelatedArticle = this._renderRelatedArticle.bind(this);
 		this.state = {
-			order: "time",
+			order: "",
 			keywords: props.keywords
 		};
 	}
 
 	render() {
-		let { keywords } = this.state;
+		let { keywords ,order} = this.state;
 		let { navigation, search_detail } = this.props;
 		return (
 			<View style={styles.container}>
-				<FlatList
-					data={search_detail.articles}
-					keyExtractor={(item, index) => index.toString()}
-					renderItem={this._renderRelatedArticle}
-					ListHeaderComponent={this._renderSearchHeader}
-					ListFooterComponent={() => {
-						return <ContentEnd />;
+				<Query query={queriesArticlesQuery} variables={{ keyword: keywords,order:order }}>
+					{({ loading, error, data, fetchMore, refetch }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.articles)) return <SpinnerLoading />;
+						if (data.articles.length < 1) return <BlankContent />;
+						return (
+							<FlatList
+							    navigation={navigation}
+								data={data.articles}
+								keyExtractor={(item, index) => index.toString()}
+								renderItem={this._renderRelatedArticle}
+								ListHeaderComponent={this._renderSearchHeader}
+								ListFooterComponent={() => {
+									return <ContentEnd />;
+								}}
+							/>
+						);
 					}}
-				/>
+				</Query>
 			</View>
 		);
 	}
@@ -47,9 +60,9 @@ class SearchResult extends Component {
 	_renderRelatedUserItem(item, index) {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity style={styles.relatedItem} key={index} onPress={() => navigation.navigate("用户详情", { user: item })}>
+			<TouchableOpacity style={styles.relatedItem} key={index} onPress={() => navigation.navigate("用户详情", { user: item })} >
 				<Avatar uri={item.avatar} size={40} />
-				<Text style={styles.relatedItemName}>{item.name}</Text>
+				<Text style={styles.relatedItemName} numberOfLines={1}>{item.name}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -59,52 +72,77 @@ class SearchResult extends Component {
 		return (
 			<TouchableOpacity style={styles.relatedItem} key={index} onPress={() => navigation.navigate("专题详情", { category: item })}>
 				<Avatar uri={item.logo} type={"category"} size={40} />
-				<Text style={styles.relatedItemName}>{item.name}</Text>
+				<Text style={styles.relatedItemName} numberOfLines={1}>{item.name}</Text>
 			</TouchableOpacity>
 		);
 	}
 
 	_renderSearchHeader() {
 		let { order } = this.state;
-		let { navigation, search_detail } = this.props;
+		let { navigation, search_detail,keywords } = this.props;
 		let { users, categories, collections } = search_detail;
 		return (
 			<View>
-				<View>
-					<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关用户", { keywords })}>
-						<Text style={styles.relatedTypeText}>相关用户</Text>
-						<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
-					</TouchableOpacity>
-					<View style={styles.relatedItemList}>
-						{users.slice(0, 4).map((elem, idnex) => {
-							return this._renderRelatedUserItem(elem, idnex);
-						})}
-					</View>
-				</View>
+				<Query  query={queriesQuery} variables={{ keyword: keywords }}>
+					{({ loading, error, data, fetchMore, refetch }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.users)) return <SpinnerLoading />;
+						if (data.users.length < 1) return null;
+						return (
+							<View>
+								<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关用户", { users:data.users })}>
+									<Text style={styles.relatedTypeText}>相关用户</Text>
+									<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
+								</TouchableOpacity>
+								<View style={styles.relatedItemList}>
+									{data.users.slice(0, 4).map((elem, idnex) => {
+										return this._renderRelatedUserItem(elem, idnex);
+									})}
+								</View>
+							</View>
+						);
+					}}
+				</Query>
 				<DivisionLine height={18} />
-				<View>
-					<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关专题", { keywords })}>
-						<Text style={styles.relatedTypeText}>相关专题</Text>
-						<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
-					</TouchableOpacity>
-					<View style={styles.relatedItemList}>
-						{categories.slice(0, 4).map((elem, idnex) => {
-							return this._renderRelatedCategoryItem(elem, idnex);
-						})}
-					</View>
-				</View>
+				<Query  query={queriesCategoriesQuery} variables={{ keyword: keywords }}>
+					{({ loading, error, data, fetchMore, refetch }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.categories)) return <SpinnerLoading />;
+						if (data.categories.length < 1) return null;
+						return (
+							<View>
+								<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关专题", { categories:data.categories })}>
+									<Text style={styles.relatedTypeText} >相关专题</Text>
+									<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
+								</TouchableOpacity>
+								<View style={styles.relatedItemList}>
+									{data.categories.slice(0, 4).map((elem, idnex) => {
+										return this._renderRelatedCategoryItem(elem, idnex);
+									})}
+								</View>
+							</View>
+						);
+					}}
+				</Query>	
 				<DivisionLine height={18} />
-				<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关文集", { keywords })}>
-					<Text style={styles.relatedTypeText}>相关文集</Text>
-					<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
-				</TouchableOpacity>
+				<Query  query={queriesCollectionsQuery} variables={{ keyword: keywords }}>
+					{({ loading, error, data, fetchMore, refetch }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						return (
+							<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关文集", { collections:data.collections })}>
+								<Text style={styles.relatedTypeText}>相关文集</Text>
+								<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
+							</TouchableOpacity>
+						);
+					}}
+				</Query>
 				<DivisionLine height={18} />
 				<View style={styles.orderArticleHeader}>
-					<Text style={[styles.relatedTypeText, order == "time" ? styles.focused : {}]} onPress={() => this.articleOrder("time")}>
-						按时间
+					<Text style={[styles.relatedTypeText, order == "" ? styles.focused : {}]} onPress={() => this.articleOrder("")}>
+						按时间 
 					</Text>
 					<View style={styles.divisionLine} />
-					<Text style={[styles.relatedTypeText, order == "hits" ? styles.focused : {}]} onPress={() => this.articleOrder("hits")}>
+					<Text style={[styles.relatedTypeText, order == "HOT" ? styles.focused : {}]} onPress={() => this.articleOrder("HOT")}>
 						按热度
 					</Text>
 				</View>
@@ -160,7 +198,8 @@ const styles = StyleSheet.create({
 	},
 	relatedItem: {
 		flex: 1,
-		alignItems: "center"
+		alignItems: "center",
+		width:10
 	},
 	relatedItemName: {
 		fontSize: 14,

@@ -15,7 +15,7 @@ import actions from "../../store/actions";
 class RelatedCollectionsScreen extends Component {
 	render() {
 		let { search_detail, navigation } = this.props;
-		let { collections } = search_detail;
+		let { collections } = navigation.state.params;
 		return (
 			<Screen>
 				<View style={styles.container}>
