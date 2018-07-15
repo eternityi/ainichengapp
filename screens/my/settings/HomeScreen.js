@@ -15,6 +15,7 @@ import SettingItem from "../../../components/Setting/SettingItem";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
+import { Storage } from "../../../store/localStorage";
 import { NavigationActions } from "react-navigation";
 import { withApollo } from "react-apollo";
 
@@ -37,13 +38,15 @@ class HomeScreen extends Component {
 			fontModalVisible: false,
 			wordSize: ["小号字", "中号字(默认)", "大号字"],
 			checkedWordSize: 1,
-			dialog: ""
+			dialog: "",
+			dialogType: "",
+			storageSize: "当前缓存1.2Mb"
 		};
 	}
 
 	render() {
-		let { promotModalVisible, fontModalVisible, dialog, wordSize, checkedWordSize } = this.state;
-		const { navigation, users } = this.props;
+		let { promotModalVisible, fontModalVisible, dialog, dialogType, storageSize, wordSize, checkedWordSize } = this.state;
+		const { navigation, users, client } = this.props;
 		const { login } = users;
 		return (
 			<Screen>
@@ -78,11 +81,13 @@ class HomeScreen extends Component {
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => {
-								this.setState({ dialog: "当前缓存1.2Mb" });
-								this.handlePromotModalVisible();
+								if (storageSize.length > 0) {
+									this.setState({ dialog: "当前缓存1.2Mb", dialogType: "resetStore" });
+									this.handlePromotModalVisible();
+								}
 							}}
 						>
-							<SettingItem rightSize={15} itemName="清除缓存" rightContent={"当前缓存1.2Mb"} />
+							<SettingItem rightSize={15} itemName="清除缓存" rightContent={storageSize} />
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => {
@@ -129,12 +134,12 @@ class HomeScreen extends Component {
 					visible={promotModalVisible}
 					handleVisible={this.handlePromotModalVisible}
 					confirm={() => {
-						if (dialog.indexOf("账号") > 0) {
+						if (dialog == "确定退出当前账号？") {
 							this.props.dispatch(actions.signOut());
 							this.props.navigation.dispatch(navigateAction);
 							this.handlePromotModalVisible();
-						} else {
-							this.handlePromotModalVisible();
+						} else if (dialogType == "resetStore") {
+							this.clearCache();
 						}
 					}}
 				/>
@@ -203,6 +208,11 @@ class HomeScreen extends Component {
 			navigation.navigate("登录注册", { login: true });
 		}
 	}
+
+	clearCache = () => {
+		this.setState({ dialog: "", storageSize: "" });
+		this.handlePromotModalVisible();
+	};
 }
 
 const styles = StyleSheet.create({

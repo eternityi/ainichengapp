@@ -8,7 +8,7 @@ import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } f
 import Screen from "../../Screen";
 
 import { Query, compose, graphql } from "react-apollo";
-import { userTrashQuery, restoreArticleMutation, deleteArticleMutation } from "../../../graphql/user.graphql";
+import { userTrashQuery, restoreArticleMutation, deleteArticleMutation, draftsQuery } from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 
 class RecycleScreen extends Component {
@@ -101,6 +101,9 @@ class RecycleScreen extends Component {
 													refetchQueries: result => [
 														{
 															query: userTrashQuery
+														},
+														{
+															query: draftsQuery
 														}
 													]
 												});
@@ -135,7 +138,7 @@ class RecycleScreen extends Component {
 					</View>
 					<View>
 						<Text numberOfLines={2} style={styles.title}>
-							{item.title}
+							{item.title ? item.title : item.description}
 						</Text>
 					</View>
 				</View>

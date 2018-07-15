@@ -52,7 +52,6 @@ import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
 
 //my staff
 import PrivacyArticle from "../screens/my/staff/DraftsScreen";
-import PrivacyArticleDetail from "../screens/my/staff/DraftDetailScreen";
 import OpenArticlesScreen from "../screens/my/staff/OpenArticlesScreen";
 import FavoritedArticlesScreen from "../screens/my/staff/FavoritedArticlesScreen";
 import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
@@ -267,9 +266,6 @@ export default {
   },
   私密作品: {
     screen: PrivacyArticle
-  },
-  私密文章详情: {
-    screen: PrivacyArticleDetail
   },
   我的发布: {
     screen: OpenArticlesScreen

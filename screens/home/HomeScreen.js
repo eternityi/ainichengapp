@@ -29,7 +29,6 @@ class HomeScreen extends React.Component {
       <Screen>
         <View style={styles.container}>
           <Header
-            navigation={navigation}
             leftComponent={<RecommendFollow navigation={navigation} />}
             rightComponent={
               <View style={{ flex: 1, marginLeft: 15, marginTop: 3 }}>

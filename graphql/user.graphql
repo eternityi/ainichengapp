@@ -113,6 +113,7 @@ query userTrashQuery($offset: Int) {
         articles(filter: TRASH, offset: $offset) {
             id
             title
+            description
             updated_at
         }
     }
@@ -375,6 +376,7 @@ query userAdminCategoriesQuery($user_id: Int!) {
         logo
         count_articles
         count_follows
+        submit_status
         user {
             id
             name
@@ -698,6 +700,7 @@ query queryArticleRequestCenter($id: Int) {
             name
             count_articles
             count_follows
+            submit_status
             logo
         }
     }

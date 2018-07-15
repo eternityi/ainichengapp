@@ -9,9 +9,17 @@ import { Query, Mutation, graphql } from "react-apollo";
 import { submitArticleMutation } from "../../graphql/user.graphql";
 
 class CategoryContributeGroup extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			submitted: false
+		};
+	}
+
 	render() {
 		let { article, category, navigation } = this.props;
-		let { submit_status } = category;
+		let { submitted } = this.state;
 		return (
 			<TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate("专题详情", { category })}>
 				<View>
@@ -38,15 +46,18 @@ class CategoryContributeGroup extends React.Component {
 							{submitArticle => {
 								return (
 									<Button
-										name={submit_status ? submit_status : "投稿"}
+										outline
+										name={submitted ? "撤回" : "投稿"}
 										fontSize={12}
-										// color={submit_status.indexOf("投稿") !== -1 ? "rgba(66,192,46,0.9)" : Colors.themeColor}
-										theme={"rgba(66,192,46,0.9)"}
+										theme={submitted ? Colors.themeColor : "rgba(66,192,46,0.9)"}
 										handler={() => {
 											submitArticle({
 												variables: {
 													category_id: category.id,
 													article_id: article.id
+												},
+												update: (cache, { data }) => {
+													this.setState(prevState => ({ submitted: !prevState.submitted }));
 												}
 											});
 										}}

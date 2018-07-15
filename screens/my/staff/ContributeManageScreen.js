@@ -23,7 +23,6 @@ class ContributeManageScreen extends React.Component {
 					<DivisionLine />
 					<Query query={querySubmitedArticles}>
 						{({ loading, error, data, refetch, fetchMore }) => {
-							console.log("投稿信息");
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.submitedArticles)) return null;
 							let { submitedArticles } = data.user;

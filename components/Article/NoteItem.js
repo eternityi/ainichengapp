@@ -15,38 +15,43 @@ const COVER_WIDTH = width - 30;
 
 class NoteItem extends Component {
 	render() {
-		const { post, navigation, compress, recommend, longPress = () => null } = this.props;
+		const {
+			post,
+			navigation,
+			compress,
+			longPress = () => null,
+			onPress = this.skipScreen,
+			popoverMenu,
+			options,
+			popoverHandler = () => null
+		} = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_comments } = post;
 		let layout = images.length > 1 ? "vertical" : "horizontal";
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen} onLongPress={longPress}>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={onPress} onLongPress={longPress}>
 				<View style={styles.noteContainer}>
-					{!compress ? (
-						<View style={styles.noteUser}>
-							{user && (
-								<View style={styles.userInfo}>
-									<TouchableWithoutFeedback
-										onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}
-									>
-										<Avatar size={28} uri={user.avatar} />
-									</TouchableWithoutFeedback>
-									<Text style={styles.userName}>{user.name}</Text>
-								</View>
-							)}
-							{recommend ? (
-								<CustomPopoverMenu
-									width={110}
-									selectHandler={() => null}
-									triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
-									options={["不感兴趣"]}
-								/>
-							) : null}
-						</View>
-					) : (
-						<View style={styles.noteUser}>
+					<View style={styles.noteUser}>
+						{compress ? (
 							<Text style={{ fontSize: 14, color: Colors.tintFontColor }}>{time_ago}</Text>
-						</View>
-					)}
+						) : (
+							<View style={styles.userInfo}>
+								<TouchableWithoutFeedback
+									onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}
+								>
+									<Avatar size={28} uri={user.avatar} />
+								</TouchableWithoutFeedback>
+								<Text style={styles.userName}>{user.name}</Text>
+							</View>
+						)}
+						{popoverMenu && (
+							<CustomPopoverMenu
+								width={110}
+								selectHandler={popoverHandler}
+								triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
+								options={options}
+							/>
+						)}
+					</View>
 					{type == "article" ? (
 						<View style={styles.abstract}>
 							<Text numberOfLines={2} style={styles.title}>

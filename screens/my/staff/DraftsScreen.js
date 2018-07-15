@@ -9,7 +9,7 @@ import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } f
 import Screen from "../../Screen";
 
 import { Query, Mutation, graphql, compose } from "react-apollo";
-import { draftsQuery, removeArticleMutation } from "../../../graphql/user.graphql";
+import { draftsQuery, removeArticleMutation, userTrashQuery } from "../../../graphql/user.graphql";
 import { publishArticleMutation } from "../../../graphql/article.graphql";
 import { connect } from "react-redux";
 
@@ -52,9 +52,15 @@ class DraftsScreen extends Component {
 										<NoteItem
 											post={item}
 											compress
+											popoverMenu
 											longPress={() => {
 												this.article = item;
 												this.handleModal();
+											}}
+											options={["编辑", "删除", "公开发布", "文集设置"]}
+											popoverHandler={index => {
+												this.article = item;
+												this.operationHandler(index);
 											}}
 										/>
 									)}
@@ -104,38 +110,7 @@ class DraftsScreen extends Component {
 					visible={modalVisible}
 					handleVisible={this.handleModal}
 					handleOperation={index => {
-						switch (index) {
-							case 0:
-								navigation.navigate("创作", { article: this.article });
-								break;
-							case 1:
-								removeArticle({
-									variables: {
-										id: this.article.id
-									},
-									refetchQueries: result => [
-										{
-											query: draftsQuery
-										}
-									]
-								});
-								break;
-							case 2:
-								publishArticle({
-									variables: {
-										id: this.article.id
-									},
-									refetchQueries: result => [
-										{
-											query: draftsQuery
-										}
-									]
-								});
-								break;
-							case 3:
-								navigation.navigate("选择文集", { article: this.article });
-								break;
-						}
+						this.operationHandler(index);
 						this.handleModal();
 					}}
 				/>
@@ -148,6 +123,45 @@ class DraftsScreen extends Component {
 			modalVisible: !prevState.modalVisible
 		}));
 	}
+
+	operationHandler = index => {
+		let { navigation } = this.props;
+		switch (index) {
+			case 0:
+				navigation.navigate("创作", { article: this.article });
+				break;
+			case 1:
+				removeArticle({
+					variables: {
+						id: this.article.id
+					},
+					refetchQueries: result => [
+						{
+							query: draftsQuery
+						},
+						{
+							query: userTrashQuery
+						}
+					]
+				});
+				break;
+			case 2:
+				publishArticle({
+					variables: {
+						id: this.article.id
+					},
+					refetchQueries: result => [
+						{
+							query: draftsQuery
+						}
+					]
+				});
+				break;
+			case 3:
+				navigation.navigate("选择文集", { article: this.article });
+				break;
+		}
+	};
 }
 
 const styles = StyleSheet.create({

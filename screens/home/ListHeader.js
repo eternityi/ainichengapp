@@ -16,7 +16,7 @@ class ListHeader extends React.Component {
 				<View style={{ padding: 15 }}>
 					<Text style={styles.tintText}>最近逛的专题</Text>
 				</View>
-				<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
+				<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 					{this._renderContent()}
 					{this._renderFooter()}
 				</ScrollView>
