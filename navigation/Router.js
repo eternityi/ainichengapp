@@ -104,7 +104,6 @@ import CategoryMembersScreen from "../screens/category/MembersScreen";
 import SearchHomeScreen from "../screens/search/HomeScreen";
 import SearchArticlesScreen from "../screens/search/ArticlesScreen";
 import SearchCategoriesScreen from "../screens/search/CategoriesScreen";
-import SearchDetailScreen from "../screens/search/DetailScreen";
 import RelatedUsersScreen from "../screens/search/RelatedUsersScreen";
 import RelatedCategoriesScreen from "../screens/search/RelatedCategoriesScreen";
 import RelatedCollectionsScreen from "../screens/search/RelatedCollectionsScreen";
@@ -178,9 +177,6 @@ export default {
   },
   搜索中心: {
     screen: SearchHomeScreen
-  },
-  搜索详情: {
-    screen: SearchDetailScreen
   },
   搜索文章: {
     screen: SearchArticlesScreen

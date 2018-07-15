@@ -12,20 +12,17 @@ import SearchArticleItem from "../../components/Article/SearchArticleItem";
 import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
 
-class DetailScreen extends Component {
+class SearchResult extends Component {
 	constructor(props) {
 		super(props);
-		this.handleSearch = this.handleSearch.bind(this);
-		this.changeKeywords = this.changeKeywords.bind(this);
-		this.filterArticleSort = this.filterArticleSort.bind(this);
-		this._matchingText = this._matchingText.bind(this);
+		this.articleOrder = this.articleOrder.bind(this);
 		this._renderRelatedUserItem = this._renderRelatedUserItem.bind(this);
 		this._renderRelatedCategoryItem = this._renderRelatedCategoryItem.bind(this);
 		this._renderSearchHeader = this._renderSearchHeader.bind(this);
 		this._renderRelatedArticle = this._renderRelatedArticle.bind(this);
 		this.state = {
-			keywords: "美味",
-			filter: "time"
+			order: "time",
+			keywords: props.keywords
 		};
 	}
 
@@ -33,45 +30,18 @@ class DetailScreen extends Component {
 		let { keywords } = this.state;
 		let { navigation, search_detail } = this.props;
 		return (
-			<Screen>
-				<View style={styles.container}>
-					<SearchHeader changeKeywords={this.changeKeywords} keywords={keywords} navigation={navigation} handleSearch={this.handleSearch} />
-
-					<FlatList
-						data={search_detail.articles}
-						keyExtractor={(item, index) => index.toString()}
-						renderItem={this._renderRelatedArticle}
-						ListHeaderComponent={this._renderSearchHeader}
-						ListFooterComponent={() => {
-							return <ContentEnd />;
-						}}
-					/>
-				</View>
-			</Screen>
+			<View style={styles.container}>
+				<FlatList
+					data={search_detail.articles}
+					keyExtractor={(item, index) => index.toString()}
+					renderItem={this._renderRelatedArticle}
+					ListHeaderComponent={this._renderSearchHeader}
+					ListFooterComponent={() => {
+						return <ContentEnd />;
+					}}
+				/>
+			</View>
 		);
-	}
-
-	handleSearch(keywords) {
-		let { navigation } = this.props;
-		let navigateAction = NavigationActions.replace({
-			key: navigation.state.key,
-			routeName: "搜索详情",
-			params: { keywords }
-		});
-		navigation.dispatch(navigateAction);
-	}
-
-	_matchingText(keywords, content) {
-		// todo 可以替换 但是不能创建React Element
-		// var reg = new RegExp(keywords,"g");
-		// if(reg.test(content)&&keywords) {
-		// 	// var highlightKeywords = React.createElement(Text,{style:{styles.focused}},keywords);
-		// 	var enhanceContent = content.replace(reg,`<Text style={styles.focused}>${keywords}</Text>`);
-		// 	return enhanceContent;
-		// }else {
-		// 	return content;
-		// }
-		return content;
 	}
 
 	_renderRelatedUserItem(item, index) {
@@ -95,7 +65,7 @@ class DetailScreen extends Component {
 	}
 
 	_renderSearchHeader() {
-		let { filter, keywords } = this.state;
+		let { order } = this.state;
 		let { navigation, search_detail } = this.props;
 		let { users, categories, collections } = search_detail;
 		return (
@@ -129,12 +99,12 @@ class DetailScreen extends Component {
 					<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
 				</TouchableOpacity>
 				<DivisionLine height={18} />
-				<View style={styles.filterArticleHeader}>
-					<Text style={[styles.relatedTypeText, filter == "time" ? styles.focused : {}]} onPress={() => this.filterArticleSort("time")}>
+				<View style={styles.orderArticleHeader}>
+					<Text style={[styles.relatedTypeText, order == "time" ? styles.focused : {}]} onPress={() => this.articleOrder("time")}>
 						按时间
 					</Text>
 					<View style={styles.divisionLine} />
-					<Text style={[styles.relatedTypeText, filter == "hits" ? styles.focused : {}]} onPress={() => this.filterArticleSort("hits")}>
+					<Text style={[styles.relatedTypeText, order == "hits" ? styles.focused : {}]} onPress={() => this.articleOrder("hits")}>
 						按热度
 					</Text>
 				</View>
@@ -148,12 +118,21 @@ class DetailScreen extends Component {
 		return <SearchArticleItem navigation={navigation} keywords={keywords} post={item} />;
 	}
 
-	changeKeywords(keywords) {
-		this.setState({ keywords });
+	articleOrder(order) {
+		this.setState({ order });
 	}
 
-	filterArticleSort(filter) {
-		this.setState({ filter });
+	_matchingText(keywords, content) {
+		// todo 可以替换 但是不能创建React Element
+		// var reg = new RegExp(keywords,"g");
+		// if(reg.test(content)&&keywords) {
+		// 	// var highlightKeywords = React.createElement(Text,{style:{styles.focused}},keywords);
+		// 	var enhanceContent = content.replace(reg,`<Text style={styles.focused}>${keywords}</Text>`);
+		// 	return enhanceContent;
+		// }else {
+		// 	return content;
+		// }
+		return content;
 	}
 }
 
@@ -188,7 +167,7 @@ const styles = StyleSheet.create({
 		color: Colors.primaryFontColor,
 		marginTop: 8
 	},
-	filterArticleHeader: {
+	orderArticleHeader: {
 		flexDirection: "row",
 		alignItems: "center",
 		padding: 15
@@ -206,4 +185,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
 	search_detail: store.search.search_detail
-}))(DetailScreen);
+}))(SearchResult);

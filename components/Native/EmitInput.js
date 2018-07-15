@@ -34,10 +34,12 @@ class EmitInput extends Component {
 			autoFocus,
 			onFocus,
 			style = {},
-			name
+			name,
+			words = true
 		} = this.props;
 		return (
 			<TextInput
+				words={words}
 				placeholder={placeholder}
 				placeholderText={placeholderText}
 				textAlignVertical={textAlignVertical}

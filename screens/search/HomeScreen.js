@@ -7,78 +7,91 @@ import Colors from "../../constants/Colors";
 import { SearchHeader } from "../../components/Header";
 import { RefreshControl } from "../../components/Pure";
 import Screen from "../Screen";
+import SearchResult from "./SearchResult";
 
 import { connect } from "react-redux";
-import gql from "graphql-tag";
 import { graphql, Query } from "react-apollo";
-
-const QUERY = gql`
-  query hot_search($offset: Int!, $limit: Int!) {
-    hotKeywords(offset: $offset, limit: $limit) {
-      id
-      keywords
-    }
-  }
-`;
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.changeKeywords = this.changeKeywords.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.closeHistory = this.closeHistory.bind(this);
     this.clearHistories = this.clearHistories.bind(this);
+    this.keywords = "";
     this.state = {
-      keywords: "",
-      histories: this.props.histories
+      histories: this.props.histories,
+      none_keywords: true,
+      order: "LATEST",
+      fetchMore: true
     };
   }
 
+  onEmitterReady = emitter => {
+    this.thingEmitter = emitter;
+    this.thingEmitter.addListener("keywordsChanged", text => {
+      this.keywords = text;
+      if (this.keywords.length < 1) {
+        this.setState({ none_keywords: true });
+      }
+    });
+  };
+
   render() {
-    let { keywords, histories } = this.state;
+    let { none_keywords, histories } = this.state;
     let { navigation, hot_search } = this.props;
     return (
       <Screen>
         <View style={styles.container}>
-          <SearchHeader changeKeywords={this.changeKeywords} keywords={keywords} navigation={navigation} handleSearch={this.handleSearch} />
-          <ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
-            <View style={{ paddingHorizontal: 15 }}>
-              <TouchableOpacity onPress={() => navigation.navigate("推荐专题")}>
-                <View style={styles.searchItem}>
-                  <View style={styles.verticalCenter}>
-                    <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
-                    <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
-                  </View>
-                  <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
-                </View>
-              </TouchableOpacity>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: Colors.lightBorderColor
-                }}
-              >
-                <View style={[styles.searchItem, { borderBottomColor: "transparent" }]}>
-                  <View style={styles.verticalCenter}>
-                    <Iconfont name={"hot"} size={21} color={Colors.weiboColor} style={{ marginRight: 8 }} />
-                    <Text style={{ fontSize: 16, color: "#666" }}>热门搜索</Text>
-                  </View>
-                  <RefreshControl size={16} refresh={() => null} />
-                </View>
-                {hot_search && this._renderHotKeywords(hot_search)}
-              </View>
-              {histories.length > 0 && (
-                <View style={styles.historyWrap}>
-                  {this._renderHistories(histories)}
-                  <TouchableOpacity onPress={this.clearHistories}>
-                    <View style={[styles.searchItem, { justifyContent: "center" }]}>
-                      <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
+          <SearchHeader
+            changeKeywords={this.onEmitterReady}
+            handleSearch={this.handleSearch}
+            headerRef={ref => (this.inputText = ref)}
+            navigation={navigation}
+            name="keywords"
+          />
+          {none_keywords ? (
+            <ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
+              <View style={{ paddingHorizontal: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate("推荐专题")}>
+                  <View style={styles.searchItem}>
+                    <View style={styles.verticalCenter}>
+                      <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
+                      <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
                     </View>
-                  </TouchableOpacity>
+                    <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: Colors.lightBorderColor
+                  }}
+                >
+                  <View style={[styles.searchItem, { borderBottomColor: "transparent" }]}>
+                    <View style={styles.verticalCenter}>
+                      <Iconfont name={"hot"} size={21} color={Colors.weiboColor} style={{ marginRight: 8 }} />
+                      <Text style={{ fontSize: 16, color: "#666" }}>热门搜索</Text>
+                    </View>
+                    <RefreshControl size={16} refresh={() => null} />
+                  </View>
+                  {hot_search && this._renderHotKeywords(hot_search)}
                 </View>
-              )}
-            </View>
-          </ScrollView>
+                {histories.length > 0 && (
+                  <View style={styles.historyWrap}>
+                    {this._renderHistories(histories)}
+                    <TouchableOpacity onPress={this.clearHistories}>
+                      <View style={[styles.searchItem, { justifyContent: "center" }]}>
+                        <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          ) : (
+            <SearchResult keywords={this.keywords} />
+          )}
         </View>
       </Screen>
     );
@@ -125,18 +138,13 @@ class HomeScreen extends Component {
     return <View>{histories}</View>;
   };
 
-  changeKeywords(keywords) {
-    this.setState({ keywords });
-  }
-
   handleSearch(keywords) {
-    let { navigation } = this.props;
-    let navigateAction = NavigationActions.replace({
-      key: navigation.state.key,
-      routeName: "搜索详情",
-      params: { keywords }
-    });
-    navigation.dispatch(navigateAction);
+    if (keywords.length > 0) {
+      this.changeKeywords(keywords);
+    }
+    if (this.keywords.length > 0) {
+      this.setState({ none_keywords: false });
+    }
   }
 
   closeHistory(id) {
@@ -153,6 +161,11 @@ class HomeScreen extends Component {
   clearHistories() {
     this.setState({ histories: [] });
   }
+
+  changeKeywords = keywords => {
+    this.keywords = keywords;
+    this.inputText.changeText(this.keywords);
+  };
 }
 
 const styles = StyleSheet.create({
