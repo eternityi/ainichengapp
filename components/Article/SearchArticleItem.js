@@ -17,7 +17,7 @@ class SearchArticleItem extends Component {
         <Text style={styles.articleText} numberOfLines={3}>
           <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={post.description} />
         </Text>
-        <Text style={[styles.articleText, { marginTop: 10 }]}>{post.user.name + " 著"}</Text>
+        <Text style={[styles.articleText, { marginTop: 10 }]}>{post.user.name}</Text>
       </TouchableOpacity>
     );
   }
