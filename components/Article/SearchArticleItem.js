@@ -1,23 +1,42 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from "react-native";
 import Highlighter from "react-native-highlight-words";
 import { withNavigation } from "react-navigation";
 
 import { navigationAction } from "../../constants/Methods";
+import { VideoCover } from "../Pure";
 import Colors from "../../constants/Colors";
+
+const { height, width } = Dimensions.get("window");
+const COVER_WIDTH = (width - 40) / 3;
 
 class SearchArticleItem extends Component {
   render() {
     let { navigation, keywords, post } = this.props;
+    let { type, title, description, cover, user } = post;
     return (
       <TouchableOpacity style={styles.articleItem} onPress={this.skipScreen}>
-        <Text style={styles.articleTitle}>
-          <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={post.title} />
-        </Text>
-        <Text style={styles.articleText} numberOfLines={3}>
-          <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={post.description} />
-        </Text>
-        <Text style={[styles.articleText, { marginTop: 10 }]}>{post.user.name}</Text>
+        {type == "video" ? (
+          <View style={styles.videoWrap}>
+            <View style={styles.videoLeft}>
+              <Text style={styles.articleTitle} numberOfLines={2}>
+                <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={title ? title : description} />
+              </Text>
+              <Text style={[styles.articleText, { marginTop: 10 }]}>{user.name}</Text>
+            </View>
+            <VideoCover width={COVER_WIDTH} height={COVER_WIDTH} cover={cover} markWidth={40} markSize={18} />
+          </View>
+        ) : (
+          <View>
+            <Text style={styles.articleTitle}>
+              <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={title} />
+            </Text>
+            <Text style={styles.articleText} numberOfLines={3}>
+              <Highlighter highlightStyle={{ color: Colors.themeColor }} searchWords={[keywords]} textToHighlight={description} />
+            </Text>
+            <Text style={[styles.articleText, { marginTop: 10 }]}>{user.name}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     );
   }
@@ -44,18 +63,27 @@ class SearchArticleItem extends Component {
 }
 
 const styles = StyleSheet.create({
+  videoWrap: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  videoLeft: {
+    flex: 1,
+    marginRight: 10,
+    justifyContent: "space-between",
+    height: COVER_WIDTH
+  },
   articleItem: {
     marginHorizontal: 15,
-    paddingBottom: 10,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: Colors.lightBorderColor
   },
   articleTitle: {
     fontSize: 16,
     lineHeight: 22,
-    fontWeight: "500",
     color: Colors.primaryFontColor,
-    paddingVertical: 16
+    paddingBottom: 16
   },
   articleText: {
     fontSize: 13,

@@ -570,6 +570,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
     }
 }
 
+# 专题投稿
 query userArticlesSubmitStatusQuery($category_id: Int!) {
     user {
         id
@@ -582,6 +583,7 @@ query userArticlesSubmitStatusQuery($category_id: Int!) {
     }
 }
 
+# 推荐关注
 query recommendFollowsQuery($user_id: Int!, $offset: Int) {
     follows(user_id: $user_id, filter: USER_CATEGORY, offset: $offset) {
         id
@@ -612,6 +614,7 @@ query recommendFollowsQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+# 推荐关注的用户
 query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
     follows(user_id: $user_id, filter: USER, offset: $offset) {
         id
@@ -642,6 +645,7 @@ query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+# 推荐关注的专题
 query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
     follows(user_id: $user_id, filter: CATEGORY, offset: $offset) {
         id
@@ -672,6 +676,7 @@ query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
     }
 }
 
+# 文章投稿管理
 query querySubmitedArticles($offset: Int, $limit: Int) {
     user {
         submitedArticles(offset: $offset, limit: $limit) {
@@ -687,12 +692,14 @@ query querySubmitedArticles($offset: Int, $limit: Int) {
     }
 }
 
+# 用户收入
 query queryIncomeHistory {
     user {
         incomeHistory
     }
 }
 
+# 最近投稿
 query queryArticleRequestCenter($id: Int) {
     user(id: $id) {
         id
@@ -707,57 +714,12 @@ query queryArticleRequestCenter($id: Int) {
     }
 }
 
-#查询用户
-#keyword，查询关键字
-query queriesQuery($keyword: String!, $offset: Int) {
-    users(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        avatar
-    }
-}
-
-#查询用户
-#keyword，查询关键字
-query queriesCategoriesQuery($keyword: String!, $offset: Int) {
-    categories(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        logo_app
-        logo
-        count_articles
-        count_follows
-        followed
-        user {
-            name
-            id
-        }
-    }
-}
-
-#查询文集
-#输入keyword，会去模糊匹配文集名字
-query queriesCollectionsQuery($keyword: String!, $offset: Int) {
-    collections(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        logo
-        count_articles
-        count_follows
-        followed
-        user {
-            name
-            id
-        }
-    }
-}
-
-#查询文章
+#查询文章 用户 专题 文集
 #keyword:搜索的关键字
-#type        :VIDEO代表视频，ARTICLE代表文章.默认查询查询所有
-#order  :排序规则。 HOT：按热度排序 ，默认是按照时间排序
-query queriesArticlesQuery($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
-    articles(keyword: $keyword, type: $type, order: $order, offset: $offset, limit: 100) {
+#type   :VIDEO代表视频，ARTICLE代表文章.默认查询查询所有
+#order  :文章排序规则。 HOT：按热度排序 ，默认是按照时间排序
+query SearchResaultQueries($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
+    articles(keyword: $keyword, type: $type, order: $order, offset: $offset, limit: 10) {
         id
         title
         type
@@ -765,12 +727,46 @@ query queriesArticlesQuery($keyword: String!, $type: ArticleType, $order: Articl
             name
         }
         description
-        video_url
+        cover
+    }
+    users(keyword: $keyword, offset: $offset, limit: 4) {
+        id
+        name
+        avatar
+    }
+    categories(keyword: $keyword, offset: $offset, limit: 4) {
+        id
+        name
+        logo
+        count_articles
+        count_follows
+        followed
+        user {
+            id
+            name
+        }
+    }
+    collections(keyword: $keyword, offset: $offset, limit: 4) {
+        id
+        name
+        logo
+        count_articles
+        count_follows
+        followed
+        user {
+            id
+            name
+        }
     }
 }
 
-#热门搜索
-query queriesHotQuery($offset: Int) {
+# 搜索记录，未登录返回空。
+# 热搜
+query hotSearchAndLogsQuery($offset: Int) {
+    queryLogs(offset: 0) {
+        id
+        query
+    }
     queries(offset: $offset, limit: 15) {
         id
         query
@@ -781,13 +777,6 @@ query queriesHotQuery($offset: Int) {
 #id：查询日志的ID，如果不传参则删除该用户所有的查询记录
 mutation deleteQueryLogMutation($id: Int) {
     deleteQueryLog(id: $id) {
-        id
-        query
-    }
-}
-#查询当前登录用户的搜索记录，如果未登录返回空。
-query queryLogsQuery($offset: Int, $limit: Int) {
-    queryLogs(offset: $offset, limit: $limit) {
         id
         query
     }

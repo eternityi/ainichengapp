@@ -14,12 +14,12 @@ import actions from "../../store/actions";
 
 class RelatedCollectionsScreen extends Component {
 	render() {
-		let { search_detail, navigation } = this.props;
-		let { collections } = navigation.state.params;
+		let { navigation } = this.props;
+		let collections = navigation.getParam("collections", []);
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
+					<Header />
 					<FlatList
 						style={{ paddingHorizontal: 15 }}
 						data={collections}

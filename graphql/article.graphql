@@ -157,6 +157,10 @@ query articleQuery($id: Int!) {
 		categories {
 			id
 			name
+			logo
+			count_articles
+			count_follows
+			followed
 		}
 		tipedUsers {
 			id
@@ -249,6 +253,7 @@ query recommendArticlesQuery($offset: Int, $limit: Int) {
 	}
 }
 
+# 文章投稿推荐
 query queryArticleRequesRecommend($id: Int) {
 	user(id: $id) {
 		id
