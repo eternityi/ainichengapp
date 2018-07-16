@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import Colors from "../../../constants/Colors";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import {
+	CustomScrollTabBar,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../../components/Pure";
 import { Header, HeaderLeft } from "../../../components/Header";
 import NotificationItem from "./NotificationItem";
 import Screen from "../../Screen";
@@ -40,7 +47,10 @@ class CategoryScreen extends Component {
 						)}
 					>
 						<View style={styles.container}>
-							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "ALL" }}>
+							<Query
+								query={categoryPendingArticlesQuery}
+								variables={{ category_id: category.id, filter: "ALL" }}
+							>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
@@ -49,7 +59,9 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => <NotificationItem post={item} navigation={navigation} />}
+											renderItem={({ item }) => (
+												<NotificationItem article={item} navigation={navigation} />
+											)}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}
@@ -60,7 +72,10 @@ class CategoryScreen extends Component {
 						</View>
 						<View style={styles.container}>
 							{/*PEDING（pending） 后端参数单词错误**/}
-							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "PEDING" }}>
+							<Query
+								query={categoryPendingArticlesQuery}
+								variables={{ category_id: category.id, filter: "PEDING" }}
+							>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
@@ -69,7 +84,9 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => <NotificationItem post={item} navigation={navigation} />}
+											renderItem={({ item }) => (
+												<NotificationItem article={item} navigation={navigation} />
+											)}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}
