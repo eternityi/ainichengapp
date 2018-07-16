@@ -11,7 +11,7 @@ import { Button } from "../../../components/Button";
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 import { Query, Mutation, graphql } from "react-apollo";
-import { querySubmitedArticles } from "../../../graphql/user.graphql";
+import { querySubmitedArticles, submitArticleMutation } from "../../../graphql/user.graphql";
 
 class ContributeManageScreen extends React.Component {
 	render() {
@@ -58,19 +58,25 @@ class ContributeManageScreen extends React.Component {
 					</View>
 				</View>
 				<View style={styles.button}>
-					<Button
-						outline
-						name={item.submit_status}
-						fontSize={12}
-						handler={() => {
-							submitArticle({
-								variables: {
-									category_id: category.id,
-									article_id: article.id
-								}
-							});
+					<Mutation mutation={submitArticleMutation}>
+						{submitArticle => {
+							return (
+								<Button
+									outline
+									name={item.submit_status}
+									fontSize={12}
+									handler={() => {
+										submitArticle({
+											variables: {
+												category_id: item.submitedCategory.id,
+												article_id: item.id
+											}
+										});
+									}}
+								/>
+							);
 						}}
-					/>
+					</Mutation>
 				</View>
 			</View>
 		);
