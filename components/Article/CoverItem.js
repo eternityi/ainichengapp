@@ -20,7 +20,10 @@ class CoverItem extends PureComponent {
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
 				<View style={styles.postContainer}>
 					<View style={[styles.layoutFlexRow, styles.postUser]}>
-						<TouchableOpacity onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}
+						>
 							<Avatar size={38} uri={user.avatar} />
 						</TouchableOpacity>
 						<View style={styles.userInfo}>

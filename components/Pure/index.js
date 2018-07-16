@@ -17,6 +17,7 @@ import Find from "./Find";
 import Waiting from "./Waiting";
 import VideoCover from "./VideoCover";
 import VideoMark from "./VideoMark";
+import SlideWrite from "./SlideWrite";
 
 // export { SearchBar };
 // export { ContentEnd };
@@ -41,5 +42,6 @@ export {
 	Find,
 	Waiting,
 	VideoCover,
-	VideoMark
+	VideoMark,
+	SlideWrite
 };

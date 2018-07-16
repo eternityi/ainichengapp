@@ -32,7 +32,7 @@ class CommentItem extends Component {
 
 	render() {
 		//detail决定评论是否显示详细内容
-		const { detail = false, comment, toggleReplyComment, navigation, login } = this.props;
+		const { detail = false, comment, toggleReplyComment, navigation, login, toggleVisible } = this.props;
 		const { liked, likes, operationModalVisible, reportModalVisible, subComment } = this.state;
 		// 如果不是详细模式就只取前三条子评论
 		let replyComments = detail ? comment.replyComments : comment.replyComments.slice(0, 3);
@@ -43,10 +43,15 @@ class CommentItem extends Component {
 						<View style={{ flexDirection: "row" }}>
 							<TouchableOpacity
 								style={{ marginRight: 10 }}
-								onPress={() =>
+								onPress={() => {
+									if (toggleVisible) {
+										// 关闭评论列表模态框
+										toggleVisible();
+									}
 									navigation.navigate("用户详情", {
 										user: comment.user
-									})}
+									});
+								}}
 							>
 								<Avatar size={30} uri={comment.user.avatar} />
 							</TouchableOpacity>
@@ -136,7 +141,7 @@ class CommentItem extends Component {
 	}
 
 	_renderReplyComments(replyComments) {
-		const { detail = false, comment, navigation, toggleVisible = () => null } = this.props;
+		const { detail = false, comment, navigation, toggleVisible } = this.props;
 		return (
 			<View style={styles.subComment}>
 				{replyComments &&
@@ -149,7 +154,9 @@ class CommentItem extends Component {
 							style={{ flexDirection: "row", alignItems: "center" }}
 							onPress={() => {
 								//关闭评论列表模态框
-								toggleVisible();
+								if (toggleVisible) {
+									toggleVisible();
+								}
 								navigation.navigate("评论详情", {
 									comment: comment
 								});

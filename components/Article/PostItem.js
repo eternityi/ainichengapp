@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight, TouchableWithoutFeedback, ImageBackground } from "react-native";
+import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight, TouchableOpacity, ImageBackground } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import PostToolBar from "./PostToolBar";
@@ -21,9 +21,9 @@ class PostItem extends PureComponent {
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
 				<View style={styles.postContainer}>
 					<View style={styles.layoutFlexRow}>
-						<TouchableWithoutFeedback onPress={() => navigation.navigate("用户详情", { user: user })}>
+						<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
 							<Avatar size={30} uri={user.avatar} />
-						</TouchableWithoutFeedback>
+						</TouchableOpacity>
 						<Text style={styles.userName}>{user.name}</Text>
 						<Text style={styles.timeAgo}>{time_ago}</Text>
 					</View>

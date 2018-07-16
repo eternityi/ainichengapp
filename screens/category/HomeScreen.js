@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, Platform, StatusBar } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, Platform, StatusBar, Animated, Easing } from "react-native";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, SlideWrite } from "../../components/Pure";
 import { Header, HeaderLeft, Search } from "../../components/Header";
 import { CustomPopoverMenu, ShareModal } from "../../components/Modal";
 import { CommunityInfo } from "../../components/MediaGroup";
@@ -20,15 +20,17 @@ class HomeScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);
+		this.offset = 0;
 		this.state = {
 			order: "LATEST",
 			modalVisible: false,
-			fetchingMore: true
+			fetchingMore: true,
+			offset: new Animated.Value(20)
 		};
 	}
 
 	render() {
-		let { order, modalVisible, fetchingMore } = this.state;
+		let { order, modalVisible, fetchingMore, offset } = this.state;
 		let { navigation, personal, deleteCategory } = this.props;
 		let category = navigation.getParam("category", {});
 		return (
@@ -109,6 +111,7 @@ class HomeScreen extends Component {
 									onRefresh={() => {
 										fetch();
 									}}
+									onScroll={this.onScroll}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item }) => <NoteItem post={item} />}
 									onEndReachedThreshold={0.3}
@@ -146,6 +149,9 @@ class HomeScreen extends Component {
 										);
 									}}
 								/>
+								<Animated.View style={[styles.slideSite, { right: offset }]}>
+									<SlideWrite navigation={navigation} />
+								</Animated.View>
 							</View>
 						);
 					}}
@@ -207,12 +213,32 @@ class HomeScreen extends Component {
 			modalVisible: !prevState.modalVisible
 		}));
 	}
+
+	onScroll = event => {
+		let { offset } = this.state;
+		let currentOffset = event.nativeEvent.contentOffset.y;
+		if (currentOffset > 200 && currentOffset > this.offset) {
+			Animated.timing(offset, {
+				toValue: -50,
+				duration: 120,
+				easing: Easing.linear
+			}).start();
+		} else {
+			Animated.timing(offset, {
+				toValue: 20,
+				duration: 120,
+				easing: Easing.linear
+			}).start();
+		}
+		this.offset = currentOffset;
+	};
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colors.skinColor
+		backgroundColor: Colors.skinColor,
+		position: "relative"
 	},
 	orderHeader: {
 		height: 40,
@@ -234,6 +260,11 @@ const styles = StyleSheet.create({
 	orderText: {
 		fontSize: 16,
 		color: Colors.darkFontColor
+	},
+	slideSite: {
+		position: "absolute",
+		bottom: 40,
+		right: 20
 	}
 });
 

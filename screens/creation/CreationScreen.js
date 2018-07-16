@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, Text, Platform, Dimensions, View, TouchableOpacity, YellowBox, BackHandler } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
@@ -96,6 +97,7 @@ class CreationScreen extends React.Component {
           ) : (
             this.renderEditor()
           )}
+          {Platform.OS == "ios" && <KeyboardSpacer />}
         </View>
         <Waiting isVisible={waitingVisible} />
       </Screen>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableWithoutFeedback, Dimensions, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, Dimensions, TouchableHighlight } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
@@ -35,11 +35,12 @@ class NoteItem extends Component {
 							<Text style={{ fontSize: 14, color: Colors.tintFontColor }}>{time_ago}</Text>
 						) : (
 							<View style={styles.userInfo}>
-								<TouchableWithoutFeedback
+								<TouchableOpacity
+									activeOpacity={0.5}
 									onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}
 								>
 									<Avatar size={28} uri={user.avatar} />
-								</TouchableWithoutFeedback>
+								</TouchableOpacity>
 								<Text style={styles.userName}>{user.name}</Text>
 							</View>
 						)}
