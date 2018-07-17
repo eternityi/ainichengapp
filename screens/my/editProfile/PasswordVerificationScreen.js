@@ -7,6 +7,8 @@ import { Button } from "../../../components/Button";
 import Header from "../../../components/Header/Header";
 import SettingItem from "../../../components/Setting/SettingItem";
 
+import Toast from "react-native-root-toast";
+
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
 // import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
@@ -19,12 +21,13 @@ class PasswordVerificationScreen extends Component {
 		this.state = {
 			oldpassword: "",
 			password: "",
+			againpassword: "",
 			disabled: true
 		};
 	}
 
 	render() {
-		let { oldpassword, password, disabled } = this.state;
+		let { oldpassword, password, disabled, againpassword } = this.state;
 		let { navigation } = this.props;
 		return (
 			<Screen>
@@ -59,7 +62,7 @@ class PasswordVerificationScreen extends Component {
 							secureTextEntry={true}
 						/>
 					</View>
-					{/*<View style={styles.textWrap}>
+					<View style={styles.textWrap}>
 						<TextInput
 							textAlignVertical="center"
 							underlineColorAndroid="transparent"
@@ -67,10 +70,10 @@ class PasswordVerificationScreen extends Component {
 							placeholderText={Colors.tintFontColor}
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							onChangeText={password => this.setState({ password })}
+							onChangeText={againpassword => this.setState({ againpassword })}
 							secureTextEntry={true}
 						/>
-					</View>*/}
+					</View>
 					<View style={{ margin: 15, height: 48 }}>
 						<Mutation mutation={updateUserPasswordMutation}>
 							{updateUserPassword => {
@@ -78,16 +81,21 @@ class PasswordVerificationScreen extends Component {
 									<Button
 										name="完成"
 										handler={() => {
-											updateUserPassword({
-												variables: {
-													oldpassword,
-													password
-												}
-											});
+											if (password == againpassword) {
+												updateUserPassword({
+													variables: {
+														oldpassword,
+														password
+													}
+												});
+											} else {
+												this.toast("两次输入的密码不一致");
+												return null;
+											}
 											this.props.dispatch(actions.updatePassword(password));
 											navigation.goBack();
 										}}
-										disabled={oldpassword && password && password ? false : true}
+										disabled={oldpassword && password && againpassword ? false : true}
 									/>
 								);
 							}}
@@ -96,6 +104,20 @@ class PasswordVerificationScreen extends Component {
 				</View>
 			</Screen>
 		);
+	}
+	toast(message) {
+		let toast = Toast.show(message, {
+			duration: Toast.durations.LONG,
+			position: -20,
+			shadow: true,
+			animation: true,
+			hideOnPress: true,
+			delay: 100,
+			backgroundColor: Colors.nightColor
+		});
+		setTimeout(function() {
+			Toast.hide(toast);
+		}, 2000);
 	}
 }
 

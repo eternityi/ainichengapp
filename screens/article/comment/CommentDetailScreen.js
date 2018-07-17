@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	ScrollView,
+	TouchableOpacity,
+	Dimensions,
+	KeyboardAvoidingView,
+	Platform
+} from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Screen from "../../Screen";
@@ -134,7 +143,10 @@ class CommentDetailScreen extends Component {
 
 	async fetchReplyComments() {
 		let { comment } = this.state;
-		let { data } = await this.props.client.query({ query: replyCommentsQuery, variables: { comment_id: comment.id } });
+		let { data } = await this.props.client.query({
+			query: replyCommentsQuery,
+			variables: { comment_id: comment.id }
+		});
 		this.setState(prevState => ({
 			comment: {
 				...prevState.comment,

@@ -24,12 +24,13 @@ class RetrievePasswordScreen extends Component {
 		this.state = {
 			verificationcode: "",
 			password: "",
-			disabled: true
+			disabled: true,
+			againpassword: ""
 		};
 	}
 
 	render() {
-		let { verificationcode, password, disabled } = this.state;
+		let { verificationcode, password, disabled, againpassword } = this.state;
 		let { navigation } = this.props;
 		return (
 			<Screen>
@@ -93,7 +94,7 @@ class RetrievePasswordScreen extends Component {
 							placeholderText={Colors.tintFontColor}
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							onChangeText={password => this.setState({ password })}
+							onChangeText={againpassword => this.setState({ againpassword })}
 							secureTextEntry={true}
 						/>
 					</View>
@@ -101,21 +102,40 @@ class RetrievePasswordScreen extends Component {
 						<Button
 							name="完成"
 							handler={() => {
-								updateUserPassword({
-									variables: {
-										verificationcode,
-										password
-									}
-								});
+								if (password == againpassword) {
+									updateUserPassword({
+										variables: {
+											verificationcode,
+											password
+										}
+									});
+								} else {
+									this.toast("两次输入的密码不一致");
+									return null;
+								}
 								this.props.dispatch(actions.updatePassword(password));
 								navigation.goBack();
 							}}
-							disabled={verificationcode && password && password ? false : true}
+							disabled={verificationcode && password && againpassword ? false : true}
 						/>
 					</View>
 				</View>
 			</Screen>
 		);
+	}
+	toast(message) {
+		let toast = Toast.show(message, {
+			duration: Toast.durations.LONG,
+			position: -20,
+			shadow: true,
+			animation: true,
+			hideOnPress: true,
+			delay: 100,
+			backgroundColor: Colors.nightColor
+		});
+		setTimeout(function() {
+			Toast.hide(toast);
+		}, 2000);
 	}
 }
 
