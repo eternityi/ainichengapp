@@ -29,6 +29,8 @@ import RecommendCategoriesScreen from "../screens/recommend/CategoriesScreen";
 
 //login
 import LoginScreen from "../screens/login/LoginScreen";
+import RetrievePasswordScreen from "../screens/login/RetrievePasswordScreen";
+import VerificationEmailScreen from "../screens/login/VerificationEmailScreen";
 
 //my
 import BrowsingHistoryScreen from "../screens/my/HistoryScreen";
@@ -263,6 +265,12 @@ export default {
   },
   登录注册: {
     screen: LoginScreen
+  },
+  找回密码: {
+    screen: RetrievePasswordScreen
+  },
+  验证邮箱: {
+    screen: VerificationEmailScreen
   },
   私密作品: {
     screen: PrivacyArticle

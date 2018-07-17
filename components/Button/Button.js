@@ -11,7 +11,7 @@ class Button extends Component {
 			outline, //镂空按钮
 			theme = Colors.themeColor, //边框/背景/文字颜色
 			name,
-			fontSize = 14,
+			fontSize = 16,
 			icon, //自定义icon
 			iconName, //iconName
 			iconSize = fontSize,
@@ -27,7 +27,9 @@ class Button extends Component {
 		]);
 		return (
 			<TouchableOpacity onPress={handler} style={mergeButton} disabled={disabled}>
-				{icon ? icon : iconName && <Iconfont name={iconName} size={iconSize} color={outline ? theme : "#fff"} />}
+				{icon
+					? icon
+					: iconName && <Iconfont name={iconName} size={iconSize} color={outline ? theme : "#fff"} />}
 				<Text style={[{ fontSize, color: theme }, !outline && { color: "#fff" }]}>{name}</Text>
 			</TouchableOpacity>
 		);

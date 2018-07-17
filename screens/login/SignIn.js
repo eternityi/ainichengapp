@@ -57,7 +57,12 @@ class SignIn extends Component {
 				<View style={styles.login}>
 					<View style={{ marginTop: 20, alignItems: "flex-end" }}>
 						<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-							<Iconfont name={"chacha"} size={20} color={Colors.tintFontColor} style={{ fontWeight: "600" }} />
+							<Iconfont
+								name={"chacha"}
+								size={20}
+								color={Colors.tintFontColor}
+								style={{ fontWeight: "600" }}
+							/>
 						</TouchableOpacity>
 					</View>
 					<View>
@@ -153,7 +158,7 @@ class SignIn extends Component {
 				>
 					<View>
 						<View>
-							<TouchableOpacity onPress={() => null}>
+							<TouchableOpacity onPress={() => this.props.navigation.navigate("验证邮箱")}>
 								<Text
 									style={{
 										fontSize: 17,
@@ -172,7 +177,7 @@ class SignIn extends Component {
 							}}
 						/>
 						<View>
-							<TouchableOpacity onPress={() => null}>
+							<TouchableOpacity onPress={this.handleModal}>
 								<Text
 									style={{
 										fontSize: 17,
