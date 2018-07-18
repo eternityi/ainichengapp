@@ -25,7 +25,7 @@ class NoteItem extends Component {
 			options,
 			popoverHandler = () => null
 		} = this.props;
-		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_comments } = post;
+		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_replies } = post;
 		let layout = images.length > 1 ? "vertical" : "horizontal";
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={onPress} onLongPress={longPress}>
@@ -72,13 +72,13 @@ class NoteItem extends Component {
 						</View>
 					)}
 					<View>{has_image && this.renderImage(type, images, cover)}</View>
-					{this._renderFooter(category, hits, count_comments, count_likes)}
+					{this._renderFooter(category, hits, count_replies, count_likes)}
 				</View>
 			</TouchableHighlight>
 		);
 	}
 
-	_renderFooter = (category, hits, count_comments, count_likes) => {
+	_renderFooter = (category, hits, count_replies, count_likes) => {
 		const { navigation } = this.props;
 		return (
 			<View style={styles.noteFooter}>
@@ -97,7 +97,7 @@ class NoteItem extends Component {
 					</View>
 					<View style={styles.meta}>
 						<Iconfont name={"comment"} size={14} color={Colors.lightFontColor} />
-						<Text style={styles.count}>{count_comments || 0}</Text>
+						<Text style={styles.count}>{count_replies || 0}</Text>
 					</View>
 					<View style={styles.meta}>
 						<Iconfont name={"like"} size={14} color={Colors.lightFontColor} />

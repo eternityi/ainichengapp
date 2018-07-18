@@ -3,6 +3,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, Flat
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
+import { Iconfont } from "../../utils/Fonts";
 import { Header, RecommendFollow } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import CoverItem from "../../components/Article/CoverItem";
@@ -14,6 +15,26 @@ import { Query, Mutation } from "react-apollo";
 import { hotArticlesQuery } from "../../graphql/article.graphql";
 
 class HomeScreen extends React.Component {
+  static fresh = scroll => {
+    HomeScreen.scroll = scroll;
+  };
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      //当前tab页，点击tabbar跳转到顶部并刷新页面
+      tabBarOnPress: ({ scene, jumpToIndex, client }) => {
+        if (scene.focused) {
+          if (HomeScreen.scroll) {
+            HomeScreen.scroll.scrollToOffset({ offset: 0, animated: false });
+            client.query({ query: hotArticlesQuery, fetchPolicy: "network-only" });
+          }
+        } else {
+          jumpToIndex(scene.index);
+        }
+      }
+    };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -42,6 +63,7 @@ class HomeScreen extends React.Component {
               if (!(data && data.articles)) return <SpinnerLoading />;
               return (
                 <FlatList
+                  ref={ref => HomeScreen.fresh(ref)}
                   removeClippedSubviews
                   ListHeaderComponent={() => <ListHeader navigation={navigation} />}
                   refreshing={loading}

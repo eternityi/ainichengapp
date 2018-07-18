@@ -105,6 +105,7 @@ class HomeScreen extends Component {
 
 								<FlatList
 									bounces={false}
+									scrollEventThrottle={16}
 									ListHeaderComponent={() => this._renderListHeader(category)}
 									data={articles}
 									refreshing={loading}

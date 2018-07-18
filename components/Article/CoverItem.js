@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get("window");
 class CoverItem extends PureComponent {
 	render() {
 		const { post, navigation } = this.props;
-		let { type, user, time_ago, title, description, cover, category, hits, count_likes, count_comments } = post;
+		let { type, user, time_ago, title, description, cover, category, hits, count_likes, count_replies } = post;
 		if (!cover) {
 			return null;
 		}
@@ -60,7 +60,7 @@ class CoverItem extends PureComponent {
 							<View style={styles.layoutFlexRow}>
 								{hits > 0 && <Text style={styles.metaCount}>{hits || 0}次查看</Text>}
 								{count_likes > 0 && <Text style={styles.metaCount}>{"· " + count_likes || 0}人喜欢</Text>}
-								{count_comments > 0 && <Text style={styles.metaCount}>{"· " + count_comments || 0}条评论</Text>}
+								{count_replies > 0 && <Text style={styles.metaCount}>{"· " + count_replies || 0}条评论</Text>}
 							</View>
 						</View>
 					</View>

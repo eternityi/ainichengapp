@@ -39,7 +39,7 @@ class RecommendScreen extends React.Component {
                           {({ loading, error, data }) => {
                             if (!(data && data.articles)) return null;
                             return (
-                              <Swiper autoplay={true} autoplayTimeout={5} paginationStyle={{ bottom: 10 }} activeDotColor="#fff">
+                              <Swiper autoplay={true} autoplayTimeout={5} paginationStyle={{ bottom: 8 }} activeDotColor="#fff">
                                 {this._renderSwiperImage(data.articles)}
                               </Swiper>
                             );

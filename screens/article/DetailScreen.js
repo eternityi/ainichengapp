@@ -24,6 +24,8 @@ import { articleQuery } from "../../graphql/article.graphql";
 
 const { width, height } = Dimensions.get("window");
 
+const IMG_WIDTH = width - 30;
+
 let css_fix = `
     <!DOCTYPE html>
     <html lang="en">
@@ -129,6 +131,10 @@ class DetailScreen extends Component {
                           // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
+                          // 解析\"xxx\"格式的宽高属性
+                          let img_width = parseInt(htmlAttribs.width.replace('\\"', ""));
+                          let img_height = parseInt(htmlAttribs.height.replace('\\"', ""));
+                          img_height = IMG_WIDTH * img_height / img_width;
                           return (
                             <TouchableOpacity
                               key={index}
@@ -142,9 +148,8 @@ class DetailScreen extends Component {
                               <Image
                                 source={{ uri: htmlAttribs.src }}
                                 style={{
-                                  marginLeft: -15,
-                                  width, //TODO: will use htmlAttribs.width
-                                  height: 200, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
+                                  width: IMG_WIDTH, //TODO: will use htmlAttribs.width
+                                  height: img_height, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
                                   resizeMode: "cover"
                                 }}
                                 {...passProps}

@@ -1,29 +1,48 @@
 import React from "react";
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button, FlatList } from "react-native";
+
 import Color from "../constants/Colors";
-import { Badge } from "../components/Pure";
 import { Iconfont } from "../utils/Fonts";
+import { Badge } from "../components/Pure";
+
 import { connect } from "react-redux";
 import actions from "../store/actions";
+import { Query, Mutation, withApollo, compose } from "react-apollo";
 
 class CustomMainTab extends React.Component {
     renderItem = (route, index) => {
-        const { navigation, jumpToIndex } = this.props;
-
+        const { navigation, jumpToIndex, getOnPress, getLabel, client } = this.props;
         const focused = index === navigation.state.index;
         const color = focused ? this.props.activeTintColor : this.props.inactiveTintColor;
-        let TabScene = {
+        const scene = {
+            index: index,
             focused: focused,
             route: route,
             tintColor: color
         };
+        const { routes } = navigation.state;
+        const previousScene = routes[navigation.state.index];
+        const onPress = getOnPress(previousScene, scene);
         return (
-            <TouchableOpacity key={route.key} style={styles.tabItem} onPress={() => jumpToIndex(index)}>
+            <TouchableOpacity
+                key={route.key}
+                style={styles.tabItem}
+                onPress={() => {
+                    onPress
+                        ? onPress({
+                              previousScene,
+                              scene,
+                              jumpToIndex,
+                              client
+                          })
+                        : jumpToIndex(index);
+                }}
+            >
                 <View style={styles.tabItem}>
-                    {this.props.renderIcon(TabScene)}
-                    <Text style={{ fontSize: 11, color }}>{this.props.getLabel(TabScene)}</Text>
+                    {this.props.renderIcon(scene)}
+                    <Text style={{ fontSize: 11, color }}>{getLabel(scene)}</Text>
                 </View>
-                {this.props.getLabel(TabScene) == "通知" && (
+                {getLabel(scene) == "通知" && (
                     <View style={{ position: "absolute", right: 0, top: 2 }}>
                         <Badge count={this.props.unreads} radius={7} />
                     </View>
@@ -76,4 +95,4 @@ const styles = {
     }
 };
 
-export default connect(store => ({ login: store.users.login, unreads: store.users.count_unreads }))(CustomMainTab);
+export default compose(withApollo, connect(store => ({ login: store.users.login, unreads: store.users.count_unreads })))(CustomMainTab);

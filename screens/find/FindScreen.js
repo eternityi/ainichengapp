@@ -1,6 +1,6 @@
 import React from "react";
 import Colors from "../../constants/Colors";
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, TabBarTop } from "react-navigation";
 import { Text, View, Platform } from "react-native";
 
 import Search from "../../components/Header/Search";
@@ -25,8 +25,31 @@ export default TabNavigator(
     backBehavior: "none",
     tabBarOptions: {
       activeTintColor: Colors.themeColor,
-      inactiveTintColor: Colors.primaryFontColor
+      inactiveTintColor: Colors.primaryFontColor,
+      style: {
+        backgroundColor: "#fff",
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lightBorderColor,
+        elevation: 0,
+        height: 70,
+        paddingTop: 24,
+        paddingLeft: 15
+      },
+      indicatorStyle: {
+        height: 2,
+        width: 50,
+        backgroundColor: Colors.themeColor,
+        marginLeft: 15
+      },
+      labelStyle: {
+        fontSize: 17,
+        margin: 3
+      },
+      tabStyle: {
+        width: 50,
+        paddingHorizontal: 0
+      }
     },
-    tabBarComponent: props => <CustomFindTab {...props} />
+    tabBarComponent: props => <TabBarTop {...props} />
   }
 );

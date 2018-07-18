@@ -25,7 +25,7 @@ class DraftsScreen extends Component {
 
 	render() {
 		let { fetchingMore, modalVisible } = this.state;
-		let { navigation, drafts, publishArticle, removeArticle } = this.props;
+		let { navigation } = this.props;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -125,7 +125,7 @@ class DraftsScreen extends Component {
 	}
 
 	operationHandler = index => {
-		let { navigation } = this.props;
+		let { navigation, publishArticle, removeArticle } = this.props;
 		switch (index) {
 			case 0:
 				navigation.navigate("创作", { article: this.article });

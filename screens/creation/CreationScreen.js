@@ -237,7 +237,7 @@ class CreationScreen extends React.Component {
                   waitingVisible: false
                 });
                 this.publishing = false;
-                navigation.replace("私密文章");
+                navigation.replace("私密作品");
               })
               .catch(error => {
                 this.setState({
