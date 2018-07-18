@@ -57,20 +57,22 @@ class RetrievePasswordScreen extends Component {
 							}}
 							maxLength={10}
 						/>
-						<View style={styles.repeat}>
-							<Text
-								style={{
-									backgroundColor: Colors.weixinColor,
-									fontSize: 14,
-									color: Colors.skinColor,
-									paddingHorizontal: 15,
-									paddingVertical: 9,
-									borderRadius: 4
-								}}
-							>
-								重发
-							</Text>
-						</View>
+						<TouchableOpacity>
+							<View style={styles.repeat}>
+								<Text
+									style={{
+										backgroundColor: Colors.weixinColor,
+										fontSize: 14,
+										color: Colors.skinColor,
+										paddingHorizontal: 15,
+										paddingVertical: 9,
+										borderRadius: 4
+									}}
+								>
+									重发
+								</Text>
+							</View>
+						</TouchableOpacity>
 					</View>
 					<View style={styles.textWrap}>
 						<TextInput

@@ -158,7 +158,14 @@ class SignIn extends Component {
 				>
 					<View>
 						<View>
-							<TouchableOpacity onPress={() => this.props.navigation.navigate("验证邮箱")}>
+							<TouchableOpacity
+								onPress={() => {
+									this.props.navigation.navigate("验证邮箱");
+									setTimeout(() => {
+										this.handleModal();
+									}, 100);
+								}}
+							>
 								<Text
 									style={{
 										fontSize: 17,
