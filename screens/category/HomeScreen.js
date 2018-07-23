@@ -1,10 +1,27 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, Platform, StatusBar, Animated, Easing } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	FlatList,
+	TouchableOpacity,
+	Dimensions,
+	StatusBar,
+	Animated,
+	Easing
+} from "react-native";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, SlideWrite } from "../../components/Pure";
+import {
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent,
+	SlideWrite
+} from "../../components/Pure";
 import { Header, HeaderLeft, Search } from "../../components/Header";
 import { CustomPopoverMenu, ShareModal } from "../../components/Modal";
 import { CommunityInfo } from "../../components/MediaGroup";
@@ -13,7 +30,10 @@ import NoteItem from "../../components/Article/NoteItem";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import { Mutation, Query, graphql } from "react-apollo";
-import { categoryQuery, deleteCategoryMutation } from "../../graphql/category.graphql";
+import {
+	categoryQuery,
+	deleteCategoryMutation
+} from "../../graphql/category.graphql";
 import { userCategoriesQuery } from "../../../graphql/user.graphql";
 
 class HomeScreen extends Component {
@@ -35,10 +55,15 @@ class HomeScreen extends Component {
 		let category = navigation.getParam("category", {});
 		return (
 			<Screen>
-				<Query query={categoryQuery} variables={{ id: category.id, order }}>
+				<Query
+					query={categoryQuery}
+					variables={{ id: category.id, order }}
+				>
 					{({ loading, error, data, refetch, fetchMore }) => {
-						if (error) return <LoadingError reload={() => refetch()} />;
-						if (!(data && data.category && data.articles)) return <SpinnerLoading />;
+						if (error)
+							return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.category && data.articles))
+							return <SpinnerLoading />;
 						let category = data.category;
 						let articles = data.articles;
 						let self = category.user.id == personal.id;
@@ -54,7 +79,10 @@ class HomeScreen extends Component {
 											}}
 										>
 											<View style={{ marginRight: 15 }}>
-												<Search navigation={navigation} routeName={"搜索文章"} />
+												<Search
+													navigation={navigation}
+													routeName={"搜索文章"}
+												/>
 											</View>
 											<CustomPopoverMenu
 												width={160}
@@ -62,20 +90,25 @@ class HomeScreen extends Component {
 													if (self) {
 														switch (index) {
 															case 0:
-																navigation.navigate("新建专题", {
-																	category
-																});
+																navigation.navigate(
+																	"新建专题",
+																	{
+																		category
+																	}
+																);
 																break;
 															case 1:
 																deleteCategory({
 																	variables: {
-																		id: category.id
+																		id:
+																			category.id
 																	},
 																	refetchQueries: deleteCategoryResult => [
 																		{
 																			query: userCategoriesQuery,
 																			variables: {
-																				user_id: personal.id
+																				user_id:
+																					personal.id
 																			}
 																		}
 																	]
@@ -90,14 +123,27 @@ class HomeScreen extends Component {
 														this.toggleModalVisible();
 													}
 												}}
-												triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
+												triggerComponent={
+													<Iconfont
+														name={"more-vertical"}
+														size={20}
+														color={
+															Colors.tintFontColor
+														}
+													/>
+												}
 												customOptionStyle={{
 													optionWrapper: {
-														alignItems: "flex-start",
+														alignItems:
+															"flex-start",
 														paddingHorizontal: 10
 													}
 												}}
-												options={self ? ["编辑", "删除专题", "分享专题"] : ["分享专题"]}
+												options={
+													self
+														? ["编辑", "删除专题", "分享专题"]
+														: ["分享专题"]
+												}
 											/>
 										</View>
 									}
@@ -106,15 +152,19 @@ class HomeScreen extends Component {
 								<FlatList
 									bounces={false}
 									scrollEventThrottle={16}
-									ListHeaderComponent={() => this._renderListHeader(category)}
+									ListHeaderComponent={() =>
+										this._renderListHeader(category)}
 									data={articles}
 									refreshing={loading}
 									onRefresh={() => {
 										fetch();
 									}}
 									onScroll={this.onScroll}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item }) => <NoteItem post={item} />}
+									keyExtractor={(item, index) =>
+										index.toString()}
+									renderItem={({ item }) => (
+										<NoteItem post={item} />
+									)}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
 										if (articles) {
@@ -122,16 +172,34 @@ class HomeScreen extends Component {
 												variables: {
 													offset: articles.length
 												},
-												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+												updateQuery: (
+													prev,
+													{ fetchMoreResult }
+												) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.articles &&
+															fetchMoreResult
+																.articles
+																.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
 														return prev;
 													}
-													return Object.assign({}, prev, {
-														articles: [...prev.articles, ...fetchMoreResult.articles]
-													});
+													return Object.assign(
+														{},
+														prev,
+														{
+															articles: [
+																...prev.articles,
+																...fetchMoreResult.articles
+															]
+														}
+													);
 												}
 											});
 										} else {
@@ -142,22 +210,41 @@ class HomeScreen extends Component {
 									}}
 									ListEmptyComponent={() => <BlankContent />}
 									ListFooterComponent={() => {
-										if (articles.length < 1) return <View />;
+										if (articles.length < 1)
+											return <View />;
 										return (
-											<View style={{ paddingBottom: 25, backgroundColor: "#fff" }}>
-												{fetchingMore ? <LoadingMore /> : <ContentEnd />}
+											<View
+												style={{
+													paddingBottom: 25,
+													backgroundColor: "#fff"
+												}}
+											>
+												{fetchingMore ? (
+													<LoadingMore />
+												) : (
+													<ContentEnd />
+												)}
 											</View>
 										);
 									}}
 								/>
-								<Animated.View style={[styles.slideSite, { right: offset }]}>
+								<Animated.View
+									style={[
+										styles.slideSite,
+										{ right: offset }
+									]}
+								>
 									<SlideWrite navigation={navigation} />
 								</Animated.View>
 							</View>
 						);
 					}}
 				</Query>
-				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
+				<ShareModal
+					plain
+					visible={modalVisible}
+					toggleVisible={this.toggleModalVisible}
+				/>
 			</Screen>
 		);
 	}
@@ -199,7 +286,11 @@ class HomeScreen extends Component {
 						triggerComponent={
 							<View style={styles.ranking}>
 								<Text style={styles.filterText}>排序</Text>
-								<Iconfont name={"downward"} size={14} style={{ marginLeft: 5 }} />
+								<Iconfont
+									name={"downward"}
+									size={14}
+									style={{ marginLeft: 5 }}
+								/>
 							</View>
 						}
 						options={["发帖时间", "回复时间", "热门"]}

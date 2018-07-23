@@ -1,17 +1,45 @@
 import React, { Component } from "react";
-import { SectionList, FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+	SectionList,
+	FlatList,
+	Image,
+	StyleSheet,
+	Text,
+	View,
+	TouchableOpacity
+} from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { GiftedChat, Bubble, Send, Composer, InputToolbar } from "react-native-gifted-chat";
+import {
+	GiftedChat,
+	Bubble,
+	Send,
+	Composer,
+	InputToolbar
+} from "react-native-gifted-chat";
 import { HeaderLeft, HeaderRight, Header } from "../../components/Header";
 import { ReportModal } from "../../components/Modal";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import {
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../components/Pure";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
 import { Query, Mutation, withApollo, compose, graphql } from "react-apollo";
-import { chatsQuery, chatQuery, messagesQuery, sendMessageMutation } from "../../graphql/chat.graphql";
-import { blockUserMutation, blockedUsersQuery } from "../../graphql/user.graphql";
+import {
+	chatsQuery,
+	chatQuery,
+	messagesQuery,
+	sendMessageMutation
+} from "../../graphql/chat.graphql";
+import {
+	blockUserMutation,
+	blockedUsersQuery
+} from "../../graphql/user.graphql";
 
 class ChatScreen extends React.Component {
 	constructor(props) {
@@ -43,7 +71,10 @@ class ChatScreen extends React.Component {
 								routeName={chatWithUser.name}
 								rightComponent={
 									<HeaderRight
-										options={["举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
+										options={[
+											"举报用户",
+											isBlocked ? "移除黑名单" : "加入黑名单"
+										]}
 										selectHandler={index => {
 											if (index == 0) {
 												this.handleReportVisible();
@@ -71,16 +102,25 @@ class ChatScreen extends React.Component {
 					{chat ? (
 						this._renderMessagesQuery(chat)
 					) : (
-						<Query query={chatQuery} variables={{ with_id: withUser.id }}>
+						<Query
+							query={chatQuery}
+							variables={{ with_id: withUser.id }}
+						>
 							{({ loading, error, data }) => {
 								if (error) return <LoadingError />;
-								if (!(data && data.chat)) return <SpinnerLoading />;
+								if (!(data && data.chat))
+									return <SpinnerLoading />;
 								return this._renderMessagesQuery(data.chat);
 							}}
 						</Query>
 					)}
 				</View>
-				<ReportModal visible={reportVisible} handleVisible={this.handleReportVisible} type="user" report={chatWithUser} />
+				<ReportModal
+					visible={reportVisible}
+					handleVisible={this.handleReportVisible}
+					type="user"
+					report={chatWithUser}
+				/>
 			</Screen>
 		);
 	}
@@ -90,7 +130,16 @@ class ChatScreen extends React.Component {
 		let { user } = users;
 		return (
 			<Query query={messagesQuery} variables={{ chat_id: chat.id }}>
-				{({ loading, error, data, refetch, fetchMore, client, startPolling, stopPolling }) => {
+				{({
+					loading,
+					error,
+					data,
+					refetch,
+					fetchMore,
+					client,
+					startPolling,
+					stopPolling
+				}) => {
 					if (error) return <LoadingError />;
 					if (!(data && data.messages)) return <SpinnerLoading />;
 					//retech unreadsQuery ...
@@ -144,20 +193,35 @@ class ChatScreen extends React.Component {
 													id: 0,
 													time_ago: "正在发送...",
 													created_at: new Date(),
-													message: messageText + "...",
+													message:
+														messageText + "...",
 													user: user,
 													images: []
 												}
 											},
-											update: (cache, { data: { sendMessage } }) => {
-												const { messages } = cache.readQuery({
+											update: (
+												cache,
+												{ data: { sendMessage } }
+											) => {
+												const {
+													messages
+												} = cache.readQuery({
 													query: messagesQuery,
-													variables: { chat_id: chat.id }
+													variables: {
+														chat_id: chat.id
+													}
 												});
 												cache.writeQuery({
 													query: messagesQuery,
-													variables: { chat_id: chat.id },
-													data: { messages: [sendMessage, ...messages] }
+													variables: {
+														chat_id: chat.id
+													},
+													data: {
+														messages: [
+															sendMessage,
+															...messages
+														]
+													}
 												});
 											},
 											refetchQueries: result => {
@@ -166,33 +230,55 @@ class ChatScreen extends React.Component {
 										});
 									}}
 									renderLoadEarlier={() => {
-										// if (messages.length >= data.chats[0].count_messages)
-										//   return null;
-										return (
-											<TouchableOpacity
-												onPress={() => {
-													stopPolling();
-
-													//TODO:: when srcoll to bottom, need startPolling again ...
-
-													fetchMore({
-														variables: {
-															offset: messages.length
-														},
-														updateQuery: (prev, { fetchMoreResult }) => {
-															if (!fetchMoreResult) return prev;
-															return Object.assign({}, prev, {
-																messages: [...prev.messages, ...fetchMoreResult.messages]
+										if (messages.length > 9)
+											return (
+												<View
+													style={styles.loadEarlier}
+												>
+													<TouchableOpacity
+														onPress={() => {
+															stopPolling();
+															//TODO:: when srcoll to bottom, need startPolling again ...
+															fetchMore({
+																variables: {
+																	offset:
+																		messages.length
+																},
+																updateQuery: (
+																	prev,
+																	{
+																		fetchMoreResult
+																	}
+																) => {
+																	if (
+																		!fetchMoreResult
+																	)
+																		return prev;
+																	return Object.assign(
+																		{},
+																		prev,
+																		{
+																			messages: [
+																				...prev.messages,
+																				...fetchMoreResult.messages
+																			]
+																		}
+																	);
+																}
 															});
-														}
-													});
-												}}
-											>
-												<View style={{ alignItems: "center" }}>
-													<Text>查看更早的消息</Text>
+														}}
+													>
+														<View
+															style={{
+																alignItems:
+																	"center"
+															}}
+														>
+															<Text>查看更早的消息</Text>
+														</View>
+													</TouchableOpacity>
 												</View>
-											</TouchableOpacity>
-										);
+											);
 									}}
 									onPressAvatar={user => {
 										//默认传递过来的currentUser，id字段名字不同
@@ -237,7 +323,9 @@ class ChatScreen extends React.Component {
 
 	renderInputToolbar(props) {
 		//Add the extra styles via containerStyle
-		return <InputToolbar {...props} primaryStyle={{ alignItems: "center" }} />;
+		return (
+			<InputToolbar {...props} primaryStyle={{ alignItems: "center" }} />
+		);
 	}
 
 	renderBubble(props) {
@@ -278,9 +366,15 @@ class ChatScreen extends React.Component {
 
 	renderSend(props) {
 		return (
-			<Send {...props} containerStyle={{ justifyContent: "center" }} alwaysShowSend>
+			<Send
+				{...props}
+				containerStyle={{ justifyContent: "center" }}
+				alwaysShowSend
+			>
 				<View style={styles.sendButton}>
-					<Text style={{ color: Colors.themeColor, fontSize: 17 }}>发送</Text>
+					<Text style={{ color: Colors.themeColor, fontSize: 17 }}>
+						发送
+					</Text>
 				</View>
 			</Send>
 		);
@@ -288,7 +382,9 @@ class ChatScreen extends React.Component {
 
 	//举报模态框开关
 	handleReportVisible() {
-		this.setState(prevState => ({ reportVisible: !prevState.reportVisible }));
+		this.setState(prevState => ({
+			reportVisible: !prevState.reportVisible
+		}));
 	}
 }
 
@@ -302,7 +398,14 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		width: 60,
 		marginHorizontal: 5
+	},
+	loadEarlier: {
+		marginVertical: 20,
+		flexDirection: "row",
+		justifyContent: "center"
 	}
 });
 
-export default connect(store => ({ users: store.users }))(withApollo(ChatScreen));
+export default connect(store => ({ users: store.users }))(
+	withApollo(ChatScreen)
+);

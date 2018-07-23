@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  FlatList,
+  Modal,
+  StatusBar
+} from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import HTML from "react-native-render-html";
 
@@ -15,7 +26,11 @@ import Comments from "./comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
 import AuthorCard from "../../components/Card/AuthorCard";
 import { RewardModal, ShareModal } from "../../components/Modal";
-import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import {
+  LoadingError,
+  SpinnerLoading,
+  BlankContent
+} from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -78,7 +93,14 @@ class DetailScreen extends Component {
   }
 
   render() {
-    let { showWrite, rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible, initImage } = this.state;
+    let {
+      showWrite,
+      rewardVisible,
+      addCommentVisible,
+      shareModalVisible,
+      imageViewerVisible,
+      initImage
+    } = this.state;
     let { navigation, login } = this.props;
     const article = navigation.getParam("article", {});
     return (
@@ -93,8 +115,16 @@ class DetailScreen extends Component {
             this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
-                <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
-                <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} login={login} />
+                <StatusBar
+                  backgroundColor={imageViewerVisible ? "#000" : "#fff"}
+                  barStyle={"dark-content"}
+                />
+                <ArticleDetailHeader
+                  navigation={navigation}
+                  article={article}
+                  share={this.handleSlideShareMenu}
+                  login={login}
+                />
                 <ScrollView
                   style={styles.container}
                   onScroll={this._onScroll.bind(this)}
@@ -110,12 +140,31 @@ class DetailScreen extends Component {
                       </Text>
                     </View>
                     <View style={{ marginVertical: 20 }}>
-                      <UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={article.user} plain />
+                      <UserGroup
+                        navigation={navigation}
+                        customStyle={{ avatar: 34, nameSize: 15 }}
+                        user={article.user}
+                        plain
+                      />
                     </View>
                     <View style={styles.articleInfo}>
-                      <Text style={styles.articleInfoText}>{article.time_ago + " · 字数" + article.count_words + " · 阅读" + article.hits + "  "}</Text>
-                      {article.collection && <Iconfont name={"collection-two"} style={styles.articleInfoText} />}
-                      <Text style={styles.articleInfoText}>{article.collection && article.collection.name}</Text>
+                      <Text style={styles.articleInfoText}>
+                        {article.time_ago +
+                          " · 字数" +
+                          article.count_words +
+                          " · 阅读" +
+                          article.hits +
+                          "  "}
+                      </Text>
+                      {article.collection && (
+                        <Iconfont
+                          name={"collection-two"}
+                          style={styles.articleInfoText}
+                        />
+                      )}
+                      <Text style={styles.articleInfoText}>
+                        {article.collection && article.collection.name}
+                      </Text>
                     </View>
                   </View>
                   <View style={{ paddingHorizontal: 15 }}>
@@ -132,11 +181,16 @@ class DetailScreen extends Component {
                           let index = this.imgKey;
                           this.imgKey++;
                           // 解析\"xxx\"格式的宽高属性
-                          let img_width = parseInt(htmlAttribs.width.replace('\\"', ""));
-                          let img_height = parseInt(htmlAttribs.height.replace('\\"', ""));
+                          let img_width = htmlAttribs.width
+                            ? parseInt(htmlAttribs.width.replace('\\"', ""))
+                            : htmlAttribs.width;
+                          let img_height = htmlAttribs.height
+                            ? parseInt(htmlAttribs.height.replace('\\"', ""))
+                            : htmlAttribs.height;
                           img_height = IMG_WIDTH * img_height / img_width;
                           return (
                             <TouchableOpacity
+                              activeOpacity={1}
                               key={index}
                               onPress={() => {
                                 this.setState({
@@ -167,9 +221,20 @@ class DetailScreen extends Component {
                     //赞赏面板
                     //作者卡片
                   }
-                  <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
-                    <BeSelectedCategory categories={article.categories} navigation={navigation} />
-                    <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
+                  <View
+                    style={styles.showFoot}
+                    onLayout={this._footOnLayout.bind(this)}
+                  >
+                    <BeSelectedCategory
+                      categories={article.categories}
+                      navigation={navigation}
+                    />
+                    <MetaBottom
+                      login={login}
+                      navigation={navigation}
+                      article={article}
+                      handleSlideShareMenu={this.handleSlideShareMenu}
+                    />
                     <RewardPanel
                       navigation={navigation}
                       rewardUsers={article.tipedUsers}
@@ -178,7 +243,9 @@ class DetailScreen extends Component {
                     />
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
-                  <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
+                  <View
+                    style={{ height: 8, backgroundColor: Colors.lightGray }}
+                  />
                   <Comments
                     addCommentVisible={addCommentVisible}
                     article={article}
@@ -201,13 +268,21 @@ class DetailScreen extends Component {
                   login={login}
                 />
                 {/*赞赏模态框**/}
-                <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={article} />
+                <RewardModal
+                  visible={rewardVisible}
+                  handleVisible={this.handleRewardVisible}
+                  article={article}
+                />
               </View>
             );
           }}
         </Query>
         {/*点击图片预览**/}
-        <Modal visible={imageViewerVisible} transparent={true} onRequestClose={() => this.setState({ imageViewerVisible: false })}>
+        <Modal
+          visible={imageViewerVisible}
+          transparent={true}
+          onRequestClose={() => this.setState({ imageViewerVisible: false })}
+        >
           <ImageViewer
             onClick={() => this.setState({ imageViewerVisible: false })}
             onSwipeDown={() => this.setState({ imageViewerVisible: false })}
@@ -215,7 +290,10 @@ class DetailScreen extends Component {
             index={initImage}
           />
         </Modal>
-        <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
+        <ShareModal
+          visible={shareModalVisible}
+          toggleVisible={this.handleSlideShareMenu}
+        />
       </Screen>
     );
   }
@@ -284,7 +362,9 @@ class DetailScreen extends Component {
 function renderNode(node, index, siblings, parent, defaultRenderer) {
   if (node.name == "img") {
     const { src } = node.attribs;
-    return <Image key={index} source={{ uri: src }} style={{ width: width * 3 }} />;
+    return (
+      <Image key={index} source={{ uri: src }} style={{ width: width * 3 }} />
+    );
   }
 }
 

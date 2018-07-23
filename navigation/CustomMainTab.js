@@ -1,5 +1,15 @@
 import React from "react";
-import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button, FlatList } from "react-native";
+import {
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Button,
+    FlatList
+} from "react-native";
 
 import Color from "../constants/Colors";
 import { Iconfont } from "../utils/Fonts";
@@ -11,17 +21,27 @@ import { Query, Mutation, withApollo, compose } from "react-apollo";
 
 class CustomMainTab extends React.Component {
     renderItem = (route, index) => {
-        const { navigation, jumpToIndex, getOnPress, getLabel, client } = this.props;
+        const {
+            navigation,
+            jumpToIndex,
+            getOnPress,
+            getLabel,
+            client
+        } = this.props;
         const focused = index === navigation.state.index;
-        const color = focused ? this.props.activeTintColor : this.props.inactiveTintColor;
+        const color = focused
+            ? this.props.activeTintColor
+            : this.props.inactiveTintColor;
         const scene = {
             index: index,
             focused: focused,
             route: route,
             tintColor: color
         };
+        //react-navigation => tabview传递的props
         const { routes } = navigation.state;
         const previousScene = routes[navigation.state.index];
+        // 获取传递的tabBarOnPress
         const onPress = getOnPress(previousScene, scene);
         return (
             <TouchableOpacity
@@ -40,7 +60,9 @@ class CustomMainTab extends React.Component {
             >
                 <View style={styles.tabItem}>
                     {this.props.renderIcon(scene)}
-                    <Text style={{ fontSize: 11, color }}>{getLabel(scene)}</Text>
+                    <Text style={{ fontSize: 11, color }}>
+                        {getLabel(scene)}
+                    </Text>
                 </View>
                 {getLabel(scene) == "通知" && (
                     <View style={{ position: "absolute", right: 0, top: 2 }}>
@@ -60,7 +82,11 @@ class CustomMainTab extends React.Component {
                 onPress={() => navigation.navigate(login ? "创作" : "创作封面")}
             >
                 <View>
-                    <Iconfont name={"fill-add"} size={38} color={Color.themeColor} />
+                    <Iconfont
+                        name={"fill-add"}
+                        size={38}
+                        color={Color.themeColor}
+                    />
                 </View>
             </TouchableOpacity>
         );
@@ -70,7 +96,9 @@ class CustomMainTab extends React.Component {
         const { navigation } = this.props;
         const { routes } = navigation.state;
         const creationItem = this.renderCreation();
-        let routerItem = routes && routes.map((route, index) => this.renderItem(route, index));
+        let routerItem =
+            routes &&
+            routes.map((route, index) => this.renderItem(route, index));
         routerItem.splice(2, 0, creationItem);
         return <View style={styles.tab}>{routerItem}</View>;
     }
@@ -95,4 +123,10 @@ const styles = {
     }
 };
 
-export default compose(withApollo, connect(store => ({ login: store.users.login, unreads: store.users.count_unreads })))(CustomMainTab);
+export default compose(
+    withApollo,
+    connect(store => ({
+        login: store.users.login,
+        unreads: store.users.count_unreads
+    }))
+)(CustomMainTab);

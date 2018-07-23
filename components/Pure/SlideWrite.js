@@ -9,8 +9,13 @@ class SlideWrite extends Component {
 	render() {
 		let { style = {}, size = 30, color = "#fff", navigation } = this.props;
 		return (
-			<TouchableWithoutFeedback onPress={() => navigation.dispatch(navigationAction({ routeName: "发布动态" }))}>
-				<View style={[styles.write, style]}>
+			<TouchableWithoutFeedback
+				onPress={() =>
+					navigation.dispatch(
+						navigationAction({ routeName: "发布动态" })
+					)}
+			>
+				<View style={[styles.write, style]} elevation={5}>
 					<Iconfont name="write" size={25} color={color} />
 				</View>
 			</TouchableWithoutFeedback>
