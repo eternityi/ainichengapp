@@ -19,10 +19,6 @@ query commentsQuery($article_id: Int, $comment_id: Int, $offset: Int, $filter: C
         id
         name
       }
-      atUser {
-        id
-        name
-      }
       time_ago
     }
   }
@@ -43,18 +39,14 @@ query replyCommentsQuery($comment_id: Int!) {
 
 # commentable_id 评论所属的article_id
 # comment_id 回复（当前comment的id）
-mutation addCommentMutation($commentable_id: Int!, $body: String!, $at_uid: Int, $comment_id: Int) {
-  addComment(commentable_id: $commentable_id, body: $body, at_uid: $at_uid, comment_id: $comment_id) {
+mutation addCommentMutation($commentable_id: Int!, $body: String!, $comment_id: Int) {
+  addComment(commentable_id: $commentable_id, body: $body, comment_id: $comment_id) {
     id
     body
     user {
       id
       name
       avatar
-    }
-    atUser {
-      id
-      name
     }
     time_ago
   }

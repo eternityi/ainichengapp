@@ -18,6 +18,7 @@ import Waiting from "./Waiting";
 import VideoCover from "./VideoCover";
 import VideoMark from "./VideoMark";
 import SlideWrite from "./SlideWrite";
+import SubComment from "./SubComment";
 
 // export { SearchBar };
 // export { ContentEnd };
@@ -43,5 +44,6 @@ export {
 	Waiting,
 	VideoCover,
 	VideoMark,
-	SlideWrite
+	SlideWrite,
+	SubComment
 };

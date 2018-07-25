@@ -11,7 +11,6 @@ import Toast from "react-native-root-toast";
 
 import { connect } from "react-redux";
 import actions from "../../../store/actions";
-// import { commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
 import { updateUserPasswordMutation } from "../../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
 

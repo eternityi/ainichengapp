@@ -180,13 +180,12 @@ class DetailScreen extends Component {
                           // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
-                          // 解析\"xxx\"格式的宽高属性
                           let img_width = htmlAttribs.width
-                            ? parseInt(htmlAttribs.width.replace('\\"', ""))
-                            : htmlAttribs.width;
+                            ? parseInt(htmlAttribs.width)
+                            : IMG_WIDTH;
                           let img_height = htmlAttribs.height
-                            ? parseInt(htmlAttribs.height.replace('\\"', ""))
-                            : htmlAttribs.height;
+                            ? parseInt(htmlAttribs.height)
+                            : IMG_WIDTH;
                           img_height = IMG_WIDTH * img_height / img_width;
                           return (
                             <TouchableOpacity

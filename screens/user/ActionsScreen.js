@@ -7,7 +7,7 @@ import { Iconfont } from "../../utils/Fonts";
 import { navigationAction } from "../../constants/Methods";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
-import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, TextContainer } from "../../components/Pure";
+import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, TextContainer, SubComment } from "../../components/Pure";
 import { Header } from "../../components/Header";
 
 import { userActionsQuery } from "../../graphql/user.graphql";
@@ -316,9 +316,7 @@ class ActionsScreen extends Component {
 		return (
 			<TouchableOpacity onPress={() => navigation.dispatch(navigationAction({ routeName: "评论详情", params: { comment } }))}>
 				<TextContainer customStyle={{ marginTop: 5 }}>
-					<Text numberOfLines={3} style={styles.tintText}>
-						{comment.body}
-					</Text>
+					<SubComment numberOfLines={3} style={styles.tintText} body={comment.body} />
 				</TextContainer>
 			</TouchableOpacity>
 		);
@@ -402,11 +400,11 @@ const styles = StyleSheet.create({
 		color: Colors.primaryFontColor
 	},
 	linkText: {
-		color: Colors.linkColor
+		color: Colors.linkColor,
+		lineHeight: 20
 	},
 	tintText: {
 		fontSize: 14,
-		lineHeight: 20,
 		color: Colors.tintFontColor
 	}
 });

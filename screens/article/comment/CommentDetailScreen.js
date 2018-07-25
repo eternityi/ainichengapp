@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	Text,
-	ScrollView,
-	TouchableOpacity,
-	Dimensions,
-	KeyboardAvoidingView,
-	Platform
-} from "react-native";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Screen from "../../Screen";
@@ -95,8 +86,7 @@ class CommentDetailScreen extends Component {
 												variables: {
 													commentable_id: comment.commentable_id,
 													body: this.body,
-													comment_id: replyingComment.id,
-													at_uid: replyingComment.user.id
+													comment_id: replyingComment.id
 												},
 												refetchQueries: ({ replyComment }) => [
 													{

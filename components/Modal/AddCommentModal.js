@@ -15,7 +15,6 @@ const { width } = Dimensions.get("window");
 class AddCommentModal extends Component {
 	constructor(props) {
 		super(props);
-		this.atUser = null;
 		this.body = "";
 		this.toggleVisible = this.toggleVisible.bind(this);
 		this.prevReplyingComment = {};
@@ -86,8 +85,7 @@ class AddCommentModal extends Component {
 												variables: {
 													commentable_id: article.id,
 													body: this.body,
-													comment_id: replyingComment ? replyingComment.id : "",
-													at_uid: this.atUser ? this.atUser.id : ""
+													comment_id: replyingComment ? replyingComment.id : ""
 												},
 												refetchQueries: addComment => [
 													{
@@ -122,8 +120,7 @@ class AddCommentModal extends Component {
 								toggleVisible={this.toggleVisible}
 								handleSelectedUser={user => {
 									this.toggleVisible();
-									this.atUser = user;
-									this.changeBody(this.body + `@${this.atUser.name} `);
+									this.changeBody(this.body + `@${user.name} `);
 								}}
 							/>
 						</BasicModal>
@@ -144,11 +141,12 @@ class AddCommentModal extends Component {
 
 	_inputFocus() {
 		let { replyingComment } = this.props;
+		if (replyingComment && !replyingComment.reply) {
+			return;
+		}
 		if (replyingComment && this.prevReplyingComment.id !== replyingComment.id) {
-			this.atUser = replyingComment.user;
 			this.changeBody(`@${replyingComment.user.name} `);
 		} else if (replyingComment && this.body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-			this.atUser = replyingComment.user;
 			this.changeBody(`@${replyingComment.user.name} `);
 		}
 	}

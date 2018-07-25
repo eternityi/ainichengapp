@@ -509,11 +509,6 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
                 name
                 avatar
             }
-            atUser {
-                id
-                name
-                avatar
-            }
             article {
                 id
                 type

@@ -7,7 +7,6 @@ import SettingType from "../../components/Setting/SettingType";
 import SettingItem from "../../components/Setting/SettingItem";
 import Screen from "../Screen";
 
-// import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
 import { Query, Mutation } from "react-apollo";
 
 class SettingScreen extends Component {

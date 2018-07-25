@@ -114,7 +114,7 @@ class CommentsScreen extends Component {
 						style={styles.reply}
 						onPress={() => {
 							this.commentedArticle = notification.article;
-							this.replyingComment = { ...notification.comment, ...notification.user };
+							this.replyingComment = { ...notification.comment, ...notification.user, reply: true };
 							this.setState(prevState => ({
 								replyCommentVisible: !prevState.replyCommentVisible
 							}));

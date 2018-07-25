@@ -3,8 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList, Dimensions }
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 
-import Avatar from "../../../components/Pure/Avatar";
-import Dashed from "../../../components/Pure/Dashed";
+import { Avatar, Dashed, SubComment } from "../../../components/Pure";
 import { OperationModal, ReportModal } from "../../../components/Modal";
 
 import { Query, Mutation } from "react-apollo";
@@ -20,20 +19,19 @@ class CommentItem extends Component {
 		this._renderSubCommentItem = this._renderSubCommentItem.bind(this);
 		this.handleOperationModal = this.handleOperationModal.bind(this);
 		this.handleReportModal = this.handleReportModal.bind(this);
-
+		this.subComment = null;
 		this.state = {
 			liked: props.comment.liked,
 			likes: props.comment.likes,
 			operationModalVisible: false,
-			reportModalVisible: false,
-			subComment: null
+			reportModalVisible: false
 		};
 	}
 
 	render() {
 		//detail决定评论是否显示详细内容
 		const { detail = false, comment, toggleReplyComment, navigation, login, toggleVisible } = this.props;
-		const { liked, likes, operationModalVisible, reportModalVisible, subComment } = this.state;
+		const { liked, likes, operationModalVisible, reportModalVisible } = this.state;
 		// 如果不是详细模式就只取前三条子评论
 		let replyComments = detail ? comment.replyComments : comment.replyComments.slice(0, 3);
 		return (
@@ -106,11 +104,11 @@ class CommentItem extends Component {
 					<TouchableOpacity
 						style={styles.commentContent}
 						onPress={() => {
-							this.setState({ subComment: comment });
+							this.subComment = comment;
 							this.handleOperationModal();
 						}}
 					>
-						<Text style={styles.commentBody}>{comment.body}</Text>
+						<SubComment style={styles.commentBody} body={comment.body} />
 					</TouchableOpacity>
 				</View>
 				{comment.replyComments && comment.replyComments.length > 0 && this._renderReplyComments(replyComments)}
@@ -122,7 +120,7 @@ class CommentItem extends Component {
 					handleOperation={index => {
 						switch (index) {
 							case 0:
-								toggleReplyComment(subComment);
+								toggleReplyComment({ ...this.subComment, commentable_id: comment.commentable_id, id: comment.id, reply: true });
 								this.handleOperationModal();
 								break;
 							case 1:
@@ -151,7 +149,10 @@ class CommentItem extends Component {
 				{!detail &&
 					comment.replyComments.length > 3 && (
 						<TouchableOpacity
-							style={{ flexDirection: "row", alignItems: "center" }}
+							style={{
+								flexDirection: "row",
+								alignItems: "center"
+							}}
 							onPress={() => {
 								//关闭评论列表模态框
 								if (toggleVisible) {
@@ -175,38 +176,27 @@ class CommentItem extends Component {
 		return (
 			<TouchableOpacity
 				onPress={() => {
-					this.setState({ subComment: reply });
+					this.subComment = reply;
 					this.handleOperationModal();
 				}}
 			>
 				<View style={styles.subCommentItem}>
-					<Text numberOfLines={3} style={{ fontSize: 15, color: Colors.primaryFontColor }}>
-						<Text
-							style={{ color: Colors.linkColor, lineHeight: 20 }}
-							onPress={() =>
-								navigation.navigate("用户详情", {
-									user: reply.user
-								})}
-						>
-							{reply.user.name}
-						</Text>:
-						{reply.atUser && (
+					<SubComment
+						spokesperson={
 							<Text
-								style={{
-									color: Colors.linkColor,
-									lineHeight: 20
-								}}
+								style={styles.linkText}
 								onPress={() =>
 									navigation.navigate("用户详情", {
-										user: reply.atUser
+										user: reply.user
 									})}
 							>
-								{" "}
-								@{reply.atUser.name}
+								{reply.user.name}
 							</Text>
-						)}
-						<Text style={{ lineHeight: 20 }}> {reply.body}</Text>
-					</Text>
+						}
+						numberOfLines={3}
+						style={styles.commentText}
+						body={reply.body}
+					/>
 				</View>
 			</TouchableOpacity>
 		);
@@ -277,6 +267,10 @@ const styles = StyleSheet.create({
 	unfoldMore: {
 		fontSize: 15,
 		color: Colors.linkColor
+	},
+	commentText: {
+		color: Colors.primaryFontColor,
+		fontSize: 15
 	}
 });
 

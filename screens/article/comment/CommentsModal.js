@@ -118,7 +118,6 @@ class CommentsModal extends Component {
 																			commentable_id: article.id,
 																			body: this.body,
 																			comment_id: replyingComment ? replyingComment.id : "",
-																			at_uid: replyingComment ? replyingComment.user.id : ""
 																		},
 																		refetchQueries: addComment => [
 																			{

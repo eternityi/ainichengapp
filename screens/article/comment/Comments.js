@@ -97,7 +97,12 @@ class Comments extends Component {
                   />
                 </View>
                 {comments.length < 1 ? (
-                  <Diving customStyle={{ paddingVertical: 40, backgroundColor: Colors.skinColor }}>
+                  <Diving
+                    customStyle={{
+                      paddingVertical: 40,
+                      backgroundColor: Colors.skinColor
+                    }}
+                  >
                     {onlyAuthor ? (
                       <Text style={styles.divingFont}>作者还没有发表评论哦~</Text>
                     ) : (
@@ -127,7 +132,7 @@ class Comments extends Component {
                         );
                       })}
                     </View>
-                    {article.count_replies > 3 ? (
+                    {comments.length > 3 ? (
                       <TouchableOpacity style={styles.loadMore} onPress={this.toggleCommentsVisible}>
                         <Text style={{ fontSize: 16, color: Colors.linkColor }}>查看更多评论</Text>
                         <Iconfont name={"right"} size={16} color={Colors.linkColor} />
@@ -173,11 +178,15 @@ class Comments extends Component {
   }
 
   toggleCommentsVisible() {
-    this.setState(prevState => ({ commentsVisible: !prevState.commentsVisible }));
+    this.setState(prevState => ({
+      commentsVisible: !prevState.commentsVisible
+    }));
   }
 
   toggleReplyCommentVisible() {
-    this.setState(prevState => ({ replyCommentVisible: !prevState.replyCommentVisible }));
+    this.setState(prevState => ({
+      replyCommentVisible: !prevState.replyCommentVisible
+    }));
   }
 }
 
