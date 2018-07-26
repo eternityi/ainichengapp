@@ -11,8 +11,7 @@ import { recommendAuthors } from "./graphql/user.graphql";
 import { unreadsQuery } from "./graphql/notification.graphql";
 import { chatsQuery } from "./graphql/chat.graphql";
 import { recommendArticlesQuery, topArticleWithImagesQuery, hotArticlesQuery } from "./graphql/article.graphql";
-import { topCategoriesQuery } from "./graphql/category.graphql";
-import { userFollowedCategoriesQuery } from "./graphql/user.graphql";
+import { topCategoriesQuery, visitCategoryQuery } from "./graphql/category.graphql";
 
 class ApolloApp extends Component {
 	_makeClient(user) {
@@ -44,15 +43,13 @@ class ApolloApp extends Component {
 			query({ query: topCategoriesQuery })
 		];
 		if (user.token) {
-			promises.concat([
-				query({ query: unreadsQuery }),
-				query({ query: chatsQuery }),
-				query({ query: userFollowedCategoriesQuery, variables: { user_id: user.id } })
-			]);
+			promises.concat([query({ query: unreadsQuery }), query({ query: chatsQuery }), query({ query: visitCategoryQuery })]);
 		}
 		Promise.all(promises)
 			.then(fulfilled => {
-				this.props.onReady();
+				this.promiseTimer = setTimeout(() => {
+					this.props.onReady();
+				}, 1000);
 			})
 			.catch(rejected => {
 				return null;
@@ -67,6 +64,7 @@ class ApolloApp extends Component {
 
 	componentWillUnmount() {
 		this.timer && clearTimeout(this.timer);
+		this.promiseTimer && clearTimeout(this.promiseTimer);
 	}
 
 	render() {
