@@ -101,7 +101,6 @@ const official_categories = [
 
 class OfficialCategories extends React.Component {
 	render() {
-		console.log("render");
 		return (
 			<View style={styles.officialWrap}>
 				<View style={styles.officialList}>

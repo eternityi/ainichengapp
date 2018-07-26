@@ -34,7 +34,6 @@ class SearchResult extends Component {
 	render() {
 		let { order, fetchingMore } = this.state;
 		let { keywords, navigation } = this.props;
-		console.log("tesrendert");
 		return (
 			<View style={styles.container}>
 				<Query query={SearchResaultQueries} variables={{ keyword: keywords, order: order }}>

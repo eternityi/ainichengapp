@@ -6,38 +6,97 @@ import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { Avatar } from "../../components/Pure";
 import { userFollowedCategoriesQuery } from "../../graphql/user.graphql";
+import { visitCategoryQuery, deleteVisitMutation } from "../../graphql/category.graphql";
+
 import { connect } from "react-redux";
-import { Query, compose, graphql } from "react-apollo";
+import { Query, compose, graphql, withApollo } from "react-apollo";
 
 class ListHeader extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			deleteVisible: false,
+			privacy: false
+		};
+	}
+
+	componentDidMount() {
+		let { navigation } = this.props;
+		this.willBlurSubscription = navigation.addListener("willBlur", payload => {
+			this.setState({ deleteVisible: false });
+		});
+	}
+
+	componentWillUnmount() {
+		this.willBlurSubscription.remove();
+	}
+
 	render() {
+		let { privacy } = this.state;
 		return (
-			<View style={styles.officialColumnWarp}>
-				<View style={{ padding: 15 }}>
-					<Text style={styles.tintText}>最近逛的专题</Text>
-				</View>
-				<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-					{this._renderContent()}
-					{this._renderFooter()}
-				</ScrollView>
-			</View>
+			<Query query={visitCategoryQuery} fetchPolicy="network-only">
+				{({ loading, error, data, refetch, fetchMore }) => {
+					if (!(data && data.visits && data.visits.length > 0)) return null;
+					return (
+						<View style={styles.officialColumnWarp}>
+							<View style={styles.header}>
+								<View>
+									<Text style={styles.tintText}>最近逛的专题</Text>
+								</View>
+								<View>{this._headerStatus()}</View>
+							</View>
+							<ScrollView
+								horizontal={true}
+								showsHorizontalScrollIndicator={false}
+								style={privacy ? { display: "none" } : { marginBottom: 10 }}
+							>
+								{this._renderContent(data.visits)}
+							</ScrollView>
+						</View>
+					);
+				}}
+			</Query>
 		);
 	}
 
-	_renderContent = () => {
-		let { data } = this.props;
-		if (!(data && data.categories && data.categories.length > 0)) {
-			return null;
-		} else {
-			return data.categories.map((item, index) => {
-				return this._renderItem({ item, index });
-			});
+	_headerStatus = () => {
+		let { deleteVisible, privacy } = this.state;
+		switch (true) {
+			case deleteVisible:
+				return (
+					<TouchableOpacity style={styles.headerRight} onPress={() => this.setState(prevState => ({ deleteVisible: false }))}>
+						<Text style={styles.linkText}>完成</Text>
+					</TouchableOpacity>
+				);
+				break;
+			case privacy:
+				return (
+					<TouchableOpacity style={styles.headerRight} onPress={() => this.setState(prevState => ({ privacy: !prevState.privacy }))}>
+						<Iconfont name="privacy" size={16} color={Colors.tintFontColor} />
+					</TouchableOpacity>
+				);
+				break;
+			default:
+				return (
+					<TouchableOpacity style={styles.headerRight} onPress={() => this.setState(prevState => ({ privacy: !prevState.privacy }))}>
+						<Iconfont name="browse-outline" size={15} color={Colors.tintFontColor} />
+					</TouchableOpacity>
+				);
 		}
 	};
 
+	_renderContent = visits => {
+		return visits.map((item, index) => {
+			return this._renderItem({ item, index });
+		});
+	};
+
 	_renderItem = ({ item, index }) => {
+		let { deleteVisible } = this.state;
 		const { navigation } = this.props;
-		let { logo, name } = item;
+		let category = item.visited;
+		let { logo, title } = category;
 		return (
 			<TouchableOpacity
 				key={index.toString()}
@@ -45,47 +104,103 @@ class ListHeader extends React.Component {
 				onPress={() => {
 					const navigateAction = NavigationActions.navigate({
 						routeName: "专题详情",
-						params: { category: item }
+						params: { category }
 					});
 					navigation.dispatch(navigateAction);
 				}}
+				onLongPress={() => this.setState({ deleteVisible: true })}
 			>
 				<Avatar uri={logo} size={50} type="category" />
-				<View>
+				<View style={{ marginTop: 5, marginHorizontal: 5 }}>
 					<Text style={styles.darkText} numberOfLines={1}>
-						{name}
+						{title}
 					</Text>
 				</View>
+				{deleteVisible && (
+					<TouchableOpacity style={styles.deleteBox} onPress={() => this.deleteVisitHandler(item)}>
+						<View style={styles.deleteBadge}>
+							<View style={styles.deleteBadgeLine} />
+						</View>
+					</TouchableOpacity>
+				)}
 			</TouchableOpacity>
 		);
 	};
 
-	_renderFooter = () => {
-		const { navigation } = this.props;
-		return (
-			<TouchableOpacity style={styles.lastChild} onPress={() => navigation.navigate("推荐专题")}>
-				<View style={styles.addMore}>
-					<Iconfont name="add" size={30} color={Colors.tintFontColor} />
-				</View>
-				<View>
-					<Text style={styles.darkText}>发现更多</Text>
-				</View>
-			</TouchableOpacity>
-		);
+	deleteVisitHandler = item => {
+		this.props.deleteVisit({
+			variables: {
+				id: item.id
+			},
+			refetchQueries: result => [
+				{
+					query: visitCategoryQuery
+				}
+			]
+		});
 	};
+
+	// _renderFooter = () => {
+	// 	const { navigation } = this.props;
+	// 	return (
+	// 		<TouchableOpacity style={styles.lastChild} onPress={() => navigation.navigate("推荐专题")}>
+	// 			<View style={styles.addMore}>
+	// 				<Iconfont name="add" size={30} color={Colors.tintFontColor} />
+	// 			</View>
+	// 			<View>
+	// 				<Text style={styles.darkText}>发现更多</Text>
+	// 			</View>
+	// 		</TouchableOpacity>
+	// 	);
+	// };
 }
 
 const styles = StyleSheet.create({
 	officialColumnWarp: {
-		paddingBottom: 15,
+		paddingLeft: 5,
 		borderBottomWidth: 6,
 		borderBottomColor: Colors.lightBorderColor
 	},
+	header: {
+		padding: 15,
+		paddingBottom: 10,
+		paddingLeft: 10,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center"
+	},
+	headerRight: {
+		paddingHorizontal: 5,
+		height: 20,
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	deleteBox: {
+		position: "absolute",
+		padding: 6,
+		right: -6,
+		top: -6
+	},
+	deleteBadge: {
+		width: 12,
+		height: 12,
+		borderRadius: 6,
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "#ff0000"
+	},
+	deleteBadgeLine: {
+		width: 8,
+		height: 1,
+		backgroundColor: "#fff"
+	},
 	category: {
-		width: 50,
-		height: 70,
-		marginLeft: 15,
-		justifyContent: "space-between"
+		width: 60,
+		paddingVertical: 5,
+		marginLeft: 5,
+		position: "relative",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	logo: {
 		width: 50,
@@ -114,16 +229,13 @@ const styles = StyleSheet.create({
 	tintText: {
 		fontSize: 13,
 		color: Colors.tintFontColor
+	},
+	linkText: {
+		fontSize: 13,
+		color: Colors.themeColor
 	}
 });
 
-export default compose(
-	connect(store => ({ id: store.users.user.id })),
-	graphql(userFollowedCategoriesQuery, {
-		options: props => ({
-			variables: {
-				user_id: props.id
-			}
-		})
-	})
-)(ListHeader);
+export default compose(withApollo, connect(store => ({ id: store.users.user.id })), graphql(deleteVisitMutation, { name: "deleteVisit" }))(
+	ListHeader
+);

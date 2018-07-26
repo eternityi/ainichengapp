@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions } from "react-native";
+import Toast from "react-native-root-toast";
+
 import BasicModal from "./BasicModal";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
@@ -105,6 +107,7 @@ class ReportModal extends Component {
 										break;
 								}
 								handleVisible();
+								this.toast();
 							}}
 							style={styles.modalOperation}
 						>
@@ -114,6 +117,23 @@ class ReportModal extends Component {
 				</View>
 			</BasicModal>
 		);
+	}
+
+	toast() {
+		setTimeout(function() {
+			let toast = Toast.show("举报成功，感谢您的守护", {
+				duration: Toast.durations.LONG,
+				position: 70,
+				shadow: true,
+				animation: true,
+				hideOnPress: true,
+				delay: 100,
+				backgroundColor: Colors.nightColor
+			});
+			setTimeout(function() {
+				Toast.hide(toast);
+			}, 2000);
+		}, 1000);
 	}
 }
 

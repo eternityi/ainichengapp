@@ -1,45 +1,17 @@
 import React, { Component } from "react";
-import {
-	SectionList,
-	FlatList,
-	Image,
-	StyleSheet,
-	Text,
-	View,
-	TouchableOpacity
-} from "react-native";
+import { SectionList, FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import {
-	GiftedChat,
-	Bubble,
-	Send,
-	Composer,
-	InputToolbar
-} from "react-native-gifted-chat";
+import { GiftedChat, Bubble, Send, Composer, InputToolbar } from "react-native-gifted-chat";
 import { HeaderLeft, HeaderRight, Header } from "../../components/Header";
 import { ReportModal } from "../../components/Modal";
-import {
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading,
-	BlankContent
-} from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import Screen from "../Screen";
 
 import { connect } from "react-redux";
 import { Query, Mutation, withApollo, compose, graphql } from "react-apollo";
-import {
-	chatsQuery,
-	chatQuery,
-	messagesQuery,
-	sendMessageMutation
-} from "../../graphql/chat.graphql";
-import {
-	blockUserMutation,
-	blockedUsersQuery
-} from "../../graphql/user.graphql";
+import { chatsQuery, chatQuery, messagesQuery, sendMessageMutation } from "../../graphql/chat.graphql";
+import { blockUserMutation, blockedUsersQuery } from "../../graphql/user.graphql";
 
 class ChatScreen extends React.Component {
 	constructor(props) {
@@ -48,15 +20,16 @@ class ChatScreen extends React.Component {
 		this.renderInputToolbar = this.renderInputToolbar.bind(this);
 		this.renderComposer = this.renderComposer.bind(this);
 		this.renderSend = this.renderSend.bind(this);
+		this.messages = [];
 		this.state = {
-			messages: [],
 			reportVisible: false,
-			isBlocked: false
+			isBlocked: false,
+			end: false
 		};
 	}
 
 	render() {
-		let { messages, reportVisible, isBlocked } = this.state;
+		let { reportVisible, isBlocked } = this.state;
 		const { navigation } = this.props;
 		const { user } = this.props.users;
 		let { chat, withUser } = navigation.state.params;
@@ -71,10 +44,7 @@ class ChatScreen extends React.Component {
 								routeName={chatWithUser.name}
 								rightComponent={
 									<HeaderRight
-										options={[
-											"举报用户",
-											isBlocked ? "移除黑名单" : "加入黑名单"
-										]}
+										options={["举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
 										selectHandler={index => {
 											if (index == 0) {
 												this.handleReportVisible();
@@ -102,44 +72,27 @@ class ChatScreen extends React.Component {
 					{chat ? (
 						this._renderMessagesQuery(chat)
 					) : (
-						<Query
-							query={chatQuery}
-							variables={{ with_id: withUser.id }}
-						>
+						<Query query={chatQuery} variables={{ with_id: withUser.id }}>
 							{({ loading, error, data }) => {
 								if (error) return <LoadingError />;
-								if (!(data && data.chat))
-									return <SpinnerLoading />;
+								if (!(data && data.chat)) return <SpinnerLoading />;
 								return this._renderMessagesQuery(data.chat);
 							}}
 						</Query>
 					)}
 				</View>
-				<ReportModal
-					visible={reportVisible}
-					handleVisible={this.handleReportVisible}
-					type="user"
-					report={chatWithUser}
-				/>
+				<ReportModal visible={reportVisible} handleVisible={this.handleReportVisible} type="user" report={chatWithUser} />
 			</Screen>
 		);
 	}
 
 	_renderMessagesQuery(chat) {
+		let { end } = this.state;
 		const { navigation, users } = this.props;
 		let { user } = users;
 		return (
 			<Query query={messagesQuery} variables={{ chat_id: chat.id }}>
-				{({
-					loading,
-					error,
-					data,
-					refetch,
-					fetchMore,
-					client,
-					startPolling,
-					stopPolling
-				}) => {
+				{({ loading, error, data, refetch, fetchMore, client, startPolling, stopPolling }) => {
 					if (error) return <LoadingError />;
 					if (!(data && data.messages)) return <SpinnerLoading />;
 					//retech unreadsQuery ...
@@ -159,9 +112,29 @@ class ChatScreen extends React.Component {
 							}
 						};
 					});
-
+					// combine messages
+					// 因为startPolling会使Query每次重新请求，messages总是会得到最新的10个，使用一直都是渲染最新的10个
+					if (this.messages.length > 0) {
+						for (let i = 0; i < messages.length; i++) {
+							let shared = false;
+							for (let j = 0; j < this.messages.length; j++) {
+								if (this.messages[j]._id == messages[i]._id) {
+									shared = true;
+									break;
+								}
+							}
+							if (!shared) {
+								this.messages.push(messages[i]);
+								this.messages.sort(function(a, b) {
+									return b._id - a._id;
+								});
+							}
+						}
+					} else {
+						this.messages = messages;
+					}
+					this.messages = [...this.messages];
 					startPolling(1000);
-
 					return (
 						<Mutation mutation={sendMessageMutation}>
 							{sendMessage => (
@@ -175,10 +148,10 @@ class ChatScreen extends React.Component {
 									renderComposer={this.renderComposer}
 									renderSend={this.renderSend}
 									renderBubble={this.renderBubble}
-									messages={messages}
+									messages={this.messages}
 									onSend={messages => {
 										stopPolling();
-										startPolling(500);
+										startPolling(1000);
 										this.onSend(messages);
 										let messageText = messages[0].text;
 										sendMessage({
@@ -193,19 +166,13 @@ class ChatScreen extends React.Component {
 													id: 0,
 													time_ago: "正在发送...",
 													created_at: new Date(),
-													message:
-														messageText + "...",
+													message: messageText + "...",
 													user: user,
 													images: []
 												}
 											},
-											update: (
-												cache,
-												{ data: { sendMessage } }
-											) => {
-												const {
-													messages
-												} = cache.readQuery({
+											update: (cache, { data: { sendMessage } }) => {
+												const { messages } = cache.readQuery({
 													query: messagesQuery,
 													variables: {
 														chat_id: chat.id
@@ -217,10 +184,7 @@ class ChatScreen extends React.Component {
 														chat_id: chat.id
 													},
 													data: {
-														messages: [
-															sendMessage,
-															...messages
-														]
+														messages: [sendMessage, ...messages]
 													}
 												});
 											},
@@ -230,53 +194,61 @@ class ChatScreen extends React.Component {
 										});
 									}}
 									renderLoadEarlier={() => {
-										if (messages.length > 9)
+										if (this.messages.length > 9)
 											return (
-												<View
-													style={styles.loadEarlier}
-												>
-													<TouchableOpacity
-														onPress={() => {
-															stopPolling();
-															//TODO:: when srcoll to bottom, need startPolling again ...
-															fetchMore({
-																variables: {
-																	offset:
-																		messages.length
-																},
-																updateQuery: (
-																	prev,
-																	{
-																		fetchMoreResult
-																	}
-																) => {
-																	if (
-																		!fetchMoreResult
-																	)
-																		return prev;
-																	return Object.assign(
-																		{},
-																		prev,
-																		{
-																			messages: [
-																				...prev.messages,
-																				...fetchMoreResult.messages
-																			]
+												<View style={styles.loadEarlier}>
+													{!end ? (
+														<TouchableOpacity
+															onPress={() => {
+																// stopPolling();
+																//TODO:: when srcoll to bottom, need startPolling again ...
+																fetchMore({
+																	variables: {
+																		offset: this.messages.length
+																	},
+																	updateQuery: (prev, { fetchMoreResult }) => {
+																		if (!fetchMoreResult) return prev;
+																		if (
+																			!(
+																				fetchMoreResult &&
+																				fetchMoreResult.messages &&
+																				fetchMoreResult.messages.length > 0
+																			)
+																		) {
+																			this.setState({
+																				end: true
+																			});
+																			return prev;
 																		}
-																	);
-																}
-															});
-														}}
-													>
-														<View
-															style={{
-																alignItems:
-																	"center"
+																		if (fetchMoreResult.messages.length < 10) {
+																			this.setState({
+																				end: true
+																			});
+																		}
+																		return Object.assign({}, prev, {
+																			messages: [...prev.messages, ...fetchMoreResult.messages]
+																		});
+																	}
+																});
 															}}
 														>
-															<Text>查看更早的消息</Text>
+															<View
+																style={{
+																	alignItems: "center"
+																}}
+															>
+																<Text style={styles.darkText}>查看更早的消息</Text>
+															</View>
+														</TouchableOpacity>
+													) : (
+														<View
+															style={{
+																alignItems: "center"
+															}}
+														>
+															<Text style={styles.tintText}>--end--</Text>
 														</View>
-													</TouchableOpacity>
+													)}
 												</View>
 											);
 									}}
@@ -316,16 +288,12 @@ class ChatScreen extends React.Component {
 	}
 
 	onSend(messages = []) {
-		this.setState(previousState => ({
-			messages: GiftedChat.append(previousState.messages, messages)
-		}));
+		this.messages = GiftedChat.append(this.messages, messages);
 	}
 
 	renderInputToolbar(props) {
 		//Add the extra styles via containerStyle
-		return (
-			<InputToolbar {...props} primaryStyle={{ alignItems: "center" }} />
-		);
+		return <InputToolbar {...props} primaryStyle={{ alignItems: "center" }} />;
 	}
 
 	renderBubble(props) {
@@ -366,15 +334,9 @@ class ChatScreen extends React.Component {
 
 	renderSend(props) {
 		return (
-			<Send
-				{...props}
-				containerStyle={{ justifyContent: "center" }}
-				alwaysShowSend
-			>
+			<Send {...props} containerStyle={{ justifyContent: "center" }} alwaysShowSend>
 				<View style={styles.sendButton}>
-					<Text style={{ color: Colors.themeColor, fontSize: 17 }}>
-						发送
-					</Text>
+					<Text style={{ color: Colors.themeColor, fontSize: 17 }}>发送</Text>
 				</View>
 			</Send>
 		);
@@ -403,9 +365,15 @@ const styles = StyleSheet.create({
 		marginVertical: 20,
 		flexDirection: "row",
 		justifyContent: "center"
+	},
+	darkText: {
+		fontSize: 14,
+		color: Colors.primaryFontColor
+	},
+	tintText: {
+		fontSize: 14,
+		color: Colors.tintFontColor
 	}
 });
 
-export default connect(store => ({ users: store.users }))(
-	withApollo(ChatScreen)
-);
+export default connect(store => ({ users: store.users }))(withApollo(ChatScreen));

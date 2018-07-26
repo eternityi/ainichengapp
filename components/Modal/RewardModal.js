@@ -146,7 +146,7 @@ class RewardModal extends Component {
                     onPress={() => {
                       if (personal.balance >= amount) {
                         if (amount < 1) {
-                          this.handleWarningVisible("最少也给一颗糖果嘛~(*╹▽╹*)");
+                          this.handleWarningVisible("最少也给一颗糖果嘛~");
                         } else {
                           tipArticle({
                             variables: {
@@ -173,9 +173,9 @@ class RewardModal extends Component {
                 </View>
               </View>
               <PaymentModal visible={paymentVisible} handleVisible={this.handlePaymentVisible} />
-              <BasicModal visible={warningVisible} handleVisible={this.handleWarningVisible}>
+              <BasicModal visible={warningVisible} handleVisible={this.handleWarningVisible} customStyle={styles.toastModal}>
                 <View>
-                  <Text style={{ fontSize: 16, color: Colors.themeColor }}>{this.warning}</Text>
+                  <Text style={styles.toastText}>{this.warning}</Text>
                 </View>
               </BasicModal>
             </BasicModal>
@@ -192,6 +192,9 @@ class RewardModal extends Component {
   handleWarningVisible(warn) {
     this.warning = warn;
     this.setState(prevState => ({ warningVisible: !prevState.warningVisible }));
+    setTimeout(() => {
+      this.setState(prevState => ({ warningVisible: !prevState.warningVisible }));
+    }, 2000);
   }
 
   selectMoney(money) {
@@ -304,6 +307,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.primaryFontColor,
     marginLeft: 10
+  },
+  toastModal: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    width: "auto",
+    padding: 10
+  },
+  toastText: {
+    fontSize: 16,
+    color: "#fff",
+    textAlign: "center"
   }
 });
 

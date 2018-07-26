@@ -207,7 +207,6 @@ class HomeScreen extends Component {
     }
     if (this.keywords.length > 0) {
       this.setState({ none_keywords: false });
-      console.log("handleSearch");
     }
   }
 

@@ -1,30 +1,12 @@
 import React from "react";
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Button,
-  FlatList,
-  RefreshControl,
-  BackHandler,
-  Dimensions
-} from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, RefreshControl, BackHandler, Dimensions } from "react-native";
 import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, RecommendFollow } from "../../components/Header";
-import {
-  SearchBar,
-  ContentEnd,
-  LoadingMore,
-  LoadingError,
-  SpinnerLoading
-} from "../../components/Pure";
+import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import CoverItem from "../../components/Article/CoverItem";
 import ListHeader from "./ListHeader";
 
@@ -67,23 +49,17 @@ class HomeScreen extends React.Component {
     };
   }
 
-  // 首页监听物理返回、连续两次才可退出APP
+  // 首页监听物理返回、连续两次才可退出APP；同时保证聚焦在首页
   componentDidMount() {
     let { navigation } = this.props;
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", this.toast);
-      this.didFocusSubscription = navigation.addListener(
-        "didFocus",
-        payload => {
-          BackHandler.addEventListener("hardwareBackPress", this.toast);
-        }
-      );
-      this.willBlurSubscription = navigation.addListener(
-        "willBlur",
-        payload => {
-          BackHandler.removeEventListener("hardwareBackPress", this.toast);
-        }
-      );
+      this.didFocusSubscription = navigation.addListener("didFocus", payload => {
+        BackHandler.addEventListener("hardwareBackPress", this.toast);
+      });
+      this.willBlurSubscription = navigation.addListener("willBlur", payload => {
+        BackHandler.removeEventListener("hardwareBackPress", this.toast);
+      });
     }
   }
 
@@ -106,12 +82,7 @@ class HomeScreen extends React.Component {
             leftComponent={<RecommendFollow navigation={navigation} />}
             rightComponent={
               <View style={{ flex: 1, marginLeft: 15, marginTop: 3 }}>
-                <SearchBar
-                  navigation={navigation}
-                  height={28}
-                  iconSize={18}
-                  textStyle={{ marginLeft: 10, fontSize: 15 }}
-                />
+                <SearchBar navigation={navigation} height={28} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
               </View>
             }
           />
@@ -123,15 +94,10 @@ class HomeScreen extends React.Component {
                 <FlatList
                   ref={ref => HomeScreen.fresh(ref)}
                   removeClippedSubviews
-                  ListHeaderComponent={() => (
-                    <ListHeader navigation={navigation} />
-                  )}
-                  refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={refetch} />
-                  }
+                  ListHeaderComponent={() => <ListHeader navigation={navigation} />}
+                  refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                   data={data.articles}
-                  keyExtractor={(item, index) =>
-                    item.key ? item.key : index.toString()}
+                  keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
                   renderItem={({ item, index }) => <CoverItem post={item} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
@@ -141,23 +107,14 @@ class HomeScreen extends React.Component {
                           offset: data.articles.length
                         },
                         updateQuery: (prev, { fetchMoreResult }) => {
-                          if (
-                            !(
-                              fetchMoreResult &&
-                              fetchMoreResult.articles &&
-                              fetchMoreResult.articles.length > 0
-                            )
-                          ) {
+                          if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
                             this.setState({
                               fetchingMore: false
                             });
                             return prev;
                           }
                           return Object.assign({}, prev, {
-                            articles: [
-                              ...prev.articles,
-                              ...fetchMoreResult.articles
-                            ]
+                            articles: [...prev.articles, ...fetchMoreResult.articles]
                           });
                         }
                       });
@@ -168,11 +125,7 @@ class HomeScreen extends React.Component {
                     }
                   }}
                   ListFooterComponent={() => {
-                    return this.state.fetchingMore ? (
-                      <LoadingMore />
-                    ) : (
-                      <ContentEnd />
-                    );
+                    return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
                   }}
                 />
               );
@@ -185,6 +138,7 @@ class HomeScreen extends React.Component {
 
   toast = () => {
     if (this.continuous) {
+      //确保在1.5s内连续点击两次
       this.continuous = false;
       let toast = Toast.show("再次点击退出爱你城", {
         duration: Toast.durations.LONG,

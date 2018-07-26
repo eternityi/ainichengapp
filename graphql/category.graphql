@@ -1,3 +1,23 @@
+#最近逛过的专题
+query visitCategoryQuery($offset: Int, $limit: Int) {
+	visits(offset: $offset, limit: $limit, type: CATEGORY) {
+		id
+		visited {
+			id
+			title
+			logo
+			dynamic_msg
+		}
+	}
+}
+
+#删除浏览记录
+mutation deleteVisitMutation($id: Int!) {
+	deleteVisit(id: $id) {
+		id
+	}
+}
+
 query specialCategoriesQuery {
 	categories(filter: SPECIAL, limit: 11) {
 		id
