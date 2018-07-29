@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
 		color: Colors.linkColor
 	},
 	commentText: {
-		color: Colors.primaryFontColor,
+		color: "#666",
 		fontSize: 15
 	}
 });
