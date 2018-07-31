@@ -132,11 +132,27 @@ class ListHeader extends React.Component {
 			variables: {
 				id: item.id
 			},
-			refetchQueries: result => [
-				{
-					query: visitCategoryQuery
-				}
-			]
+			optimisticResponse: {
+			  __typename: "Mutation",
+			  deleteVisit: {
+			    __typename: "Visit",
+			    id: item.id,
+			  }
+			},
+			update: (cache, { data: { deleteVisit } }) => {
+			  let { visits } = cache.readQuery({
+			  	query: visitCategoryQuery,
+			  });
+			  visits = visits.filter((elem,index)=>{
+			  	return elem.id!==deleteVisit.id
+			  });
+			  cache.writeQuery({
+			    query: visitCategoryQuery,
+			    data: {
+			      visits 
+			    }
+			  });
+			}
 		});
 	};
 
@@ -178,8 +194,8 @@ const styles = StyleSheet.create({
 	deleteBox: {
 		position: "absolute",
 		padding: 6,
-		right: -6,
-		top: -6
+		right: -5,
+		top: -5
 	},
 	deleteBadge: {
 		width: 12,

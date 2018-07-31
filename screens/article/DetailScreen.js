@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-  FlatList,
-  Modal,
-  StatusBar
-} from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import HTML from "react-native-render-html";
 
@@ -26,11 +15,7 @@ import Comments from "./comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
 import AuthorCard from "../../components/Card/AuthorCard";
 import { RewardModal, ShareModal } from "../../components/Modal";
-import {
-  LoadingError,
-  SpinnerLoading,
-  BlankContent
-} from "../../components/Pure";
+import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -79,28 +64,20 @@ class DetailScreen extends Component {
     this.handleRewardVisible = this.handleRewardVisible.bind(this);
     this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
     this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
+    this.footOffsetY = height;
+    this.commentsOffsetY = height;
     this.state = {
-      footOffsetHeight: height,
-      commentsOffsetHeight: height,
       showWrite: false,
       addCommentVisible: false,
       rewardVisible: false,
       shareModalVisible: false,
-      reply: false,
       imageViewerVisible: false,
-      initImage: 0
+      initImage: 0 //图片预览模式下首先打开的图片索引
     };
   }
 
   render() {
-    let {
-      showWrite,
-      rewardVisible,
-      addCommentVisible,
-      shareModalVisible,
-      imageViewerVisible,
-      initImage
-    } = this.state;
+    let { showWrite, rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible, initImage } = this.state;
     let { navigation, login } = this.props;
     const article = navigation.getParam("article", {});
     return (
@@ -115,16 +92,8 @@ class DetailScreen extends Component {
             this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
-                <StatusBar
-                  backgroundColor={imageViewerVisible ? "#000" : "#fff"}
-                  barStyle={"dark-content"}
-                />
-                <ArticleDetailHeader
-                  navigation={navigation}
-                  article={article}
-                  share={this.handleSlideShareMenu}
-                  login={login}
-                />
+                <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
+                <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} login={login} />
                 <ScrollView
                   style={styles.container}
                   onScroll={this._onScroll.bind(this)}
@@ -140,31 +109,12 @@ class DetailScreen extends Component {
                       </Text>
                     </View>
                     <View style={{ marginVertical: 20 }}>
-                      <UserGroup
-                        navigation={navigation}
-                        customStyle={{ avatar: 34, nameSize: 15 }}
-                        user={article.user}
-                        plain
-                      />
+                      <UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={article.user} plain />
                     </View>
                     <View style={styles.articleInfo}>
-                      <Text style={styles.articleInfoText}>
-                        {article.time_ago +
-                          " · 字数" +
-                          article.count_words +
-                          " · 阅读" +
-                          article.hits +
-                          "  "}
-                      </Text>
-                      {article.collection && (
-                        <Iconfont
-                          name={"collection-two"}
-                          style={styles.articleInfoText}
-                        />
-                      )}
-                      <Text style={styles.articleInfoText}>
-                        {article.collection && article.collection.name}
-                      </Text>
+                      <Text style={styles.articleInfoText}>{article.time_ago + " · 字数" + article.count_words + " · 阅读" + article.hits + "  "}</Text>
+                      {article.collection && <Iconfont name={"collection-two"} style={styles.articleInfoText} />}
+                      <Text style={styles.articleInfoText}>{article.collection && article.collection.name}</Text>
                     </View>
                   </View>
                   <View style={{ paddingHorizontal: 15 }}>
@@ -180,12 +130,8 @@ class DetailScreen extends Component {
                           // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
-                          let img_width = htmlAttribs.width
-                            ? parseInt(htmlAttribs.width)
-                            : IMG_WIDTH;
-                          let img_height = htmlAttribs.height
-                            ? parseInt(htmlAttribs.height)
-                            : IMG_WIDTH;
+                          let img_width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;
+                          let img_height = htmlAttribs.height ? parseInt(htmlAttribs.height) : IMG_WIDTH;
                           img_height = IMG_WIDTH * img_height / img_width;
                           return (
                             <TouchableOpacity
@@ -220,20 +166,9 @@ class DetailScreen extends Component {
                     //赞赏面板
                     //作者卡片
                   }
-                  <View
-                    style={styles.showFoot}
-                    onLayout={this._footOnLayout.bind(this)}
-                  >
-                    <BeSelectedCategory
-                      categories={article.categories}
-                      navigation={navigation}
-                    />
-                    <MetaBottom
-                      login={login}
-                      navigation={navigation}
-                      article={article}
-                      handleSlideShareMenu={this.handleSlideShareMenu}
-                    />
+                  <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
+                    <BeSelectedCategory categories={article.categories} navigation={navigation} />
+                    <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
                     <RewardPanel
                       navigation={navigation}
                       rewardUsers={article.tipedUsers}
@@ -242,9 +177,7 @@ class DetailScreen extends Component {
                     />
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
-                  <View
-                    style={{ height: 8, backgroundColor: Colors.lightGray }}
-                  />
+                  <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
                   <Comments
                     addCommentVisible={addCommentVisible}
                     article={article}
@@ -267,21 +200,13 @@ class DetailScreen extends Component {
                   login={login}
                 />
                 {/*赞赏模态框**/}
-                <RewardModal
-                  visible={rewardVisible}
-                  handleVisible={this.handleRewardVisible}
-                  article={article}
-                />
+                <RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={article} />
               </View>
             );
           }}
         </Query>
         {/*点击图片预览**/}
-        <Modal
-          visible={imageViewerVisible}
-          transparent={true}
-          onRequestClose={() => this.setState({ imageViewerVisible: false })}
-        >
+        <Modal visible={imageViewerVisible} transparent={true} onRequestClose={() => this.setState({ imageViewerVisible: false })}>
           <ImageViewer
             onClick={() => this.setState({ imageViewerVisible: false })}
             onSwipeDown={() => this.setState({ imageViewerVisible: false })}
@@ -289,10 +214,7 @@ class DetailScreen extends Component {
             index={initImage}
           />
         </Modal>
-        <ShareModal
-          visible={shareModalVisible}
-          toggleVisible={this.handleSlideShareMenu}
-        />
+        <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
   }
@@ -322,19 +244,19 @@ class DetailScreen extends Component {
   //获取文章底部到页面顶部的高度 控制底部输入框显示隐藏的临界点
   _footOnLayout(event) {
     let { x, y, width, height } = event.nativeEvent.layout;
-    this.setState({ footOffsetHeight: y });
+    this.footOffsetY = y;
   }
 
   //获取评论区域到顶部的高度
   _commentsOnLayout(event) {
     let { x, y, width, height } = event.nativeEvent.layout;
-    this.setState({ commentsOffsetHeight: y });
+    this.commentsOffsetY = y;
   }
 
   //scrollView 滚动事件
   _onScroll(event) {
     let { y } = event.nativeEvent.contentOffset;
-    if (y >= this.state.footOffsetHeight - height) {
+    if (y >= this.footOffsetY - height) {
       if (!this.state.showWrite) this.setState({ showWrite: true });
     } else {
       if (this.state.showWrite) this.setState({ showWrite: false });
@@ -345,7 +267,7 @@ class DetailScreen extends Component {
   _scrollToComments() {
     this.scrollRef.scrollTo({
       x: 0,
-      y: this.state.commentsOffsetHeight,
+      y: this.commentsOffsetY,
       animated: true
     });
   }
@@ -361,9 +283,7 @@ class DetailScreen extends Component {
 function renderNode(node, index, siblings, parent, defaultRenderer) {
   if (node.name == "img") {
     const { src } = node.attribs;
-    return (
-      <Image key={index} source={{ uri: src }} style={{ width: width * 3 }} />
-    );
+    return <Image key={index} source={{ uri: src }} style={{ width: width * 3 }} />;
   }
 }
 

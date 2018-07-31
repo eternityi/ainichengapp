@@ -118,7 +118,7 @@ class ChatScreen extends React.Component {
 						for (let i = 0; i < messages.length; i++) {
 							let shared = false;
 							for (let j = 0; j < this.messages.length; j++) {
-								if (this.messages[j]._id == messages[i]._id) {
+								if (messages[i]._id == 0 || this.messages[j]._id == messages[i]._id) {
 									shared = true;
 									break;
 								}
@@ -133,7 +133,12 @@ class ChatScreen extends React.Component {
 					} else {
 						this.messages = messages;
 					}
-					this.messages = [...this.messages];
+					// 修复发送消息后，因为乐观更新造成的消息重复
+					this.messages = this.messages.filter((elem, index) => {
+						if (Number(elem._id)) {
+							return true;
+						}
+					});
 					startPolling(1000);
 					return (
 						<Mutation mutation={sendMessageMutation}>

@@ -26,7 +26,6 @@ class NoteItem extends Component {
 			popoverHandler = () => null
 		} = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_replies } = post;
-		let layout = images.length > 1 ? "vertical" : "horizontal";
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={onPress} onLongPress={longPress}>
 				<View style={styles.noteContainer}>

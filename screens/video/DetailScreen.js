@@ -43,9 +43,7 @@ class DetailScreen extends Component {
 			isBuffering: false,
 			addCommentVisible: false,
 			rewardVisible: false,
-			shareModalVisible: false,
-			reply: false,
-			replyingComment: null
+			shareModalVisible: false
 		};
 	}
 
@@ -62,17 +60,7 @@ class DetailScreen extends Component {
 	}
 
 	render() {
-		let {
-			fullScreen,
-			rate,
-			paused,
-			muted,
-			ignoreSilentSwitch,
-			replyingComment,
-			rewardVisible,
-			addCommentVisible,
-			shareModalVisible
-		} = this.state;
+		let { fullScreen, rate, paused, muted, ignoreSilentSwitch, rewardVisible, addCommentVisible, shareModalVisible } = this.state;
 		let { navigation, login, favoriteArticle, likeArticle } = this.props;
 		let video = navigation.getParam("video", {});
 		return (
