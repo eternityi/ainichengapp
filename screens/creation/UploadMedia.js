@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput,Platform } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput, Platform } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
-import DialogSelected from '../../components/Pure/AlertSelected';
+import DialogSelected from "../../components/Pure/AlertSelected";
 
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
 const selectedArr = ["图片", "视频"];
 
 class UploadMedia extends Component {
@@ -53,37 +53,29 @@ class UploadMedia extends Component {
 						}}
 					>
 						{covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
-						<TouchableOpacity onPress={covers.length>0 ? onPressPhotoUpload : showAlertSelected}>
-							{retype < 0 ?null:
-
-								(<View style={covers == "" ? styles.icon : styles.icon2}>
+						<TouchableOpacity onPress={covers.length > 0 ? onPressPhotoUpload : showAlertSelected}>
+							{retype < 0 ? null : (
+								<View style={covers == "" ? styles.icon : styles.icon2}>
 									<Iconfont name={"add"} size={100} color={Colors.lightGray} />
-								</View>)
-						    }
+								</View>
+							)}
 						</TouchableOpacity>
-						{retype < 0 ?(
+						{retype < 0 ? (
 							<Progress.Circle
-					            style={ uploadId==null||completed ? styles.complete :styles.nocomplete}
-					            size={100}
-					            progress={progress/100}
-					            indeterminate={false}
-					            color={Colors.lightGray}
-					            showsText={true}
-					        />):null
-						}
+								style={uploadId == null || completed ? styles.complete : styles.nocomplete}
+								size={100}
+								progress={progress / 100}
+								indeterminate={false}
+								color={Colors.lightGray}
+								showsText={true}
+							/>
+						) : null}
 					</View>
 				</View>
 				<TouchableOpacity>
 					<View style={styles.item}>
-						<Iconfont name={"person-outline"} size={22} style={{ paddingRight: 15 }} color={"#000000"} />
-						<Text style={{ color: "#000", fontSize: 15 }}>谁可以看</Text>
-						<Text style={{ position: "absolute", right: 15 }}>公开</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity>
-					<View style={styles.item}>
-						<Iconfont name={"aite"} size={22} style={{ paddingRight: 15 }} color={"#000000"} />
-						<Text style={{ color: "#000", fontSize: 15 }}>提醒谁看</Text>
+						<Iconfont name={"category-rotate"} size={23} style={{ paddingRight: 15 }} color={"#000"} />
+						<Text style={{ color: "#000", fontSize: 16 }}>选择专题</Text>
 					</View>
 				</TouchableOpacity>
 			</ScrollView>
@@ -138,21 +130,21 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: Colors.lightGray
 	},
-	picture: {		
+	picture: {
 		height: 100,
 		width: 100,
 		marginHorizontal: 4,
 		marginTop: 8,
-		marginBottom: 70,
+		marginBottom: 70
 	},
-	nocomplete:{
-	    position:'absolute',
-	    backgroundColor:'rgba(255,255,255,0.5)',
-	    marginTop:8,
-	    marginLeft:4
+	nocomplete: {
+		position: "absolute",
+		backgroundColor: "rgba(255,255,255,0.5)",
+		marginTop: 8,
+		marginLeft: 4
 	},
- 	complete:{
-	    display:'none'
+	complete: {
+		display: "none"
 	},
 	item: {
 		flexDirection: "row",
