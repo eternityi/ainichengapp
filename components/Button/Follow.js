@@ -67,7 +67,7 @@ class Follow extends Component {
 			personal,
 			id,
 			theme = Colors.weixinColor,
-			outline,
+			outline, //镂空
 			login
 		} = this.props;
 		if (!login) status = 0;
@@ -94,7 +94,7 @@ class Follow extends Component {
 					style={[
 						{
 							color,
-							fontSize: fontSize
+							fontSize
 						}
 					]}
 				>

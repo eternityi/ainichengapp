@@ -37,7 +37,7 @@ class CategoryContributeGroup extends React.Component {
 						</View>
 						<View>
 							<Text numberOfLines={1} style={styles.categoryItemMeta}>
-								投稿需要管理员审核
+								{category.need_approve ? "投稿需要管理员审核" : "自由投稿"}
 							</Text>
 						</View>
 					</View>

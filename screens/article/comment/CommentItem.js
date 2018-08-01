@@ -184,7 +184,7 @@ class CommentItem extends Component {
 					<SubComment
 						spokesperson={
 							<Text
-								style={styles.linkText}
+								style={{ color: Colors.linkColor }}
 								onPress={() =>
 									navigation.navigate("用户详情", {
 										user: reply.user

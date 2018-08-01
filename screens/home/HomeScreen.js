@@ -12,28 +12,20 @@ import ListHeader from "./ListHeader";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation, withApollo } from "react-apollo";
+
 import { hotArticlesQuery } from "../../graphql/article.graphql";
 
 const { width, height } = Dimensions.get("window");
 
 class HomeScreen extends React.Component {
-  static fresh = scroll => {
-    HomeScreen.scroll = scroll;
-  };
-
   static navigationOptions = ({ navigation }) => {
     return {
       //当前tab页，点击tabbar跳转到顶部并刷新页面
-      tabBarOnPress: ({ scene, jumpToIndex, client }) => {
-        if (scene.focused) {
-          if (HomeScreen.scroll) {
-            HomeScreen.scroll.scrollToOffset({ offset: 0, animated: false });
-            client.query({
-              query: hotArticlesQuery,
-              fetchPolicy: "network-only"
-            });
-          }
+      tabBarOnPress: ({ scene, jumpToIndex }) => {
+        let scrollToTop = navigation.getParam("scrollToTop", null);
+        if (scene.focused && scrollToTop) {
+          scrollToTop();
         } else {
           jumpToIndex(scene.index);
         }
@@ -47,6 +39,12 @@ class HomeScreen extends React.Component {
     this.state = {
       fetchingMore: true
     };
+  }
+
+  componentWillMount() {
+    this.props.navigation.setParams({
+      scrollToTop: this._scrollToTop
+    });
   }
 
   // 首页监听物理返回、连续两次才可退出APP；同时保证聚焦在首页
@@ -92,7 +90,9 @@ class HomeScreen extends React.Component {
               if (!(data && data.articles)) return <SpinnerLoading />;
               return (
                 <FlatList
-                  ref={ref => HomeScreen.fresh(ref)}
+                  ref={scrollview => {
+                    this.scrollview = scrollview;
+                  }}
                   removeClippedSubviews
                   ListHeaderComponent={() => <ListHeader navigation={navigation} />}
                   refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
@@ -136,6 +136,16 @@ class HomeScreen extends React.Component {
     );
   }
 
+  _scrollToTop = () => {
+    if (this.scrollview) {
+      this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
+      this.props.client.query({
+        query: hotArticlesQuery,
+        fetchPolicy: "network-only"
+      });
+    }
+  };
+
   toast = () => {
     if (this.continuous) {
       //确保在1.5s内连续点击两次
@@ -166,4 +176,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default withApollo(HomeScreen);

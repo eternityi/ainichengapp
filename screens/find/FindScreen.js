@@ -48,6 +48,9 @@ export default TabNavigator(
       tabStyle: {
         width: 50,
         paddingHorizontal: 0
+      },
+      tabBarOnPress: ({ scene, jumpToIndex }) => {
+        console.log("tabBarOnPress");
       }
     },
     tabBarComponent: props => <TabBarTop {...props} />

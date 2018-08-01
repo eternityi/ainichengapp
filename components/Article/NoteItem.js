@@ -134,8 +134,8 @@ class NoteItem extends Component {
 	skipScreen = () => {
 		const { post, navigation } = this.props;
 		let { type } = post;
-		let routeName = type == "article" ? "文章详情" : "视频详情";
-		let params = type == "article" ? { article: post } : { video: post };
+		let routeName = type == "video" ? "视频详情" : "文章详情";
+		let params = type == "video" ? { video: post } : { article: post };
 		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }

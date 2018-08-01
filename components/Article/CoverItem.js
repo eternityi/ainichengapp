@@ -12,10 +12,7 @@ const { height, width } = Dimensions.get("window");
 class CoverItem extends PureComponent {
 	render() {
 		const { post, navigation } = this.props;
-		let { type, user, time_ago, title, description, cover, category, hits, count_likes, count_replies } = post;
-		if (!cover) {
-			return null;
-		}
+		let { type, user, time_ago, title, description, cover, has_image, category, hits, count_likes, count_replies } = post;
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
 				<View style={styles.postContainer}>
@@ -31,9 +28,13 @@ class CoverItem extends PureComponent {
 							<Text style={styles.timeAgo}>{time_ago}</Text>
 						</View>
 					</View>
-					<View>{this._renderCover(type, cover)}</View>
+					<View>{has_image && this._renderCover(type, cover)}</View>
 					<View style={styles.postContent}>
-						{type == "article" ? (
+						{type == "video" ? (
+							<Text numberOfLines={2} style={styles.title}>
+								{description ? description : title}
+							</Text>
+						) : (
 							<View>
 								<Text numberOfLines={2} style={styles.title}>
 									{title}
@@ -42,10 +43,6 @@ class CoverItem extends PureComponent {
 									{description}
 								</Text>
 							</View>
-						) : (
-							<Text numberOfLines={2} style={styles.title}>
-								{description ? description : title}
-							</Text>
 						)}
 						<View style={[styles.layoutFlexRow, styles.postFooter]}>
 							{category ? (
@@ -80,8 +77,8 @@ class CoverItem extends PureComponent {
 	skipScreen = () => {
 		const { post, navigation } = this.props;
 		let { type } = post;
-		let routeName = type == "article" ? "文章详情" : "视频详情";
-		let params = type == "article" ? { article: post } : { video: post };
+		let routeName = type == "video" ? "视频详情" : "文章详情";
+		let params = type == "video" ? { video: post } : { article: post };
 		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }

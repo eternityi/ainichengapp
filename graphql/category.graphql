@@ -35,6 +35,7 @@ query topCategoriesQuery($offset: Int) {
 		count_follows
 		followed
 		description
+		need_approve
 	}
 }
 

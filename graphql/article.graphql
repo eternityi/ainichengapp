@@ -263,6 +263,7 @@ query queryArticleRequesRecommend($id: Int) {
 			count_articles
 			count_follows
 			logo
+			need_approve
 		}
 	}
 }

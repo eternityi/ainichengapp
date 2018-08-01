@@ -21,7 +21,7 @@ class AuthorCard extends Component {
 		return (
 			<View style={styles.cardWrap}>
 				<View>
-					<Avatar uri={user.avatar} size={70} />
+					<Avatar uri={user.avatar} size={64} />
 				</View>
 				<View>
 					<Text numberOfLines={1} style={styles.name}>
@@ -33,7 +33,7 @@ class AuthorCard extends Component {
 						{user.followings.length ? user.followings[0].name + "关注" : Config.AppName + "推荐"}
 					</Text>
 				</View>
-				<FollowButton type={"user"} id={user.id} status={user.followed_status} customStyle={styles.followWrap} />
+				<FollowButton type={"user"} id={user.id} status={user.followed_status} customStyle={styles.followWrap} fontSize={14} />
 			</View>
 		);
 	}
@@ -43,27 +43,26 @@ const styles = StyleSheet.create({
 	cardWrap: {
 		borderRadius: 4,
 		backgroundColor: Colors.skinColor,
-		width: 140,
-		paddingVertical: 12,
-		paddingHorizontal: 20,
+		width: 115,
+		padding: 12,
 		alignItems: "center"
 	},
 	name: {
-		fontSize: 15,
+		fontSize: 14,
 		color: Colors.darkFontColor,
 		paddingTop: 8
 	},
 	latestFollower: {
-		fontSize: 12,
+		fontSize: 11,
 		color: Colors.tintFontColor,
-		paddingTop: 6
+		paddingVertical: 6
 	},
 	followWrap: {
-		alignSelf: "stretch",
-		marginTop: 8,
-		height: 32,
 		width: "auto",
-		borderRadius: 20
+		height: 28,
+		alignSelf: "stretch",
+		marginHorizontal: 4,
+		borderRadius: 15
 	}
 });
 

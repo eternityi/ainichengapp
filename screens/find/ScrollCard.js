@@ -30,38 +30,36 @@ class ScrollCard extends Component {
           if (!(data && data.users)) return null;
           return (
             <View style={styles.recommendAuthor}>
-              {/*
-                <View style={styles.title}>
-                  <View>
-                    <Text style={styles.titleText}>推荐作者</Text>
-                  </View>
-                  <RefreshControl
-                    refreshing={refreshing}
-                    refresh={() => {
-                      this.setState({
-                        refreshing: true
-                      });
-                      if (data.users) {
-                        fetchMore({
-                          variables: {
-                            offset: page * 10
-                          },
-                          updateQuery: (prev, { fetchMoreResult }) => {
-                            this.setState(prevState => ({
-                              refreshing: false,
-                              page: ++prevState.page
-                            }));
-                            if (!(fetchMoreResult && fetchMoreResult.users && fetchMoreResult.users.length > 0)) {
-                              return prev;
-                            }
-                            return fetchMoreResult;
-                          }
-                        });
-                      }
-                    }}
-                  />
+              <View style={styles.title}>
+                <View>
+                  <Text style={styles.titleText}>推荐作者</Text>
                 </View>
-                **/}
+                <RefreshControl
+                  refreshing={refreshing}
+                  refresh={() => {
+                    this.setState({
+                      refreshing: true
+                    });
+                    if (data.users) {
+                      fetchMore({
+                        variables: {
+                          offset: page * 10
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          this.setState(prevState => ({
+                            refreshing: false,
+                            page: ++prevState.page
+                          }));
+                          if (!(fetchMoreResult && fetchMoreResult.users && fetchMoreResult.users.length > 0)) {
+                            return prev;
+                          }
+                          return fetchMoreResult;
+                        }
+                      });
+                    }
+                  }}
+                />
+              </View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <FlatList
                   data={data.users}
@@ -99,17 +97,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 16,
-    marginLeft: 3,
+    height: 18,
+    marginBottom: 10,
     paddingLeft: 5,
-    paddingRight: 20,
-    paddingBottom: 15,
+    paddingRight: 10,
     borderLeftWidth: 2,
     borderColor: Colors.themeColor
   },
   titleText: {
     fontSize: 12,
-    marginTop: -2,
     color: Colors.tintFontColor
   }
 });

@@ -376,12 +376,12 @@ query userAdminCategoriesQuery($user_id: Int!) {
         logo
         count_articles
         count_follows
-        submit_status
         user {
             id
             name
         }
         followed
+        need_approve
     }
 }
 

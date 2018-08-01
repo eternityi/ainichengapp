@@ -42,7 +42,7 @@ class OpenArticlesScreen extends Component {
 							if (!(data && data.articles)) return <SpinnerLoading />;
 							if (data.articles.length < 1) return <BlankContent />;
 							return (
-								<View>
+								<View style={{ flex: 1 }}>
 									<FlatList
 										data={data.articles}
 										keyExtractor={(item, index) => index.toString()}

@@ -20,26 +20,20 @@ class HelpScreen extends Component {
 		super(props);
 		this.state = {
 			hot: [
-				{ id: 1, title: "收入结算与提现常见问题（ iOS ）" },
-				{ id: 2, title: `${Config.AppName}收入结算与提现常见问题` },
-				{ id: 3, title: "为什么文章会被锁定？" },
-				{ id: 104, title: `${Config.AppName}账号绑定解绑相关问题汇总` },
-				{ id: 5, title: `${Config.AppName}官方专题投稿指南大全` },
-				{ id: 6, title: "关于文章投稿次数的有关说明" },
-				{ id: 7, title: "关于举报“抄袭类文章”的说明" },
-				{ id: 8, title: "如果你被封号了？" },
-				{ id: 109, title: "我该如何发表付费内容？" },
-				{ id: 10, title: `如何在${Config.AppName}进行创作` },
-				{ id: 11, title: "删除的文章如何找回，有回收站吗？" }
+				{ id: 1375, title: `${Config.AppName}签约作者申请指南` },
+				{ id: 12574, title: "提现没有到账怎么办？" },
+				{ id: 12580, title: "专题投稿须知" },
+				{ id: 12579, title: "如果你上传图片失败了" },
+				{ id: 12575, title: `对${Config.AppName}专题推荐作者的说明` },
+				{ id: 12577, title: `${Config.AppName}社区管理规则` },
+				{ id: 12572, title: "删除的文章如何找回，有回收站吗？" }
 			],
-			explain: [
-				{ id: 1, title: `如何在${Config.AppName}进行创作` },
-				{ id: 2, title: "如何让更多的人看到自己的文章" },
-				{ id: 3, title: "发现页热门文章使用指南" },
-				{ id: 104, title: "公告：关于首页投稿专题密集投稿相关问题" },
-				{ id: 5, title: "如何创建并玩转属于你自己的专题" }
-			],
-			account: [{ id: 1, title: "为什么文章会被锁定？" }, { id: 2, title: "如果你被封号了？" }, { id: 3, title: "身份认证" }]
+			explain: [{ id: 12576, title: `什么是${Config.AppName}内容领域优质作者及相关细则` }, { id: 12578, title: "如何创建并玩转属于你自己的专题" }],
+			account: [
+				{ id: 12422, title: `${Config.AppName}用户协议` },
+				{ id: 12423, title: "隐私声明" },
+				{ id: 12573, title: `${Config.AppName}账号绑定解绑相关问题汇总` }
+			]
 		};
 	}
 

@@ -20,7 +20,7 @@ const { width, height } = Dimensions.get("window");
 class CategoryItem extends React.Component {
 	render() {
 		let { article, category, navigation, status } = this.props;
-		let { submit_status } = category;
+		let { submit_status = "收录" } = category;
 		return (
 			<TouchableOpacity style={{ marginRight: 25 }} onPress={() => navigation.navigate("专题详情", { category })}>
 				<View style={{ position: "relative" }}>

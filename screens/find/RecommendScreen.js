@@ -9,16 +9,36 @@ import ScrollCard from "./ScrollCard";
 import Screen from "../Screen";
 
 import { recommendArticlesQuery, topArticleWithImagesQuery } from "../../graphql/article.graphql";
-import { Mutation, Query } from "react-apollo";
+import { Mutation, Query, compose, withApollo } from "react-apollo";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 const { width, height } = Dimensions.get("window");
 
 class RecommendScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      //当前tab页，点击tabbar跳转到顶部并刷新页面
+      tabBarOnPress: ({ scene, jumpToIndex }) => {
+        let scrollToTop = navigation.getParam("scrollToTop", null);
+        if (scene.focused && scrollToTop) {
+          scrollToTop();
+        } else {
+          jumpToIndex(scene.index);
+        }
+      }
+    };
+  };
+
   state = {
     fetchingMore: true
   };
+
+  componentWillMount() {
+    this.props.navigation.setParams({
+      scrollToTop: this._scrollToTop
+    });
+  }
 
   render() {
     let { navigation } = this.props;
@@ -30,6 +50,9 @@ class RecommendScreen extends React.Component {
             if (!(data && data.articles)) return <SpinnerLoading />;
             return (
               <FlatList
+                ref={scrollview => {
+                  this.scrollview = scrollview;
+                }}
                 removeClippedSubviews
                 ListHeaderComponent={() => {
                   return (
@@ -103,6 +126,16 @@ class RecommendScreen extends React.Component {
     });
     return posterList;
   }
+
+  _scrollToTop = () => {
+    if (this.scrollview) {
+      this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
+      this.props.client.query({
+        query: recommendArticlesQuery,
+        fetchPolicy: "network-only"
+      });
+    }
+  };
 }
 
 const styles = StyleSheet.create({
@@ -120,4 +153,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ articles: store.articles.articles }))(RecommendScreen);
+export default compose(withApollo, connect(store => ({ articles: store.articles.articles })))(RecommendScreen);

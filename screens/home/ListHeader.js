@@ -100,7 +100,7 @@ class ListHeader extends React.Component {
 		return (
 			<TouchableOpacity
 				key={index.toString()}
-				style={styles.category}
+				style={[styles.category, index == 0 && { marginLeft: 5 }]}
 				onPress={() => {
 					const navigateAction = NavigationActions.navigate({
 						routeName: "专题详情",
@@ -133,25 +133,25 @@ class ListHeader extends React.Component {
 				id: item.id
 			},
 			optimisticResponse: {
-			  __typename: "Mutation",
-			  deleteVisit: {
-			    __typename: "Visit",
-			    id: item.id,
-			  }
+				__typename: "Mutation",
+				deleteVisit: {
+					__typename: "Visit",
+					id: item.id
+				}
 			},
 			update: (cache, { data: { deleteVisit } }) => {
-			  let { visits } = cache.readQuery({
-			  	query: visitCategoryQuery,
-			  });
-			  visits = visits.filter((elem,index)=>{
-			  	return elem.id!==deleteVisit.id
-			  });
-			  cache.writeQuery({
-			    query: visitCategoryQuery,
-			    data: {
-			      visits 
-			    }
-			  });
+				let { visits } = cache.readQuery({
+					query: visitCategoryQuery
+				});
+				visits = visits.filter((elem, index) => {
+					return elem.id !== deleteVisit.id;
+				});
+				cache.writeQuery({
+					query: visitCategoryQuery,
+					data: {
+						visits
+					}
+				});
 			}
 		});
 	};
@@ -173,7 +173,7 @@ class ListHeader extends React.Component {
 
 const styles = StyleSheet.create({
 	officialColumnWarp: {
-		paddingLeft: 5,
+		paddingHorizontal: 5,
 		borderBottomWidth: 6,
 		borderBottomColor: Colors.lightBorderColor
 	},
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
 	category: {
 		width: 60,
 		paddingVertical: 5,
-		marginLeft: 5,
+		marginRight: 5,
 		position: "relative",
 		justifyContent: "center",
 		alignItems: "center"
