@@ -73,7 +73,7 @@ public class MainApplication extends Application implements ReactApplication {
   }
 
 
-  //TODO:: 测试的，需要替换成自己购买的
+  //替换成自己购买的
   private String ugcKey = "dd82fb6b890bba02ed86a9387b7d0a6a";
   private String ugcLicenceUrl = "http://license.vod2.myqcloud.com/license/v1/0bbe5588e35a8d37586c23910faf074f/TXUgcSDK.licence";
 

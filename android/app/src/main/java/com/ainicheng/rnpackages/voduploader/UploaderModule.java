@@ -115,43 +115,13 @@ public class UploaderModule extends ReactContextBaseJavaModule {
 //            }).start();
 //        }
 
+    }
+
+
+    //开始上传
+    private void uploadToVod() {
 
         mTXugcPublish = new TXUGCPublish(mContent, "customID");
-
-        initListener();
-    }
-
-    private void initListener() {
-        mPublishSiglistener = new PublishSigListener() {
-            @Override
-            public void onSuccess(String signatureStr) {
-                signature = signatureStr;
-                publish();
-            }
-
-            @Override
-            public void onFail(final int errCode) {
-                Log.d(TAG, "get signature failed");
-            }
-        };
-        VideoDataMgr.getInstance().setPublishSigListener(mPublishSiglistener);
-
-        mReportVideoInfoListener = new ReportVideoInfoListener() {
-            @Override
-            public void onFail(int errCode) {
-                Log.e(TAG, "reportVideoInfo, report video info fail");
-            }
-
-            @Override
-            public void onSuccess() {
-                Log.i(TAG, "reportVideoInfo, report video info success");
-            }
-        };
-        VideoDataMgr.getInstance().setReportVideoInfoListener(mReportVideoInfoListener);
-    }
-
-    private void publish() {
-
         mTXugcPublish.setListener(new TXUGCPublishTypeDef.ITXVideoPublishListener() {
             @Override
             public void onPublishProgress(long uploadBytes, long totalBytes) {
@@ -174,10 +144,12 @@ public class UploaderModule extends ReactContextBaseJavaModule {
 
                 WritableMap params = Arguments.createMap();
                 params.putString("id", customUploadId);
+                params.putString("fileId", result.videoId);
+                params.putString("videoUrl", result.videoURL);
                 sendEvent("completed", params);
 
                 // 这里可以把上传返回的视频信息以及自定义的视频信息上报到自己的业务服务器
-                VideoDataMgr.getInstance().reportVideoInfo(result.videoId, "腾讯云");
+//                VideoDataMgr.getInstance().reportVideoInfo(result.videoId, result.videoURL);
 
                 if (isCancelPublish) {
                     return;
@@ -202,7 +174,37 @@ public class UploaderModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startUpload(ReadableMap options, final Promise promise) {
         customUploadId = "vod_upload_" + System.currentTimeMillis();
-        initData();
+
+        //1. 先拿到上传签名
+        mPublishSiglistener = new PublishSigListener() {
+            @Override
+            public void onSuccess(String signatureStr) {
+                signature = signatureStr;
+                //2. 开始上传
+                uploadToVod();
+            }
+
+            @Override
+            public void onFail(final int errCode) {
+                Log.d(TAG, "get signature failed");
+            }
+        };
+        VideoDataMgr.getInstance().setPublishSigListener(mPublishSiglistener);
+
+        mReportVideoInfoListener = new ReportVideoInfoListener() {
+            @Override
+            public void onFail(int errCode) {
+                Log.e(TAG, "reportVideoInfo, report video info fail");
+            }
+
+            @Override
+            public void onSuccess() {
+                //TODO:: post to our app backend get video info ...
+                Log.i(TAG, "reportVideoInfo, report video info success");
+            }
+        };
+        VideoDataMgr.getInstance().setReportVideoInfoListener(mReportVideoInfoListener);
+
         VideoDataMgr.getInstance().getPublishSig();
         promise.resolve(customUploadId);
     }

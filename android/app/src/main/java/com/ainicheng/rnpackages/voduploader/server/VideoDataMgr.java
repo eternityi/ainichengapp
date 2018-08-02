@@ -124,9 +124,9 @@ public class VideoDataMgr {
         mReportVideoInfoListener = reportVideoInfoListener;
     }
 
-    public void reportVideoInfo(String fileId, String authorName) {
+    public void reportVideoInfo(String fileId, String videoUrl) {
         FormBody formBody = new FormBody.Builder().
-                add("author", authorName)
+                add("videoUrl", videoUrl)
                 .build();
         Request request = new Request.Builder()
                 .url(Const.ADDRESS_VIDEO_REPORT + fileId + "?" + getSigParams())
@@ -157,12 +157,12 @@ public class VideoDataMgr {
         JSONObject resJson = null;
         try {
             resJson = new JSONObject(contentStr);
-            int code = resJson.optInt("code");
-            if (code != Const.RetCode.CODE_SUCCESS) {
-                Log.e(TAG, "parseReportVideoResult fail, code = " + code);
-                notifyGetPublishSigFail(code);
-                return;
-            }
+//            int code = resJson.optInt("code");
+//            if (code != Const.RetCode.CODE_SUCCESS) {
+//                Log.e(TAG, "parseReportVideoResult fail, code = " + code);
+//                notifyGetPublishSigFail(code);
+//                return;
+//            }
             notifyReportVideoInfoSuc();
         } catch (JSONException e) {
             e.printStackTrace();

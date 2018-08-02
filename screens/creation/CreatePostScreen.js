@@ -32,6 +32,7 @@ class CreatePostScreen extends React.Component {
     this.showAlertSelected = this.showAlertSelected.bind(this);
     this.callbackSelected = this.callbackSelected.bind(this);
     this.state = {
+      video_id: null,
       uploadId: null,
       progress: null,
       completed: false,
@@ -89,8 +90,7 @@ class CreatePostScreen extends React.Component {
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })
-          }
+            })}
         />
         <DialogSelected
           ref={dialog => {
@@ -200,9 +200,16 @@ class CreatePostScreen extends React.Component {
           Upload.addListener("completed", uploadId, data => {
             this.setState({
               completed: true
-            }); //上传完成
-            console.log(data.responseCode); //http状态码
-            console.log(data.responseBody); //http响应正文
+            });
+            //上传完成,
+            console.log(data.fileId); //数据库里的 vod fileid
+            console.log(data.videoUrl); //云上的视频url
+
+            //TODO,  api : http get /api/video/save?fileId=&videoUrl=,
+
+            //得到数据的 video->id
+
+            //this.state.video_id, 方便后面createPostMutation.
           });
         })
         .catch(err => {
