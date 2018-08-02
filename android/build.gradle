@@ -18,10 +18,16 @@ buildscript {
 
 allprojects {
     repositories {
-				// Add jitpack repository (added by react-native-spinkit)
-				maven { url "https://jitpack.io" }
-        mavenLocal()
+        // for add
+        flatDir {
+            dirs 'libs'
+        }
         jcenter()
+
+        // Add jitpack repository (added by react-native-spinkit)
+        maven { url "https://jitpack.io" }
+        mavenLocal()
+
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
@@ -32,4 +38,8 @@ allprojects {
             name 'Google'
         }
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

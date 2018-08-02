@@ -11,7 +11,9 @@ import { Header } from "../../components/Header";
 import MediaModal from "../../components/Modal/MediaModal";
 import DialogSelected from "../../components/Pure/AlertSelected";
 
-import Upload from "react-native-background-upload";
+// import Upload from "react-native-background-upload";
+import Upload from "../../utils/VodUploader";
+
 import ImagePicker from "react-native-image-crop-picker";
 import { throttle } from "lodash";
 
@@ -87,7 +89,8 @@ class CreatePostScreen extends React.Component {
               url: "https://www.ainicheng.com/video",
               field: "uploaded_media",
               type: "multipart"
-            })}
+            })
+          }
         />
         <DialogSelected
           ref={dialog => {
@@ -172,7 +175,7 @@ class CreatePostScreen extends React.Component {
         {
           method: "POST",
           headers: {
-            'Accept': 'application/json',
+            Accept: "application/json",
             "content-type": metadata.mimeType // server requires a content-type header
           }
         },
@@ -198,8 +201,8 @@ class CreatePostScreen extends React.Component {
             this.setState({
               completed: true
             }); //上传完成
-            console.log(data.responseCode);//http状态码
-            console.log(data.responseBody);//http响应正文
+            console.log(data.responseCode); //http状态码
+            console.log(data.responseBody); //http响应正文
           });
         })
         .catch(err => {
@@ -242,9 +245,9 @@ class CreatePostScreen extends React.Component {
         break;
       case 1: // 视频库
         this.onPressVideoUpload({
-          url: "https://ainicheng.com/api/video/save?api_token="+token,
+          url: "https://ainicheng.com/api/video/save?api_token=" + token,
           field: "video",
-          type: "multipart" 
+          type: "multipart"
         });
         break;
     }

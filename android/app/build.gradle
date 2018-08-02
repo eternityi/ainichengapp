@@ -104,8 +104,12 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        renderscriptTargetApi = 14
+        renderscriptSupportModeEnabled = true
+        multiDexEnabled true
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
         }
     }
     signingConfigs {
@@ -121,7 +125,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86"
+            include "armeabi", "armeabi-v7a","x86"
         }
     }
     buildTypes {
@@ -144,9 +148,32 @@ android {
             }
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    configurations {
+        all*.exclude module:'okio'
+        all*.exclude module:'okhttp'
+    }
 }
 
 dependencies {
+
+    //引入第三方libs,比如qc sdk ..
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs/upload', include: ['*.jar'])
+
+    compile(name: 'volley-1.0.0', ext: 'aar')
+    compile(name: 'LiteAVSDK_Professional', ext: 'aar')
+
     compile project(':bugsnag-react-native')
     compile project(':appcenter-crashes')
     compile project(':appcenter-analytics')
@@ -159,7 +186,6 @@ dependencies {
     compile project(':react-native-spinkit')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-code-push')
-    compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:25.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
