@@ -24,7 +24,7 @@ export type StartUploadArgs = {
   notification?: NotificationArgs
 };
 
-const NativeModule = NativeModules.QCVodUploader || NativeModules.VodUploader; // iOS is VodUploader and Android is NativeModules
+const NativeModule = NativeModules.QCVodUploader || NativeModules.VodUploader; // iOS is QCVodUploader and Android is VodUploader
 const eventPrefix = "VodUploader-";
 
 // for IOS, register event listeners or else they don't fire on DeviceEventEmitter
