@@ -20,7 +20,7 @@ import { throttle } from "lodash";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { draftsQuery } from "../../graphql/user.graphql";
-import { articleContentQuery, createdArticleMutation, editArticleMutation } from "../../graphql/article.graphql";
+import { createPostMutation } from "../../graphql/article.graphql";
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
 
@@ -31,6 +31,8 @@ class CreatePostScreen extends React.Component {
     super(props);
     this.showAlertSelected = this.showAlertSelected.bind(this);
     this.callbackSelected = this.callbackSelected.bind(this);
+    this.image_urls = [];
+    this.body = "";
     this.state = {
       video_id: null,
       uploadId: null,
@@ -41,7 +43,7 @@ class CreatePostScreen extends React.Component {
       selectMedia: false,
       uri: "",
       isImagePickerShowing: false,
-      retype: ""
+      retype: 1
     };
   }
 
@@ -91,6 +93,7 @@ class CreatePostScreen extends React.Component {
               field: "uploaded_media",
               type: "multipart"
             })}
+          changeBody={this.changeBody}
         />
         <DialogSelected
           ref={dialog => {
@@ -100,6 +103,41 @@ class CreatePostScreen extends React.Component {
       </View>
     );
   }
+
+  publish = () => {
+    console.log("publish");
+    console.log(this.body, this.image_urls);
+    let { navigation, createPost } = this.props;
+    let { retype } = this.state;
+    this.publishing = true;
+    createPost({
+      variables: {
+        body: this.body,
+        image_urls: this.image_urls
+      }
+      // video_id:
+      // a_cids:
+    })
+      .then(({ data }) => {
+        console.log("published");
+        console.log("createPost", data.createPost);
+        this.publishing = false;
+        //如果没有发布就发布更新否则更新发布
+        if (retype < 1) {
+          console.log("retype", retype);
+          navigation.navigate("视频详情", { video: data.createPost });
+        } else {
+          navigation.navigate("文章详情", { article: data.createPost });
+        }
+      })
+      .catch(error => {
+        this.publishing = false;
+      });
+  };
+
+  changeBody = body => {
+    this.body = body;
+  };
 
   onPressVideoUpload = options => {
     //打开视频库
@@ -136,33 +174,64 @@ class CreatePostScreen extends React.Component {
     }).then(
       images => {
         let { covers, uri, retype } = this.state;
+        this.imgs = [];
         images.map(image => {
           //optmistic update
           covers.push(image.path);
+          this.saveImage(image.path);
           //upload ..
-          if (Platform.OS === "android") {
-            this.setState({
-              uri: image.path.substr(7)
-            });
-          } else {
-            this.setState({
-              uri: image.path
-            });
-          }
+          // if (Platform.OS === "android") {
+          //   this.setState({
+          //     uri: image.path.substr(7)
+          //   });
+          // } else {
+          //   this.setState({
+          //     uri: image.path
+          //   });
+          // }
         });
         this.setState({
           covers
         });
-        console.log(this.state.uri);
-        console.log(this.state.retype);
-
-        this.startUpload(Object.assign({ path: this.state.uri }, options));
+        // this.startUpload(Object.assign({ path: this.state.uri }, options));
       },
       error => {
         console.log(error);
         add;
       }
     );
+  };
+
+  saveImage = imagePath => {
+    const { token } = this.props.users.user;
+    var data = new FormData();
+    data.append("photo", {
+      uri: imagePath,
+      name: "image.jpg",
+      type: "image/jpg"
+    });
+
+    const config = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data"
+      },
+      body: data
+    };
+    console.log("config", config);
+    fetch(Config.ServerRoot + "/api/image/save?api_token=" + token, config)
+      .then(response => {
+        console.log("response", response);
+        return response.text();
+      })
+      .then(photo => {
+        this.image_urls.push(photo);
+        console.log("this.image_urls", this.image_urls);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   handleProgress = throttle(progress => {
@@ -268,4 +337,4 @@ const styles = StyleSheet.create({
     paddingTop: 24
   }
 });
-export default connect(store => store)(CreatePostScreen);
+export default compose(withApollo, connect(store => store), graphql(createPostMutation, { name: "createPost" }))(CreatePostScreen);

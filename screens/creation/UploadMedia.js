@@ -23,7 +23,8 @@ class UploadMedia extends Component {
 			uploadId,
 			retype,
 			uri,
-			showAlertSelected
+			showAlertSelected,
+			changeBody
 		} = this.props;
 		return (
 			<ScrollView>
@@ -36,11 +37,7 @@ class UploadMedia extends Component {
 						selectionColor="#000"
 						multiline={true}
 						textAlignVertical={"top"}
-						onChangeText={body => {
-							this.setState({
-								body
-							});
-						}}
+						onChangeText={changeBody}
 					/>
 				</View>
 				<View style={styles.add}>

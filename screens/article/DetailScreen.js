@@ -158,6 +158,7 @@ class DetailScreen extends Component {
                         }
                       }}
                     />
+                    {article.images && this.renderImagesList(article.images)}
                   </View>
                   {
                     //内容底部
@@ -217,6 +218,16 @@ class DetailScreen extends Component {
         <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
+  }
+
+  renderImagesList(images) {
+    return images.map(function(elem, index) {
+      return (
+        <View key={index} style={{ marginTop: 15 }}>
+          <Image source={{ uri: elem }} style={styles.imageItem} />
+        </View>
+      );
+    });
   }
 
   //赞赏模态框开关
@@ -319,6 +330,11 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     color: "#717171"
+  },
+  imageItem: {
+    width: width - 30,
+    height: width - 30,
+    resizeMode: "cover"
   }
 });
 
