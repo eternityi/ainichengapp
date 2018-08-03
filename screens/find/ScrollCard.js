@@ -89,7 +89,7 @@ class ScrollCard extends Component {
 
 const styles = StyleSheet.create({
   recommendAuthor: {
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingLeft: 9,
     backgroundColor: Colors.tintGray
   },

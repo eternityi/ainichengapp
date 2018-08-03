@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 import Swiper from "react-native-swiper";
 
-import Color from "../../constants/Colors";
+import Colors from "../../constants/Colors";
 import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import ScrollCard from "./ScrollCard";
@@ -62,7 +62,13 @@ class RecommendScreen extends React.Component {
                           {({ loading, error, data }) => {
                             if (!(data && data.articles)) return null;
                             return (
-                              <Swiper autoplay={true} autoplayTimeout={5} paginationStyle={{ bottom: 8 }} activeDotColor="#fff">
+                              <Swiper
+                                autoplay={true}
+                                autoplayTimeout={5}
+                                showsPagination={false}
+                                paginationStyle={{ bottom: 8 }}
+                                activeDotColor="#fff"
+                              >
                                 {this._renderSwiperImage(data.articles)}
                               </Swiper>
                             );
@@ -121,6 +127,11 @@ class RecommendScreen extends React.Component {
       posterList.push(
         <TouchableOpacity key={index} onPress={() => this.props.navigation.navigate("文章详情", { article: article })}>
           <Image style={styles.posterImage} source={{ uri: article.top_image }} />
+          <View style={styles.posterTitle}>
+            <Text style={styles.posterTitleText} numberOfLines={1}>
+              {article.title}
+            </Text>
+          </View>
         </TouchableOpacity>
       );
     });
@@ -150,6 +161,22 @@ const styles = StyleSheet.create({
     width,
     height: width * 0.5,
     resizeMode: "cover"
+  },
+  posterTitle: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 32,
+    paddingHorizontal: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  posterTitleText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#fff"
   }
 });
 
