@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -25,6 +26,21 @@
 		1A667FDA8A5744BB9DCEE779 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C25105777ACA4B5AB47923F0 /* Octicons.ttf */; };
 		1CA3CC3790EC46DBBC40A6B3 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B01FDE73A6422799A84A0B /* libRNImagePicker.a */; };
 		1E4E326DAC514A0BA9EA00FE /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B86C6765FA614E43ADBD3BBB /* Entypo.ttf */; };
+		2CFD637021141A42003EAA4E /* TVCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD632521141A42003EAA4E /* TVCUtils.m */; };
+		2CFD637121141A42003EAA4E /* TXUGCPublish.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD632721141A42003EAA4E /* TXUGCPublish.m */; };
+		2CFD637221141A42003EAA4E /* TXUGCPublishUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD632C21141A42003EAA4E /* TXUGCPublishUtil.m */; };
+		2CFD637321141A42003EAA4E /* TVCReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD632D21141A42003EAA4E /* TVCReport.m */; };
+		2CFD637421141A42003EAA4E /* TVCCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD632F21141A42003EAA4E /* TVCCommon.m */; };
+		2CFD637521141A42003EAA4E /* QCloudCOSXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD633221141A42003EAA4E /* QCloudCOSXML.framework */; };
+		2CFD637621141A42003EAA4E /* QCloudCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD633321141A42003EAA4E /* QCloudCore.framework */; };
+		2CFD637721141A42003EAA4E /* TVCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD633721141A42003EAA4E /* TVCClient.m */; };
+		2CFD637821141A42003EAA4E /* TVCClientInner.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD633921141A42003EAA4E /* TVCClientInner.m */; };
+		2CFD637A21141B04003EAA4E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD637921141B04003EAA4E /* CoreTelephony.framework */; };
+		2CFD637C21141B11003EAA4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD637B21141B11003EAA4E /* Foundation.framework */; };
+		2CFD637E21141B1D003EAA4E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD637D21141B1D003EAA4E /* SystemConfiguration.framework */; };
+		2CFD638021141B30003EAA4E /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFD637F21141B2F003EAA4E /* libstdc++.tbd */; };
+		2CFD638221141C17003EAA4E /* QCVodUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD638121141C17003EAA4E /* QCVodUploader.m */; };
+		2CFD638421141D61003EAA4E /* BackgroundUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFD638321141D61003EAA4E /* BackgroundUpload.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -504,6 +520,31 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		1808A710D1E64D2A6C69AAB5 /* Pods-ainicheng.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ainicheng.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ainicheng/Pods-ainicheng.debug.xcconfig"; sourceTree = "<group>"; };
 		188F319B47CD4577AE37A25D /* AppCenter-Config.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "AppCenter-Config.plist"; path = "ainicheng/AppCenter-Config.plist"; sourceTree = "<group>"; };
+		2CFD632521141A42003EAA4E /* TVCUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVCUtils.m; sourceTree = "<group>"; };
+		2CFD632621141A42003EAA4E /* TVCHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCHeader.h; sourceTree = "<group>"; };
+		2CFD632721141A42003EAA4E /* TXUGCPublish.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXUGCPublish.m; sourceTree = "<group>"; };
+		2CFD632921141A42003EAA4E /* TXUGCPublishListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXUGCPublishListener.h; sourceTree = "<group>"; };
+		2CFD632A21141A42003EAA4E /* TXUGCPublishTypeDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXUGCPublishTypeDef.h; sourceTree = "<group>"; };
+		2CFD632B21141A42003EAA4E /* TXUGCPublish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXUGCPublish.h; sourceTree = "<group>"; };
+		2CFD632C21141A42003EAA4E /* TXUGCPublishUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXUGCPublishUtil.m; sourceTree = "<group>"; };
+		2CFD632D21141A42003EAA4E /* TVCReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVCReport.m; sourceTree = "<group>"; };
+		2CFD632E21141A42003EAA4E /* TVCClientInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCClientInner.h; sourceTree = "<group>"; };
+		2CFD632F21141A42003EAA4E /* TVCCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVCCommon.m; sourceTree = "<group>"; };
+		2CFD633021141A42003EAA4E /* TVCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCClient.h; sourceTree = "<group>"; };
+		2CFD633221141A42003EAA4E /* QCloudCOSXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QCloudCOSXML.framework; sourceTree = "<group>"; };
+		2CFD633321141A42003EAA4E /* QCloudCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QCloudCore.framework; sourceTree = "<group>"; };
+		2CFD633421141A42003EAA4E /* TVCReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCReport.h; sourceTree = "<group>"; };
+		2CFD633521141A42003EAA4E /* TXUGCPublishUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXUGCPublishUtil.h; sourceTree = "<group>"; };
+		2CFD633621141A42003EAA4E /* TVCUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCUtils.h; sourceTree = "<group>"; };
+		2CFD633721141A42003EAA4E /* TVCClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVCClient.m; sourceTree = "<group>"; };
+		2CFD633821141A42003EAA4E /* TVCCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVCCommon.h; sourceTree = "<group>"; };
+		2CFD633921141A42003EAA4E /* TVCClientInner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVCClientInner.m; sourceTree = "<group>"; };
+		2CFD637921141B04003EAA4E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		2CFD637B21141B11003EAA4E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2CFD637D21141B1D003EAA4E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2CFD637F21141B2F003EAA4E /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		2CFD638121141C17003EAA4E /* QCVodUploader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = QCVodUploader.m; path = ainicheng/QCVodUploader.m; sourceTree = "<group>"; };
+		2CFD638321141D61003EAA4E /* BackgroundUpload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BackgroundUpload.m; path = ainicheng/BackgroundUpload.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* ainicheng-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ainicheng-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ainicheng-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ainicheng-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -571,6 +612,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CFD638021141B30003EAA4E /* libstdc++.tbd in Frameworks */,
+				2CFD637E21141B1D003EAA4E /* SystemConfiguration.framework in Frameworks */,
+				2CFD637C21141B11003EAA4E /* Foundation.framework in Frameworks */,
+				2CFD637A21141B04003EAA4E /* CoreTelephony.framework in Frameworks */,
+				2CFD637621141A42003EAA4E /* QCloudCore.framework in Frameworks */,
+				2CFD637521141A42003EAA4E /* QCloudCOSXML.framework in Frameworks */,
 				B7D1808520F8379100AA7901 /* libART.a in Frameworks */,
 				A7F9660120C5598B00E5211F /* libReact-Native-Webview-Bridge.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
@@ -710,12 +757,15 @@
 		13B07FAE1A68108700A75B9A /* ainicheng */ = {
 			isa = PBXGroup;
 			children = (
+				2CFD632421141A42003EAA4E /* upload */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				2CFD638121141C17003EAA4E /* QCVodUploader.m */,
+				2CFD638321141D61003EAA4E /* BackgroundUpload.m */,
 			);
 			name = ainicheng;
 			sourceTree = "<group>";
@@ -792,9 +842,56 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2CFD632421141A42003EAA4E /* upload */ = {
+			isa = PBXGroup;
+			children = (
+				2CFD632521141A42003EAA4E /* TVCUtils.m */,
+				2CFD632621141A42003EAA4E /* TVCHeader.h */,
+				2CFD632721141A42003EAA4E /* TXUGCPublish.m */,
+				2CFD632821141A42003EAA4E /* include */,
+				2CFD632C21141A42003EAA4E /* TXUGCPublishUtil.m */,
+				2CFD632D21141A42003EAA4E /* TVCReport.m */,
+				2CFD632E21141A42003EAA4E /* TVCClientInner.h */,
+				2CFD632F21141A42003EAA4E /* TVCCommon.m */,
+				2CFD633021141A42003EAA4E /* TVCClient.h */,
+				2CFD633121141A42003EAA4E /* COSSDK */,
+				2CFD633421141A42003EAA4E /* TVCReport.h */,
+				2CFD633521141A42003EAA4E /* TXUGCPublishUtil.h */,
+				2CFD633621141A42003EAA4E /* TVCUtils.h */,
+				2CFD633721141A42003EAA4E /* TVCClient.m */,
+				2CFD633821141A42003EAA4E /* TVCCommon.h */,
+				2CFD633921141A42003EAA4E /* TVCClientInner.m */,
+			);
+			name = upload;
+			path = ainicheng/upload;
+			sourceTree = "<group>";
+		};
+		2CFD632821141A42003EAA4E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				2CFD632921141A42003EAA4E /* TXUGCPublishListener.h */,
+				2CFD632A21141A42003EAA4E /* TXUGCPublishTypeDef.h */,
+				2CFD632B21141A42003EAA4E /* TXUGCPublish.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		2CFD633121141A42003EAA4E /* COSSDK */ = {
+			isa = PBXGroup;
+			children = (
+				2CFD633221141A42003EAA4E /* QCloudCOSXML.framework */,
+				2CFD633321141A42003EAA4E /* QCloudCore.framework */,
+			);
+			path = COSSDK;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CFD637F21141B2F003EAA4E /* libstdc++.tbd */,
+				2CFD637D21141B1D003EAA4E /* SystemConfiguration.framework */,
+				2CFD637B21141B11003EAA4E /* Foundation.framework */,
+				2CFD637921141B04003EAA4E /* CoreTelephony.framework */,
 				A78176B020C5534500CDC828 /* QBImagePicker.framework */,
 				A78176B120C5534500CDC828 /* RSKImageCropper.framework */,
 				A781768D20C5515100CDC828 /* React-Native-Webview-Bridge.xcodeproj */,
@@ -1789,8 +1886,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CFD638421141D61003EAA4E /* BackgroundUpload.m in Sources */,
+				2CFD637421141A42003EAA4E /* TVCCommon.m in Sources */,
+				2CFD637821141A42003EAA4E /* TVCClientInner.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				2CFD637721141A42003EAA4E /* TVCClient.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				2CFD638221141C17003EAA4E /* QCVodUploader.m in Sources */,
+				2CFD637221141A42003EAA4E /* TXUGCPublishUtil.m in Sources */,
+				2CFD637021141A42003EAA4E /* TVCUtils.m in Sources */,
+				2CFD637121141A42003EAA4E /* TXUGCPublish.m in Sources */,
+				2CFD637321141A42003EAA4E /* TVCReport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1928,6 +2034,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 3W7L7CX92N;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ainicheng/upload/COSSDK",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
@@ -1944,6 +2054,7 @@
 				INFOPLIST_FILE = ainicheng/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1962,6 +2073,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3W7L7CX92N;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ainicheng/upload/COSSDK",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
@@ -1978,6 +2093,7 @@
 				INFOPLIST_FILE = ainicheng/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

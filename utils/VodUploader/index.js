@@ -2,7 +2,7 @@
 /**
  * Handles HTTP background file uploads from an iOS or Android device.
  */
-import { NativeModules, DeviceEventEmitter } from "react-native";
+import { NativeModules, DeviceEventEmitter, NativeEventEmitter } from "react-native";
 
 export type UploadEvent = "progress" | "error" | "completed" | "cancelled";
 
@@ -24,15 +24,20 @@ export type StartUploadArgs = {
   notification?: NotificationArgs
 };
 
-const NativeModule = NativeModules.QCVodUploader || NativeModules.VodUploader; // iOS is QCVodUploader and Android is VodUploader
-const eventPrefix = "VodUploader-";
+let NativeModule = NativeModules.VodUploader; // iOS is QCVodUploader and Android is VodUploader
+let eventPrefix = "VodUploader-";
+let ListenerApi = DeviceEventEmitter;
 
 // for IOS, register event listeners or else they don't fire on DeviceEventEmitter
 if (NativeModules.QCVodUploader) {
-  NativeModule.addListener(eventPrefix + "progress");
-  NativeModule.addListener(eventPrefix + "error");
-  NativeModule.addListener(eventPrefix + "cancelled");
-  NativeModule.addListener(eventPrefix + "completed");
+  eventPrefix = "QCVodUploader-";
+  NativeModule = NativeModules.QCVodUploader;
+  ListenerApi = new NativeEventEmitter(NativeModules.QCVodUploader);
+
+  // ListenerApi.addListener(eventPrefix + "completed");
+  // ListenerApi.addListener(eventPrefix + "progress");
+  // ListenerApi.addListener(eventPrefix + "error");
+  // ListenerApi.addListener(eventPrefix + "cancelled");
 }
 
 /*
@@ -105,8 +110,10 @@ Events (id is always the upload ID):
   completed - { id: string }
 */
 export const addListener = (eventType: UploadEvent, uploadId: string, listener: Function) => {
-  return DeviceEventEmitter.addListener(eventPrefix + eventType, data => {
-    if (!uploadId || !data || !data.id || data.id === uploadId) {
+  return ListenerApi.addListener(eventPrefix + eventType, data => {
+    console.log("uploadId", uploadId);
+    console.log(data);
+    if (!uploadId || !data || !data.id || data.id == uploadId) {
       listener(data);
     }
   });

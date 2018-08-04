@@ -90,10 +90,10 @@ class CreatePostScreen extends React.Component {
           onPressPhotoUpload={() =>
             this.onPressPhotoUpload({
               url: "https://www.ainicheng.com/video",
-              field: "uploaded_media",
+              field: "photo",
               type: "multipart"
-            })}
-          changeBody={this.changeBody}
+            })
+          }
         />
         <DialogSelected
           ref={dialog => {
@@ -145,17 +145,18 @@ class CreatePostScreen extends React.Component {
       multiple: false,
       mediaType: "video"
     }).then(
-      image => {
+      video => {
         let { covers, uri } = this.state;
-        covers.push(image.path); //图片资源
+        covers.push(video.path); //图片资源
         this.setState({
           covers
         });
-        console.log(image.mime);
+        console.log(video.mime);
         if (Platform.OS === "android") {
-          this.startUpload(Object.assign({ path: image.path.substr(7) }, options));
+          this.startUpload(Object.assign({ path: video.path.substr(7) }, options));
         } else {
-          this.startUpload(Object.assign({ path: image.path }, options));
+          let video_path = video.path.replace("file://", "");
+          this.startUpload(Object.assign({ path: video_path }, options));
         }
         this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
       },
@@ -250,17 +251,20 @@ class CreatePostScreen extends React.Component {
         },
         opts
       );
+      console.log("metadata", metadata);
       let uploadtype = metadata.mimeType.indexOf("image");
+      console.log("uploadtype", uploadtype);
       this.setState({
         retype: uploadtype
       });
 
       Upload.startUpload(options) //上传
         .then(uploadId => {
+          console.log("uploadId", uploadId);
           console.log(`Upload started with options: ${JSON.stringify(options)}`);
           this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
           Upload.addListener("progress", uploadId, data => {
-            this.handleProgress(+data.progress); //上传进度
+            this.handleProgress(+parseInt(data.progress)); //上传进度
             console.log(`Progress: ${data.progress}%`);
           });
           Upload.addListener("error", uploadId, data => {
@@ -271,6 +275,7 @@ class CreatePostScreen extends React.Component {
               completed: true
             });
             //上传完成,
+            console.log("上传完成：", data);
             console.log(data.fileId); //数据库里的 vod fileid
             console.log(data.videoUrl); //云上的视频url
 
@@ -315,7 +320,7 @@ class CreatePostScreen extends React.Component {
       case 0: //图库
         this.onPressPhotoUpload({
           url: "https://www.ainicheng.com/video",
-          field: "uploaded_media",
+          field: "photo",
           type: "multipart"
         });
         break;
