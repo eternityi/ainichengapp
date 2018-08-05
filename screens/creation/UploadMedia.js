@@ -21,7 +21,7 @@ class UploadMedia extends Component {
 			cancelUpload,
 			completed,
 			uploadId,
-			retype,
+			uploadType,
 			uri,
 			showAlertSelected,
 			changeBody
@@ -50,14 +50,18 @@ class UploadMedia extends Component {
 						}}
 					>
 						{covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
+						{
+							//TODO: 视频在ios渲染预览有问题，参照https://facebook.github.io/react-native/docs/images.html#static-non-image-resources
+							//用require 方式，或者用react-native-video 来渲染video
+						}
 						<TouchableOpacity onPress={covers.length > 0 ? onPressPhotoUpload : showAlertSelected}>
-							{retype < 0 ? null : (
+							{uploadType < 0 ? null : (
 								<View style={covers == "" ? styles.icon : styles.icon2}>
 									<Iconfont name={"add"} size={100} color={Colors.lightGray} />
 								</View>
 							)}
 						</TouchableOpacity>
-						{retype < 0 ? (
+						{uploadType < 0 ? (
 							<Progress.Circle
 								style={uploadId == null || completed ? styles.complete : styles.nocomplete}
 								size={100}
