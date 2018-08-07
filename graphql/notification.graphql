@@ -77,7 +77,13 @@ query likeNotificationsQuery($offset: Int) {
             comment {
                 id
                 body
+                lou
                 time_ago
+                user {
+                    id
+                    avatar
+                    name
+                }
             }
             user {
                 id

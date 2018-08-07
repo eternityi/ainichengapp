@@ -35,8 +35,9 @@ class BeRewardScreen extends Component {
 							<TouchableOpacity
 								onPress={() =>
 									navigation.navigate("文章详情", {
-										article: { id: 1 }
-									})}
+										article: { id: 12574 }
+									})
+								}
 							>
 								<Text
 									style={{
@@ -89,7 +90,8 @@ class BeRewardScreen extends Component {
 							onPress={() =>
 								navigation.navigate("聊天页", {
 									withUser: notification.user
-								})}
+								})
+							}
 						>
 							<Text style={{ fontSize: 14, color: "#717171" }}>回复</Text>
 						</TouchableOpacity>
@@ -115,14 +117,16 @@ class BeRewardScreen extends Component {
 							onPress={() =>
 								navigation.navigate("文章详情", {
 									article: notification.article
-								})}
+								})
+							}
 						>
 							{" 《" + notification.article.title + "》 "}
 						</Text>
-						送了{notification.tip.amount.slice(0, -3)}颗糖（赞赏
+						送了
+						{notification.tip.amount.slice(0, -3)}
+						颗糖（赞赏
 						<Iconfont name={"RMB"} size={16} color={Colors.themeColor} />
-						<Text style={{ color: Colors.themeColor }}>{notification.tip.amount}</Text>
-						）
+						<Text style={{ color: Colors.themeColor }}>{notification.tip.amount}</Text>）
 					</Text>
 				}
 				notification={{

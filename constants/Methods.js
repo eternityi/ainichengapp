@@ -1,7 +1,12 @@
 import { NavigationActions } from "react-navigation";
 
 //navigation.dispatch(navigationAction)
-function navigationAction({ routeName, params = null, action = null, key = routeName + Math.random().toString() }) {
+function navigationAction({
+	routeName,
+	params = null,
+	action = null,
+	key = routeName + Math.random().toString()
+}) {
 	return NavigationActions.navigate({
 		routeName,
 		params,
@@ -19,4 +24,12 @@ function userOperationMiddleware({ login, action, navigation }) {
 	}
 }
 
-export { navigationAction, userOperationMiddleware };
+//查看内容详情页
+function goContentScreen(navigation, data) {
+	let { type } = data;
+	let routeName = type == "video" ? "视频详情" : "文章详情";
+	let params = type == "video" ? { video: data } : { article: data };
+	navigation.dispatch(navigationAction({ routeName, params }));
+}
+
+export { navigationAction, userOperationMiddleware, goContentScreen };

@@ -4,6 +4,7 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { goContentScreen } from "../../constants/Methods";
 import Screen from "../Screen";
 
 import { Query } from "react-apollo";
@@ -102,7 +103,8 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("用户详情", {
 									user: notification.user
-								})}
+								})
+							}
 						>
 							{notification.user.name + " "}
 						</Text>
@@ -112,7 +114,8 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})}
+								})
+							}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>
@@ -122,15 +125,11 @@ class OtherRemindScreen extends Component {
 			case "收录了文章":
 				return (
 					<Text style={styles.remindText}>
-						你投稿的文章
-						<Text
-							style={styles.linkText}
-							onPress={() =>
-								navigation.navigate("文章详情", {
-									article: notification.article
-								})}
-						>
-							{" 《" + notification.article.title + "》 "}
+						你投稿的
+						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 						已被加入专题
 						<Text
@@ -138,7 +137,8 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})}
+								})
+							}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>
@@ -148,15 +148,11 @@ class OtherRemindScreen extends Component {
 			case "拒绝了文章":
 				return (
 					<Text style={styles.remindText}>
-						抱歉！你投稿的文章
-						<Text
-							style={styles.linkText}
-							onPress={() =>
-								navigation.navigate("文章详情", {
-									article: notification.article
-								})}
-						>
-							{" 《" + notification.article.title + "》 "}
+						抱歉！你投稿的
+						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 						未能加入专题
 						<Text
@@ -164,7 +160,8 @@ class OtherRemindScreen extends Component {
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: notification.category
-								})}
+								})
+							}
 						>
 							{" 《" + notification.category.name + "》 "}
 						</Text>
