@@ -8,6 +8,7 @@ import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
 import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
 import CreatePostScreen from "../screens/creation/CreatePostScreen";
+import SelectCategoryScreen from "../screens/creation/SelectCategoryScreen";
 
 //notification
 import ChatScreen from "../screens/notification/ChatScreen";
@@ -130,6 +131,9 @@ export default {
   },
   文章投稿: {
     screen: ContributeArticleScreen
+  },
+  选择专题: {
+    screen: SelectCategoryScreen
   },
   全部专题投稿: {
     screen: ContributeCategoryListScreen

@@ -118,7 +118,8 @@ class HomeScreen extends Component {
                                     data: { queries, queryLogs: [] }
                                   });
                                 }
-                              })}
+                              })
+                            }
                           >
                             <View style={[styles.searchItem, { justifyContent: "center" }]}>
                               <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
@@ -176,12 +177,14 @@ class HomeScreen extends Component {
                     queryLogs = queryLogs.filter((query, index) => {
                       return query.id !== elem.id;
                     });
+                    console.log(queryLogs);
                     cache.writeQuery({
                       query: hotSearchAndLogsQuery,
                       data: { queries, queryLogs }
                     });
                   }
-                })}
+                })
+              }
             >
               <View
                 style={{

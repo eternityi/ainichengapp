@@ -1,36 +1,35 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Dimensions, Modal, TouchableHighlight, Image, Platform } from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform } from "react-native";
 
 import Screen from "../Screen";
-import UploadMedia from "./UploadMedia";
+import UploadBody from "./UploadBody";
+import CreatePostBottom from "./CreatePostBottom";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
 import MediaModal from "../../components/Modal/MediaModal";
-import DialogSelected from "../../components/Pure/AlertSelected";
+// import DialogSelected from "../../components/Pure/AlertSelected";
 
 // import Upload from "react-native-background-upload";
 import TXUGCUploader from "../../utils/TXUGCUploader";
 
 import ImagePicker from "react-native-image-crop-picker";
 import { throttle } from "lodash";
-
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-import { draftsQuery } from "../../graphql/user.graphql";
-import { createPostMutation } from "../../graphql/article.graphql";
+
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
+import { draftsQuery } from "../../graphql/user.graphql";
+import { createPostMutation } from "../../graphql/article.graphql";
 
 const selectedArr = ["图片", "视频"];
 
 class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.showAlertSelected = this.showAlertSelected.bind(this);
-    this.callbackSelected = this.callbackSelected.bind(this);
     this.image_urls = [];
     this.body = "";
     this.state = {
@@ -40,15 +39,15 @@ class CreatePostScreen extends React.Component {
       completed: false,
       covers: [],
       routeName: "　",
-      selectMedia: false,
       uri: "",
-      isImagePickerShowing: false,
-      uploadType: 1
+      uploadType: 1,
+      selectCategories: [],
+      category_ids: []
     };
   }
 
   render() {
-    let { covers, routeName, selectMedia, completed, progress, uploadId, uploadType, uri } = this.state;
+    let { covers, routeName, completed, progress, uploadId, uploadType, uri, selectCategories } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -74,46 +73,46 @@ class CreatePostScreen extends React.Component {
             </TouchableOpacity>
           }
         />
-        <UploadMedia
+        <UploadBody
           navigation={navigation}
-          selectMedia={selectMedia}
           covers={covers}
-          showAlertSelected={() => {
-            this.showAlertSelected();
-          }}
           progress={progress}
-          cancelUpload={this.cancelUpload}
           completed={completed}
           uploadId={uploadId}
           uploadType={uploadType}
-          uri={uri}
-          onPressPhotoUpload={() =>
-            this.onPressPhotoUpload({
-              url: "https://www.ainicheng.com/video",
-              field: "photo",
-              type: "multipart"
-            })
-          }
+          selectCategories={selectCategories}
+          selectCategory={this.selectCategory}
         />
-        <DialogSelected
-          ref={dialog => {
-            this.dialog = dialog;
-          }}
+        <CreatePostBottom
+          navigation={navigation}
+          uploadType={uploadType}
+          covers={covers}
+          onPressPhotoUpload={this.onPressPhotoUpload}
+          onPressVideoUpload={this.onPressVideoUpload}
         />
       </View>
     );
   }
 
+  selectCategory = selectCategories => {
+    let { category_ids } = this.state;
+    this.setState({ selectCategories });
+    selectCategories.forEach(function(item) {
+      category_ids.push(item.id);
+    });
+  };
+
   publish = () => {
     let { navigation, createPost } = this.props;
-    let { uploadType, video_id } = this.state;
+    let { uploadType, video_id, category_ids } = this.state;
     this.publishing = true;
     //TODO:这里找后端核实下，这个统一的发布动态接口应该是可以兼容所有发布动态的场景的，前端也应该简化选择上传内容那的操作，
     //简化到和朋友圈一样，和雷坤做的web发布动态一样，无需用户选择图片还是视频这个模态框，直接选择了发布，或者是拍摄。
     createPost({
       variables: {
         body: this.body,
-        image_urls: this.image_urls
+        image_urls: this.image_urls,
+        category_ids: category_ids
       },
       video_id
       // category_ids //TODO:: 选择专题，支持可以多选专题
@@ -153,7 +152,6 @@ class CreatePostScreen extends React.Component {
         });
         let path = video.path.substr(7);
         this.startUploadVideo(Object.assign({ path }, options));
-        this.setState(prevState => ({ selectMedia: !prevState.selectMedia }));
       },
       error => {
         console.log(error);
@@ -292,23 +290,7 @@ class CreatePostScreen extends React.Component {
     });
   };
 
-  cancelUpload = () => {
-    let { covers } = this.state;
-    if (!this.state.uploadId) {
-      return; //没有上传的文件ＩＤ
-    }
-
-    TXUGCUploader.cancelUpload(this.state.uploadId).then(props => {
-      console.log(`Upload ${this.state.uploadId} canceled`);
-      this.setState({ uploadId: null, progress: null }); //取消上传,移除上传文件的ID与进度
-      covers.pop();
-      this.setState({
-        covers
-      }); //取消上传时移除数组的最后一个
-    });
-  };
-
-  showAlertSelected() {
+  /*showAlertSelected() {
     this.dialog.show("请选择上传内容", selectedArr, "#333333", this.callbackSelected);
   }
   // 回调
@@ -317,21 +299,18 @@ class CreatePostScreen extends React.Component {
     console.log(token);
     switch (i) {
       case 0: //图库
-        this.onPressPhotoUpload({
-          url: "https://www.ainicheng.com/video",
-          field: "photo",
-          type: "multipart"
-        });
+        this.onPressPhotoUpload();
         break;
       case 1: // 视频库
-        this.onPressVideoUpload({
-          url: "https://ainicheng.com/api/video/save?api_token=" + token,
-          field: "video",
-          type: "multipart"
-        });
+        this.onPressVideoUpload();
+        // {
+        //   url: "https://ainicheng.com/api/video/save?api_token=" + token,
+        //   field: "video",
+        //   type: "multipart"
+        // }
         break;
     }
-  }
+  }*/
 }
 
 const styles = StyleSheet.create({

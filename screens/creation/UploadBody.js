@@ -8,31 +8,32 @@ import DialogSelected from "../../components/Pure/AlertSelected";
 import * as Progress from "react-native-progress";
 const selectedArr = ["图片", "视频"];
 
-class UploadMedia extends Component {
+class UploadBody extends Component {
 	render() {
-		let {
-			navigation,
-			covers,
-			showMediaSelect,
-			progress,
-			cancelUploa,
-			onPressPhotoUpload,
-			selectMedia,
-			cancelUpload,
-			completed,
-			uploadId,
-			uploadType,
-			uri,
-			showAlertSelected,
-			changeBody
-		} = this.props;
+		let { navigation, covers, progress, completed, uploadId, uploadType, changeBody, selectCategories, selectCategory } = this.props;
 		return (
-			<ScrollView>
+			<View style={{ backgroundColor: Colors.darkGray, flex: 1 }}>
+				<TouchableOpacity onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}>
+					<View style={styles.item}>
+						<Text style={{ color: "#000", fontSize: 14 }}>发布到</Text>
+						<View
+							style={{
+								flexDirection: "row",
+								alignItems: "center"
+							}}
+						>
+							<Text style={{ color: Colors.darkGray, fontSize: 14 }}>
+								{selectCategories.length > 0 ? selectCategories[0].name : "请选择投稿的专题"}{" "}
+							</Text>
+							<Iconfont name={"right"} size={14} color={Colors.darkGray} />
+						</View>
+					</View>
+				</TouchableOpacity>
 				<View style={styles.inputText}>
 					<TextInput
 						ref="textInput"
 						style={styles.input}
-						placeholder="这一刻的想法"
+						placeholder="内容"
 						underlineColorAndroid="transparent"
 						selectionColor="#000"
 						multiline={true}
@@ -40,7 +41,7 @@ class UploadMedia extends Component {
 						onChangeText={changeBody}
 					/>
 				</View>
-				<View style={styles.add}>
+				<View style={styles.uploadPreview}>
 					<View
 						style={{
 							flexWrap: "wrap",
@@ -54,13 +55,13 @@ class UploadMedia extends Component {
 							//TODO: 视频在ios渲染预览有问题，参照https://facebook.github.io/react-native/docs/images.html#static-non-image-resources
 							//用require 方式，或者用react-native-video 来渲染video
 						}
-						<TouchableOpacity onPress={covers.length > 0 ? onPressPhotoUpload : showAlertSelected}>
+						{/*<TouchableOpacity onPress={covers.length > 0 ? onPressPhotoUpload : showAlertSelected}>
 							{uploadType < 0 ? null : (
 								<View style={covers == "" ? styles.icon : styles.icon2}>
 									<Iconfont name={"add"} size={100} color={Colors.lightGray} />
 								</View>
 							)}
-						</TouchableOpacity>
+						</TouchableOpacity>*/}
 						{uploadType < 0 ? (
 							<Progress.Circle
 								style={uploadId == null || completed ? styles.complete : styles.nocomplete}
@@ -72,14 +73,36 @@ class UploadMedia extends Component {
 							/>
 						) : null}
 					</View>
-				</View>
-				<TouchableOpacity>
-					<View style={styles.item}>
-						<Iconfont name={"category-rotate"} size={23} style={{ paddingRight: 15 }} color={"#000"} />
-						<Text style={{ color: "#000", fontSize: 16 }}>选择专题</Text>
+					<View style={{ flexDirection: "row", marginTop: 10 }}>
+						{selectCategories.map((elem, index) => (
+							<View
+								style={{
+									flexDirection: "row",
+									borderColor: Colors.themeColor,
+									borderWidth: 1,
+									borderRadius: 30,
+									paddingVertical: 5,
+									paddingHorizontal: 10,
+									marginRight: 10
+								}}
+								key={index}
+							>
+								<Text style={{ fontSize: 13, color: Colors.themeColor }}>{elem.name}</Text>
+								<TouchableOpacity
+									onPress={() => {
+										selectCategories = selectCategories.filter((query, index) => {
+											return query.id !== elem.id;
+										});
+										selectCategory(selectCategories);
+									}}
+								>
+									<Iconfont name={"chacha"} size={14} color={Colors.themeColor} style={{ marginLeft: 5 }} />
+								</TouchableOpacity>
+							</View>
+						))}
 					</View>
-				</TouchableOpacity>
-			</ScrollView>
+				</View>
+			</View>
 		);
 	}
 }
@@ -94,19 +117,18 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		padding: 0,
 		paddingLeft: 20,
-		paddingTop: 3,
-		height: 100,
+		paddingTop: 10,
+		height: 180,
 		justifyContent: "flex-start"
 		// marginTop:10,
 	},
 
-	add: {
+	uploadPreview: {
 		flexDirection: "column",
 		justifyContent: "center",
-		marginHorizontal: 18,
+		paddingHorizontal: 18,
 		backgroundColor: Colors.skinColor,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightGray
+		paddingBottom: 10
 	},
 	icon: {
 		flexDirection: "row",
@@ -115,7 +137,6 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 		height: 100,
 		width: 100,
-		marginBottom: 120,
 		borderWidth: 1,
 		borderColor: Colors.lightGray
 	},
@@ -126,7 +147,6 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 		height: 100,
 		width: 100,
-		marginBottom: 70,
 		marginLeft: 3,
 		borderWidth: 1,
 		borderColor: Colors.lightGray
@@ -135,8 +155,7 @@ const styles = StyleSheet.create({
 		height: 100,
 		width: 100,
 		marginHorizontal: 4,
-		marginTop: 8,
-		marginBottom: 70
+		marginTop: 8
 	},
 	nocomplete: {
 		position: "absolute",
@@ -150,12 +169,12 @@ const styles = StyleSheet.create({
 	item: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginHorizontal: 20,
-		paddingVertical: 20,
-		backgroundColor: Colors.skinColor,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightGray
+		justifyContent: "space-between",
+		marginVertical: 10,
+		paddingHorizontal: 20,
+		paddingVertical: 15,
+		backgroundColor: Colors.skinColor
 	}
 });
 
-export default UploadMedia;
+export default UploadBody;
