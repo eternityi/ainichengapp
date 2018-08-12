@@ -33,7 +33,7 @@ class HomeScreen extends React.Component {
       <Screen>
         <Header navigation={navigation} />
         <View style={styles.container}>
-          <Query query={recommendFollowsQuery} variables={{ user_id: user.id }}>
+          <Query query={recommendFollowsQuery} variables={{ recommend_for_user_id: user.id }}>
             {({ loading, error, data, fetchMore, fetch }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.follows)) return <SpinnerLoading />;
@@ -159,12 +159,16 @@ class HomeScreen extends React.Component {
                 marginLeft: 5
               }}
             >
-              {Config.AppName}推荐{follow.user ? "作者" : "专题"}
+              {Config.AppName}
+              推荐
+              {follow.user ? "作者" : "专题"}
             </Text>
           </View>
           <TouchableOpacity
             style={{ paddingVertical: 20 }}
-            onPress={() => navigation.navigate(follow.user ? "用户详情" : "专题详情", follow.user ? { user: follow.user } : { category: follow.category })}
+            onPress={() =>
+              navigation.navigate(follow.user ? "用户详情" : "专题详情", follow.user ? { user: follow.user } : { category: follow.category })
+            }
           >
             <FollowItem follow={follow} navigation={navigation} />
           </TouchableOpacity>

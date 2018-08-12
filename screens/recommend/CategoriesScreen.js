@@ -25,7 +25,7 @@ class CategoriesScreen extends Component {
 			<Screen>
 				<Header navigation={navigation} />
 				<View style={styles.container}>
-					<Query query={recommendFollowCategoriesQuery} variables={{ user_id: user.id }}>
+					<Query query={recommendFollowCategoriesQuery} variables={{ recommend_for_user_id: user.id }}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.follows)) return <SpinnerLoading />;
@@ -89,7 +89,8 @@ class CategoriesScreen extends Component {
 					onPress={() =>
 						navigation.navigate("专题详情", {
 							category: item.category
-						})}
+						})
+					}
 				>
 					<FollowItem follow={item} />
 				</TouchableOpacity>

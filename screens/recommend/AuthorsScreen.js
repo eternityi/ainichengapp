@@ -25,7 +25,7 @@ class AuthorsScreen extends Component {
 			<Screen>
 				<Header navigation={navigation} />
 				<View style={styles.container}>
-					<Query query={recommendFollowUsersQuery} variables={{ user_id: user.id }}>
+					<Query query={recommendFollowUsersQuery} variables={{ recommend_for_user_id: user.id }}>
 						{({ loading, error, data, fetchMore, fetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.follows)) return <SpinnerLoading />;
@@ -86,7 +86,8 @@ class AuthorsScreen extends Component {
 					onPress={() =>
 						navigation.navigate("用户详情", {
 							user: follow.user
-						})}
+						})
+					}
 				>
 					<FollowItem follow={follow} navigation={navigation} />
 				</TouchableOpacity>

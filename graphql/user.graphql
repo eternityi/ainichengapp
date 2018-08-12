@@ -579,8 +579,8 @@ query userArticlesSubmitStatusQuery($category_id: Int!) {
 }
 
 # 推荐关注
-query recommendFollowsQuery($user_id: Int!, $offset: Int) {
-    follows(user_id: $user_id, filter: USER_CATEGORY, offset: $offset) {
+query recommendFollowsQuery($recommend_for_user_id: Int!, $offset: Int) {
+    follows(recommend_for_user_id: $recommend_for_user_id, filter: USER_CATEGORY, offset: $offset) {
         id
         user {
             id
@@ -610,8 +610,8 @@ query recommendFollowsQuery($user_id: Int!, $offset: Int) {
 }
 
 # 推荐关注的用户
-query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
-    follows(user_id: $user_id, filter: USER, offset: $offset) {
+query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
+    follows(recommend_for_user_id: $recommend_for_user_id, filter: USER, offset: $offset) {
         id
         user {
             id
@@ -641,8 +641,8 @@ query recommendFollowUsersQuery($user_id: Int!, $offset: Int) {
 }
 
 # 推荐关注的专题
-query recommendFollowCategoriesQuery($user_id: Int!, $offset: Int) {
-    follows(user_id: $user_id, filter: CATEGORY, offset: $offset) {
+query recommendFollowCategoriesQuery($recommend_for_user_id: Int!, $offset: Int) {
+    follows(recommend_for_user_id: $recommend_for_user_id, filter: CATEGORY, offset: $offset) {
         id
         user {
             id

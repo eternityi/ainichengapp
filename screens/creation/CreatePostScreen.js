@@ -151,6 +151,7 @@ class CreatePostScreen extends React.Component {
           covers
         });
         let path = video.path.substr(7);
+        console.log("video path:", path);
         this.startUploadVideo(Object.assign({ path }, options));
       },
       error => {
@@ -234,7 +235,7 @@ class CreatePostScreen extends React.Component {
         },
         opts
       );
-      console.log("metadata", metadata);
+      console.log("metadata:", metadata);
       let uploadtype = metadata.mimeType.indexOf("image");
       this.setState({
         uploadType: uploadtype
@@ -247,7 +248,7 @@ class CreatePostScreen extends React.Component {
           this.setState({ uploadId, progress: 0, completed: false }); //获取上传ID,进度归０,上传未完成
           TXUGCUploader.addListener("progress", uploadId, data => {
             this.handleProgress(+parseInt(data.progress)); //上传进度
-            // console.log(`Progress: ${data.progress}%`);
+            console.log(`Progress: ${data.progress}%`);
           });
           TXUGCUploader.addListener("error", uploadId, data => {
             console.log(`Error: ${data.error}%`);
@@ -275,10 +276,10 @@ class CreatePostScreen extends React.Component {
               })
             })
               .then(response => response.json())
-              .then(responseJson => {
-                console.log("responseJson:", responseJson);
+              .then(video => {
+                console.log("video:", video);
                 ___this.setState({
-                  video_id: responseJson.id
+                  video_id: video.id
                 });
               });
           });
