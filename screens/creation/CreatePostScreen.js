@@ -138,7 +138,7 @@ class CreatePostScreen extends React.Component {
     this.body = body;
   };
 
-  onPressVideoUpload = options => {
+  onPressVideoUpload = () => {
     //打开视频库
     ImagePicker.openPicker({
       multiple: false,
@@ -152,7 +152,7 @@ class CreatePostScreen extends React.Component {
         });
         let path = video.path.substr(7);
         console.log("video path:", path);
-        this.startUploadVideo(Object.assign({ path }, options));
+        this.startUploadVideo({ path });
       },
       error => {
         console.log(error);

@@ -15,9 +15,10 @@
 #import "TVCCommon.h"
 
 @interface QCVodUploader : RCTEventEmitter <RCTBridgeModule,TXVideoPublishListener>
-{
-  NSMutableDictionary *_responsesData;
-}
+
+  +(void)getVodSign:(void (^)(int, NSString *))completion;
+  +(void)asyncSendHttpRequest: (void (^)(int, NSString*))handler;
+
 @end
 
 @implementation QCVodUploader
@@ -38,7 +39,6 @@ static bool isCancelUpload = false;
   self = [super init];
   if (self) {
     staticEventEmitter = self;
-    _responsesData = [NSMutableDictionary dictionary];
   }
   return self;
 }
@@ -66,7 +66,7 @@ static bool isCancelUpload = false;
     progress = 100.0 * (float)uploadBytes / (float)totalBytes;
   }
   [self _sendEventWithName:@"QCVodUploader-progress" body:@{ @"id": [NSString stringWithFormat:@"%d", uploadId], @"progress": [NSNumber numberWithFloat:progress] }];
-//  NSLog(@"onPublishProgress [%ld/%ld] progress: [%f]", (long)uploadBytes, (long)totalBytes, progress);
+  NSLog(@"onPublishProgress [%ld/%ld] progress: [%f]", (long)uploadBytes, (long)totalBytes, progress);
 }
 
 -(void) onPublishComplete:(TXPublishResult*)result
@@ -107,9 +107,11 @@ RCT_EXPORT_METHOD(getFileInfo:(NSString *)path resolve:(RCTPromiseResolveBlock)r
         [params setObject:[NSNumber numberWithLong:fileSize] forKey:@"size"];
       }
     }
+    NSLog(@"get fileinfo ok");
     resolve(params);
   }
   @catch (NSException *exception) {
+    NSLog(@"get fileinfo error: %@", exception.name);
     reject(@"QCVodUploader", exception.name, nil);
   }
 }
@@ -147,32 +149,82 @@ RCT_EXPORT_METHOD(startUpload:(NSDictionary *)options resolve:(RCTPromiseResolve
     thisUploadId = ++uploadId;
   }
   
-//  NSString *uploadUrl = options[@"url"];
   __block NSString *fileURI = options[@"path"];
-//  NSString *method = options[@"method"] ?: @"POST";
-//  NSString *uploadType = options[@"type"] ?: @"raw";
-//  NSString *fieldName = options[@"field"];
   NSString *customUploadId = options[@"customUploadId"];
   if(customUploadId){
     uploadId = [customUploadId intValue];
   }
-//  NSDictionary *headers = options[@"headers"];
-//  NSDictionary *parameters = options[@"parameters"];
   
-  NSLog(@"start upload with video path: %@", fileURI);
+  NSLog(@"start get signature ...");
+  
+  [QCVodUploader getVodSign: ^(int code, NSString *signature) {
+    
+    if(!code){
+      NSLog(@"get signature failed: %@", signature);
+      return;
+    }
+    
+    NSLog(@"start upload with video path: %@", fileURI);
+    @try{
+      TXUGCPublish   *_videoPublish = [[TXUGCPublish alloc] initWithUserID:@"carol_ios"];
+      _videoPublish.delegate = self;
+      TXPublishParam *videoPublishParams = [[TXPublishParam alloc] init];
+      videoPublishParams.signature  = signature;
+      videoPublishParams.videoPath  = fileURI;
+      [_videoPublish publishVideo:videoPublishParams];
+      resolve([NSString stringWithFormat:@"%d",thisUploadId]);
+    }
+    @catch (NSException *exception) {
+      reject(@"QCVodUploader uploading error:", exception.name, nil);
+    }
+  
+  }];
+  
+}
 
-  @try{
-    TXUGCPublish   *_videoPublish = [[TXUGCPublish alloc] initWithUserID:@"carol_ios"];
-    _videoPublish.delegate = self;
-    TXPublishParam *videoPublishParams = [[TXPublishParam alloc] init];
-    videoPublishParams.signature  = @"CWz6tHQ5rMfGHPbugNcvpWh/WqdzZWNyZXRJZD1BS0lEUGJYQ2JqNUMxYno3Mmk3RjlvRE1IeE9hWEVnc05YMEUmY3VycmVudFRpbWVTdGFtcD0xNTMzMzY0NzQzJmV4cGlyZVRpbWU9MTUzMzQ1MTE0MyZyYW5kb209ODg5NTI0MjIw";
-    videoPublishParams.videoPath  = fileURI;
-    [_videoPublish publishVideo:videoPublishParams];
-    resolve([NSString stringWithFormat:@"%d",thisUploadId]);
-  }
-  @catch (NSException *exception) {
-    reject(@"QCVodUploader uploading error:", exception.name, nil);
-  }
++ (void)getVodSign:(void (^)(int code, NSString *signature))completion
+{
+
+  [QCVodUploader asyncSendHttpRequest: ^(int code, NSString *signature) {
+    completion(code, signature);
+  }];
+}
+
++ (void)asyncSendHttpRequest: (void (^)(int code, NSString *signature))handler
+{
+  dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    NSString* urlString = @"https://ainicheng.com/sdk/qcvod.php";
+    NSMutableString *strUrl = [[NSMutableString alloc] initWithString:urlString];
+    
+    NSURL *URL = [NSURL URLWithString:strUrl];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"text/html; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+  
+    [request setTimeoutInterval:3];
+    
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+      if (error != nil)
+      {
+        NSLog(@"internalSendRequest failed，NSURLSessionDataTask return error code:%d, des:%@", (int)[error code], [error description]);
+        dispatch_async(dispatch_get_main_queue(), ^{
+          handler(-1, @"服务请求失败");
+        });
+      }
+      else
+      {
+        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+       
+        dispatch_async(dispatch_get_main_queue(), ^{
+          handler(1, responseString);
+        });
+      }
+    }];
+    
+    [task resume];
+  });
 }
 
 /*
