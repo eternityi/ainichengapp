@@ -10,7 +10,7 @@ const selectedArr = ["图片", "视频"];
 
 class UploadBody extends Component {
 	render() {
-		let { navigation, covers, progress, completed, uploadId, uploadType, changeBody, selectCategories, selectCategory } = this.props;
+		let { navigation, covers, progress, completed, uploadId, uploadType, changeBody, body,selectCategories, selectCategory } = this.props;
 		return (
 			<View style={{ backgroundColor: Colors.darkGray, flex: 1 }}>
 				<TouchableOpacity onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}>

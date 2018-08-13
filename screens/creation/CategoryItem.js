@@ -47,7 +47,7 @@ class CategoryItem extends React.Component {
 							</Text>
 						</View>
 					</View>
-					<View style={{ width: 60, height: 28 }}>
+					<View style={{ width: 60, height: 32 }}>
 						<CheckBox style={{ flex: 1, padding: 10 }} onClick={() => this.onClick(category)} isChecked={check} />
 					</View>
 				</View>

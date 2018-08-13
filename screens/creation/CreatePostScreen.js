@@ -10,7 +10,6 @@ import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
 import MediaModal from "../../components/Modal/MediaModal";
-// import DialogSelected from "../../components/Pure/AlertSelected";
 
 // import Upload from "react-native-background-upload";
 import TXUGCUploader from "../../utils/TXUGCUploader";
@@ -80,6 +79,8 @@ class CreatePostScreen extends React.Component {
           completed={completed}
           uploadId={uploadId}
           uploadType={uploadType}
+          changeBody={this.changeBody}
+          body={this.body}
           selectCategories={selectCategories}
           selectCategory={this.selectCategory}
         />
@@ -112,10 +113,10 @@ class CreatePostScreen extends React.Component {
       variables: {
         body: this.body,
         image_urls: this.image_urls,
-        category_ids: category_ids
+        a_cids: category_ids,
+        video_id:video_id
       },
-      video_id
-      // category_ids //TODO:: 选择专题，支持可以多选专题
+      // category_ids //TODO:: 选择专题，支持可以多选专
     })
       .then(({ data }) => {
         console.log("published");
@@ -124,9 +125,9 @@ class CreatePostScreen extends React.Component {
         //如果没有发布就发布更新否则更新发布
         if (uploadType < 1) {
           console.log("uploadType", uploadType);
-          navigation.navigate("视频详情", { video: data.createPost });
+          navigation.replace("视频详情", { video: data.createPost });
         } else {
-          navigation.navigate("文章详情", { article: data.createPost });
+          navigation.replace("文章详情", { article: data.createPost });
         }
       })
       .catch(error => {
@@ -136,6 +137,7 @@ class CreatePostScreen extends React.Component {
 
   changeBody = body => {
     this.body = body;
+    console.log("text",this.body);
   };
 
   onPressVideoUpload = () => {
@@ -290,28 +292,6 @@ class CreatePostScreen extends React.Component {
         });
     });
   };
-
-  /*showAlertSelected() {
-    this.dialog.show("请选择上传内容", selectedArr, "#333333", this.callbackSelected);
-  }
-  // 回调
-  callbackSelected(i) {
-    const { token } = this.props.users.user;
-    console.log(token);
-    switch (i) {
-      case 0: //图库
-        this.onPressPhotoUpload();
-        break;
-      case 1: // 视频库
-        this.onPressVideoUpload();
-        // {
-        //   url: "https://ainicheng.com/api/video/save?api_token=" + token,
-        //   field: "video",
-        //   type: "multipart"
-        // }
-        break;
-    }
-  }*/
 }
 
 const styles = StyleSheet.create({
