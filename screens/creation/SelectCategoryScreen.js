@@ -29,23 +29,20 @@ class SeleceCategoryScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		let selectCategories = props.navigation.getParam("selectCategories", []);
-		let category_ids = props.navigation.getParam("category_ids", []);
 		selectCategories = [...selectCategories];
-		category_ids = [...category_ids];
 		this.state = {
 			fetchingMore: true,
 			keywords: "",
 			collection: "收录",
 			submission: "投稿",
 			routeName: "　",
-			selectCategories,
-			category_ids
+			selectCategories
 		};
 	}
 	render() {
 		const { navigation, user } = this.props;
 		const callback = navigation.getParam("callback", {});
-		let { fetchingMore, keywords, collection, submission, routeName, selectCategories, category_ids } = this.state;
+		let { fetchingMore, keywords, collection, submission, routeName, selectCategories } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -62,7 +59,7 @@ class SeleceCategoryScreen extends React.Component {
 										});
 									} else {
 										console.log(selectCategories);
-										callback(selectCategories, category_ids);
+										callback(selectCategories);
 										navigation.goBack();
 									}
 								}}
@@ -144,20 +141,15 @@ class SeleceCategoryScreen extends React.Component {
 	}
 
 	selectCategory = (category, check) => {
-		let { selectCategories, category_ids } = this.state;
+		let { selectCategories } = this.state;
 		if (check) {
 			selectCategories.push(category);
-			category_ids.push(category.id);
 		} else {
 			selectCategories = selectCategories.filter((elem, i) => {
 				return elem.id != category.id;
 			});
-			category_ids = category_ids.filter((elem, i) => {
-				return elem != category.id;
-			});
 		}
 		this.setState({ selectCategories });
-		this.setState({ category_ids });
 	};
 }
 

@@ -22,17 +22,13 @@ class UploadBody extends Component {
 			changeBody,
 			body,
 			selectCategories,
-			selectCategory,
-			category_ids,
-			category
+			selectCategory
 		} = this.props;
 		return (
 			<View style={{ backgroundColor: Colors.lightGray, flex: 1 }}>
 				<DivisionLine height={10} />
 				<TouchableOpacity
-					onPress={() =>
-						navigation.navigate("选择专题", { callback: selectCategory, selectCategories, category_ids })
-					}
+					onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}
 				>
 					<View style={styles.item}>
 						<Text style={{ color: "#000", fontSize: 14 }}>发布到</Text>
@@ -43,11 +39,7 @@ class UploadBody extends Component {
 							}}
 						>
 							<Text style={{ color: Colors.darkGray, fontSize: 14 }}>
-								{category.name == null
-									? selectCategories.length > 0
-										? selectCategories[0].name
-										: "请选择投稿的专题"
-									: category.name}
+								{selectCategories.length > 0 ? selectCategories[0].name : "请选择投稿的专题"}
 							</Text>
 							<Iconfont name={"right"} size={14} color={Colors.darkGray} />
 						</View>

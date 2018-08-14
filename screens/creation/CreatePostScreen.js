@@ -48,8 +48,7 @@ class CreatePostScreen extends React.Component {
     this.body = "";
     this.publishing = false;
     let category = props.navigation.getParam("category", {});
-    // this.selectCategories.push(category);
-    console.log("ss", category);
+
     this.state = {
       video_id: null,
       uploadId: null,
@@ -59,20 +58,10 @@ class CreatePostScreen extends React.Component {
       routeName: "　",
       uri: "",
       uploadType: 1,
-      selectCategories: [],
+      selectCategories: category.name == null ? [] : [category],
       category_ids: [],
-      waitingVisible: false,
-      category
+      waitingVisible: false
     };
-  }
-
-  componentDidMount() {
-    console.log("se", selectCategories);
-    let { category, selectCategories } = this.state;
-    if (!category.name == null) {
-      selectCategories.push(category);
-      console.log("se", selectCategories);
-    }
   }
 
   render() {
@@ -86,8 +75,7 @@ class CreatePostScreen extends React.Component {
       uri,
       selectCategories,
       category_ids,
-      waitingVisible,
-      category
+      waitingVisible
     } = this.state;
     const { navigation } = this.props;
     return (
@@ -126,7 +114,6 @@ class CreatePostScreen extends React.Component {
           selectCategories={selectCategories}
           selectCategory={this.selectCategory}
           category_ids={category_ids}
-          category={category}
         />
         <CreatePostBottom
           navigation={navigation}
@@ -140,25 +127,18 @@ class CreatePostScreen extends React.Component {
     );
   }
 
-  selectCategory = (selectCategories, category_ids) => {
+  selectCategory = selectCategories => {
     // let { category_ids } = this.state;
     this.setState({ selectCategories });
-    console.log("id", category_ids);
-    this.setState({ category_ids });
-  };
-
-  slidewrite = () => {
-    let { category, selectCategories } = this.state;
-    if (!category.name == null) {
-      selectCategories.push(category);
-      console.log("se", selectCategories);
-    }
-    return;
   };
 
   publish = () => {
     let { navigation, createPost } = this.props;
-    let { uploadType, video_id, category_ids } = this.state;
+    let { uploadType, video_id, selectCategories } = this.state;
+    let category_ids = selectCategories.map((elem, i) => {
+      return elem.id;
+    });
+    console.log("category_ids", category_ids);
     Keyboard.dismiss();
     this.publishing = true;
     if (!this.body) {
