@@ -217,6 +217,7 @@ class CreatePostScreen extends React.Component {
         this.setState({
           covers
         });
+        console.log("covers:", covers);
         let path = video.path.substr(7);
         console.log("video path:", path);
         this.startUploadVideo({ path });
@@ -240,6 +241,7 @@ class CreatePostScreen extends React.Component {
         images.map(image => {
           //optmistic update
           covers.push(image.path);
+          console.log("地址", covers);
           this.startUploadImage(image.path);
         });
         this.setState({

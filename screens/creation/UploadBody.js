@@ -6,6 +6,8 @@ import { DivisionLine } from "../../components/Pure";
 import DialogSelected from "../../components/Pure/AlertSelected";
 
 import * as Progress from "react-native-progress";
+import Video from "react-native-video";
+
 const selectedArr = ["图片", "视频"];
 
 class UploadBody extends Component {
@@ -73,9 +75,27 @@ class UploadBody extends Component {
 							borderColor: Colors.lightGray
 						}}
 					>
-						{covers.map((cover, index) => (
-							<Image key={index} style={styles.picture} source={{ uri: cover }} />
-						))}
+						{Platform.OS == "android"
+							? covers.map((cover, index) => (
+									<Image key={index} style={styles.picture} source={{ uri: cover }} />
+							  ))
+							: uploadType < 0
+								? covers.map((cover, index) => (
+										<Video
+											key={index}
+											source={{
+												uri: cover
+											}}
+											style={styles.picture}
+											rate={0}
+											muted={true}
+											resizeMode="cover"
+										/>
+								  ))
+								: covers.map((cover, index) => (
+										<Image key={index} style={styles.picture} source={{ uri: cover }} />
+								  ))}
+
 						{
 							//TODO: 视频在ios渲染预览有问题，参照https://facebook.github.io/react-native/docs/images.html#static-non-image-resources
 							//用require 方式，或者用react-native-video 来渲染video
