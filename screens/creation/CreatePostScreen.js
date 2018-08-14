@@ -1,6 +1,18 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  Button,
+  View,
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight,
+  Image,
+  Platform,
+  Keyboard
+} from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -14,10 +26,12 @@ import MediaModal from "../../components/Modal/MediaModal";
 // import Upload from "react-native-background-upload";
 import TXUGCUploader from "../../utils/TXUGCUploader";
 
+import Toast from "react-native-root-toast";
 import ImagePicker from "react-native-image-crop-picker";
 import { throttle } from "lodash";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
+import { Waiting } from "../../components/Pure";
 
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
@@ -30,7 +44,12 @@ class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
     this.image_urls = [];
+    // this.selectCategories = [];
     this.body = "";
+    this.publishing = false;
+    let category = props.navigation.getParam("category", {});
+    // this.selectCategories.push(category);
+    console.log("ss", category);
     this.state = {
       video_id: null,
       uploadId: null,
@@ -41,12 +60,35 @@ class CreatePostScreen extends React.Component {
       uri: "",
       uploadType: 1,
       selectCategories: [],
-      category_ids: []
+      category_ids: [],
+      waitingVisible: false,
+      category
     };
   }
 
+  componentDidMount() {
+    console.log("se", selectCategories);
+    let { category, selectCategories } = this.state;
+    if (!category.name == null) {
+      selectCategories.push(category);
+      console.log("se", selectCategories);
+    }
+  }
+
   render() {
-    let { covers, routeName, completed, progress, uploadId, uploadType, uri, selectCategories } = this.state;
+    let {
+      covers,
+      routeName,
+      completed,
+      progress,
+      uploadId,
+      uploadType,
+      uri,
+      selectCategories,
+      category_ids,
+      waitingVisible,
+      category
+    } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -83,6 +125,8 @@ class CreatePostScreen extends React.Component {
           body={this.body}
           selectCategories={selectCategories}
           selectCategory={this.selectCategory}
+          category_ids={category_ids}
+          category={category}
         />
         <CreatePostBottom
           navigation={navigation}
@@ -91,22 +135,38 @@ class CreatePostScreen extends React.Component {
           onPressPhotoUpload={this.onPressPhotoUpload}
           onPressVideoUpload={this.onPressVideoUpload}
         />
+        <Waiting isVisible={waitingVisible} />
       </View>
     );
   }
 
-  selectCategory = selectCategories => {
-    let { category_ids } = this.state;
+  selectCategory = (selectCategories, category_ids) => {
+    // let { category_ids } = this.state;
     this.setState({ selectCategories });
-    selectCategories.forEach(function(item) {
-      category_ids.push(item.id);
-    });
+    console.log("id", category_ids);
+    this.setState({ category_ids });
+  };
+
+  slidewrite = () => {
+    let { category, selectCategories } = this.state;
+    if (!category.name == null) {
+      selectCategories.push(category);
+      console.log("se", selectCategories);
+    }
+    return;
   };
 
   publish = () => {
     let { navigation, createPost } = this.props;
     let { uploadType, video_id, category_ids } = this.state;
+    Keyboard.dismiss();
     this.publishing = true;
+    if (!this.body) {
+      this.toast();
+    }
+    this.setState({
+      waitingVisible: true
+    });
     //TODO:这里找后端核实下，这个统一的发布动态接口应该是可以兼容所有发布动态的场景的，前端也应该简化选择上传内容那的操作，
     //简化到和朋友圈一样，和雷坤做的web发布动态一样，无需用户选择图片还是视频这个模态框，直接选择了发布，或者是拍摄。
     createPost({
@@ -114,13 +174,16 @@ class CreatePostScreen extends React.Component {
         body: this.body,
         image_urls: this.image_urls,
         a_cids: category_ids,
-        video_id:video_id
-      },
+        video_id: video_id
+      }
       // category_ids //TODO:: 选择专题，支持可以多选专
     })
       .then(({ data }) => {
         console.log("published");
         console.log("createPost", data.createPost);
+        this.setState({
+          waitingVisible: false
+        });
         this.publishing = false;
         //如果没有发布就发布更新否则更新发布
         if (uploadType < 1) {
@@ -132,12 +195,14 @@ class CreatePostScreen extends React.Component {
       })
       .catch(error => {
         this.publishing = false;
+        this.setState({
+          waitingVisible: false
+        });
       });
   };
 
   changeBody = body => {
     this.body = body;
-    console.log("text",this.body);
   };
 
   onPressVideoUpload = () => {
@@ -292,6 +357,20 @@ class CreatePostScreen extends React.Component {
         });
     });
   };
+  toast() {
+    let toast = Toast.show("内容不能为空哦~", {
+      duration: Toast.durations.LONG,
+      position: -70,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 100,
+      backgroundColor: Colors.nightColor
+    });
+    setTimeout(function() {
+      Toast.hide(toast);
+    }, 2000);
+  }
 }
 
 const styles = StyleSheet.create({

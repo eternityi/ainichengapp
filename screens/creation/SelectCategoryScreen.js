@@ -4,7 +4,16 @@ import Colors from "../../constants/Colors";
 import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from "react-native";
 import Screen from "../Screen";
 
-import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import Toast from "react-native-root-toast";
+import {
+	SearchTypeBar,
+	Avatar,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import CategoryItem from "./CategoryItem";
@@ -20,19 +29,23 @@ class SeleceCategoryScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		let selectCategories = props.navigation.getParam("selectCategories", []);
+		let category_ids = props.navigation.getParam("category_ids", []);
+		selectCategories = [...selectCategories];
+		category_ids = [...category_ids];
 		this.state = {
 			fetchingMore: true,
 			keywords: "",
 			collection: "收录",
 			submission: "投稿",
 			routeName: "　",
-			selectCategories
+			selectCategories,
+			category_ids
 		};
 	}
 	render() {
 		const { navigation, user } = this.props;
 		const callback = navigation.getParam("callback", {});
-		let { fetchingMore, keywords, collection, submission, routeName, selectCategories } = this.state;
+		let { fetchingMore, keywords, collection, submission, routeName, selectCategories, category_ids } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -42,8 +55,16 @@ class SeleceCategoryScreen extends React.Component {
 						rightComponent={
 							<TouchableOpacity
 								onPress={() => {
-									callback(selectCategories);
-									navigation.goBack();
+									if (selectCategories.length > 3) {
+										Toast.show("最多选择3个专题哦~", {
+											shadow: true,
+											delay: 100
+										});
+									} else {
+										console.log(selectCategories);
+										callback(selectCategories, category_ids);
+										navigation.goBack();
+									}
 								}}
 							>
 								<Text
@@ -87,7 +108,13 @@ class SeleceCategoryScreen extends React.Component {
 													offset: categories.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.categories &&
+															fetchMoreResult.categories.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
@@ -117,17 +144,20 @@ class SeleceCategoryScreen extends React.Component {
 	}
 
 	selectCategory = (category, check) => {
-		let { selectCategories } = this.state;
+		let { selectCategories, category_ids } = this.state;
 		if (check) {
 			selectCategories.push(category);
+			category_ids.push(category.id);
 		} else {
 			selectCategories = selectCategories.filter((elem, i) => {
-				console.log("sss", elem.id != category.id);
 				return elem.id != category.id;
+			});
+			category_ids = category_ids.filter((elem, i) => {
+				return elem != category.id;
 			});
 		}
 		this.setState({ selectCategories });
-		console.log("aaa", selectCategories);
+		this.setState({ category_ids });
 	};
 }
 

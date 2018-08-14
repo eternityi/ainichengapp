@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, StatusBar, Animated, Easing } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	FlatList,
+	TouchableOpacity,
+	Dimensions,
+	StatusBar,
+	Animated,
+	Easing
+} from "react-native";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
@@ -94,7 +104,13 @@ class HomeScreen extends Component {
 														this.toggleModalVisible();
 													}
 												}}
-												triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
+												triggerComponent={
+													<Iconfont
+														name={"more-vertical"}
+														size={20}
+														color={Colors.tintFontColor}
+													/>
+												}
 												customOptionStyle={{
 													optionWrapper: {
 														alignItems: "flex-start",
@@ -127,7 +143,13 @@ class HomeScreen extends Component {
 													offset: articles.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.articles &&
+															fetchMoreResult.articles.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
@@ -160,7 +182,7 @@ class HomeScreen extends Component {
 									}}
 								/>
 								<Animated.View style={[styles.slideSite, { right: offset }]}>
-									<SlideWrite navigation={navigation} />
+									<SlideWrite navigation={navigation} category={category} />
 								</Animated.View>
 							</View>
 						);

@@ -7,13 +7,10 @@ import { navigationAction } from "../../constants/Methods";
 
 class SlideWrite extends Component {
 	render() {
-		let { style = {}, size = 30, color = "#fff", navigation } = this.props;
+		let { style = {}, size = 30, color = "#fff", navigation, category } = this.props;
 		return (
 			<TouchableWithoutFeedback
-				onPress={() =>
-					navigation.dispatch(
-						navigationAction({ routeName: "发布动态" })
-					)}
+				onPress={() => navigation.dispatch(navigationAction({ routeName: "发布动态", params: { category } }))}
 			>
 				<View style={[styles.write, style]} elevation={5}>
 					<Iconfont name="write" size={25} color={color} />

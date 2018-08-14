@@ -19,13 +19,14 @@ class CategoryItem extends React.Component {
 			return elem.id == category.id;
 		});
 		this.state = {
-			check
+			check,
+			disabled: true
 		};
 	}
 
 	render() {
 		let { category, navigation } = this.props;
-		let { check } = this.state;
+		let { check, disabled } = this.state;
 		return (
 			<TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate("专题详情", { category })}>
 				<View>
@@ -48,20 +49,25 @@ class CategoryItem extends React.Component {
 						</View>
 					</View>
 					<View style={{ width: 60, height: 32 }}>
-						<CheckBox style={{ flex: 1, padding: 10 }} onClick={() => this.onClick(category)} isChecked={check} />
+						<CheckBox
+							style={{ flex: 1, padding: 10 }}
+							onClick={() => this.onClick(category)}
+							isChecked={check}
+						/>
 					</View>
 				</View>
 			</TouchableOpacity>
 		);
 	}
 	onClick(value) {
-		let { category, selectCategory } = this.props;
+		let { category, selectCategory, disabled } = this.props;
 		this.setState(
 			prevState => ({
 				check: !prevState.check
 			}),
 			() => {
 				let { check } = this.state;
+				console.log("状态", check);
 				selectCategory(category, check);
 			}
 		);

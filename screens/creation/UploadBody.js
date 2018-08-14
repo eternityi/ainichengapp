@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput, Platform } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-
+import { DivisionLine } from "../../components/Pure";
 import DialogSelected from "../../components/Pure/AlertSelected";
 
 import * as Progress from "react-native-progress";
@@ -10,10 +10,28 @@ const selectedArr = ["图片", "视频"];
 
 class UploadBody extends Component {
 	render() {
-		let { navigation, covers, progress, completed, uploadId, uploadType, changeBody, body,selectCategories, selectCategory } = this.props;
+		let {
+			navigation,
+			covers,
+			progress,
+			completed,
+			uploadId,
+			uploadType,
+			changeBody,
+			body,
+			selectCategories,
+			selectCategory,
+			category_ids,
+			category
+		} = this.props;
 		return (
-			<View style={{ backgroundColor: Colors.darkGray, flex: 1 }}>
-				<TouchableOpacity onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}>
+			<View style={{ backgroundColor: Colors.lightGray, flex: 1 }}>
+				<DivisionLine height={10} />
+				<TouchableOpacity
+					onPress={() =>
+						navigation.navigate("选择专题", { callback: selectCategory, selectCategories, category_ids })
+					}
+				>
 					<View style={styles.item}>
 						<Text style={{ color: "#000", fontSize: 14 }}>发布到</Text>
 						<View
@@ -23,12 +41,17 @@ class UploadBody extends Component {
 							}}
 						>
 							<Text style={{ color: Colors.darkGray, fontSize: 14 }}>
-								{selectCategories.length > 0 ? selectCategories[0].name : "请选择投稿的专题"}{" "}
+								{category.name == null
+									? selectCategories.length > 0
+										? selectCategories[0].name
+										: "请选择投稿的专题"
+									: category.name}
 							</Text>
 							<Iconfont name={"right"} size={14} color={Colors.darkGray} />
 						</View>
 					</View>
 				</TouchableOpacity>
+				<DivisionLine height={10} />
 				<View style={styles.inputText}>
 					<TextInput
 						ref="textInput"
@@ -50,7 +73,9 @@ class UploadBody extends Component {
 							borderColor: Colors.lightGray
 						}}
 					>
-						{covers.map((cover, index) => <Image key={index} style={styles.picture} source={{ uri: cover }} />)}
+						{covers.map((cover, index) => (
+							<Image key={index} style={styles.picture} source={{ uri: cover }} />
+						))}
 						{
 							//TODO: 视频在ios渲染预览有问题，参照https://facebook.github.io/react-native/docs/images.html#static-non-image-resources
 							//用require 方式，或者用react-native-video 来渲染video
@@ -73,7 +98,7 @@ class UploadBody extends Component {
 							/>
 						) : null}
 					</View>
-					<View style={{ flexDirection: "row", marginTop: 10 }}>
+					<View style={{ flexDirection: "row", marginTop: 10, height: 20 }}>
 						{selectCategories.map((elem, index) => (
 							<View
 								style={{
@@ -81,13 +106,14 @@ class UploadBody extends Component {
 									borderColor: Colors.themeColor,
 									borderWidth: 1,
 									borderRadius: 30,
-									paddingVertical: 5,
-									paddingHorizontal: 10,
+									paddingHorizontal: 6,
 									marginRight: 10
 								}}
 								key={index}
 							>
-								<Text style={{ fontSize: 13, color: Colors.themeColor }}>{elem.name}</Text>
+								<Text style={{ fontSize: 9, color: Colors.themeColor, paddingVertical: 3 }}>
+									{elem.name}
+								</Text>
 								<TouchableOpacity
 									onPress={() => {
 										selectCategories = selectCategories.filter((query, index) => {
@@ -96,7 +122,12 @@ class UploadBody extends Component {
 										selectCategory(selectCategories);
 									}}
 								>
-									<Iconfont name={"chacha"} size={14} color={Colors.themeColor} style={{ marginLeft: 5 }} />
+									<Iconfont
+										name={"chacha"}
+										size={11}
+										color={Colors.themeColor}
+										style={{ marginLeft: 5, padding: 3 }}
+									/>
 								</TouchableOpacity>
 							</View>
 						))}
@@ -114,11 +145,11 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		backgroundColor: "transparent",
-		fontSize: 16,
+		fontSize: 14,
 		padding: 0,
 		paddingLeft: 20,
 		paddingTop: 10,
-		height: 180,
+		height: 150,
 		justifyContent: "flex-start"
 		// marginTop:10,
 	},
@@ -170,7 +201,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		marginVertical: 10,
 		paddingHorizontal: 20,
 		paddingVertical: 15,
 		backgroundColor: Colors.skinColor
