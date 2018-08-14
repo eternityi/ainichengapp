@@ -186,7 +186,7 @@ dependencies {
     compile project(':react-native-spinkit')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-code-push')
-    compile "com.android.support:appcompat-v7:25.0.1"
+//    compile "com.android.support:appcompat-v7:25.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 
