@@ -8,9 +8,9 @@ import com.bugsnag.BugsnagReactNative;
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
 import com.microsoft.appcenter.reactnative.analytics.AppCenterReactNativeAnalyticsPackage;
 import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage;
-import com.tencent.bugly.crashreport.CrashReport;
-import com.tencent.rtmp.TXLiveBase;
-import com.tencent.ugc.TXUGCBase;
+//import com.tencent.bugly.crashreport.CrashReport;
+//import com.tencent.rtmp.TXLiveBase;
+//import com.tencent.ugc.TXUGCBase;
 //import com.vydia.RNUploader.UploaderReactPackage;
 import com.ainicheng.rnpackages.voduploader.UploaderReactPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -83,7 +83,7 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
 
     // 短视频licence设置
-    TXUGCBase.getInstance().setLicence(this, ugcLicenceUrl, ugcKey);
+//    TXUGCBase.getInstance().setLicence(this, ugcLicenceUrl, ugcKey);
 
 //    String sdkver = TXLiveBase.getSDKVersionStr();
 //    Log.d("liteavsdk", "liteav sdk version is : " + sdkver);

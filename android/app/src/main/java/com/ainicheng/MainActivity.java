@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.ReactActivity;
-import com.tencent.rtmp.TXLiveBase;
+//import com.tencent.rtmp.TXLiveBase;
 
 public class MainActivity extends ReactActivity {
 
@@ -23,7 +23,7 @@ public class MainActivity extends ReactActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
-        String sdkver = TXLiveBase.getSDKVersionStr();
-        Log.d("liteavsdk", "liteav sdk version is : " + sdkver);
+//        String sdkver = TXLiveBase.getSDKVersionStr();
+//        Log.d("liteavsdk", "liteav sdk version is : " + sdkver);
     }
 }

@@ -10,7 +10,7 @@ import com.tencent.qcloud.core.auth.BasicLifecycleCredentialProvider;
 import com.tencent.qcloud.core.auth.BasicQCloudCredentials;
 import com.tencent.qcloud.core.auth.QCloudLifecycleCredentials;
 import com.tencent.qcloud.core.common.QCloudClientException;
-import com.tencent.rtmp.TXLog;
+//import com.tencent.rtmp.TXLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,9 +83,9 @@ public class TVCNetworkCredentialProvider extends BasicLifecycleCredentialProvid
                     if (retData.has("keyTime")) {
                         keyTime = retData.getString("keyTime");
                     }
-                    TXLog.d(TAG, "upload got cos sig succeed");
+//                    TXLog.d(TAG, "upload got cos sig succeed");
                 } else {
-                    TXLog.d(TAG, "upload got cos sig failed");
+//                    TXLog.d(TAG, "upload got cos sig failed");
                 }
             }
             urlConnection.disconnect();

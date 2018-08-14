@@ -27,7 +27,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 //import com.tencent.liteav.basic.log.TXCLog;
 //import com.tencent.rtmp.TXLog;
-import com.tencent.ugc.TXVideoInfoReader;
+//import com.tencent.ugc.TXVideoInfoReader;
 
 
 import java.io.File;

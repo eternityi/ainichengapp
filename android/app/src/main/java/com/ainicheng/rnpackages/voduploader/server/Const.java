@@ -6,11 +6,11 @@ package com.ainicheng.rnpackages.voduploader.server;
 
 public class Const {
     public static final String SERVER_IP = "https://ainicheng.com";
-    public static final String ADDRESS_SIG = SERVER_IP + "/sdk/qcvod.php";
+    public static final String ADDRESS_SIG = SERVER_IP + "/sdk/qcvod.php"; //这个地址直接可以获取爱你城vod上传的签名
     public static final String ADDRESS_VIDEO_LIST = SERVER_IP + "/api/vod/videos";
     public static final String ADDRESS_VIDEO_INFO = SERVER_IP + "/api/vod/videos/#";
     public static final String ADDRESS_VIDEO_REPORT = SERVER_IP + "/api/video/report";
-    //TODO:: /api/video/report?videoId=&videoUrl= , return video object json
+    // TODO:: /api/video/report?videoId=&videoUrl= , return video object json
     // /api/v1/resource/videos/#file_id
 
     static class RetCode {

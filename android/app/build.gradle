@@ -171,14 +171,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile fileTree(dir: 'libs/upload', include: ['*.jar'])
 
-    compile(name: 'volley-1.0.0', ext: 'aar')
-    compile(name: 'LiteAVSDK_Professional', ext: 'aar')
-
     compile project(':bugsnag-react-native')
     compile project(':appcenter-crashes')
     compile project(':appcenter-analytics')
     compile project(':appcenter')
-    compile project(':react-native-background-upload')
+//    compile project(':react-native-background-upload')
     compile project(':react-native-image-picker')
     compile project(':react-native-video')
     compile project(':react-native-webview-bridge')
