@@ -34,6 +34,7 @@ query commentNotificationQuery($offset: Int) {
         notifications(type: ARTICLE_COMMENTED, offset: $offset) {
             id
             type
+            time_ago
             user {
                 id
                 name
@@ -68,6 +69,7 @@ query likeNotificationsQuery($offset: Int) {
         notifications(type: GROUP_LIKES, offset: $offset) {
             id
             type
+            time_ago
             article {
                 id
                 type
@@ -191,7 +193,7 @@ query otherNotificationsQuery($offset: Int) {
         notifications(type: GROUP_OTHERS, offset: $offset) {
             id
             type
-            read_at
+            time_ago
             category {
                 id
                 name

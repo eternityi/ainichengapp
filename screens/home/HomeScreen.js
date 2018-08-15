@@ -51,7 +51,6 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     let { navigation } = this.props;
     if (Platform.OS === "android") {
-      BackHandler.addEventListener("hardwareBackPress", this.toast);
       this.didFocusSubscription = navigation.addListener("didFocus", payload => {
         BackHandler.addEventListener("hardwareBackPress", this.toast);
       });
@@ -65,7 +64,6 @@ class HomeScreen extends React.Component {
     if (Platform.OS === "android") {
       this.didFocusSubscription.remove();
       this.willBlurSubscription.remove();
-      BackHandler.removeEventListener("hardwareBackPress", this.toast);
     }
   }
 

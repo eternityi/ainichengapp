@@ -113,7 +113,15 @@ class ActionsScreen extends Component {
 					<View style={styles.activityInfo}>
 						<Text style={styles.typeText}>
 							{this.user.name}
-							{action.signUp ? <Text> 加入{Config.AppName}</Text> : this._activityType(action)}
+							{action.signUp ? (
+								<Text>
+									{" "}
+									加入
+									{Config.AppName}
+								</Text>
+							) : (
+								this._activityType(action)
+							)}
 						</Text>
 					</View>
 					{action.postedComment && this._activityComment(action.postedComment)}
@@ -152,9 +160,9 @@ class ActionsScreen extends Component {
 					}
 					return (
 						<Text>
-							{typeText}
+							{" " + typeText + " "}
 							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedArticle)}>
-								{title ? title : description}
+								《{title ? title : description}》
 							</Text>
 						</Text>
 					);
@@ -175,7 +183,7 @@ class ActionsScreen extends Component {
 						<Text>
 							{" " + typeText + " "}
 							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedComment.article)}>
-								{title ? title : description}
+								《{title ? title : description}》
 							</Text>
 						</Text>
 					);
@@ -233,7 +241,7 @@ class ActionsScreen extends Component {
 						<Text>
 							{" " + typeText + " "}
 							<Text style={styles.linkText} onPress={() => this.skipContent(liked.article)}>
-								{title ? title : description}
+								《{title ? title : description}》
 							</Text>
 						</Text>
 					);
@@ -254,7 +262,7 @@ class ActionsScreen extends Component {
 						<Text>
 							{" " + typeText + " "}
 							<Text style={styles.linkText} onPress={() => this.skipContent(action.tiped.article)}>
-								{title ? title : description}
+								《{title ? title : description}》
 							</Text>
 						</Text>
 					);

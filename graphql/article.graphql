@@ -217,6 +217,7 @@ query topArticleWithImagesQuery {
 		id
 		type
 		title
+		description
 		top_image
 	}
 }

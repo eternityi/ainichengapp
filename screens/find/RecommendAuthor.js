@@ -11,7 +11,7 @@ import actions from "../../store/actions";
 import { Query } from "react-apollo";
 import { recommendAuthors } from "../../graphql/user.graphql";
 
-class ScrollCard extends Component {
+class RecommendAuthor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ScrollCard;
+export default RecommendAuthor;

@@ -1,30 +1,15 @@
 import React, { Component } from "react";
 import Colors from "../../constants/Colors";
-import {
-	StyleSheet,
-	View,
-	FlatList,
-	Text,
-	TouchableOpacity
-} from "react-native";
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Header } from "../../components/Header";
 import { AddCommentModal } from "../../components/Modal";
-import {
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading,
-	BlankContent
-} from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { goContentScreen } from "../../constants/Methods";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
 
 import { Query, Mutation } from "react-apollo";
-import {
-	commentNotificationQuery,
-	unreadsQuery
-} from "../../graphql/notification.graphql";
+import { commentNotificationQuery, unreadsQuery } from "../../graphql/notification.graphql";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -47,21 +32,10 @@ class CommentsScreen extends Component {
 				<View style={styles.container}>
 					<Header navigation={navigation} />
 					<Query query={commentNotificationQuery}>
-						{({
-							loading,
-							error,
-							data,
-							refetch,
-							fetchMore,
-							client
-						}) => {
-							if (error)
-								return (
-									<LoadingError reload={() => refetch()} />
-								);
+						{({ loading, error, data, refetch, fetchMore, client }) => {
+							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;
-							if (data.user.notifications.length < 1)
-								return <BlankContent />;
+							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
@@ -70,31 +44,21 @@ class CommentsScreen extends Component {
 							return (
 								<FlatList
 									data={data.user.notifications}
-									keyExtractor={(item, index) =>
-										index.toString()
-									}
+									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
 									onEndReachedThreshold={0.3}
 									onEndReached={() => {
 										if (data.user.notifications) {
 											fetchMore({
 												variables: {
-													offset:
-														data.user.notifications
-															.length
+													offset: data.user.notifications.length
 												},
-												updateQuery: (
-													prev,
-													{ fetchMoreResult }
-												) => {
+												updateQuery: (prev, { fetchMoreResult }) => {
 													if (
 														!(
 															fetchMoreResult &&
-															fetchMoreResult.user
-																.notifications &&
-															fetchMoreResult.user
-																.notifications
-																.length > 0
+															fetchMoreResult.user.notifications &&
+															fetchMoreResult.user.notifications.length > 0
 														)
 													) {
 														this.setState({
@@ -102,26 +66,11 @@ class CommentsScreen extends Component {
 														});
 														return prev;
 													}
-													return Object.assign(
-														{},
-														prev,
-														{
-															user: Object.assign(
-																{},
-																prev.user,
-																{
-																	notifications: [
-																		...prev
-																			.user
-																			.notifications,
-																		...fetchMoreResult
-																			.user
-																			.notifications
-																	]
-																}
-															)
-														}
-													);
+													return Object.assign({}, prev, {
+														user: Object.assign({}, prev.user, {
+															notifications: [...prev.user.notifications, ...fetchMoreResult.user.notifications]
+														})
+													});
 												}
 											});
 										} else {
@@ -131,11 +80,7 @@ class CommentsScreen extends Component {
 										}
 									}}
 									ListFooterComponent={() => {
-										return fetchingMore ? (
-											<LoadingMore />
-										) : (
-											<ContentEnd />
-										);
+										return fetchingMore ? <LoadingMore /> : <ContentEnd />;
 									}}
 								/>
 							);
@@ -161,6 +106,9 @@ class CommentsScreen extends Component {
 	_renderItem = ({ item, index }) => {
 		let { navigation } = this.props;
 		let notification = item;
+		if (!["评论中提到了你", "评论了文章"].includes(notification.type)) {
+			return <View />;
+		}
 		return (
 			<MediaGroup
 				navigation={navigation}
@@ -180,65 +128,12 @@ class CommentsScreen extends Component {
 							}));
 						}}
 					>
-						<Text style={{ fontSize: 14, color: "#717171" }}>
-							回复
-						</Text>
+						<Text style={{ fontSize: 14, color: "#717171" }}>回复</Text>
 					</TouchableOpacity>
 				}
-				description={
-					notification.type == "评论中提到了你" ? (
-						<Text style={{ lineHeight: 24 }}>
-							在
-							<Text
-								style={styles.linkText}
-								onPress={() =>
-									goContentScreen(
-										navigation,
-										notification.article
-									)
-								}
-							>
-								{" 《" + notification.article.title + "》 "}
-							</Text>
-							的评论中提到了你
-						</Text>
-					) : notification.type == "评论了文章" ? (
-						<Text style={{ lineHeight: 24 }}>
-							评论了你发布的
-							<Text
-								style={styles.linkText}
-								onPress={() =>
-									goContentScreen(
-										navigation,
-										notification.article
-									)
-								}
-							>
-								{" 《" + notification.article.title + "》 "}
-							</Text>
-						</Text>
-					) : (
-						<Text style={{ lineHeight: 24 }}>
-							在
-							<Text
-								style={styles.linkText}
-								onPress={() =>
-									goContentScreen(
-										navigation,
-										notification.article
-									)
-								}
-							>
-								{" 《" + notification.article.title + "》 "}
-							</Text>
-							中添加了一条新评论
-						</Text>
-					)
-				}
+				description={this.description(notification, navigation)}
 				notification={{
-					content: notification.comment
-						? notification.comment.body
-						: "",
+					content: notification.comment ? notification.comment.body : "",
 					type: "评论详情",
 					info: { comment: notification.comment }
 				}}
@@ -246,6 +141,32 @@ class CommentsScreen extends Component {
 			/>
 		);
 	};
+
+	description(notification, navigation) {
+		switch (notification.type) {
+			case "评论中提到了你":
+				return (
+					<Text style={{ lineHeight: 24 }}>
+						在
+						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
+							{" 《" + notification.article.title + "》 "}
+						</Text>
+						的评论中提到了你
+					</Text>
+				);
+				break;
+			case "评论了文章":
+				return (
+					<Text style={{ lineHeight: 24 }}>
+						评论了你发布的
+						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
+							{" 《" + notification.article.title + "》 "}
+						</Text>
+					</Text>
+				);
+				break;
+		}
+	}
 }
 
 const styles = StyleSheet.create({

@@ -51,14 +51,18 @@ class FollowScreen extends Component {
 
 	_renderItem({ item, index }) {
 		let { navigation } = this.props;
-		let notification = item;
+		let { user, time_ago } = item;
+		if (!user) {
+			return null;
+		}
 		return (
 			<TouchableOpacity
 				style={styles.followerItem}
 				onPress={() =>
 					navigation.navigate("用户详情", {
-						user: notification.user
-					})}
+						user
+					})
+				}
 			>
 				<UserMetaGroup
 					navigation={navigation}
@@ -68,9 +72,9 @@ class FollowScreen extends Component {
 						nameSize: 17,
 						metaSize: 13
 					}}
-					user={notification.user}
-					topInfo={notification.user.name + " 关注了你"}
-					bottomInfo={notification.time_ago}
+					user={user}
+					topInfo={user.name + " 关注了你"}
+					bottomInfo={time_ago}
 				/>
 			</TouchableOpacity>
 		);

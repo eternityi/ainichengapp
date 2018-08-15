@@ -23,8 +23,8 @@ class RewardModal extends Component {
     this.emptySelectMoney = this.emptySelectMoney.bind(this);
     this.customMoney = this.customMoney.bind(this);
     this.warning = "";
+    this.message = "";
     this.state = {
-      message: "",
       amount: 2,
       selectMoney: 2,
       inputMoney: 0,
@@ -35,7 +35,7 @@ class RewardModal extends Component {
 
   render() {
     const { visible, handleVisible, type, article, user, personal } = this.props;
-    const { message, selectMoney, inputMoney, paymentVisible, warningVisible, amount } = this.state;
+    const { selectMoney, inputMoney, paymentVisible, warningVisible, amount } = this.state;
     return (
       <Mutation mutation={tipArticleMutation}>
         {tipArticle => {
@@ -122,7 +122,7 @@ class RewardModal extends Component {
                   <Text style={styles.rewardModalText}>留言：</Text>
                   <TextInput
                     style={styles.rewardModalInput}
-                    onChangeText={message => this.setState({ message })}
+                    onChangeText={message => (this.message = message)}
                     value=""
                     underlineColorAndroid="transparent"
                   />
@@ -132,7 +132,10 @@ class RewardModal extends Component {
                     <Iconfont name={"RMB"} size={18} />
                     <Text>{amount}</Text>
                   </Text>
-                  <Text style={styles.paymentText}>当前余额¥{personal.balance}</Text>
+                  <Text style={styles.paymentText}>
+                    当前余额¥
+                    {personal.balance}
+                  </Text>
                   {/*
                     // 更换支付方式
                       <TouchableOpacity onPress={this.handlePaymentVisible}>
@@ -152,7 +155,7 @@ class RewardModal extends Component {
                             variables: {
                               id: article.id,
                               amount: selectMoney ? selectMoney : inputMoney ? inputMoney : 0,
-                              message
+                              message: this.message
                             },
                             update: (cache, { data: { likeArticle } }) => {
                               handleVisible();
@@ -173,7 +176,7 @@ class RewardModal extends Component {
                 </View>
               </View>
               <PaymentModal visible={paymentVisible} handleVisible={this.handlePaymentVisible} />
-              <BasicModal visible={warningVisible} handleVisible={this.handleWarningVisible} customStyle={styles.toastModal}>
+              <BasicModal visible={warningVisible} handleVisible={() => this.handleWarningVisible("warn")} customStyle={styles.toastModal}>
                 <View>
                   <Text style={styles.toastText}>{this.warning}</Text>
                 </View>
@@ -191,10 +194,14 @@ class RewardModal extends Component {
 
   handleWarningVisible(warn) {
     this.warning = warn;
-    this.setState(prevState => ({ warningVisible: !prevState.warningVisible }));
-    setTimeout(() => {
-      this.setState(prevState => ({ warningVisible: !prevState.warningVisible }));
-    }, 2000);
+    this.setState(
+      prevState => ({ warningVisible: !prevState.warningVisible }),
+      () => {
+        setTimeout(() => {
+          this.setState({ warningVisible: false });
+        }, 2000);
+      }
+    );
   }
 
   selectMoney(money) {

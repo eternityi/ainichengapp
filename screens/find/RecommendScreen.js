@@ -1,11 +1,12 @@
 import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 import Swiper from "react-native-swiper";
+import Poster from "./Poster";
 
 import Colors from "../../constants/Colors";
 import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import ScrollCard from "./ScrollCard";
+import RecommendAuthor from "./RecommendAuthor";
 import Screen from "../Screen";
 
 import { recommendArticlesQuery, topArticleWithImagesQuery } from "../../graphql/article.graphql";
@@ -14,6 +15,9 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 const { width, height } = Dimensions.get("window");
+
+const sliderWidth = width;
+const itemWidth = width - 40;
 
 class RecommendScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -57,25 +61,13 @@ class RecommendScreen extends React.Component {
                 ListHeaderComponent={() => {
                   return (
                     <View>
-                      <View style={styles.swiperContainer}>
-                        <Query query={topArticleWithImagesQuery}>
-                          {({ loading, error, data }) => {
-                            if (!(data && data.articles)) return null;
-                            return (
-                              <Swiper
-                                autoplay={true}
-                                autoplayTimeout={5}
-                                showsPagination={false}
-                                paginationStyle={{ bottom: 8 }}
-                                activeDotColor="#fff"
-                              >
-                                {this._renderSwiperImage(data.articles)}
-                              </Swiper>
-                            );
-                          }}
-                        </Query>
-                      </View>
-                      <ScrollCard navigation={navigation} />
+                      <Query query={topArticleWithImagesQuery}>
+                        {({ loading, error, data }) => {
+                          if (!(data && data.articles)) return null;
+                          return <Poster data={data.articles} />;
+                        }}
+                      </Query>
+                      <RecommendAuthor navigation={navigation} />
                     </View>
                   );
                 }}
@@ -119,6 +111,17 @@ class RecommendScreen extends React.Component {
         </Query>
       </View>
     );
+  }
+
+  _renderCarouselItem() {
+    <TouchableOpacity key={index} onPress={() => this.props.navigation.navigate("文章详情", { article: article })}>
+      <Image style={styles.posterImage} source={{ uri: article.top_image }} />
+      <View style={styles.posterTitle}>
+        <Text style={styles.posterTitleText} numberOfLines={1}>
+          {article.title}
+        </Text>
+      </View>
+    </TouchableOpacity>;
   }
 
   _renderSwiperImage(poster) {
@@ -180,4 +183,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default compose(withApollo, connect(store => ({ articles: store.articles.articles })))(RecommendScreen);
+export default compose(
+  withApollo,
+  connect(store => ({ articles: store.articles.articles }))
+)(RecommendScreen);

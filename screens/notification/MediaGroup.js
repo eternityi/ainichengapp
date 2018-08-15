@@ -31,15 +31,17 @@ class MediaGroup extends Component {
 					</TouchableOpacity>
 				) : null}
 				<View>
-					<Text
-						style={{
-							fontSize: 13,
-							lineHeight: 18,
-							color: Colors.tintFontColor
-						}}
-					>
-						{meta ? meta : null}
-					</Text>
+					{meta && (
+						<Text
+							style={{
+								fontSize: 13,
+								lineHeight: 18,
+								color: Colors.tintFontColor
+							}}
+						>
+							{meta}
+						</Text>
+					)}
 				</View>
 			</View>
 		);
