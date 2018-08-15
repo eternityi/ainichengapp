@@ -1,1 +1,10 @@
-../../../../AppCenter/AppCenter-SDK-Apple/iOS/AppCenterAnalytics.framework/Headers/MSEventLog.h
+#import "MSLogWithNameAndProperties.h"
+
+@interface MSEventLog : MSLogWithNameAndProperties
+
+/**
+ * Unique identifier for this event.
+ */
+@property(nonatomic, copy) NSString *eventId;
+
+@end

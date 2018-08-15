@@ -1,1 +1,5 @@
-../../../../AppCenter/AppCenter-SDK-Apple/iOS/AppCenter.framework/Headers/MSAbstractLog.h
+#import <Foundation/Foundation.h>
+
+@interface MSAbstractLog : NSObject
+
+@end
