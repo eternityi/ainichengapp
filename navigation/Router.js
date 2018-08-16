@@ -94,8 +94,9 @@ import CollectionRankScreen from "../screens/user/collection/RankScreen";
 import ArticleDetailScreen from "../screens/article/DetailScreen";
 import CommentDetail from "../screens/article/comment/CommentDetailScreen";
 
-//video
-import VideoDetailScreen from "../screens/video/DetailScreen";
+//POST
+import VideoDetailScreen from "../screens/post/VideoScreen";
+import PostDetailScreen from "../screens/post/PostScreen";
 
 //category
 import CategoryHomeScreen from "../screens/category/HomeScreen";
@@ -173,6 +174,9 @@ export default {
   },
   视频详情: {
     screen: VideoDetailScreen
+  },
+  动态详情: {
+    screen: PostDetailScreen
   },
   聊天页: {
     screen: ChatScreen

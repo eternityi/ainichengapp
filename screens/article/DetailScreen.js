@@ -5,6 +5,7 @@ import HTML from "react-native-render-html";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
+import { imageSize } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
 import ArticleDetailHeader from "./ArticleDetailHeader";
 import BeSelectedCategory from "./BeSelectedCategory";
@@ -25,37 +26,6 @@ import { articleQuery } from "../../graphql/article.graphql";
 const { width, height } = Dimensions.get("window");
 
 const IMG_WIDTH = width - 30;
-
-let css_fix = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8">
-    </head>
-    <body>
-    <style>
-    article {
-      word-break: break-all!important;
-      font-size: 20px;
-      line-height: 30px;
-    }
-    article img {
-      max-width: 100%;
-      height: auto;
-    }
-    </style>`;
-
-//必须用onload, 不然计算图片高度不准确
-let js_fix = `
-  <script>
-      window.onload = function() {
-        document.title = document.body.offsetHeight;
-        window.location.hash = 1;
-      }
-  </script>
-  </body>
-  </html>
-`;
 
 class DetailScreen extends Component {
   constructor(props) {
@@ -102,7 +72,7 @@ class DetailScreen extends Component {
                   keyboardShouldPersistTaps={"handled"}
                   scrollEventThrottle={16}
                 >
-                  <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+                  <View style={{ padding: 20 }}>
                     <View>
                       <Text style={styles.title} NumberOfLines={2}>
                         {article.title}
@@ -112,7 +82,9 @@ class DetailScreen extends Component {
                       <UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={article.user} plain />
                     </View>
                     <View style={styles.articleInfo}>
-                      <Text style={styles.articleInfoText}>{article.time_ago + " · 字数" + article.count_words + " · 阅读" + article.hits + "  "}</Text>
+                      <Text style={styles.articleInfoText}>
+                        {article.time_ago + " · 字数" + article.count_words + " · 阅读" + article.hits + "  "}
+                      </Text>
                       {article.collection && <Iconfont name={"collection-two"} style={styles.articleInfoText} />}
                       <Text style={styles.articleInfoText}>{article.collection && article.collection.name}</Text>
                     </View>
@@ -121,6 +93,12 @@ class DetailScreen extends Component {
                     <HTML
                       html={article.body}
                       imagesMaxWidth={width}
+                      baseFontStyle={{
+                        fontSize: 15,
+                        lineHeight: 21,
+                        color: Colors.primaryFontColor
+                      }}
+                      tagsStyles={{ a: { color: Colors.themeColor } }}
                       renderers={{
                         img: (htmlAttribs, children, passProps) => {
                           //往picture填充图片
@@ -130,9 +108,9 @@ class DetailScreen extends Component {
                           // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
-                          let img_width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;
-                          let img_height = htmlAttribs.height ? parseInt(htmlAttribs.height) : IMG_WIDTH;
-                          img_height = IMG_WIDTH * img_height / img_width;
+                          let width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;
+                          let height = htmlAttribs.height ? parseInt(htmlAttribs.height) : IMG_WIDTH;
+                          let size = imageSize({ width, height }, IMG_WIDTH);
                           return (
                             <TouchableOpacity
                               activeOpacity={1}
@@ -147,18 +125,24 @@ class DetailScreen extends Component {
                               <Image
                                 source={{ uri: htmlAttribs.src }}
                                 style={{
-                                  width: IMG_WIDTH, //TODO: will use htmlAttribs.width
-                                  height: img_height, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
+                                  width: size.width, //TODO: will use htmlAttribs.width
+                                  height: size.height, //TODO:图片的宽高比例可以由后台api计算好返回，这里先固定, will use htmlAttribs.height
                                   resizeMode: "cover"
                                 }}
                                 {...passProps}
                               />
                             </TouchableOpacity>
                           );
-                        }
+                        },
+                        hr: () => <View style={{ height: 1, backgroundColor: Colors.primaryBorderColor }} />
+                      }}
+                      alterNode={node => {
+                        const { name, parent, children, data } = node;
+                        node.attribs = { ...(node.attribs || {}), style: `marginTop:${0};marginBottom:${10};padding:${0};fontSize:${15}` };
+                        return node;
                       }}
                     />
-                    {article.images && this.renderImagesList(article.images)}
+                    {article.type == "post" && article.images && this.renderImagesList(article.images)}
                   </View>
                   {
                     //内容底部
@@ -320,21 +304,6 @@ const styles = StyleSheet.create({
   showFoot: {
     paddingHorizontal: 20,
     paddingVertical: 35
-  },
-  slideInOption: {
-    padding: 5
-  },
-  text: {
-    fontSize: 18
-  },
-  optionText: {
-    fontSize: 16,
-    color: "#717171"
-  },
-  imageItem: {
-    width: width - 30,
-    height: width - 30,
-    resizeMode: "cover"
   }
 });
 

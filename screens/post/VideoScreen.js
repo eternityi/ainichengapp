@@ -23,7 +23,7 @@ import { likeArticleMutation } from "../../graphql/user.graphql";
 
 const { width, height } = Dimensions.get("window");
 
-class DetailScreen extends Component {
+class VideoScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.onProgress = this.onProgress.bind(this);
@@ -96,7 +96,7 @@ class DetailScreen extends Component {
 										posterResizeMode="cover"
 										style={{
 											width,
-											height: fullScreen ? height : width * 9 / 16
+											height: fullScreen ? height : (width * 9) / 16
 										}}
 										ref={ref => {
 											this.player = ref;
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
 	},
 	videoWrap: {
 		overflow: "hidden",
-		height: width * 9 / 16
+		height: (width * 9) / 16
 	},
 	topInfo: {
 		padding: 15
@@ -325,4 +325,4 @@ export default compose(
 			login: store.users.login
 		};
 	})
-)(DetailScreen);
+)(VideoScreen);

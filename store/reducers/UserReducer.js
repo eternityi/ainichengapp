@@ -51,7 +51,7 @@ class UserReducer {
 		let { name } = action;
 		user = {
 			...user,
-			password
+			name
 		};
 		return state.set("user", user);
 	}

@@ -12,7 +12,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 import { tipArticleMutation } from "../../graphql/article.graphql";
-// import { tipUserMutation } from "../../graphql/article.graphql";
 
 class RewardModal extends Component {
   constructor(props) {

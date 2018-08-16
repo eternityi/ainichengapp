@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, StatusBar } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
+import Toast from "react-native-root-toast";
 
 import Screen from "../../Screen";
 import { Iconfont } from "../../../utils/Fonts";
@@ -22,10 +23,9 @@ class EditProfileScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);
-
+		this.nickname = "";
 		this.state = {
-			modalVisible: false,
-			nickname: ""
+			modalVisible: false
 		};
 	}
 
@@ -74,7 +74,7 @@ class EditProfileScreen extends Component {
 	render() {
 		let { navigation } = this.props;
 		let { user } = this.props.users;
-		let { modalVisible, nickname } = this.state;
+		let { modalVisible } = this.state;
 		return (
 			<Screen>
 				<View style={styles.container}>
@@ -160,7 +160,8 @@ class EditProfileScreen extends Component {
 							onPress={() =>
 								navigation.navigate("文章详情", {
 									article: { id: "00045" }
-								})}
+								})
+							}
 						>
 							<SettingItem endItem itemName="绑定账号遇到问题" />
 						</TouchableOpacity>
@@ -177,19 +178,23 @@ class EditProfileScreen extends Component {
 								modalName="修改昵称"
 								placeholder={user.name}
 								visible={modalVisible}
-								value={nickname}
+								value={this.nickname}
 								handleVisible={this.toggleModalVisible}
 								changeVaule={val => {
-									this.setState({ nickname: val });
+									this.nickname = val;
 								}}
 								submit={() => {
+									if (this.nickname.length < 1) {
+										this.toggleModalVisible();
+										return;
+									}
 									this.toggleModalVisible();
 									updateUserName({
 										variables: {
-											name: nickname
+											name: this.nickname
 										}
 									});
-									this.props.dispatch(actions.updateName(nickname));
+									this.props.dispatch(actions.updateName(this.nickname));
 								}}
 							/>
 						);
@@ -203,6 +208,21 @@ class EditProfileScreen extends Component {
 		this.setState(prevState => ({
 			modalVisible: !prevState.modalVisible
 		}));
+	}
+
+	toast(tip) {
+		let toast = Toast.show(tip, {
+			duration: Toast.durations.LONG,
+			position: 70,
+			shadow: true,
+			animation: true,
+			hideOnPress: true,
+			delay: 100,
+			backgroundColor: Colors.nightColor
+		});
+		setTimeout(function() {
+			Toast.hide(toast);
+		}, 2000);
 	}
 }
 

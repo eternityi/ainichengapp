@@ -6,7 +6,7 @@ import PostToolBar from "./PostToolBar";
 import { Avatar, VideoCover } from "../Pure";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { navigationAction } from "../../constants/Methods";
+import { navigationAction, goContentScreen } from "../../constants/Methods";
 
 const { height, width } = Dimensions.get("window");
 const IMG_INTERVAL = 8;
@@ -18,7 +18,7 @@ class PostItem extends PureComponent {
 		const { post, navigation, toggleShareModal } = this.props;
 		let { type, user, time_ago, title, description, images, cover, has_image } = post;
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
 					<View style={styles.layoutFlexRow}>
 						<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
@@ -46,7 +46,12 @@ class PostItem extends PureComponent {
 						</View>
 					)}
 					<View>{has_image && this.renderImage(type, images, cover)}</View>
-					<PostToolBar post={post} navigation={navigation} skip={this.skipScreen} toggleShareModal={toggleShareModal} />
+					<PostToolBar
+						post={post}
+						navigation={navigation}
+						skip={() => goContentScreen(navigation, post)}
+						toggleShareModal={toggleShareModal}
+					/>
 				</View>
 			</TouchableHighlight>
 		);
@@ -56,7 +61,7 @@ class PostItem extends PureComponent {
 		if (type == "video") {
 			return (
 				<View style={styles.coverWrap}>
-					<VideoCover width={COVER_WIDTH} height={COVER_WIDTH * 9 / 16} cover={cover} />
+					<VideoCover width={COVER_WIDTH} height={(COVER_WIDTH * 9) / 16} cover={cover} />
 				</View>
 			);
 		} else if (images.length == 1) {
@@ -74,14 +79,6 @@ class PostItem extends PureComponent {
 				</View>
 			);
 		}
-	};
-
-	skipScreen = () => {
-		const { post, navigation } = this.props;
-		let { type } = post;
-		let routeName = type == "video" ? "视频详情" : "文章详情";
-		let params = type == "video" ? { video: post } : { article: post };
-		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }
 
