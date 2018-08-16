@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput, Platform, Dimensions } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	TouchableOpacity,
+	Image,
+	ScrollView,
+	TextInput,
+	Platform,
+	Dimensions
+} from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
@@ -12,10 +22,20 @@ class CreatePostBottom extends Component {
 			<View style={styles.body}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					<TouchableOpacity onPress={onPressPhotoUpload} disabled={uploadType < 0 ? true : false}>
-						<Iconfont name={"image"} size={22} color={uploadType < 0 ? "#999" : "#666"} style={{ paddingRight: 20 }} />
+						<Iconfont
+							name={"image"}
+							size={22}
+							color={uploadType < 0 ? "#999" : "#666"}
+							style={{ paddingRight: 20 }}
+						/>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={onPressVideoUpload} disabled={covers.length > 0 ? true : false}>
-						<Iconfont name={"upload"} size={21} color={covers.length > 0 ? "#999" : "#666"} style={{ paddingRight: 20 }} />
+						<Iconfont
+							name={"upload"}
+							size={21}
+							color={covers.length > 0 ? "#999" : "#666"}
+							style={{ paddingRight: 20 }}
+						/>
 					</TouchableOpacity>
 				</View>
 				{/*	<Iconfont name={"add"} size={22} color={"#666"} />*/}
@@ -26,7 +46,8 @@ class CreatePostBottom extends Component {
 
 const styles = StyleSheet.create({
 	body: {
-		position: "absolute",
+		// position: "absolute",
+
 		bottom: 0,
 		flexDirection: "row",
 		alignItems: "center",

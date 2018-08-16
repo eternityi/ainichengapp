@@ -27,6 +27,7 @@ import MediaModal from "../../components/Modal/MediaModal";
 import TXUGCUploader from "../../utils/TXUGCUploader";
 
 import Toast from "react-native-root-toast";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 import ImagePicker from "react-native-image-crop-picker";
 import { throttle } from "lodash";
 import { connect } from "react-redux";
@@ -79,51 +80,54 @@ class CreatePostScreen extends React.Component {
     } = this.state;
     const { navigation } = this.props;
     return (
-      <View style={styles.container}>
-        <Header
-          navigation={navigation}
-          routeName={routeName}
-          rightComponent={
-            <TouchableOpacity
-              onPress={() => {
-                if (!this.publishing) {
-                  this.publish();
-                }
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 17,
-                  color: Colors.themeColor
+      <Screen>
+        <View style={styles.container}>
+          <Header
+            navigation={navigation}
+            routeName={routeName}
+            rightComponent={
+              <TouchableOpacity
+                onPress={() => {
+                  if (!this.publishing) {
+                    this.publish();
+                  }
                 }}
               >
-                发表
-              </Text>
-            </TouchableOpacity>
-          }
-        />
-        <UploadBody
-          navigation={navigation}
-          covers={covers}
-          progress={progress}
-          completed={completed}
-          uploadId={uploadId}
-          uploadType={uploadType}
-          changeBody={this.changeBody}
-          body={this.body}
-          selectCategories={selectCategories}
-          selectCategory={this.selectCategory}
-          category_ids={category_ids}
-        />
-        <CreatePostBottom
-          navigation={navigation}
-          uploadType={uploadType}
-          covers={covers}
-          onPressPhotoUpload={this.onPressPhotoUpload}
-          onPressVideoUpload={this.onPressVideoUpload}
-        />
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: Colors.themeColor
+                  }}
+                >
+                  发表
+                </Text>
+              </TouchableOpacity>
+            }
+          />
+          <UploadBody
+            navigation={navigation}
+            covers={covers}
+            progress={progress}
+            completed={completed}
+            uploadId={uploadId}
+            uploadType={uploadType}
+            changeBody={this.changeBody}
+            body={this.body}
+            selectCategories={selectCategories}
+            selectCategory={this.selectCategory}
+            category_ids={category_ids}
+          />
+          <CreatePostBottom
+            navigation={navigation}
+            uploadType={uploadType}
+            covers={covers}
+            onPressPhotoUpload={this.onPressPhotoUpload}
+            onPressVideoUpload={this.onPressVideoUpload}
+          />
+          {Platform.OS == "ios" && <KeyboardSpacer />}
+        </View>
         <Waiting isVisible={waitingVisible} />
-      </View>
+      </Screen>
     );
   }
 
