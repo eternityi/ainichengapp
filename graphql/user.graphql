@@ -485,6 +485,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
             article {
                 id
                 title
+                description
                 images
                 cover
             }
@@ -513,6 +514,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
                 id
                 type
                 title
+                description
                 images
                 cover
             }
@@ -523,6 +525,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
                 id
                 type
                 title
+                description
                 images
                 cover
             }
@@ -539,6 +542,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
                     id
                     type
                     title
+                    description
                     images
                     cover
                 }

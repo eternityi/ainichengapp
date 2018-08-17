@@ -151,6 +151,7 @@ query articleQuery($id: Int!) {
 		id
 		type
 		title
+		description
 		body
 		images
 		video_url

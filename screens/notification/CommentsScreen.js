@@ -132,10 +132,9 @@ class CommentsScreen extends Component {
 					</TouchableOpacity>
 				}
 				description={this.description(notification, navigation)}
-				notification={{
-					content: notification.comment ? notification.comment.body : "",
-					type: "评论详情",
-					info: { comment: notification.comment }
+				comment={{
+					body: notification.comment ? notification.comment.body : "",
+					param: { comment: notification.comment }
 				}}
 				meta={notification.time_ago}
 			/>

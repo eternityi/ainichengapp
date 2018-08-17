@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
+import { navigationAction, goContentScreen } from "../../constants/Methods";
 import { Header } from "../../components/Header";
 import { ShareModal } from "../../components/Modal";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
@@ -111,15 +112,8 @@ class BeRewardScreen extends Component {
 				}
 				description={
 					<Text style={{ lineHeight: 24 }}>
-						向你的文章
-						<Text
-							style={styles.linkText}
-							onPress={() =>
-								navigation.navigate("文章详情", {
-									article: notification.article
-								})
-							}
-						>
+						向你的作品
+						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
 							{" 《" + notification.article.title + "》 "}
 						</Text>
 						送了
@@ -129,9 +123,9 @@ class BeRewardScreen extends Component {
 						<Text style={{ color: Colors.themeColor }}>{notification.tip.amount}</Text>）
 					</Text>
 				}
-				notification={{
-					content: notification.tip.message,
-					type: "交易记录"
+				message={{
+					body: <Text style={{ fontSize: 16, color: Colors.primaryFontColor }}>{notification.tip.message}</Text>,
+					skipScreen: () => navigation.navigate("交易记录")
 				}}
 				meta={notification.time_ago + " " + `支付宝支付，实时到账${notification.tip.amount}元`}
 			/>

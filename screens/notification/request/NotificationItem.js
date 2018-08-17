@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Colors from "../../../constants/Colors";
+import { goContentScreen } from "../../../constants/Methods";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Button } from "../../../components/Button";
 import MediaGroup from "../MediaGroup";
@@ -97,22 +98,25 @@ class NotificationItem extends Component {
 				rightComponent={<ContributeStatus article={article} />}
 				description={
 					<Text style={{ lineHeight: 24 }}>
-						向你的专题<Text
+						向你的专题
+						<Text
 							style={styles.linkText}
 							onPress={() =>
 								navigation.navigate("专题详情", {
 									category: article.pivot_category
-								})}
+								})
+							}
 						>
 							{" 《" + article.pivot_category.name + "》 "}
-						</Text>投了一篇文章
+						</Text>
+						投稿
 					</Text>
 				}
-				notification={{
-					content: <Text style={{ fontSize: 16, color: Colors.linkColor }}>《{article.title}》</Text>,
-					type: "文章详情",
-					info: { article }
+				message={{
+					body: <Text style={{ fontSize: 16, color: Colors.linkColor }}>《{article.title}》</Text>,
+					skipScreen: () => goContentScreen(navigation, article)
 				}}
+				article={article}
 				meta={article.pivot_time_ago}
 			/>
 		);

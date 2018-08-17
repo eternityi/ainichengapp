@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  Platform,
-  Dimensions,
-  View,
-  TouchableOpacity,
-  YellowBox,
-  BackHandler,
-  Keyboard
-} from "react-native";
+import { FlatList, StyleSheet, Text, Platform, Dimensions, View, TouchableOpacity, YellowBox, BackHandler, Keyboard } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import {
-  RichTextEditor,
-  RichTextToolbar
-} from "react-native-zss-rich-text-editor";
+import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import Toast from "react-native-root-toast";
 
@@ -24,21 +10,12 @@ import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header } from "../../components/Header";
-import {
-  ContentEnd,
-  LoadingMore,
-  LoadingError,
-  Waiting
-} from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, Waiting } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { draftsQuery } from "../../graphql/user.graphql";
-import {
-  articleContentQuery,
-  createdArticleMutation,
-  editArticleMutation
-} from "../../graphql/article.graphql";
+import { articleContentQuery, createdArticleMutation, editArticleMutation } from "../../graphql/article.graphql";
 import { withApollo, compose, graphql, Query } from "react-apollo";
 
 let { width, height } = Dimensions.get("window");
@@ -63,9 +40,7 @@ class CreationScreen extends React.Component {
   };
 
   componentDidMount() {
-    YellowBox.ignoreWarnings([
-      "Warning: RichTextToolbar has a method called componentDidReceiveProps()"
-    ]);
+    YellowBox.ignoreWarnings(["Warning: RichTextToolbar has a method called componentDidReceiveProps()"]);
     //监听安卓back
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", this.backHandlerAction);
@@ -74,10 +49,7 @@ class CreationScreen extends React.Component {
 
   componentWillUnmount() {
     if (Platform.OS === "android") {
-      BackHandler.removeEventListener(
-        "hardwareBackPress",
-        this.backHandlerAction
-      );
+      BackHandler.removeEventListener("hardwareBackPress", this.backHandlerAction);
     }
   }
 
@@ -152,7 +124,8 @@ class CreationScreen extends React.Component {
           selectedButtonStyle={{ backgroundColor: Colors.tintGray }}
           onPressAddImage={() => {
             ImagePicker.openPicker({
-              cropping: true
+              cropping: Platform.OS == "android" ? true : false,
+              freeStyleCropEnabled: true
             })
               .then(image => {
                 this.saveImage(image.path);
@@ -203,10 +176,7 @@ class CreationScreen extends React.Component {
 
   //判断article内容是否change
   isChange(prevACont, currentCont) {
-    if (
-      prevACont.title != currentCont.title ||
-      prevACont.body != currentCont.body
-    ) {
+    if (prevACont.title != currentCont.title || prevACont.body != currentCont.body) {
       return true;
     }
     return false;

@@ -95,10 +95,9 @@ class DetailScreen extends Component {
                       imagesMaxWidth={width}
                       baseFontStyle={{
                         fontSize: 15,
-                        lineHeight: 21,
                         color: Colors.primaryFontColor
                       }}
-                      tagsStyles={{ a: { color: Colors.themeColor } }}
+                      tagsStyles={tagsStyles}
                       renderers={{
                         img: (htmlAttribs, children, passProps) => {
                           //往picture填充图片
@@ -121,6 +120,7 @@ class DetailScreen extends Component {
                                   initImage: index
                                 });
                               }}
+                              style={{ alignItems: "center" }}
                             >
                               <Image
                                 source={{ uri: htmlAttribs.src }}
@@ -134,15 +134,14 @@ class DetailScreen extends Component {
                             </TouchableOpacity>
                           );
                         },
-                        hr: () => <View style={{ height: 1, backgroundColor: Colors.primaryBorderColor }} />
+                        hr: () => <View style={styles.hr} />
                       }}
                       alterNode={node => {
                         const { name, parent, children, data } = node;
-                        node.attribs = { ...(node.attribs || {}), style: `marginTop:${0};marginBottom:${10};padding:${0};fontSize:${15}` };
+                        node.attribs = { ...(node.attribs || {}), style: `marginLeft:${0};padding:${0};` };
                         return node;
                       }}
                     />
-                    {article.type == "post" && article.images && this.renderImagesList(article.images)}
                   </View>
                   {
                     //内容底部
@@ -202,16 +201,6 @@ class DetailScreen extends Component {
         <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
-  }
-
-  renderImagesList(images) {
-    return images.map(function(elem, index) {
-      return (
-        <View key={index} style={{ marginTop: 15 }}>
-          <Image source={{ uri: elem }} style={styles.imageItem} />
-        </View>
-      );
-    });
   }
 
   //赞赏模态框开关
@@ -275,12 +264,19 @@ class DetailScreen extends Component {
   }
 }
 
-function renderNode(node, index, siblings, parent, defaultRenderer) {
-  if (node.name == "img") {
-    const { src } = node.attribs;
-    return <Image key={index} source={{ uri: src }} style={{ width: width * 3 }} />;
+//html targets style
+let tagsStyles = {
+  a: { color: Colors.themeColor },
+  p: {
+    lineHeight: 21,
+    marginBottom: 10
+  },
+  h1: {
+    fontSize: 20,
+    marginTop: 0,
+    marginBottom: 10
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -304,7 +300,8 @@ const styles = StyleSheet.create({
   showFoot: {
     paddingHorizontal: 20,
     paddingVertical: 35
-  }
+  },
+  hr: { height: 1, backgroundColor: Colors.primaryBorderColor, marginTop: 10, marginBottom: 20 }
 });
 
 export default connect(store => {

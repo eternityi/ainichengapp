@@ -47,6 +47,9 @@ class OtherRemindScreen extends Component {
 	_renderItem = ({ item }) => {
 		let { navigation } = this.props;
 		let notification = item;
+		if ((notification.type == "收录了文章" || notification.type == "拒绝了文章") && !notification.article) {
+			return <View />;
+		}
 		return (
 			<View style={styles.remindItem}>
 				<View style={{ flexDirection: "row" }}>

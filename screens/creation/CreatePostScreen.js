@@ -1,18 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  Button,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableHighlight,
-  Image,
-  Platform,
-  Keyboard
-} from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform, Keyboard } from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -66,18 +54,7 @@ class CreatePostScreen extends React.Component {
   }
 
   render() {
-    let {
-      covers,
-      routeName,
-      completed,
-      progress,
-      uploadId,
-      uploadType,
-      uri,
-      selectCategories,
-      category_ids,
-      waitingVisible
-    } = this.state;
+    let { covers, routeName, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible } = this.state;
     const { navigation } = this.props;
     return (
       <Screen>
@@ -174,7 +151,7 @@ class CreatePostScreen extends React.Component {
           console.log("uploadType", uploadType);
           navigation.replace("视频详情", { video: data.createPost });
         } else {
-          navigation.replace("文章详情", { article: data.createPost });
+          navigation.replace("动态详情", { post: data.createPost });
         }
       })
       .catch(error => {

@@ -137,7 +137,7 @@ class HomeScreen extends Component {
 				<View style={styles.orderHeader}>
 					<View>
 						<Text style={styles.orderText}>
-							{order == "LATEST" && "发帖时间排序 "}
+							{order == "LATEST" && "发布时间排序 "}
 							{order == "COMMENTED" && "回复时间排序 "}
 							{order == "HOT" && "热门排序 "}
 						</Text>

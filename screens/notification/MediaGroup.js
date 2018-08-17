@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
-import Colors from "../../constants/Colors";
 import { UserGroup } from "../../components/MediaGroup";
 import { TextContainer, SubComment } from "../../components/Pure";
+import Colors from "../../constants/Colors";
+import { navigationAction, goContentScreen } from "../../constants/Methods";
 
 class MediaGroup extends Component {
 	render() {
-		let { navigation, user, rightComponent, description, notification, meta } = this.props;
+		let { navigation, user, rightComponent, description, comment, message, meta } = this.props;
 		return (
 			<View style={styles.notificationItem}>
 				<View style={styles.userMedia}>
@@ -20,14 +21,16 @@ class MediaGroup extends Component {
 				<View style={styles.notificationDescribe}>
 					<Text style={styles.notificationDescribeText}>{description ? description : null}</Text>
 				</View>
-				{notification.content ? (
-					<TouchableOpacity
-						style={styles.notificationContent}
-						onPress={() => navigation.navigate(notification.type, notification.info ? notification.info : {})}
-					>
+				{comment && comment.body ? (
+					<TouchableOpacity style={styles.notificationContent} onPress={() => navigation.navigate("评论详情", comment.param)}>
 						<TextContainer>
-							<SubComment numberOfLines={3} style={styles.tintText} body={notification.content} />
+							<SubComment numberOfLines={3} style={styles.tintText} body={comment.body} />
 						</TextContainer>
+					</TouchableOpacity>
+				) : null}
+				{message && message.body ? (
+					<TouchableOpacity style={styles.notificationContent} onPress={() => message.skipScreen()}>
+						<TextContainer>{message.body}</TextContainer>
 					</TouchableOpacity>
 				) : null}
 				<View>
