@@ -40,6 +40,14 @@ function goContentScreen(navigation, data) {
 			routeName = "文章详情";
 			params = { article: data };
 			break;
+		case "category":
+			routeName = "专题详情";
+			params = { category: data };
+			break;
+		case "collection":
+			routeName = "文集详情";
+			params = { collection: data };
+			break;
 	}
 	navigation.dispatch(navigationAction({ routeName, params }));
 }

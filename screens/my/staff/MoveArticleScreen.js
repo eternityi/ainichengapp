@@ -24,16 +24,16 @@ class MoveArticleScreen extends Component {
 		this.toggleCreateModal = this.toggleCreateModal.bind(this);
 		this.article = props.navigation.getParam("article", {});
 		const { collection = {} } = this.article;
+		this.collectionName = "";
 		this.state = {
 			createModalVisible: false,
-			selectCollection: collection.id,
-			collectionName: ""
+			selectCollection: collection.id
 		};
 	}
 
 	render() {
 		let { navigation, user, moveArticle } = this.props;
-		let { createModalVisible, selectCollection, collectionName } = this.state;
+		let { createModalVisible, selectCollection } = this.state;
 		return (
 			<Screen>
 				<Header
@@ -98,13 +98,13 @@ class MoveArticleScreen extends Component {
 								modalName="新建文集"
 								placeholder={"文集名"}
 								visible={createModalVisible}
-								value={collectionName}
+								value={this.collectionName}
 								handleVisible={this.toggleCreateModal}
 								changeVaule={this.changeCollectionName.bind(this)}
 								submit={() => {
 									createCollection({
 										variables: {
-											name: collectionName
+											name: this.collectionName
 										},
 										refetchQueries: addCollection => [
 											{
@@ -126,7 +126,7 @@ class MoveArticleScreen extends Component {
 	}
 
 	changeCollectionName(val) {
-		this.setState({ collectionName: val });
+		this.collectionName = val;
 	}
 
 	toggleCreateModal() {

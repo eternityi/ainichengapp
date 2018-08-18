@@ -23,10 +23,10 @@ class ListScreen extends Component {
 		this.toggleCreateModal = this.toggleCreateModal.bind(this);
 		this.toggleEditModal = this.toggleEditModal.bind(this);
 		this.changeCollectionName = this.changeCollectionName.bind(this);
+		this.collectionName = "";
 		this.state = {
 			createModalVisible: false,
 			editModalVisible: false,
-			collectionName: "",
 			currentCollection: null
 		};
 	}
@@ -34,7 +34,7 @@ class ListScreen extends Component {
 	render() {
 		const { user = {} } = this.props.navigation.state.params;
 		let { navigation, currentUser, collections } = this.props;
-		let { createModalVisible, editModalVisible, collectionName, currentCollection } = this.state;
+		let { createModalVisible, editModalVisible, currentCollection } = this.state;
 		let is_self = false;
 		if (user.id == currentUser.id) {
 			is_self = true;
@@ -83,7 +83,8 @@ class ListScreen extends Component {
 												onPress={() =>
 													navigation.navigate("文集详情", {
 														collection: item
-													})}
+													})
+												}
 												onLongPress={() => {
 													this.setState({ currentCollection: item });
 													this.toggleEditModal();
@@ -114,13 +115,13 @@ class ListScreen extends Component {
 								modalName="新建文集"
 								placeholder={"文集名"}
 								visible={createModalVisible}
-								value={collectionName}
+								value={this.collectionName}
 								handleVisible={this.toggleCreateModal}
 								changeVaule={this.changeCollectionName}
 								submit={() => {
 									createCollection({
 										variables: {
-											name: collectionName
+											name: this.collectionName
 										},
 										refetchQueries: addCollection => [
 											{
@@ -186,7 +187,7 @@ class ListScreen extends Component {
 	};
 
 	changeCollectionName(val) {
-		this.setState({ collectionName: val });
+		this.collectionName = val;
 	}
 
 	toggleCreateModal() {

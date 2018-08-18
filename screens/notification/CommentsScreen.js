@@ -148,7 +148,9 @@ class CommentsScreen extends Component {
 					<Text style={{ lineHeight: 24 }}>
 						在
 						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《" + notification.article.title + "》 "}
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 						的评论中提到了你
 					</Text>
@@ -159,7 +161,9 @@ class CommentsScreen extends Component {
 					<Text style={{ lineHeight: 24 }}>
 						评论了你发布的
 						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《" + notification.article.title + "》 "}
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 					</Text>
 				);

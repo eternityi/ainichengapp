@@ -19,7 +19,7 @@ class WriteModal extends Component {
 						placeholder={placeholder}
 						placeholderText={Colors.tintFontColor}
 						onChangeText={changeVaule}
-						value={value + ""}
+						defaultValue={value + ""}
 					/>
 					<View style={styles.modalFooter}>
 						<Text style={styles.modalFooterText} onPress={handleVisible}>

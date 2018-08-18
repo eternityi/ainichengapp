@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity, FlatList, Text } from "react-native
 import ScrollableTabView from "react-native-scrollable-tab-view";
 
 import Colors from "../../constants/Colors";
+import { goContentScreen } from "../../constants/Methods";
 import { Header } from "../../components/Header";
 import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, BlankContent, SpinnerLoading } from "../../components/Pure";
 
@@ -78,15 +79,7 @@ class HistoryScreen extends Component {
 		return (
 			<TouchableOpacity
 				style={styles.historyItem}
-				onPress={() =>
-					navigation.navigate(
-						item.type == "articles" ? "文章详情" : "视频详情",
-						item.type == "articles"
-							? {
-									article: item.visited
-								}
-							: { video: item.visited }
-					)}
+				onPress={() => goContentScreen(navigation, { type: item.type.slice(0, -1), ...item.visited })}
 			>
 				<View style={{ flex: 1, marginRight: 20 }}>
 					<Text style={styles.title} numberOflines={2}>

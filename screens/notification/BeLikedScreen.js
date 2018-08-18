@@ -67,7 +67,9 @@ class BeLikedScreen extends Component {
 								{notification.type == "喜欢了文章" ? "喜欢了你发布的" : "赞了你的评论"}
 								<Text style={styles.linkText} onPress={() => this.skipScreen(notification)}>
 									{notification.type == "喜欢了文章"
-										? " 《" + notification.article.title + "》 "
+										? notification.article.title
+											? " 《" + notification.article.title + "》 "
+											: " 《" + notification.article.description + "》 "
 										: ' "' + notification.comment.body + '" '}
 								</Text>
 							</Text>
