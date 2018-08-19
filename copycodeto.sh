@@ -13,6 +13,9 @@ cd /data/app/$from
 /bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
 
 /bin/cp -rf ./package.json ../$to/
+/bin/cp -rf ./appVersion.json ../$to/
+/bin/cp -rf ./App.js ../$to/
+/bin/cp -rf ./ApolloApp.js ../$to/
 
 /bin/cp -rf ./constants/Config.js ../$to/constants
 /bin/cp -rf ./constants/Layout.js ../$to/constants

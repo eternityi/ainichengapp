@@ -48,7 +48,7 @@ class IntroduceScreen extends Component {
 									/>
 								</View>
 								<View style={{ width: 200 }}>
-									<Text style={styles.featureDscribe}>加上图片，更好的展现你的厨艺</Text>
+									<Text style={styles.featureDscribe}>加上图片，更好的展现你的作品</Text>
 								</View>
 							</View>
 							<View style={styles.feature}>

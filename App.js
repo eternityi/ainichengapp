@@ -48,7 +48,7 @@ class App extends React.Component {
         {!isLoadingComplete && (
           <View style={styles.appLaunch}>
             {Platform.OS === "ios" && <Image source={require("./assets/images/flight.gif")} style={styles.flight} />}
-            {Platform.OS === "android" && <SpinnerLoading type="9CubeGrid" />}
+            {Platform.OS === "android" && <SpinnerLoading type={Config.Spinner} />}
             <View style={styles.appInfo}>
               <View style={styles.appLogoWrap}>
                 {/**<Image source={require("./assets/images/appLogo.png")} style={styles.appLogo} />*/}
