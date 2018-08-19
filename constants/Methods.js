@@ -25,8 +25,30 @@ function userOperationMiddleware({ login, action, navigation }) {
 //查看内容详情页
 function goContentScreen(navigation, data) {
 	let { type } = data;
-	let routeName = type == "video" ? "视频详情" : type == "post" ? "动态详情" : "文章详情";
-	let params = type == "video" ? { video: data } : { article: data };
+	let routeName;
+	let params;
+	switch (type) {
+		case "video":
+			routeName = "视频详情";
+			params = { video: data };
+			break;
+		case "post":
+			routeName = "动态详情";
+			params = { post: data };
+			break;
+		case "article":
+			routeName = "文章详情";
+			params = { article: data };
+			break;
+		case "category":
+			routeName = "专题详情";
+			params = { category: data };
+			break;
+		case "collection":
+			routeName = "文集详情";
+			params = { collection: data };
+			break;
+	}
 	navigation.dispatch(navigationAction({ routeName, params }));
 }
 
@@ -34,6 +56,13 @@ function goContentScreen(navigation, data) {
 function imageSize({ width, height }, maxWidth) {
 	var scale;
 	var size = {};
+	if (width > maxWidth) {
+		size.width = maxWidth;
+		size.height = Math.round((maxWidth * height) / width);
+	} else {
+		size = { width, height };
+	}
+	return size;
 	// if(Platform.OS=="ios"){
 	// 	switch (device.width) {
 	// 		//iPhone4/4S and iPhone5/5S
@@ -61,11 +90,6 @@ function imageSize({ width, height }, maxWidth) {
 	// 		scale = 1;
 	// 	}
 	// }
-	if (width > maxWidth) {
-		size.width = maxWidth;
-		size.height = Math.round((maxWidth * height) / width);
-	}
-	return size;
 }
 
 export { navigationAction, userOperationMiddleware, goContentScreen, imageSize };

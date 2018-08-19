@@ -132,10 +132,9 @@ class CommentsScreen extends Component {
 					</TouchableOpacity>
 				}
 				description={this.description(notification, navigation)}
-				notification={{
-					content: notification.comment ? notification.comment.body : "",
-					type: "评论详情",
-					info: { comment: notification.comment }
+				comment={{
+					body: notification.comment ? notification.comment.body : "",
+					param: { comment: notification.comment }
 				}}
 				meta={notification.time_ago}
 			/>
@@ -149,7 +148,9 @@ class CommentsScreen extends Component {
 					<Text style={{ lineHeight: 24 }}>
 						在
 						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《" + notification.article.title + "》 "}
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 						的评论中提到了你
 					</Text>
@@ -160,7 +161,9 @@ class CommentsScreen extends Component {
 					<Text style={{ lineHeight: 24 }}>
 						评论了你发布的
 						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《" + notification.article.title + "》 "}
+							{" 《"}
+							{notification.article.title ? notification.article.title : notification.article.description}
+							{"》 "}
 						</Text>
 					</Text>
 				);

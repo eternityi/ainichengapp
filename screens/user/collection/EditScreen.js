@@ -45,17 +45,18 @@ class EditScreen extends Component {
 		];
 		this.toggleModalVisible = this.toggleModalVisible.bind(this);
 		let { collection } = props.navigation.state.params;
+		this.collectionName = collection.name;
 		this.state = {
 			data,
 			order: Object.keys(data),
 			modalVisible: false,
-			collectionName: collection.name,
+
 			collectionId: collection.id
 		};
 	}
 
 	render() {
-		let { data, order, modalVisible, collectionName, collectionId } = this.state;
+		let { data, order, modalVisible, collectionId } = this.state;
 		let { navigation, user } = this.props;
 		return (
 			<Screen>
@@ -108,7 +109,7 @@ class EditScreen extends Component {
 						<View style={styles.modification}>
 							<Text style={styles.highlightText}>修改文集名</Text>
 							<TouchableOpacity onPress={this.toggleModalVisible}>
-								<Text style={styles.collectionName}>{collectionName}</Text>
+								<Text style={styles.collectionName}>{this.collectionName}</Text>
 							</TouchableOpacity>
 						</View>
 						<View style={{ paddingVertical: 12, paddingHorizontal: 15 }}>
@@ -137,7 +138,7 @@ class EditScreen extends Component {
 							<ModificationModal
 								modalName="修改文集名"
 								visible={modalVisible}
-								value={collectionName}
+								value={this.collectionName}
 								handleVisible={this.toggleModalVisible}
 								submit={value => {
 									editCollection({
@@ -146,7 +147,7 @@ class EditScreen extends Component {
 											name: value
 										}
 									});
-									this.setState({ collectionName: value });
+									this.collectionName = value;
 									this.toggleModalVisible();
 								}}
 							/>

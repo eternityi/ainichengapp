@@ -4,7 +4,7 @@ import { withNavigation } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { navigationAction } from "../../constants/Methods";
+import { navigationAction, goContentScreen } from "../../constants/Methods";
 import { Avatar, VideoCover } from "../Pure";
 
 const { height, width } = Dimensions.get("window");
@@ -14,7 +14,7 @@ class CoverItem extends PureComponent {
 		const { post, navigation } = this.props;
 		let { type, user, time_ago, title, description, cover, has_image, category, hits, count_likes, count_replies } = post;
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={this.skipScreen}>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
 					<View style={[styles.layoutFlexRow, styles.postUser]}>
 						<TouchableOpacity
@@ -30,11 +30,7 @@ class CoverItem extends PureComponent {
 					</View>
 					<View>{has_image && this._renderCover(type, cover)}</View>
 					<View style={styles.postContent}>
-						{type == "video" ? (
-							<Text numberOfLines={2} style={styles.title}>
-								{description ? description : title}
-							</Text>
-						) : (
+						{type == "article" ? (
 							<View>
 								<Text numberOfLines={2} style={styles.title}>
 									{title}
@@ -43,6 +39,10 @@ class CoverItem extends PureComponent {
 									{description}
 								</Text>
 							</View>
+						) : (
+							<Text numberOfLines={2} style={styles.title}>
+								{description ? description : title}
+							</Text>
 						)}
 						<View style={[styles.layoutFlexRow, styles.postFooter]}>
 							{category ? (
@@ -55,9 +55,24 @@ class CoverItem extends PureComponent {
 								</TouchableWithoutFeedback>
 							) : null}
 							<View style={styles.layoutFlexRow}>
-								{hits > 0 && <Text style={styles.metaCount}>{hits || 0}次查看</Text>}
-								{count_likes > 0 && <Text style={styles.metaCount}>{"· " + count_likes || 0}人喜欢</Text>}
-								{count_replies > 0 && <Text style={styles.metaCount}>{"· " + count_replies || 0}条评论</Text>}
+								{hits > 0 && (
+									<Text style={styles.metaCount}>
+										{hits || 0}
+										次查看
+									</Text>
+								)}
+								{count_likes > 0 && (
+									<Text style={styles.metaCount}>
+										{"· " + count_likes || 0}
+										人喜欢
+									</Text>
+								)}
+								{count_replies > 0 && (
+									<Text style={styles.metaCount}>
+										{"· " + count_replies || 0}
+										条评论
+									</Text>
+								)}
 							</View>
 						</View>
 					</View>
@@ -68,18 +83,10 @@ class CoverItem extends PureComponent {
 
 	_renderCover = (type, cover) => {
 		if (type == "video") {
-			return <VideoCover width={width} height={width * 9 / 16} cover={cover} markWidth={44} markSize={22} customStyle={styles.coverWrap} />;
+			return <VideoCover width={width} height={(width * 9) / 16} cover={cover} markWidth={44} markSize={22} customStyle={styles.coverWrap} />;
 		} else {
 			return <Image style={[styles.articleCover, styles.coverWrap]} source={{ uri: cover }} />;
 		}
-	};
-
-	skipScreen = () => {
-		const { post, navigation } = this.props;
-		let { type } = post;
-		let routeName = type == "video" ? "视频详情" : "文章详情";
-		let params = type == "video" ? { video: post } : { article: post };
-		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }
 
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		fontSize: 14,
 		lineHeight: 20,
-		color: Colors.tintFontColor
+		color: "#666"
 	},
 	postFooter: {
 		marginTop: 10,

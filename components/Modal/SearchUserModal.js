@@ -31,7 +31,7 @@ class SearchUserModal extends Component {
 		let { user, navigation, visible, toggleVisible } = this.props;
 		return (
 			<Modal
-				animationIn="slideInLeft"
+				animationIn="slideInRight"
 				animationOut="slideOutRight"
 				isVisible={visible}
 				onBackButtonPress={toggleVisible}

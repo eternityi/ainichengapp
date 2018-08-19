@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList } from "react-native";
-import VideoPlayer from "react-native-video-controls";
-import KeyboardSpacer from "react-native-keyboard-spacer";
+import Video from "react-native-video";
+import Spinner from "react-native-spinkit";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
@@ -13,6 +13,7 @@ import RewardPanel from "../article/RewardPanel";
 import ArticleBottomTools from "../article/ArticleBottomTools";
 import Comments from "../article/comment/Comments";
 import { RewardModal, ShareModal } from "../../components/Modal";
+import ArticleDetailHeader from "../article/ArticleDetailHeader";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
@@ -26,41 +27,33 @@ const { width, height } = Dimensions.get("window");
 class VideoScreen extends Component {
 	constructor(props) {
 		super(props);
-		this.onProgress = this.onProgress.bind(this);
-		this.onBuffer = this.onBuffer.bind(this);
-		this.togglePlay = this.togglePlay.bind(this);
 		this.handleRewardVisible = this.handleRewardVisible.bind(this);
 		this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
 		this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
 		this.state = {
-			fullScreen: false,
-			rate: 1,
-			paused: false,
-			volume: 1,
-			muted: false,
 			duration: 0,
 			currentTime: 0,
-			isBuffering: false,
+			loading: true,
+			paused: false,
 			addCommentVisible: false,
 			rewardVisible: false,
 			shareModalVisible: false
 		};
 	}
 
-	onLoad(data) {
-		this.setState({ duration: data.duration });
+	componentDidMount() {
+		let { navigation } = this.props;
+		this.willBlurSubscription = navigation.addListener("willBlur", payload => {
+			this.videoPlayerControl();
+		});
 	}
 
-	onProgress(data) {
-		this.setState({ currentTime: data.currentTime });
-	}
-
-	onBuffer({ isBuffering }: { isBuffering: boolean }) {
-		this.setState({ isBuffering });
+	componentWillUnmount() {
+		this.willBlurSubscription.remove();
 	}
 
 	render() {
-		let { fullScreen, rate, paused, muted, ignoreSilentSwitch, rewardVisible, addCommentVisible, shareModalVisible } = this.state;
+		let { paused, rewardVisible, addCommentVisible, shareModalVisible } = this.state;
 		let { navigation, login, favoriteArticle, likeArticle } = this.props;
 		let video = navigation.getParam("video", {});
 		return (
@@ -75,46 +68,35 @@ class VideoScreen extends Component {
 						let { id, video_url, user, title, description, liked, favorited, cover } = video;
 						return (
 							<View style={styles.container}>
-								<View style={styles.videoWrap}>
-									<VideoPlayer
-										onPlay={() => {
-											this.setState({
-												paused: false
-											});
-										}}
-										onPause={() => {
-											this.setState({
-												paused: true
-											});
-										}}
-										// onEnterFullscreen={()=>{
-										// 	navigation.navigate("视频全屏")
-										// }}
-										navigator={navigation}
+								<ArticleDetailHeader navigation={navigation} article={video} share={this.handleSlideShareMenu} login={login} />
+								<TouchableOpacity activeOpacity={1} onPress={this.videoPlayerControl} style={styles.videoWrap}>
+									<Video
 										source={{ uri: video_url }}
 										poster={cover}
 										posterResizeMode="cover"
 										style={{
 											width,
-											height: fullScreen ? height : (width * 9) / 16
+											height: (width * 9) / 16
 										}}
-										ref={ref => {
-											this.player = ref;
-										}}
-										muted={muted}
+										rate={1}
+										muted={false}
 										volume={1}
-										rate={rate}
 										paused={paused}
 										resizeMode={"contain"}
-										onLoad={this.onLoad.bind(this)}
-										onBuffer={this.onBuffer.bind(this)}
-										onProgress={this.onProgress.bind(this)}
-										onEnd={() => {
-											return "Done!";
-										}}
-										repeat={true}
+										repeat={false} // 是否重复播放
+										playInBackground={true}
+										onLoadStart={this.loadStart} // 当视频开始加载时的回调函数
+										onLoad={this.onLoad} // 当视频加载完毕时的回调函数
+										// onProgress={this.onProgress}      //  进度控制，每250ms调用一次，以获取视频播放的进度
+										onEnd={this.onEnd} // 当视频播放完毕后的回调函数
+										onError={this.onError}
 									/>
-								</View>
+									{paused && (
+										<View style={styles.pausedStyle}>
+											<Iconfont name="video" size={40} color={Colors.tintGray} />
+										</View>
+									)}
+								</TouchableOpacity>
 								<ScrollView style={styles.container} keyboardShouldPersistTaps={"handled"}>
 									<View style={styles.topInfo}>
 										<UserMetaGroup user={user} navigation={navigation} />
@@ -186,6 +168,30 @@ class VideoScreen extends Component {
 		);
 	}
 
+	loadStart(data) {}
+	onLoad = data => {
+		// this.setState({ loading: false });
+	};
+	onProgress(data) {}
+	onEnd(data) {}
+	onError(data) {}
+
+	playStatus = () => {
+		let { loading, paused } = this.state;
+		switch (true) {
+			case !loading:
+				return <Spinner size={40} type="FadingCircleAlt" color={Colors.tintGray} />;
+				break;
+			case paused:
+				return (
+					<View style={styles.pausedStyle}>
+						<Iconfont name="video" size={40} color={Colors.tintGray} />
+					</View>
+				);
+				break;
+		}
+	};
+
 	// 喜欢文章
 	likeHandler = likeArticle => {
 		let { login, navigation } = this.props;
@@ -218,11 +224,9 @@ class VideoScreen extends Component {
 	};
 
 	// 播放暂停
-	togglePlay() {
-		this.setState(prevState => ({
-			paused: !prevState.paused
-		}));
-	}
+	videoPlayerControl = () => {
+		this.setState(prevState => ({ paused: !prevState.paused }));
+	};
 
 	handleRewardVisible() {
 		let { login, navigation } = this.props;
@@ -259,17 +263,28 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.skinColor
 	},
 	videoWrap: {
-		overflow: "hidden",
+		position: "relative",
 		height: (width * 9) / 16
+	},
+	pausedStyle: {
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		width: 50,
+		height: 50,
+		opacity: 0.7,
+		marginLeft: -25,
+		marginTop: -25,
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	topInfo: {
 		padding: 15
 	},
 	title: {
 		marginTop: 15,
-		fontSize: 18,
-		fontWeight: "500",
-		lineHeight: 24,
+		fontSize: 16,
+		lineHeight: 22,
 		color: Colors.darkFontColor
 	},
 	topOperation: {

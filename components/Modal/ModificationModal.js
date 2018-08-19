@@ -9,15 +9,11 @@ const { width, height } = Dimensions.get("window");
 class ModificationModal extends Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			value: props.value
-		};
+		this.value = props.value;
 	}
 
 	render() {
 		const { modalName, visible, handleVisible, submit } = this.props;
-		const { value } = this.state;
 		return (
 			<BasicModal
 				visible={visible}
@@ -32,8 +28,8 @@ class ModificationModal extends Component {
 						selectionColor={Colors.themeColor}
 						style={styles.textInput}
 						autoFocus={true}
-						onChangeText={value => this.setState({ value })}
-						value={value + ""}
+						onChangeText={value => (this.value = value)}
+						defaultValue={this.value + ""}
 					/>
 					<View style={styles.modalFooter}>
 						<TouchableOpacity
@@ -42,7 +38,7 @@ class ModificationModal extends Component {
 						>
 							<Text style={styles.modalFooterText}>取消修改</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => submit(value)} style={styles.modalOperation}>
+						<TouchableOpacity onPress={() => submit(this.value)} style={styles.modalOperation}>
 							<Text style={[styles.modalFooterText, { marginLeft: 20 }]}>确定修改</Text>
 						</TouchableOpacity>
 					</View>

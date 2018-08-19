@@ -7,6 +7,7 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { imageSize } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
+import PostHeader from "./PostHeader";
 import RewardPanel from "../article/RewardPanel";
 import ArticleBottomTools from "../article/ArticleBottomTools";
 import Comments from "../article/comment/Comments";
@@ -21,11 +22,11 @@ import { articleQuery } from "../../graphql/article.graphql";
 
 const { width, height } = Dimensions.get("window");
 
-const MAX_LENGTH = width - 30;
-const IMG_WIDTH = MAX_LENGTH;
-const IMG_HEIGHT = MAX_LENGTH;
+const MAX_WIDTH = width - 30;
+let IMG_WIDTH = MAX_WIDTH;
+let IMG_HEIGHT = MAX_WIDTH;
 const IMG_INTERVAL = 8;
-const IMG_SIZE = (MAX_LENGTH - 16) / 3;
+const IMG_SIZE = (MAX_WIDTH - 16) / 3;
 
 class PostScreen extends Component {
 	constructor(props) {
@@ -36,35 +37,36 @@ class PostScreen extends Component {
 		this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
 		this.commentsOffsetY = height;
 		this.state = {
-			addCommentVisible: false,
 			rewardVisible: false,
+			addCommentVisible: false,
 			shareModalVisible: false,
 			imageViewerVisible: false,
-			imageSize: { width: MAX_LENGTH, height: MAX_LENGTH },
 			initImage: 0 //图片预览模式下首先打开的图片索引
 		};
 	}
 
+	componentWillUpdate(nextProps, nextState) {}
+
 	render() {
 		let { rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible, initImage } = this.state;
 		let { navigation, login } = this.props;
-		const article = navigation.getParam("article", {});
+		const post = navigation.getParam("post", {});
 		return (
 			<Screen>
-				<Query query={articleQuery} variables={{ id: article.id }}>
+				<Query query={articleQuery} variables={{ id: post.id }}>
 					{({ loading, error, data, refetch }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
-						let article = data.article;
-						let { body, images, user, count_tips, count_replies } = article;
+						let post = data.article;
+						let { body, images, user, count_tips, count_replies, time_ago, hits } = post;
 						this.images = images.map((elem, index) => {
 							return { url: elem };
 						});
-						this.getImageSize(images[0]);
 						return (
 							<View style={styles.container}>
 								<StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
+								<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
 								<ScrollView
 									style={styles.container}
 									ref={ref => (this.scrollRef = ref)}
@@ -72,28 +74,28 @@ class PostScreen extends Component {
 									keyboardShouldPersistTaps={"handled"}
 									scrollEventThrottle={16}
 								>
-									<View style={{ paddingHorizontal: 20 }}>
-										<View style={{ marginTop: 20 }}>
+									<View style={{ padding: 15 }}>
+										<View style={{ marginBottom: 15 }}>
 											<UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={user} plain />
-											<View>
-												<Text style={styles.body}>{body}</Text>
-											</View>
-											{this.renderImages(images)}
 										</View>
-										<Comments
-											addCommentVisible={addCommentVisible}
-											article={article}
-											navigation={navigation}
-											onLayout={this._commentsOnLayout.bind(this)}
-											toggleCommentModal={this.toggleAddCommentVisible}
-										/>
+										<View style={{ marginBottom: 15 }}>
+											<Text style={styles.body}>{body}</Text>
+										</View>
+										{images.length > 0 && this.renderImages(images)}
 									</View>
+									<Comments
+										addCommentVisible={addCommentVisible}
+										article={post}
+										navigation={navigation}
+										onLayout={this._commentsOnLayout.bind(this)}
+										toggleCommentModal={this.toggleAddCommentVisible}
+									/>
 								</ScrollView>
 								{/*文章底部工具**/}
 								<ArticleBottomTools
 									rewards={count_tips}
 									comments={count_replies}
-									article={article}
+									article={post}
 									showWrite
 									toggleCommentModal={this.toggleAddCommentVisible}
 									handleRewardVisible={this.handleRewardVisible}
@@ -103,7 +105,7 @@ class PostScreen extends Component {
 									login={login}
 								/>
 								{/*赞赏模态框**/}
-								<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={article} />
+								<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={post} />
 							</View>
 						);
 					}}
@@ -124,7 +126,6 @@ class PostScreen extends Component {
 
 	renderImages(images) {
 		if (images.length == 1) {
-			let { imageSize } = this.state;
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
@@ -135,7 +136,7 @@ class PostScreen extends Component {
 						});
 					}}
 				>
-					<Image source={{ uri: images[0] }} style={[{ width: imageSize.width, height: imageSize.height }, styles.singleImage]} />
+					<Image source={{ uri: images[0] }} style={[{ width: IMG_WIDTH, height: IMG_HEIGHT }, styles.singleImage]} />
 				</TouchableOpacity>
 			);
 		} else {
@@ -162,23 +163,24 @@ class PostScreen extends Component {
 		}
 	}
 
-	getImageSize = uri => {
-		console.log(uri);
-		Image.getSize(
-			uri,
-			(width, height) => {
-				if (width > height) {
-					IMG_HEIGHT = (height * MAX_LENGTH) / width;
-				} else {
-					MAX_LENGTH = (width * MAX_LENGTH) / height;
-				}
-				this.setState({ imageSize: { width: IMG_WIDTH, height: IMG_HEIGHT } });
-			},
-			error => {
-				console.log(error);
-			}
-		);
-	};
+	// getImageSize = uri => {
+	// 	Image.getSize(
+	// 		uri,
+	// 		(width, height) => {
+	// 			if (width > height) {
+	// 				IMG_WIDTH = MAX_WIDTH;
+	// 				IMG_HEIGHT = (IMG_WIDTH * height) / width;
+	// 			} else {
+	// 				IMG_HEIGHT = MAX_WIDTH;
+	// 				IMG_WIDTH = (IMG_HEIGHT * width) / height;
+	// 			}
+	// 			this.setState({ imageSize: { width: IMG_WIDTH, height: IMG_HEIGHT } });
+	// 		},
+	// 		error => {
+	// 			console.log(error);
+	// 		}
+	// 	);
+	// };
 
 	//赞赏模态框开关
 	handleRewardVisible() {
@@ -230,22 +232,26 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colors.skinColor
 	},
+	metaText: {
+		fontSize: 12,
+		color: Colors.tintFontColor
+	},
 	body: {
 		fontSize: 16,
 		lineHeight: 22,
-		marginBottom: 20,
 		color: Colors.primaryFontColor
 	},
 	singleImage: {
 		resizeMode: "cover",
-		marginBottom: 20
+		marginBottom: 15
 	},
 	gridView: {
 		flexDirection: "row",
 		flexWrap: "nowrap",
 		alignItems: "center",
 		marginLeft: -IMG_INTERVAL,
-		marginBottom: 20
+		marginTop: -IMG_INTERVAL,
+		marginBottom: 15
 	},
 	gridImage: {
 		width: IMG_SIZE,
@@ -255,8 +261,12 @@ const styles = StyleSheet.create({
 		borderColor: Colors.lightBorderColor,
 		backgroundColor: Colors.tintGray,
 		marginLeft: IMG_INTERVAL,
-		marginBottom: IMG_INTERVAL
+		marginTop: IMG_INTERVAL
 	}
 });
 
-export default PostScreen;
+export default connect(store => {
+	return {
+		login: store.users.login
+	};
+})(PostScreen);

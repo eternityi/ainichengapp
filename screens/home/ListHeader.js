@@ -34,12 +34,9 @@ class ListHeader extends React.Component {
 
 	render() {
 		let { privacy } = this.state;
-		console.log("test1");
 		return (
 			<Query query={visitCategoryQuery} fetchPolicy="network-only">
 				{({ loading, error, data, refetch, fetchMore }) => {
-					console.log("test2");
-
 					if (!(data && data.visits && data.visits.length > 0)) return null;
 					return (
 						<View style={styles.officialColumnWarp}>

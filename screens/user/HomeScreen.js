@@ -228,7 +228,7 @@ class HomeScreen extends Component {
             {self ? (
               <View style={[styles.layoutFlexRow, styles.buttonGroup]}>
                 <View style={{ width: 70 }}>
-                  <Button name="编辑资料" outline handler={() => navigation.navigate("编辑个人资料")} />
+                  <Button fontSize={14} name="编辑资料" outline handler={() => navigation.navigate("编辑个人资料")} />
                 </View>
               </View>
             ) : (
@@ -244,7 +244,7 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ width: 70 }}>
-                  <Button name="发信息" outline handler={() => this.chatting(user)} />
+                  <Button fontSize={14} name="发信息" outline handler={() => this.chatting(user)} />
                 </View>
               </View>
             )}
@@ -294,7 +294,8 @@ class HomeScreen extends Component {
               navigation.navigate("动态", {
                 user,
                 self
-              })}
+              })
+            }
           >
             <View style={{ alignItems: "center" }}>
               <Image source={require("../../assets/images/actively.png")} style={styles.listItemImg} />
@@ -308,7 +309,8 @@ class HomeScreen extends Component {
             onPress={() =>
               navigation.navigate("个人文集", {
                 user
-              })}
+              })
+            }
           >
             <View style={{ alignItems: "center" }}>
               <Image source={require("../../assets/images/collection.png")} style={styles.listItemImg} />
@@ -322,7 +324,8 @@ class HomeScreen extends Component {
             onPress={() =>
               navigation.navigate("关注的专题和文集", {
                 user
-              })}
+              })
+            }
           >
             <View style={{ alignItems: "center" }}>
               <Image source={require("../../assets/images/category.png")} style={styles.listItemImg} />

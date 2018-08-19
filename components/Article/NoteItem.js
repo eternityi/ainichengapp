@@ -4,7 +4,7 @@ import { withNavigation } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { navigationAction } from "../../constants/Methods";
+import { navigationAction, goContentScreen } from "../../constants/Methods";
 import { Avatar, VideoCover } from "../Pure";
 import { CustomPopoverMenu } from "../../components/Modal";
 
@@ -15,19 +15,14 @@ const COVER_WIDTH = width - 30;
 
 class NoteItem extends Component {
 	render() {
-		const {
-			post,
-			navigation,
-			compress,
-			longPress = () => null,
-			onPress = this.skipScreen,
-			popoverMenu,
-			options,
-			popoverHandler = () => null
-		} = this.props;
+		const { post, navigation, compress, longPress = () => null, onPress, popoverMenu, options, popoverHandler = () => null } = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_replies } = post;
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={onPress} onLongPress={longPress}>
+			<TouchableHighlight
+				underlayColor={Colors.tintGray}
+				onPress={onPress ? onPress : () => goContentScreen(navigation, post)}
+				onLongPress={longPress}
+			>
 				<View style={styles.noteContainer}>
 					<View style={styles.noteUser}>
 						{compress ? (
@@ -111,7 +106,7 @@ class NoteItem extends Component {
 		if (type == "video") {
 			return (
 				<View style={styles.coverWrap}>
-					<VideoCover width={COVER_WIDTH} height={COVER_WIDTH * 9 / 16} cover={cover} />
+					<VideoCover width={COVER_WIDTH} height={(COVER_WIDTH * 9) / 16} cover={cover} />
 				</View>
 			);
 		} else if (images.length == 1) {
@@ -129,14 +124,6 @@ class NoteItem extends Component {
 				</View>
 			);
 		}
-	};
-
-	skipScreen = () => {
-		const { post, navigation } = this.props;
-		let { type } = post;
-		let routeName = type == "video" ? "视频详情" : "文章详情";
-		let params = type == "video" ? { video: post } : { article: post };
-		navigation.dispatch(navigationAction({ routeName, params }));
 	};
 }
 
