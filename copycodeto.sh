@@ -8,6 +8,11 @@ fi
 
 echo "copy code to $to ..."
 cd /data/app/$from
+
+/bin/cp -rf ./android/gradle.properties ../$to/android
+/bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
+
+/bin/cp -rf ./package.json ../$to/
 /bin/cp -rf ./assets ../$to/
 /bin/cp -rf ./components ../$to/
 /bin/cp -rf ./graphql ../$to/
