@@ -338,10 +338,9 @@ class ActionsScreen extends Component {
 				navigation.dispatch(navigationAction({ routeName: "文章详情", params: { article } }));
 				break;
 			case "video":
-				navigation.dispatch(navigationAction({ routeName: "视频详情", params: { video: article } }));
+			case "post":
+				navigation.dispatch(navigationAction({ routeName: "动态详情", params: { post: article } }));
 				break;
-			default:
-				navigation.dispatch(navigationAction({ routeName: "文章详情", params: { article } }));
 		}
 	};
 

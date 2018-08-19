@@ -35,7 +35,6 @@ query visitsQuery($visit: VisitFilter) {
         visited {
             id
             title
-            collection
         }
     }
 }

@@ -26,7 +26,7 @@ class RewardModal extends Component {
     this.state = {
       amount: 2,
       selectMoney: 2,
-      inputMoney: 0,
+      inputMoney: "",
       paymentVisible: false,
       warningVisible: false
     };
@@ -122,14 +122,14 @@ class RewardModal extends Component {
                   <TextInput
                     style={styles.rewardModalInput}
                     onChangeText={message => (this.message = message)}
-                    value=""
+                    defaultValue=""
                     underlineColorAndroid="transparent"
                   />
                 </View>
                 <View style={styles.rewardModalAmount}>
                   <Text style={{ fontSize: 20, color: Colors.themeColor, letterSpacing: 2 }}>
                     <Iconfont name={"RMB"} size={18} />
-                    <Text>{amount}</Text>
+                    <Text>{amount || 0}</Text>
                   </Text>
                   <Text style={styles.paymentText}>
                     当前余额¥
@@ -219,7 +219,8 @@ class RewardModal extends Component {
   }
 
   emptySelectMoney() {
-    this.setState({ selectMoney: 0, amount: 0 });
+    let { inputMoney } = this.state;
+    this.setState({ selectMoney: 0, amount: inputMoney });
   }
 
   rewardModalHeader() {

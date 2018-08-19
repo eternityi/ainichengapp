@@ -29,8 +29,9 @@ class BeSelectedCategory extends Component {
           if (elem) {
             return (
               <TouchableOpacity key={index} style={styles.beSelectedCategoryItem} onPress={() => navigation.navigate("专题详情", { category: elem })}>
-                <Text style={styles.beSelectedCategoryItemText}>{elem.name}</Text>
-                <Iconfont name={"right"} size={16} color={Colors.themeColor} />
+                <Text style={styles.beSelectedCategoryItemText} numberOfLines={1}>
+                  {elem.name}
+                </Text>
               </TouchableOpacity>
             );
           }
@@ -79,14 +80,18 @@ class BeSelectedCategory extends Component {
 
 const styles = StyleSheet.create({
   beSelectedCategory: {
+    flexWrap: "nowrap",
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 15
   },
   beSelectedCategoryItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 6,
-    padding: 5,
+    maxWidth: 150,
+    height: 30,
+    paddingHorizontal: 5,
+    marginRight: 8,
     borderWidth: 1,
     borderColor: Colors.themeColor,
     borderRadius: 5

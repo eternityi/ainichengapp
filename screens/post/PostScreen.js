@@ -3,14 +3,16 @@ import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions
 import ImageViewer from "react-native-image-zoom-viewer";
 import HTML from "react-native-render-html";
 
+import PostHeader from "./PostHeader";
+import Player from "./Player";
+import RewardPanel from "./RewardPanel";
+import PostBottomTools from "./PostBottomTools";
+import Comments from "../article/comment/Comments";
+import BeSelectedCategory from "../article/BeSelectedCategory";
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
-import { imageSize } from "../../constants/Methods";
+import { imageSize, goContentScreen } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
-import PostHeader from "./PostHeader";
-import RewardPanel from "../article/RewardPanel";
-import ArticleBottomTools from "../article/ArticleBottomTools";
-import Comments from "../article/comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
 import { RewardModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
@@ -23,8 +25,6 @@ import { articleQuery } from "../../graphql/article.graphql";
 const { width, height } = Dimensions.get("window");
 
 const MAX_WIDTH = width - 30;
-let IMG_WIDTH = MAX_WIDTH;
-let IMG_HEIGHT = MAX_WIDTH;
 const IMG_INTERVAL = 8;
 const IMG_SIZE = (MAX_WIDTH - 16) / 3;
 
@@ -59,56 +59,70 @@ class PostScreen extends Component {
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
 						let post = data.article;
-						let { body, pictures, user, count_tips, count_replies, time_ago, hits } = post;
-						this.images = pictures.map((elem, index) => {
-							return {
-								url: elem.url,
-								width: elem.width,
-								height: elem.height
-							};
+						let { body, pictures, user, categories, category, count_tips, count_replies, time_ago, hits } = post;
+						this.pictures = pictures.map((elem, index) => {
+							return { url: elem.url };
 						});
+						console.log("post", post);
 						return (
 							<View style={styles.container}>
 								<StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
 								<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
 								<ScrollView
 									style={styles.container}
+									bounces={false}
 									ref={ref => (this.scrollRef = ref)}
 									removeClippedSubviews={true}
 									keyboardShouldPersistTaps={"handled"}
 									scrollEventThrottle={16}
 								>
+									{post.type == "video" && <Player video={post} navigation={navigation} />}
 									<View style={{ padding: 15 }}>
-										<View style={{ marginBottom: 15 }}>
-											<UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={user} plain />
-										</View>
 										<View style={{ marginBottom: 15 }}>
 											<Text style={styles.body}>{body}</Text>
 										</View>
 										{pictures.length > 0 && this.renderImages(pictures)}
+										{post.type == "article" ? (
+											<BeSelectedCategory categories={categories} navigation={navigation} />
+										) : (
+											category && (
+												<View style={{ marginBottom: 10 }}>
+													<Text
+														style={styles.category}
+														onPress={() => goContentScreen(navigation, { ...category, type: "category" })}
+													>
+														#{category.name}
+													</Text>
+												</View>
+											)
+										)}
+										<View>
+											<Text style={styles.time_ago}>{time_ago}</Text>
+										</View>
 									</View>
+									<RewardPanel
+										navigation={navigation}
+										rewardUsers={post.tipedUsers}
+										rewardDescrib={post.user.tip_words}
+										handleRewardVisible={this.handleRewardVisible}
+									/>
 									<Comments
 										addCommentVisible={addCommentVisible}
 										article={post}
 										navigation={navigation}
-										onLayout={this._commentsOnLayout.bind(this)}
+										onLayout={this._commentsOnLayout}
 										toggleCommentModal={this.toggleAddCommentVisible}
 									/>
 								</ScrollView>
-								{/*文章底部工具**/}
-								<ArticleBottomTools
-									rewards={count_tips}
-									comments={count_replies}
-									article={post}
-									showWrite
+								<PostBottomTools
+									post={post}
+									login={login}
+									navigation={navigation}
 									toggleCommentModal={this.toggleAddCommentVisible}
 									handleRewardVisible={this.handleRewardVisible}
 									handleSlideShareMenu={this.handleSlideShareMenu}
-									commentHandler={this._scrollToComments.bind(this)}
-									navigation={navigation}
-									login={login}
+									scrollToComment={this._scrollToComment}
 								/>
-								{/*赞赏模态框**/}
 								<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={post} />
 							</View>
 						);
@@ -119,7 +133,7 @@ class PostScreen extends Component {
 					<ImageViewer
 						onClick={() => this.setState({ imageViewerVisible: false })}
 						onSwipeDown={() => this.setState({ imageViewerVisible: false })}
-						imageUrls={this.images}
+						imageUrls={this.pictures}
 						index={initImage}
 					/>
 				</Modal>
@@ -128,9 +142,9 @@ class PostScreen extends Component {
 		);
 	}
 
-	renderImages(pictures) {
-		if (pictures.length == 1) {
-			let picture = pictures[0];
+	renderImages(images) {
+		if (images.length == 1) {
+			let size = imageSize({ width: images[0].width, height: images[0].height }, MAX_WIDTH);
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
@@ -141,7 +155,7 @@ class PostScreen extends Component {
 						});
 					}}
 				>
-					<Image source={{ uri: picture.url }} style={[{ width: IMG_WIDTH, height: IMG_HEIGHT }, styles.singleImage]} />
+					<Image source={{ uri: images[0].url }} style={[{ width: size.width, height: size.height }, styles.singleImage]} />
 				</TouchableOpacity>
 			);
 		} else {
@@ -171,25 +185,6 @@ class PostScreen extends Component {
 		}
 	}
 
-	// getImageSize = uri => {
-	// 	Image.getSize(
-	// 		uri,
-	// 		(width, height) => {
-	// 			if (width > height) {
-	// 				IMG_WIDTH = MAX_WIDTH;
-	// 				IMG_HEIGHT = (IMG_WIDTH * height) / width;
-	// 			} else {
-	// 				IMG_HEIGHT = MAX_WIDTH;
-	// 				IMG_WIDTH = (IMG_HEIGHT * width) / height;
-	// 			}
-	// 			this.setState({ imageSize: { width: IMG_WIDTH, height: IMG_HEIGHT } });
-	// 		},
-	// 		error => {
-	// 			console.log(error);
-	// 		}
-	// 	);
-	// };
-
 	//赞赏模态框开关
 	handleRewardVisible() {
 		let { login, navigation } = this.props;
@@ -212,27 +207,27 @@ class PostScreen extends Component {
 		}
 	}
 
-	//获取评论区域到顶部的高度
-	_commentsOnLayout(event) {
-		let { x, y, width, height } = event.nativeEvent.layout;
-		this.commentsOffsetY = y;
-	}
-
-	//滚动到评论顶部
-	_scrollToComments() {
-		this.scrollRef.scrollTo({
-			x: 0,
-			y: this.commentsOffsetY,
-			animated: true
-		});
-	}
-
 	//分享slide
 	handleSlideShareMenu() {
 		this.setState(prevState => ({
 			shareModalVisible: !prevState.shareModalVisible
 		}));
 	}
+
+	//获取评论区域到顶部的高度
+	_commentsOnLayout = event => {
+		let { x, y, width, height } = event.nativeEvent.layout;
+		this.commentsOffsetY = y;
+	};
+
+	//滚动到评论顶部
+	_scrollToComment = () => {
+		this.scrollRef.scrollTo({
+			x: 0,
+			y: this.commentsOffsetY,
+			animated: true
+		});
+	};
 }
 
 const styles = StyleSheet.create({
@@ -240,14 +235,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colors.skinColor
 	},
-	metaText: {
-		fontSize: 12,
-		color: Colors.tintFontColor
-	},
 	body: {
 		fontSize: 16,
 		lineHeight: 22,
-		color: Colors.primaryFontColor
+		color: Colors.darkFontColor
+	},
+	category: {
+		fontSize: 15,
+		lineHeight: 20,
+		color: Colors.themeColor
+	},
+	time_ago: {
+		fontSize: 13,
+		color: Colors.tintFontColor
 	},
 	singleImage: {
 		resizeMode: "cover",

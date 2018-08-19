@@ -95,7 +95,6 @@ import ArticleDetailScreen from "../screens/article/DetailScreen";
 import CommentDetail from "../screens/article/comment/CommentDetailScreen";
 
 //POST
-import VideoDetailScreen from "../screens/post/VideoScreen";
 import PostDetailScreen from "../screens/post/PostScreen";
 
 //category
@@ -171,9 +170,6 @@ export default {
   },
   文章详情: {
     screen: ArticleDetailScreen
-  },
-  视频详情: {
-    screen: VideoDetailScreen
   },
   动态详情: {
     screen: PostDetailScreen

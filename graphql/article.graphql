@@ -154,6 +154,7 @@ query articleQuery($id: Int!) {
 		description
 		body
 		pictures {
+			id
 			url
 			width
 			height
@@ -166,7 +167,6 @@ query articleQuery($id: Int!) {
 			introduction
 			count_articles
 			count_likes
-			tip_words
 			followed_status
 		}
 		time_ago
@@ -178,6 +178,10 @@ query articleQuery($id: Int!) {
 		count_tips
 		count_replies
 		collection {
+			id
+			name
+		}
+		category {
 			id
 			name
 		}

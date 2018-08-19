@@ -1,10 +1,10 @@
 import React from "react";
 import { Platform, StatusBar, StyleSheet, View, Text, YellowBox, Dimensions, Image } from "react-native";
 import codePush from "react-native-code-push";
+import Spinner from "react-native-spinkit";
 import ApolloApp from "./ApolloApp";
 import Colors from "./constants/Colors";
 import Config from "./constants/Config";
-import { SpinnerLoading } from "./components/Pure";
 
 //redux
 import { Provider, connect } from "react-redux";
@@ -47,14 +47,16 @@ class App extends React.Component {
         </MenuProvider>
         {!isLoadingComplete && (
           <View style={styles.appLaunch}>
-            {Platform.OS === "ios" && <Image source={require("./assets/images/flight.gif")} style={styles.flight} />}
-            {Platform.OS === "android" && <SpinnerLoading type={Config.Spinner} />}
-            <View style={styles.appInfo}>
-              <View style={styles.appLogoWrap}>
-                {/**<Image source={require("./assets/images/appLogo.png")} style={styles.appLogo} />*/}
-                <Text style={styles.appName}>{Config.AppDisplayName}</Text>
+            <View style={styles.column}>
+              <Spinner size={50} type="9CubeGrid" color={Colors.themeColor} />
+            </View>
+            <View style={styles.column}>
+              <View style={styles.appName}>
+                <Text style={styles.name}>{Config.AppName}</Text>
               </View>
-              <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>{Config.AppSlogan}</Text>
+              <View style={styles.appSlogan}>
+                <Text style={styles.slogan}>{Config.AppSlogan}</Text>
+              </View>
             </View>
           </View>
         )}
@@ -95,34 +97,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff"
   },
-  flight: {
-    width,
-    height: width * 0.68,
-    resizeMode: "cover"
-  },
-  appInfo: {
-    marginVertical: 30,
-    flexDirection: "row",
+  column: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  },
-  appLogoWrap: {
-    // padding: 4,
-    // borderWidth: 0.5,
-    // borderColor: Colors.lightBorderColor,
-    // borderRadius: 5,
-    marginRight: 15
+    alignItems: "center",
+    paddingHorizontal: 15
   },
   appName: {
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.themeColor
+  },
+  name: {
     fontSize: 22,
     color: Colors.themeColor,
     fontWeight: "300"
   },
-  appLogo: {
-    width: 50,
-    height: 50,
-    resizeMode: "cover"
-  }
+  appSlogan: {
+    marginTop: 10
+  },
+  slogan: { fontSize: 15, lineHeight: 20, color: Colors.tintFontColor }
 });
 
 export default codePush(App);

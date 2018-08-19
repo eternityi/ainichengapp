@@ -6,7 +6,8 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-m
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, HeaderLeft } from "../../components/Header";
-import { Avatar, ContentEnd } from "../../components/Pure";
+import { Avatar } from "../../components/Pure";
+import { FollowButton } from "../../components/Button";
 import { CustomPopoverMenu, ReportModal } from "../../components/Modal";
 
 import { Query, Mutation, compose, graphql } from "react-apollo";
@@ -48,7 +49,19 @@ class PostHeader extends Component {
                 navigation={navigation}
                 leftComponent={
                   <HeaderLeft navigation={navigation} routeName={true}>
-                    <Text style={{ fontSize: 14, color: Colors.tintFontColor }}>{time_ago}</Text>
+                    <TouchableOpacity style={{ marginRight: 6 }} onPress={() => navigation.navigate("用户详情", { user })}>
+                      <Avatar size={30} uri={user.avatar} />
+                    </TouchableOpacity>
+                    <Text style={styles.name}>{user.name}</Text>
+                    <FollowButton
+                      plain
+                      outline
+                      id={user.id}
+                      type={"user"}
+                      customStyle={styles.followWrap}
+                      status={user.followed_status}
+                      fontSize={user.followed_status == 2 ? 13 : 14}
+                    />
                   </HeaderLeft>
                 }
                 rightComponent={
@@ -131,6 +144,19 @@ class PostHeader extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  name: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.primaryFontColor,
+    marginLeft: 6
+  },
+  followWrap: {
+    width: 66,
+    height: 28,
+    marginLeft: 15,
+    borderRadius: 15
+  }
+});
 
 export default connect(store => ({ personal: store.users.user }))(PostHeader);

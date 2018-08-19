@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from "react-nati
 import Highlighter from "react-native-highlight-words";
 import { withNavigation } from "react-navigation";
 
-import { navigationAction } from "../../constants/Methods";
+import { goContentScreen } from "../../constants/Methods";
 import { VideoCover } from "../Pure";
 import Colors from "../../constants/Colors";
 
@@ -15,7 +15,7 @@ class SearchArticleItem extends Component {
     let { navigation, keywords, post } = this.props;
     let { type, title, description, cover, user } = post;
     return (
-      <TouchableOpacity style={styles.articleItem} onPress={this.skipScreen}>
+      <TouchableOpacity style={styles.articleItem} onPress={() => goContentScreen(navigation, post)}>
         {type == "video" ? (
           <View style={styles.videoWrap}>
             <View style={styles.videoLeft}>
@@ -39,26 +39,6 @@ class SearchArticleItem extends Component {
         )}
       </TouchableOpacity>
     );
-  }
-
-  skipScreen = () => {
-    const { post, navigation } = this.props;
-    let { type } = post;
-    let routeName = type == "article" ? "文章详情" : "视频详情";
-    let params = type == "article" ? { article: post } : { video: post };
-    navigation.dispatch(navigationAction({ routeName, params }));
-  };
-
-  _matchingText(keywords, content) {
-    // BAK 可以替换 但是不能创建React Element
-    // var reg = new RegExp(keywords,"g");
-    // if(reg.test(content)&&keywords) {
-    //  // var highlightKeywords = React.createElement(Text,{style:{styles.focused}},keywords);
-    //  var enhanceContent = content.replace(reg,`<Text style={styles.focused}>${keywords}</Text>`);
-    //  return enhanceContent;
-    // }else {
-    //  return content;
-    // }
   }
 }
 

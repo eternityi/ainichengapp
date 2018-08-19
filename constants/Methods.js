@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
 import { NavigationActions } from "react-navigation";
-
 const divece = Dimensions.get("window");
 
 //navigation.dispatch(navigationAction)
@@ -29,8 +28,8 @@ function goContentScreen(navigation, data) {
 	let params;
 	switch (type) {
 		case "video":
-			routeName = "视频详情";
-			params = { video: data };
+			routeName = "动态详情";
+			params = { post: data };
 			break;
 		case "post":
 			routeName = "动态详情";
@@ -52,15 +51,26 @@ function goContentScreen(navigation, data) {
 	navigation.dispatch(navigationAction({ routeName, params }));
 }
 
+// 数字格式化
+function numberFormat(number) {
+	number = parseFloat(number);
+	if (number >= 10000) {
+		return (number / 10000).toFixed(1) + "w";
+	} else {
+		return number;
+	}
+}
+
 // response images
-function imageSize({ width, height }, maxWidth) {
+function imageSize({ width, height }, maxWidth = divece.width) {
 	var scale;
 	var size = {};
-	if (width > maxWidth) {
+	if (width >= height) {
 		size.width = maxWidth;
 		size.height = Math.round((maxWidth * height) / width);
 	} else {
-		size = { width, height };
+		size.height = maxWidth;
+		size.width = Math.round((maxWidth * width) / height);
 	}
 	return size;
 	// if(Platform.OS=="ios"){
@@ -92,4 +102,4 @@ function imageSize({ width, height }, maxWidth) {
 	// }
 }
 
-export { navigationAction, userOperationMiddleware, goContentScreen, imageSize };
+export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, imageSize };

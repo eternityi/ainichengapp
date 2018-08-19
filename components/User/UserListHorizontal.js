@@ -15,7 +15,7 @@ class UserListHorizontal extends Component {
 							marginRight: -radius / 2,
 							borderRadius: radius,
 							borderWidth: radius / 6,
-							borderColor: "#ffffff"
+							borderColor: "transparent"
 						}}
 					>
 						<Image

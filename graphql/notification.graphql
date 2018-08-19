@@ -110,6 +110,7 @@ query followersNotificationsQuery($offset: Int) {
                 id
                 name
                 avatar
+                followed_status
             }
         }
     }

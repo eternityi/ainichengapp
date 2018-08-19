@@ -146,13 +146,8 @@ class CreatePostScreen extends React.Component {
           waitingVisible: false
         });
         this.publishing = false;
-        //如果没有发布就发布更新否则更新发布
-        if (uploadType < 1) {
-          console.log("uploadType", uploadType);
-          navigation.replace("视频详情", { video: data.createPost });
-        } else {
-          navigation.replace("动态详情", { post: data.createPost });
-        }
+
+        navigation.replace("动态详情", { post: data.createPost });
       })
       .catch(error => {
         this.publishing = false;

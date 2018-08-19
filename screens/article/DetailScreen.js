@@ -7,10 +7,10 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { imageSize } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
-import ArticleDetailHeader from "./ArticleDetailHeader";
+import PostHeader from "../post/PostHeader";
 import BeSelectedCategory from "./BeSelectedCategory";
 import MetaBottom from "./MetaBottom";
-import RewardPanel from "./RewardPanel";
+import RewardPanel from "../post/RewardPanel";
 import ArticleBottomTools from "./ArticleBottomTools";
 import Comments from "./comment/Comments";
 import { UserGroup } from "../../components/MediaGroup";
@@ -63,7 +63,7 @@ class DetailScreen extends Component {
             return (
               <View style={styles.container}>
                 <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
-                <ArticleDetailHeader navigation={navigation} article={article} share={this.handleSlideShareMenu} login={login} />
+                <PostHeader navigation={navigation} post={article} share={this.handleSlideShareMenu} login={login} />
                 <ScrollView
                   style={styles.container}
                   onScroll={this._onScroll.bind(this)}
@@ -153,15 +153,16 @@ class DetailScreen extends Component {
                   <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
                     <BeSelectedCategory categories={article.categories} navigation={navigation} />
                     <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
-                    <RewardPanel
-                      navigation={navigation}
-                      rewardUsers={article.tipedUsers}
-                      rewardDescrib={article.user.tip_words}
-                      handleRewardVisible={this.handleRewardVisible}
-                    />
+                    <View style={{ marginHorizontal: -20, marginVertical: 15 }}>
+                      <RewardPanel
+                        navigation={navigation}
+                        rewardUsers={article.tipedUsers}
+                        rewardDescrib={article.user.tip_words}
+                        handleRewardVisible={this.handleRewardVisible}
+                      />
+                    </View>
                     <AuthorCard user={article.user} navigation={navigation} />
                   </View>
-                  <View style={{ height: 8, backgroundColor: Colors.lightGray }} />
                   <Comments
                     addCommentVisible={addCommentVisible}
                     article={article}
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   },
   showFoot: {
     paddingHorizontal: 20,
-    paddingVertical: 35
+    paddingVertical: 30
   },
   hr: { height: 1, backgroundColor: Colors.primaryBorderColor, marginTop: 10, marginBottom: 20 }
 });

@@ -5,26 +5,13 @@ import { withNavigation } from "react-navigation";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
-import {
-	followUserMutation,
-	followCollectionMutation,
-	followCategoryMutation
-} from "../../graphql/user.graphql";
+import { followUserMutation, followCollectionMutation, followCategoryMutation } from "../../graphql/user.graphql";
 import { graphql, compose } from "react-apollo";
 import { connect } from "react-redux";
 
 class Follow extends Component {
 	handleFollow() {
-		let {
-			type,
-			id,
-			status,
-			followUser,
-			followCollection,
-			followCategory,
-			login,
-			navigation
-		} = this.props;
+		let { type, id, status, followUser, followCollection, followCategory, login, navigation } = this.props;
 		if (login) {
 			switch (type) {
 				case "user":
@@ -75,21 +62,16 @@ class Follow extends Component {
 		let statusStyle = outline
 			? status
 				? styles.outlineFollwed
-				: { borderColor: theme, backgroundColor: "#fff" }
+				: { borderColor: theme, backgroundColor: theme }
 			: status
 				? styles.followed
 				: { borderColor: theme, backgroundColor: theme };
-		let color = outline
-			? status ? "#666" : theme
-			: status ? Colors.tintFontColor : "#fff";
+		let color = status ? "#666" : "#fff";
 		if (type == "user" && personal.id == id) {
 			return null;
 		}
 		return (
-			<TouchableOpacity
-				style={[statusStyle, mergeStyle]}
-				onPress={this.handleFollow.bind(this)}
-			>
+			<TouchableOpacity style={[statusStyle, mergeStyle]} onPress={this.handleFollow.bind(this)}>
 				<Text
 					style={[
 						{
@@ -98,20 +80,8 @@ class Follow extends Component {
 						}
 					]}
 				>
-					{!plain &&
-						status !== 2 && (
-							<Iconfont
-								name={
-									status
-										? status == 2
-											? "follow-eachOther"
-											: "gougou"
-										: "add"
-								}
-								size={fontSize}
-							/>
-						)}
-					{status ? (status == 2 ? " 互相关注" : " 已关注") : " 关注"}
+					{!plain && status !== 2 && <Iconfont name={status ? (status == 2 ? "follow-eachOther" : "gougou") : "add"} size={fontSize} />}
+					{status ? (status == 2 ? "互相关注" : " 已关注") : " 关 注"}
 				</Text>
 			</TouchableOpacity>
 		);

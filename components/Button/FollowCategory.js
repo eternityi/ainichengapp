@@ -76,7 +76,7 @@ class FollowCategory extends Component {
 			<TouchableOpacity style={[styles.categoryButton, followed ? styles.followed : styles.follow]} onPress={this._handleFollow.bind(this)}>
 				<Iconfont name={followed ? "gougou" : "add"} size={size} color={followed ? Colors.tintFontColor : "#fff"} />
 				<Text style={{ fontSize: size, color: followed ? Colors.tintFontColor : "#ffffff" }}>
-					{followed ? " 已关注" : " 关注"}
+					{followed ? " 已关注" : " 关 注"}
 					{" | " + follows}
 				</Text>
 			</TouchableOpacity>

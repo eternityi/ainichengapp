@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
   metaBottom: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 15,
-    borderBottomWidth: 2,
     borderBottomColor: Colors.tintBorderColor,
     justifyContent: "space-between"
   },
