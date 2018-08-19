@@ -30,7 +30,7 @@ class RewardPanel extends Component {
 					<Text style={styles.rewardButtonText}>赞赏支持</Text>
 				</TouchableOpacity>
 				<View>
-					<Text style={styles.rewardDescrib}>{rewardDescrib || `小礼物走一走，来${Config.AppName}关注我`}</Text>
+					<Text style={styles.rewardDescrib}>{rewardDescrib || `小礼物走一走，来${Config.AppDisplayName}关注我`}</Text>
 				</View>
 				{rewardUsers.length > 0 && (
 					<TouchableOpacity style={styles.rewardUsers} onPress={this.toggleVisible}>

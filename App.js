@@ -52,7 +52,7 @@ class App extends React.Component {
             </View>
             <View style={styles.column}>
               <View style={styles.appName}>
-                <Text style={styles.name}>{Config.AppName}</Text>
+                <Text style={styles.name}>{Config.AppDisplayName}</Text>
               </View>
               <View style={styles.appSlogan}>
                 <Text style={styles.slogan}>{Config.AppSlogan}</Text>

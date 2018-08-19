@@ -25,7 +25,7 @@ class PostBottomTools extends Component {
 							</TouchableOpacity>
 							<TouchableOpacity onPress={scrollToComment} style={styles.toolItem}>
 								<Iconfont name={"comment-outline"} size={22} color={Colors.darkFontColor} />
-								<Text style={styles.countText}> {count_replies || 0}</Text>
+								<Text style={styles.countText}> {numberFormat(count_replies) || 0}</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={styles.toolItem}
@@ -45,11 +45,11 @@ class PostBottomTools extends Component {
 								}
 							>
 								<Iconfont name={liked ? "like" : "like-outline"} size={21} color={liked ? Colors.themeColor : Colors.darkFontColor} />
-								<Text style={styles.countText}> {count_likes || 0}</Text>
+								<Text style={styles.countText}> {numberFormat(count_likes) || 0}</Text>
 							</TouchableOpacity>
 							<TouchableOpacity onPress={handleSlideShareMenu} style={styles.toolItem}>
 								<Iconfont name={"share-cycle"} size={19} color={Colors.darkFontColor} />
-								<Text style={styles.countText}>{count_shares || 0}</Text>
+								<Text style={styles.countText}>{numberFormat(count_shares) || 0}</Text>
 							</TouchableOpacity>
 							<TouchableOpacity onPress={handleRewardVisible}>
 								<Iconfont name={"reward"} size={30} color={Colors.qqzoneColor} />
