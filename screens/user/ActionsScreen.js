@@ -117,7 +117,7 @@ class ActionsScreen extends Component {
 								<Text>
 									{" "}
 									加入
-									{Config.AppName}
+									{Config.AppDisplayName}
 								</Text>
 							) : (
 								this._activityType(action)

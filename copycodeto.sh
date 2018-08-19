@@ -13,6 +13,11 @@ cd /data/app/$from
 /bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
 
 /bin/cp -rf ./package.json ../$to/
+
+/bin/cp -rf ./constants/Config.js ../$to/constants
+/bin/cp -rf ./constants/Layout.js ../$to/constants
+/bin/cp -rf ./constants/Methods.js ../$to/constants
+
 /bin/cp -rf ./assets ../$to/
 /bin/cp -rf ./components ../$to/
 /bin/cp -rf ./graphql ../$to/

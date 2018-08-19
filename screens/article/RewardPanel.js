@@ -25,7 +25,7 @@ class RewardPanel extends Component {
     return (
       <View style={{ alignItems: "center" }}>
         <View style={{ marginVertical: 20 }}>
-          <Text style={styles.rewardDescrib}>{rewardDescrib || `小礼物走一走，来${Config.AppName}关注我`}</Text>
+          <Text style={styles.rewardDescrib}>{rewardDescrib || `小礼物走一走，来${Config.AppDisplayName}关注我`}</Text>
         </View>
         <TouchableOpacity style={styles.rewardButton} onPress={handleRewardVisible}>
           <Text style={styles.rewardButtonText}>赞赏支持</Text>

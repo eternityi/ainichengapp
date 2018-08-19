@@ -88,7 +88,7 @@ class IntroduceScreen extends Component {
 									textAlign: "center"
 								}}
 							>
-								<Text>{`已有${Config.AppName}账号？`}</Text>
+								<Text>{`已有${Config.AppDisplayName}账号？`}</Text>
 								<Text
 									style={{ color: Colors.linkColor }}
 									onPress={() => {

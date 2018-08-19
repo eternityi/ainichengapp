@@ -1,11 +1,10 @@
-const ServerRoot = "https://ainicheng.com";
-const AppName = "爱你城";
-const AppVersion = "1.0.1";
-const AppSlogan = "最暖心的游戏社区";
+import { AppVersion } from "../appVersion.json";
+import { ServerRoot, name as AppName, displayName as AppDisplayName, AppSlogan } from "../app.json";
 
 export default {
 	ServerRoot,
 	AppName,
+	AppDisplayName,
 	AppVersion,
 	AppSlogan
 };

@@ -40,7 +40,7 @@ class PaymentModal extends Component {
             </View>
             <View>
               <Text style={styles.paymentText}>
-                {Config.AppName}余额：<Text style={{ color: Colors.primaryColor }}>{this.props.user.balance}.00</Text>
+                {Config.AppDisplayName}余额：<Text style={{ color: Colors.primaryColor }}>{this.props.user.balance}.00</Text>
               </Text>
             </View>
           </TouchableOpacity>

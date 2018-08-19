@@ -20,19 +20,22 @@ class HelpScreen extends Component {
 		super(props);
 		this.state = {
 			hot: [
-				{ id: 1375, title: `${Config.AppName}签约作者申请指南` },
+				{ id: 1375, title: `${Config.AppDisplayName}签约作者申请指南` },
 				{ id: 12574, title: "提现没有到账怎么办？" },
 				{ id: 12580, title: "专题投稿须知" },
 				{ id: 12579, title: "如果你上传图片失败了" },
-				{ id: 12575, title: `对${Config.AppName}专题推荐作者的说明` },
-				{ id: 12577, title: `${Config.AppName}社区管理规则` },
+				{ id: 12575, title: `对${Config.AppDisplayName}专题推荐作者的说明` },
+				{ id: 12577, title: `${Config.AppDisplayName}社区管理规则` },
 				{ id: 12572, title: "删除的文章如何找回，有回收站吗？" }
 			],
-			explain: [{ id: 12576, title: `什么是${Config.AppName}内容领域优质作者及相关细则` }, { id: 12578, title: "如何创建并玩转属于你自己的专题" }],
+			explain: [
+				{ id: 12576, title: `什么是${Config.AppDisplayName}内容领域优质作者及相关细则` },
+				{ id: 12578, title: "如何创建并玩转属于你自己的专题" }
+			],
 			account: [
-				{ id: 12422, title: `${Config.AppName}用户协议` },
+				{ id: 12422, title: `${Config.AppDisplayName}用户协议` },
 				{ id: 12423, title: "隐私声明" },
-				{ id: 12573, title: `${Config.AppName}账号绑定解绑相关问题汇总` }
+				{ id: 12573, title: `${Config.AppDisplayName}账号绑定解绑相关问题汇总` }
 			]
 		};
 	}
@@ -71,14 +74,14 @@ class HelpScreen extends Component {
 							keyExtractor={this._keyExtractor}
 							renderItem={this._renderHelpItem}
 							ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-							ListHeaderComponent={this._renderHeader(`如何玩转${Config.AppName}`)}
+							ListHeaderComponent={this._renderHeader(`如何玩转${Config.AppDisplayName}`)}
 						/>
 						<FlatList
 							data={account}
 							keyExtractor={this._keyExtractor}
 							renderItem={this._renderHelpItem}
 							ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-							ListHeaderComponent={this._renderHeader(`${Config.AppName}账号问题`)}
+							ListHeaderComponent={this._renderHeader(`${Config.AppDisplayName}账号问题`)}
 						/>
 						<View style={styles.feedBack}>
 							<Image

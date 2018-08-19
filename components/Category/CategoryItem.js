@@ -26,7 +26,7 @@ class CategoryItem extends Component {
 				</View>
 				<View>
 					<Text style={styles.latestFollower} numberOfLines={2}>
-						{category.latest_follower ? category.latest_follower.name + "关注" : Config.AppName + "推荐"}
+						{category.latest_follower ? category.latest_follower.name + "关注" : Config.AppDisplayName + "推荐"}
 					</Text>
 				</View>
 			</View>

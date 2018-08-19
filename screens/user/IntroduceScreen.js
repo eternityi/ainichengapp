@@ -78,7 +78,7 @@ class IntroduceScreen extends Component {
 												/>
 												<View style={styles.QRcodeInfo}>
 													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
-														长按识别图中二维码，查看TA的{Config.AppName}主页
+														长按识别图中二维码，查看TA的{Config.AppDisplayName}主页
 													</Text>
 												</View>
 											</View>

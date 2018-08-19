@@ -92,7 +92,7 @@ class EditProfileScreen extends Component {
 						<TouchableOpacity onPress={() => navigation.navigate("简介编辑", { introduction: user.introduction })}>
 							<SettingItem endItem itemName="编辑个人简介" rightContent={user.introduction} />
 						</TouchableOpacity>
-						<SettingType typeName={`绑定账号登录${Config.AppName}`} explain={"出于安全因素，你至少需要保留一种登录方式"} />
+						<SettingType typeName={`绑定账号登录${Config.AppDisplayName}`} explain={"出于安全因素，你至少需要保留一种登录方式"} />
 						<TouchableOpacity onPress={() => null}>
 							<SettingItem
 								horizontal

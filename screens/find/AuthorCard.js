@@ -30,7 +30,7 @@ class AuthorCard extends Component {
 				</View>
 				<View>
 					<Text numberOfLines={1} style={styles.latestFollower}>
-						{user.followings.length ? user.followings[0].name + "关注" : Config.AppName + "推荐"}
+						{user.followings.length ? user.followings[0].name + "关注" : Config.AppDisplayName + "推荐"}
 					</Text>
 				</View>
 				<FollowButton type={"user"} id={user.id} status={user.followed_status} customStyle={styles.followWrap} fontSize={14} />

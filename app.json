@@ -1,4 +1,7 @@
 {
-  "name": "ainicheng",
-  "displayName": "爱你城"
+	"ServerRoot": "https://ainicheng.com",
+	"name": "ainicheng",
+	"displayName": "爱你城",
+	// "AppVersion": "1.0.2",
+	"AppSlogan": "最暖心的游戏社区"
 }

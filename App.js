@@ -52,7 +52,7 @@ class App extends React.Component {
             <View style={styles.appInfo}>
               <View style={styles.appLogoWrap}>
                 {/**<Image source={require("./assets/images/appLogo.png")} style={styles.appLogo} />*/}
-                <Text style={styles.appName}>{Config.AppName}</Text>
+                <Text style={styles.appName}>{Config.AppDisplayName}</Text>
               </View>
               <Text style={{ fontSize: 16, color: Colors.tintFontColor }}>{Config.AppSlogan}</Text>
             </View>

@@ -59,9 +59,13 @@ class PostScreen extends Component {
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
 						let post = data.article;
-						let { body, images, user, count_tips, count_replies, time_ago, hits } = post;
-						this.images = images.map((elem, index) => {
-							return { url: elem };
+						let { body, pictures, user, count_tips, count_replies, time_ago, hits } = post;
+						this.images = pictures.map((elem, index) => {
+							return {
+								url: elem.url,
+								width: elem.width,
+								height: elem.height
+							};
 						});
 						return (
 							<View style={styles.container}>
@@ -81,7 +85,7 @@ class PostScreen extends Component {
 										<View style={{ marginBottom: 15 }}>
 											<Text style={styles.body}>{body}</Text>
 										</View>
-										{images.length > 0 && this.renderImages(images)}
+										{pictures.length > 0 && this.renderImages(pictures)}
 									</View>
 									<Comments
 										addCommentVisible={addCommentVisible}
@@ -124,8 +128,9 @@ class PostScreen extends Component {
 		);
 	}
 
-	renderImages(images) {
-		if (images.length == 1) {
+	renderImages(pictures) {
+		if (pictures.length == 1) {
+			let picture = pictures[0];
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
@@ -136,13 +141,13 @@ class PostScreen extends Component {
 						});
 					}}
 				>
-					<Image source={{ uri: images[0] }} style={[{ width: IMG_WIDTH, height: IMG_HEIGHT }, styles.singleImage]} />
+					<Image source={{ uri: picture.url }} style={[{ width: IMG_WIDTH, height: IMG_HEIGHT }, styles.singleImage]} />
 				</TouchableOpacity>
 			);
 		} else {
 			return (
 				<View style={styles.gridView}>
-					{images.map((elem, index) => {
+					{pictures.map((picture, index) => {
 						return (
 							<TouchableOpacity
 								activeOpacity={1}
@@ -154,7 +159,10 @@ class PostScreen extends Component {
 									});
 								}}
 							>
-								<Image source={{ uri: elem }} style={styles.gridImage} />
+								{
+									// TODO：wyk, 需要给图片宽高下面控制下
+								}
+								<Image source={{ uri: picture.url }} style={[styles.gridImage]} />
 							</TouchableOpacity>
 						);
 					})}

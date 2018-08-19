@@ -57,17 +57,12 @@ class SignIn extends Component {
 				<View style={styles.login}>
 					<View style={{ marginTop: 20, alignItems: "flex-end" }}>
 						<TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-							<Iconfont
-								name={"chacha"}
-								size={20}
-								color={Colors.tintFontColor}
-								style={{ fontWeight: "600" }}
-							/>
+							<Iconfont name={"chacha"} size={20} color={Colors.tintFontColor} style={{ fontWeight: "600" }} />
 						</TouchableOpacity>
 					</View>
 					<View>
 						<View style={{ marginBottom: 40 }}>
-							<Text style={styles.brand}>{Config.AppName}</Text>
+							<Text style={styles.brand}>{Config.AppDisplayName}</Text>
 						</View>
 						<View>
 							<LoginInput

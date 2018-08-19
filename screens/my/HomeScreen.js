@@ -142,7 +142,7 @@ class HomeScreen extends React.Component {
               <TouchableOpacity onPress={this.toggleModalVisible}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"share"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>分享{Config.AppName}</Text>
+                  <Text style={styles.columnType}>分享{Config.AppDisplayName}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("浏览记录")}>
@@ -164,7 +164,7 @@ class HomeScreen extends React.Component {
               >
                 <View style={[styles.columnItem, styles.noBorder]}>
                   <Iconfont name={"star"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>给{Config.AppName}评分</Text>
+                  <Text style={styles.columnType}>给{Config.AppDisplayName}评分</Text>
                 </View>
               </TouchableOpacity>
             </View>

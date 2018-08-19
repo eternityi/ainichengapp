@@ -54,7 +54,7 @@ class SignUp extends Component {
 					</View>
 					<View>
 						<View style={{ marginBottom: 40 }}>
-							<Text style={styles.brand}>{Config.AppName}</Text>
+							<Text style={styles.brand}>{Config.AppDisplayName}</Text>
 						</View>
 						<View>
 							<LoginInput

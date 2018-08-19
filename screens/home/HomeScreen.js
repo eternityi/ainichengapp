@@ -4,6 +4,7 @@ import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
+import Config from "../../constants/Config";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, RecommendFollow } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
@@ -148,7 +149,7 @@ class HomeScreen extends React.Component {
     if (this.continuous) {
       //确保在1.5s内连续点击两次
       this.continuous = false;
-      let toast = Toast.show("再次点击退出爱你城", {
+      let toast = Toast.show("再次点击退出" + Config.AppDisplayName, {
         duration: Toast.durations.LONG,
         position: height - 150,
         shadow: true,

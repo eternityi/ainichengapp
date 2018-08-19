@@ -17,7 +17,7 @@ class AboutUsScreen extends Component {
 				<Header navigation={navigation} />
 				<View style={styles.container}>
 					<View style={styles.appMark}>
-						<Text style={styles.appName}>{Config.AppName}</Text>
+						<Text style={styles.appName}>{Config.AppDisplayName}</Text>
 					</View>
 					<TouchableOpacity style={styles.aboutItem} onPress={() => navigation.navigate("文章详情", { article: { id: 1375 } })}>
 						<Text style={styles.aboutItemText}>简介</Text>
@@ -38,7 +38,9 @@ class AboutUsScreen extends Component {
 						<Text style={styles.aboutItemText}>隐私政策</Text>
 					</TouchableOpacity>
 					<View style={styles.copyright}>
-						<Text style={{ fontSize: 13, color: Colors.themeColor }}>版权所有 ©2012-{new Date().getFullYear() + Config.AppName}</Text>
+						<Text style={{ fontSize: 13, color: Colors.themeColor }}>
+							版权所有 ©2012-{new Date().getFullYear() + Config.AppDisplayName}
+						</Text>
 					</View>
 				</View>
 			</Screen>

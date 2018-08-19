@@ -159,7 +159,7 @@ class HomeScreen extends React.Component {
                 marginLeft: 5
               }}
             >
-              {Config.AppName}
+              {Config.AppDisplayName}
               推荐
               {follow.user ? "作者" : "专题"}
             </Text>

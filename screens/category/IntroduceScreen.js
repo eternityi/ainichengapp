@@ -62,7 +62,9 @@ class IntroduceScreen extends Component {
 								<View style={styles.QRcodeRow}>
 									<Image style={styles.QRcode} source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }} />
 									<View style={styles.QRcodeInfo}>
-										<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>长按识别图中二维码，查看该专题的{Config.AppName}主页</Text>
+										<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
+											长按识别图中二维码，查看该专题的{Config.AppDisplayName}主页
+										</Text>
 									</View>
 								</View>
 							</View>
