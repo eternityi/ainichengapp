@@ -40,7 +40,8 @@ class HomeScreen extends Component {
 
   render() {
     let { none_keywords } = this.state;
-    let { navigation, hot_search, deleteQuery } = this.props;
+    let { navigation, hot_search, deleteQuery, login } = this.props;
+    // 未登录没有搜索记录，所以要排除该条件检测
     return (
       <Screen>
         <View style={styles.container}>
@@ -54,10 +55,15 @@ class HomeScreen extends Component {
           {none_keywords ? (
             <Query query={hotSearchAndLogsQuery}>
               {({ loading, error, data, fetchMore, refetch }) => {
+                let histories = [];
                 if (error) return <LoadingError reload={() => refetch()} />;
-                if (!(data && data.queries && data.queryLogs)) return <SpinnerLoading />;
+                if (login) {
+                  if (!(data && data.queries && data.queryLogs)) return <SpinnerLoading />;
+                  histories = data.queryLogs;
+                } else {
+                  if (!(data && data.queries)) return <SpinnerLoading />;
+                }
                 let hotsearch = data.queries;
-                let histories = data.queryLogs;
                 this.hotsearchs += hotsearch.length;
                 return (
                   <ScrollView style={styles.container} bounces={false}>
@@ -284,7 +290,8 @@ export default compose(
   withApollo,
   connect(store => ({
     hot_search: store.search.hot_search,
-    histories: store.search.histories
+    histories: store.search.histories,
+    login: store.users.login
   })),
   graphql(deleteQueryLogMutation, { name: "deleteQuery" })
 )(HomeScreen);

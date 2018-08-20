@@ -15,17 +15,7 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class BeRewardScreen extends Component {
-	constructor(props) {
-		super(props);
-		this.toggleModalVisible = this.toggleModalVisible.bind(this);
-		this.state = {
-			inputCommentVisible: false,
-			modalVisible: false
-		};
-	}
-
 	render() {
-		let { modalVisible } = this.state;
 		const { navigation } = this.props;
 		return (
 			<Screen>
@@ -72,7 +62,6 @@ class BeRewardScreen extends Component {
 						}}
 					</Query>
 				</View>
-				<ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
 			</Screen>
 		);
 	}
@@ -95,18 +84,6 @@ class BeRewardScreen extends Component {
 							}
 						>
 							<Text style={{ fontSize: 14, color: "#717171" }}>回复</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={[styles.customButton, { marginLeft: 15 }]} onPress={this.toggleModalVisible}>
-							<Iconfont name={"share"} size={13} color={Colors.tintFontColor} />
-							<Text
-								style={{
-									fontSize: 14,
-									color: "#717171",
-									marginLeft: 4
-								}}
-							>
-								分享
-							</Text>
 						</TouchableOpacity>
 					</View>
 				}
@@ -131,12 +108,6 @@ class BeRewardScreen extends Component {
 			/>
 		);
 	};
-
-	toggleModalVisible() {
-		this.setState(prevState => ({
-			modalVisible: !prevState.modalVisible
-		}));
-	}
 }
 
 const styles = StyleSheet.create({

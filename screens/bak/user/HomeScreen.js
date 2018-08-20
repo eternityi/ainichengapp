@@ -157,7 +157,11 @@ class HomeScreen extends Component {
                         </TouchableOpacity>
                         <View>
                           <Text style={{ fontSize: 15, color: Colors.tintFontColor }}>
-                            写了{user.count_words}字，获得了{user.count_likes}个喜欢
+                            写了
+                            {user.count_words}
+                            字，获得了
+                            {user.count_likes}
+                            个喜欢
                           </Text>
                         </View>
                       </View>
@@ -273,39 +277,43 @@ class HomeScreen extends Component {
               <View style={{ marginRight: 20 }}>
                 <Search navigation={navigation} color={lightTabBar ? "#fff" : "#515151"} routeName={"搜索文章"} />
               </View>
-              <HeaderRight
-                color={lightTabBar ? "#fff" : "#515151"}
-                options={is_self ? ["分享用户"] : ["分享用户", "举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
-                selectHandler={index => {
-                  switch (index) {
-                    case 0:
-                      navigation.navigate("个人介绍", { user });
-                      break;
-                    case 1:
-                      this.handleReportVisible();
-                      break;
-                    case 2:
-                      if (login) {
-                        this.props.blockUserMutation({
-                          variables: {
-                            user_id: user.id
-                          },
-                          refetchQueries: result => [
-                            {
-                              query: blockedUsersQuery
-                            }
-                          ]
-                        });
-                        this.setState(prevState => ({
-                          isBlocked: !prevState.isBlocked
-                        }));
-                      } else {
-                        navigation.navigate("登录注册");
-                      }
-                      break;
-                  }
-                }}
-              />
+              {// 隐藏功能
+              !is_self && (
+                <HeaderRight
+                  color={lightTabBar ? "#fff" : "#515151"}
+                  // options={is_self ? ["分享用户"] : ["分享用户", "举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
+                  options={["分享用户", "举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
+                  selectHandler={index => {
+                    switch (index) {
+                      case 0:
+                        navigation.navigate("个人介绍", { user });
+                        break;
+                      case 1:
+                        this.handleReportVisible();
+                        break;
+                      case 2:
+                        if (login) {
+                          this.props.blockUserMutation({
+                            variables: {
+                              user_id: user.id
+                            },
+                            refetchQueries: result => [
+                              {
+                                query: blockedUsersQuery
+                              }
+                            ]
+                          });
+                          this.setState(prevState => ({
+                            isBlocked: !prevState.isBlocked
+                          }));
+                        } else {
+                          navigation.navigate("登录注册");
+                        }
+                        break;
+                    }
+                  }}
+                />
+              )}
             </View>
           </Animated.View>
         </View>

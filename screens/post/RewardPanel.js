@@ -23,6 +23,8 @@ class RewardPanel extends Component {
 	render() {
 		const { rewardUsers, rewardDescrib, handleRewardVisible } = this.props;
 		let { modalVisible } = this.state;
+		// 隐藏钱包
+		return null;
 		return (
 			<View style={styles.panel}>
 				<TouchableOpacity style={styles.rewardButton} onPress={handleRewardVisible}>

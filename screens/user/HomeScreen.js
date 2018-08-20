@@ -19,7 +19,7 @@ import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { userOperationMiddleware } from "../../constants/Methods";
-import PostItem from "../../components/Article/PostItem";
+import NoteItem from "../../components/Article/NoteItem";
 import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
 import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
@@ -185,10 +185,15 @@ class HomeScreen extends Component {
   // 头部popover
   _headerRight = (color, user, self) => {
     let { login, navigation } = this.props;
+    if (self) {
+      // 隐藏功能
+      return null;
+    }
     return (
       <HeaderRight
         color={color}
-        options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
+        // options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
+        options={["举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
         selectHandler={index => {
           switch (index) {
             case 0:
@@ -354,7 +359,7 @@ class HomeScreen extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    return <PostItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
+    return <NoteItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
   };
 
   _onScroll(event) {

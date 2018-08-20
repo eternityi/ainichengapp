@@ -112,19 +112,22 @@ class DraftDetailScreen extends Component {
 									</View>
 								</ScrollView>
 								<View style={styles.articleBottom}>
-									<TouchableOpacity
-										onPress={this.toggleModalVisible}
-										style={[
-											styles.articleOperation,
-											{
-												borderRightWidth: 1,
-												borderRightColor: Colors.lightBorderColor
-											}
-										]}
-									>
-										<Iconfont name={"share"} size={17} color={"#666"} />
-										<Text style={styles.operationName}>分享</Text>
-									</TouchableOpacity>
+									{
+										// 隐藏功能
+										// <TouchableOpacity
+										// 	onPress={this.toggleModalVisible}
+										// 	style={[
+										// 		styles.articleOperation,
+										// 		{
+										// 			borderRightWidth: 1,
+										// 			borderRightColor: Colors.lightBorderColor
+										// 		}
+										// 	]}
+										// >
+										// 	<Iconfont name={"share"} size={17} color={"#666"} />
+										// 	<Text style={styles.operationName}>分享</Text>
+										// </TouchableOpacity>
+									}
 
 									<TouchableOpacity onPress={() => null} style={styles.articleOperation}>
 										<Iconfont name={"write"} size={20} color={"#666"} />

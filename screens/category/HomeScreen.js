@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	View,
-	Text,
-	FlatList,
-	TouchableOpacity,
-	Dimensions,
-	StatusBar,
-	Animated,
-	Easing
-} from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, StatusBar, Animated, Easing } from "react-native";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
@@ -70,55 +60,54 @@ class HomeScreen extends Component {
 											<View style={{ marginRight: 15 }}>
 												<Search navigation={navigation} routeName={"搜索文章"} />
 											</View>
-											<CustomPopoverMenu
-												width={160}
-												selectHandler={index => {
-													if (self) {
-														switch (index) {
-															case 0:
-																navigation.navigate("新建专题", {
-																	category
-																});
-																break;
-															case 1:
-																deleteCategory({
-																	variables: {
-																		id: category.id
-																	},
-																	refetchQueries: deleteCategoryResult => [
-																		{
-																			query: userCategoriesQuery,
-																			variables: {
-																				user_id: personal.id
+
+											{// 隐藏功能
+											self && (
+												<CustomPopoverMenu
+													width={160}
+													selectHandler={index => {
+														if (self) {
+															switch (index) {
+																case 0:
+																	navigation.navigate("新建专题", {
+																		category
+																	});
+																	break;
+																case 1:
+																	deleteCategory({
+																		variables: {
+																			id: category.id
+																		},
+																		refetchQueries: deleteCategoryResult => [
+																			{
+																				query: userCategoriesQuery,
+																				variables: {
+																					user_id: personal.id
+																				}
 																			}
-																		}
-																	]
-																});
-																navigation.goBack();
-																break;
-															case 2:
-																this.toggleModalVisible();
-																break;
+																		]
+																	});
+																	navigation.goBack();
+																	break;
+																case 2:
+																	this.toggleModalVisible();
+																	break;
+															}
+														} else {
+															this.toggleModalVisible();
 														}
-													} else {
-														this.toggleModalVisible();
-													}
-												}}
-												triggerComponent={
-													<Iconfont
-														name={"more-vertical"}
-														size={20}
-														color={Colors.tintFontColor}
-													/>
-												}
-												customOptionStyle={{
-													optionWrapper: {
-														alignItems: "flex-start",
-														paddingHorizontal: 10
-													}
-												}}
-												options={self ? ["编辑", "删除专题", "分享专题"] : ["分享专题"]}
-											/>
+													}}
+													triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
+													customOptionStyle={{
+														optionWrapper: {
+															alignItems: "flex-start",
+															paddingHorizontal: 10
+														}
+													}}
+													// options={self ? ["编辑", "删除专题", "分享专题"] : ["分享专题"]}
+													options={["编辑", "删除专题"]}
+												/>
+											)}
 										</View>
 									}
 								/>
@@ -143,13 +132,7 @@ class HomeScreen extends Component {
 													offset: articles.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (
-														!(
-															fetchMoreResult &&
-															fetchMoreResult.articles &&
-															fetchMoreResult.articles.length > 0
-														)
-													) {
+													if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
 														this.setState({
 															fetchingMore: false
 														});

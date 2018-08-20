@@ -56,7 +56,10 @@ class IntroduceScreen extends Component {
 											</View>
 											<View style={{ marginTop: 15 }}>
 												<Text style={{ fontSize: 15, color: "#666" }}>
-													{user.count_articles || 0}个作品，获得了{user.count_likes || 0}个喜欢
+													{user.count_articles || 0}
+													个作品，获得了
+													{user.count_likes || 0}
+													个喜欢
 												</Text>
 											</View>
 										</View>
@@ -71,39 +74,45 @@ class IntroduceScreen extends Component {
 													{user.introduction ? user.introduction : "本宝宝暂时还没想到个性签名"}
 												</Text>
 											</View>
-											<View style={styles.QRcodeRow}>
-												<Image
-													style={styles.QRcode}
-													source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }}
-												/>
-												<View style={styles.QRcodeInfo}>
-													<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
-														长按识别图中二维码，查看TA的{Config.AppDisplayName}主页
-													</Text>
-												</View>
-											</View>
+											{
+												// 隐藏功能
+												// <View style={styles.QRcodeRow}>
+												// 	<Image
+												// 		style={styles.QRcode}
+												// 		source={{ uri: "https://www.dongmeiwei.com/images/app/heiheihei.png" }}
+												// 	/>
+												// 	<View style={styles.QRcodeInfo}>
+												// 		<Text style={{ fontSize: 12, color: Colors.primaryFontColor }}>
+												// 			长按识别图中二维码，查看TA的{Config.AppDisplayName}主页
+												// 		</Text>
+												// 	</View>
+												// </View>
+											}
 										</View>
 									</View>
 								</ScrollView>
-								<View style={styles.bottomSection}>
-									<View>
-										<Text style={{ fontSize: 14, color: "#fff", textAlign: "center" }}>———— 分享图片到 ————</Text>
-									</View>
-									<View style={styles.shareVisitingCrad}>
-										<TouchableOpacity>
-											<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
-										</TouchableOpacity>
-										<TouchableOpacity>
-											<Image
-												style={{ width: 32, height: 32, resizeMode: "contain" }}
-												source={require("../../assets/images/pengyouquan.png")}
-											/>
-										</TouchableOpacity>
-										<TouchableOpacity onPress={this.toggleModalVisible}>
-											<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />
-										</TouchableOpacity>
-									</View>
-								</View>
+								{
+									// 隐藏功能
+									// <View style={styles.bottomSection}>
+									// 	<View>
+									// 		<Text style={{ fontSize: 14, color: "#fff", textAlign: "center" }}>———— 分享图片到 ————</Text>
+									// 	</View>
+									// 	<View style={styles.shareVisitingCrad}>
+									// 		<TouchableOpacity>
+									// 			<Iconfont name={"weixin"} size={35} color={Colors.weixinColor} />
+									// 		</TouchableOpacity>
+									// 		<TouchableOpacity>
+									// 			<Image
+									// 				style={{ width: 32, height: 32, resizeMode: "contain" }}
+									// 				source={require("../../assets/images/pengyouquan.png")}
+									// 			/>
+									// 		</TouchableOpacity>
+									// 		<TouchableOpacity onPress={this.toggleModalVisible}>
+									// 			<Iconfont name={"more"} size={36} color={Colors.lightFontColor} />
+									// 		</TouchableOpacity>
+									// 	</View>
+									// </View>
+								}
 							</View>
 						);
 					}}

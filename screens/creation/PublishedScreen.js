@@ -33,11 +33,17 @@ class PublishedScreen extends React.Component {
 								<Text style={[styles.text2, { marginTop: 12 }]}>或者你可以选择投稿到对应的专题</Text>
 							</View>
 						</View>
-						<View>
-							<Text style={styles.text2}>分享到</Text>
-						</View>
+						{
+							// 隐藏功能
+							// <View>
+							// 	<Text style={styles.text2}>分享到</Text>
+							// </View>
+						}
 					</View>
-					<View>{this.shareList()}</View>
+					{
+						// 隐藏功能
+						// <View>{this.shareList()}</View>
+					}
 					<View style={styles.contribute}>
 						<View style={styles.contributeTop}>
 							<Text style={styles.text2}>投稿到</Text>

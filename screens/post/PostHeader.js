@@ -84,7 +84,7 @@ class PostHeader extends Component {
                             break;
                           case 1:
                             //分享
-                            share();
+                            // share();
                             break;
                           case 2:
                             //举报

@@ -99,13 +99,16 @@ class HomeScreen extends React.Component {
                   <Text style={styles.columnQuantity}>{user.count_likes || ""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("已购内容", { user })}>
-                <View style={[styles.columnItem, styles.noBorder]}>
-                  <Iconfont name={"diamond"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>已购内容</Text>
-                  <Text style={styles.columnQuantity}>{user.purchased_content || ""}</Text>
-                </View>
-              </TouchableOpacity>
+              {
+                // 隐藏功能
+                // <TouchableOpacity onPress={() => this.navigateMiddlewear("已购内容", { user })}>
+                //   <View style={[styles.columnItem, styles.noBorder]}>
+                //     <Iconfont name={"diamond"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                //     <Text style={styles.columnType}>已购内容</Text>
+                //     <Text style={styles.columnQuantity}>{user.purchased_content || ""}</Text>
+                //   </View>
+                // </TouchableOpacity>
+              }
             </View>
             <DivisionLine height={15} />
             <View style={styles.columnContainer}>
@@ -130,21 +133,27 @@ class HomeScreen extends React.Component {
                   <Text style={styles.columnQuantity}>{""}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
-                <View style={[styles.columnItem, styles.noBorder]}>
-                  <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>我的钱包</Text>
-                </View>
-              </TouchableOpacity>
+              {
+                // 隐藏钱包
+                // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
+                //   <View style={[styles.columnItem, styles.noBorder]}>
+                //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                //     <Text style={styles.columnType}>我的钱包</Text>
+                //   </View>
+                // </TouchableOpacity>
+              }
             </View>
             <DivisionLine height={15} />
             <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={this.toggleModalVisible}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"share"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>分享{Config.AppDisplayName}</Text>
-                </View>
-              </TouchableOpacity>
+              {
+                // 隐藏功能
+                // <TouchableOpacity onPress={this.toggleModalVisible}>
+                //   <View style={styles.columnItem}>
+                //     <Iconfont name={"share"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                //     <Text style={styles.columnType}>分享{Config.AppDisplayName}</Text>
+                //   </View>
+                // </TouchableOpacity>
+              }
               <TouchableOpacity onPress={() => navigation.navigate("浏览记录")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
@@ -157,16 +166,22 @@ class HomeScreen extends React.Component {
                   <Text style={styles.columnType}>帮助与反馈</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  null;
-                }}
-              >
-                <View style={[styles.columnItem, styles.noBorder]}>
-                  <Iconfont name={"star"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>给{Config.AppDisplayName}评分</Text>
-                </View>
-              </TouchableOpacity>
+              {
+                // 隐藏功能
+                // <TouchableOpacity
+                //   onPress={() => {
+                //     null;
+                //   }}
+                // >
+                //   <View style={[styles.columnItem, styles.noBorder]}>
+                //     <Iconfont name={"star"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                //     <Text style={styles.columnType}>
+                //       给{Config.AppDisplayName}
+                //       评分
+                //     </Text>
+                //   </View>
+                // </TouchableOpacity>
+              }
             </View>
             <DivisionLine height={15} />
           </ScrollView>
