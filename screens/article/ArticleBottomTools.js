@@ -67,12 +67,15 @@ class ArticleBottomTools extends Component {
                     <Text style={styles.articleToolItemText}>喜欢 {count_likes}</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSlideShareMenu} style={{ flex: 1 }}>
-                  <View style={styles.articleToolItem}>
-                    <Iconfont name={"share"} size={16} color={Colors.tintFontColor} />
-                    <Text style={styles.articleToolItemText}>分享</Text>
-                  </View>
-                </TouchableOpacity>
+                {
+                  // 隐藏第三方social
+                  // <TouchableOpacity onPress={handleSlideShareMenu} style={{ flex: 1 }}>
+                  //   <View style={styles.articleToolItem}>
+                  //     <Iconfont name={"share"} size={16} color={Colors.tintFontColor} />
+                  //     <Text style={styles.articleToolItemText}>分享</Text>
+                  //   </View>
+                  // </TouchableOpacity>
+                }
               </View>
             </View>
           );

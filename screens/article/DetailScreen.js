@@ -13,7 +13,6 @@ import MetaBottom from "./MetaBottom";
 import RewardPanel from "../post/RewardPanel";
 import ArticleBottomTools from "./ArticleBottomTools";
 import Comments from "./comment/Comments";
-import { UserGroup } from "../../components/MediaGroup";
 import AuthorCard from "../../components/Card/AuthorCard";
 import { RewardModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
@@ -58,7 +57,9 @@ class DetailScreen extends Component {
             if (loading) return <SpinnerLoading />;
             if (!(data && data.article)) return <BlankContent />;
             let article = data.article;
-            this.pictures = []; //初始化pictures，同时也是防止重复render所以在此清空
+            this.pictures = article.pictures.map((elem, index) => {
+              return { url: elem.url };
+            });
             this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
@@ -77,9 +78,6 @@ class DetailScreen extends Component {
                       <Text style={styles.title} NumberOfLines={2}>
                         {article.title}
                       </Text>
-                    </View>
-                    <View style={{ marginVertical: 20 }}>
-                      <UserGroup navigation={navigation} customStyle={{ avatar: 34, nameSize: 15 }} user={article.user} plain />
                     </View>
                     <View style={styles.articleInfo}>
                       <Text style={styles.articleInfoText}>
@@ -100,11 +98,6 @@ class DetailScreen extends Component {
                       tagsStyles={tagsStyles}
                       renderers={{
                         img: (htmlAttribs, children, passProps) => {
-                          //往picture填充图片
-                          this.pictures.push({
-                            url: htmlAttribs.src
-                          });
-                          // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
                           let width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;
@@ -152,7 +145,10 @@ class DetailScreen extends Component {
                   }
                   <View style={styles.showFoot} onLayout={this._footOnLayout.bind(this)}>
                     <BeSelectedCategory categories={article.categories} navigation={navigation} />
-                    <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
+                    {
+                      // 隐藏第三方social
+                      // <MetaBottom login={login} navigation={navigation} article={article} handleSlideShareMenu={this.handleSlideShareMenu} />
+                    }
                     <View style={{ marginHorizontal: -20, marginVertical: 15 }}>
                       <RewardPanel
                         navigation={navigation}
@@ -292,7 +288,8 @@ const styles = StyleSheet.create({
   },
   articleInfo: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 20
   },
   articleInfoText: {
     fontSize: 12,

@@ -37,8 +37,8 @@ class SignUp extends Component {
 		}
 	}
 
-	emptyValue(value) {
-		this.setState({ [value]: "" });
+	emptyValue(key) {
+		this.accountState[key] = "";
 	}
 
 	render() {

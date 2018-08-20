@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
-import HTML from "react-native-render-html";
 
 import PostHeader from "./PostHeader";
 import Player from "./Player";
@@ -13,7 +12,6 @@ import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { imageSize, goContentScreen } from "../../constants/Methods";
 import { Iconfont } from "../../utils/Fonts";
-import { UserGroup } from "../../components/MediaGroup";
 import { RewardModal, ShareModal } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 

@@ -106,38 +106,41 @@ class HomeScreen extends React.Component {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => {
-              this.setState({
-                operation: ["微信好友", "微信朋友圈"],
-                modalVisible: true
-              });
-            }}
-          >
-            <View style={{ alignItems: "center" }}>
-              <Iconfont name={"weixin"} size={31} color={Colors.weixinColor} />
-              <View style={{ marginTop: 10 }}>
-                <Text style={styles.classify}>添加微信好友</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => {
-              this.setState({
-                operation: ["QQ好友", "QQ空间"],
-                modalVisible: true
-              });
-            }}
-          >
-            <View style={{ alignItems: "center" }}>
-              <Iconfont name={"qq"} size={29} color={Colors.qqColor} />
-              <View style={{ marginTop: 10 }}>
-                <Text style={styles.classify}>添加QQ好友</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+          {
+            // 隐藏第三方social
+            // <TouchableOpacity
+            //   style={{ flex: 1 }}
+            //   onPress={() => {
+            //     this.setState({
+            //       operation: ["微信好友", "微信朋友圈"],
+            //       modalVisible: true
+            //     });
+            //   }}
+            // >
+            //   <View style={{ alignItems: "center" }}>
+            //     <Iconfont name={"weixin"} size={31} color={Colors.weixinColor} />
+            //     <View style={{ marginTop: 10 }}>
+            //       <Text style={styles.classify}>添加微信好友</Text>
+            //     </View>
+            //   </View>
+            // </TouchableOpacity>
+            // <TouchableOpacity
+            //   style={{ flex: 1 }}
+            //   onPress={() => {
+            //     this.setState({
+            //       operation: ["QQ好友", "QQ空间"],
+            //       modalVisible: true
+            //     });
+            //   }}
+            // >
+            //   <View style={{ alignItems: "center" }}>
+            //     <Iconfont name={"qq"} size={29} color={Colors.qqColor} />
+            //     <View style={{ marginTop: 10 }}>
+            //       <Text style={styles.classify}>添加QQ好友</Text>
+            //     </View>
+            //   </View>
+            // </TouchableOpacity>
+          }
         </View>
       </View>
     );

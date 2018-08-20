@@ -41,8 +41,8 @@ class SignIn extends Component {
 		}
 	}
 
-	emptyValue(value) {
-		this.setState({ [value]: "" });
+	emptyValue(key) {
+		this.accountState[key] = "";
 	}
 
 	handleModal() {
@@ -149,7 +149,12 @@ class SignIn extends Component {
 					visible={modalVisible}
 					handleVisible={this.handleModal}
 					customStyle={{ width: width - 60 }}
-					header={<Text style={styles.helpSignIn}>小爱提供以下方式帮你登录</Text>}
+					header={
+						<Text style={styles.helpSignIn}>
+							{Config.AppDisplayName}
+							提供以下方式帮你登录
+						</Text>
+					}
 				>
 					<View>
 						<View>
@@ -171,25 +176,28 @@ class SignIn extends Component {
 								</Text>
 							</TouchableOpacity>
 						</View>
-						<View
-							style={{
-								height: 2,
-								backgroundColor: Colors.tintGray,
-								marginVertical: 12
-							}}
-						/>
-						<View>
-							<TouchableOpacity onPress={this.handleModal}>
-								<Text
-									style={{
-										fontSize: 17,
-										color: Colors.primaryFontColor
-									}}
-								>
-									使用验证码登录
-								</Text>
-							</TouchableOpacity>
-						</View>
+						{
+							// 隐藏第三方social
+							// <View
+							// 	style={{
+							// 		height: 2,
+							// 		backgroundColor: Colors.tintGray,
+							// 		marginVertical: 12
+							// 	}}
+							// />
+							// <View>
+							// 	<TouchableOpacity onPress={this.handleModal}>
+							// 		<Text
+							// 			style={{
+							// 				fontSize: 17,
+							// 				color: Colors.primaryFontColor
+							// 			}}
+							// 		>
+							// 			使用验证码登录
+							// 		</Text>
+							// 	</TouchableOpacity>
+							// </View>
+						}
 					</View>
 				</BasicModal>
 			</View>

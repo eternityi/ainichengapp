@@ -4,9 +4,11 @@ import Colors from "../../constants/Colors";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 
 class LoginInput extends Component {
-	state = {
-		visibility: true
-	};
+	constructor(props) {
+		super(props);
+		this.value = props.value;
+		this.state = { visibility: true, changes: 0 };
+	}
 
 	componentDidMount() {
 		if (this.props.secure) {
@@ -15,8 +17,10 @@ class LoginInput extends Component {
 	}
 
 	render() {
-		let { secure = false, keys, value, name, emptyValue, placeholder, focusItem, focusKey, changeValue, customStyle = {} } = this.props;
+		let { visibility } = this.state;
+		let { secure = false, keys, name, emptyValue, placeholder, focusItem, focusKey, changeValue, customStyle = {} } = this.props;
 		let combineStyle = StyleSheet.flatten([styles.inputWrap, customStyle]);
+		console.log("this.value", this.value);
 		return (
 			<View style={combineStyle}>
 				<Iconfont name={name} size={18} color={Colors.tintFontColor} style={{ marginHorizontal: 22 }} />
@@ -29,8 +33,9 @@ class LoginInput extends Component {
 					placeholderText={Colors.tintFontColor}
 					onChangeText={value => changeValue(keys, value)}
 					onFocus={() => focusKey(keys)}
-					defaultValue={value}
-					secureTextEntry={!this.state.visibility}
+					defaultValue={this.value || ""}
+					secureTextEntry={!visibility}
+					ref={ref => (this.textInput = ref)}
 				/>
 				{secure ? (
 					focusItem == keys ? (
@@ -38,13 +43,19 @@ class LoginInput extends Component {
 							style={styles.inputOperation}
 							onPress={() => this.setState(prevState => ({ visibility: !prevState.visibility }))}
 						>
-							<Iconfont name={"browse"} size={19} color={this.state.visibility ? Colors.themeColor : Colors.lightFontColor} />
+							<Iconfont name={"browse"} size={19} color={visibility ? Colors.themeColor : Colors.lightFontColor} />
 						</TouchableOpacity>
 					) : (
 						<View style={styles.inputOperation} />
 					)
 				) : focusItem == keys ? (
-					<TouchableOpacity style={styles.inputOperation} onPress={() => emptyValue(keys)}>
+					<TouchableOpacity
+						style={styles.inputOperation}
+						onPress={() => {
+							emptyValue(keys);
+							this.changeText();
+						}}
+					>
 						<Iconfont name={"close"} size={18} color={Colors.lightFontColor} />
 					</TouchableOpacity>
 				) : (
@@ -52,6 +63,11 @@ class LoginInput extends Component {
 				)}
 			</View>
 		);
+	}
+
+	changeText() {
+		this.textInput.setNativeProps({ text: "" });
+		this.setState({ changes: this.state.changes++ });
 	}
 }
 

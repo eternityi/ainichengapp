@@ -104,10 +104,13 @@ class PostHeader extends Component {
                             <Iconfont name={post.favorited ? "star" : "star-outline"} size={22} color={"#717171"} style={{ marginRight: 16 }} />
                             <Text style={styles.optionText}>{post.favorited ? "取消收藏" : "收藏"}</Text>
                           </MenuOption>
-                          <MenuOption value={1} customStyles={popoverOption}>
-                            <Iconfont name={"share"} size={19} color={"#717171"} style={{ marginRight: 16 }} />
-                            <Text style={styles.optionText}>分享</Text>
-                          </MenuOption>
+                          {
+                            // 隐藏第三方social
+                            // <MenuOption value={1} customStyles={popoverOption}>
+                            //   <Iconfont name={"share"} size={19} color={"#717171"} style={{ marginRight: 16 }} />
+                            //   <Text style={styles.optionText}>分享</Text>
+                            // </MenuOption>
+                          }
                         </View>
                       ) : (
                         <View>
@@ -115,10 +118,13 @@ class PostHeader extends Component {
                             <Iconfont name={post.favorited ? "star" : "star-outline"} size={22} color={"#717171"} style={{ marginRight: 16 }} />
                             <Text style={styles.optionText}>{post.favorited ? "取消收藏" : "收藏"}</Text>
                           </MenuOption>
-                          <MenuOption value={1} customStyles={popoverOption}>
-                            <Iconfont name={"share"} size={19} color={"#717171"} style={{ marginRight: 16 }} />
-                            <Text style={styles.optionText}>分享</Text>
-                          </MenuOption>
+                          {
+                            // 隐藏第三方social
+                            // <MenuOption value={1} customStyles={popoverOption}>
+                            //   <Iconfont name={"share"} size={19} color={"#717171"} style={{ marginRight: 16 }} />
+                            //   <Text style={styles.optionText}>分享</Text>
+                            // </MenuOption>
+                          }
                           <MenuOption value={2} customStyles={popoverOption}>
                             <Iconfont name={"hint-fill"} size={22} color={"#717171"} style={{ marginRight: 16 }} />
                             <Text style={styles.optionText}>举报</Text>

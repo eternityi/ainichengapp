@@ -47,10 +47,13 @@ class PostBottomTools extends Component {
 								<Iconfont name={liked ? "like" : "like-outline"} size={21} color={liked ? Colors.themeColor : Colors.darkFontColor} />
 								<Text style={styles.countText}> {numberFormat(count_likes) || 0}</Text>
 							</TouchableOpacity>
-							<TouchableOpacity onPress={handleSlideShareMenu} style={styles.toolItem}>
-								<Iconfont name={"share-cycle"} size={19} color={Colors.darkFontColor} />
-								<Text style={styles.countText}>{numberFormat(count_shares) || 0}</Text>
-							</TouchableOpacity>
+							{
+								// 隐藏第三方social
+								// <TouchableOpacity onPress={handleSlideShareMenu} style={styles.toolItem}>
+								// 	<Iconfont name={"share-cycle"} size={19} color={Colors.darkFontColor} />
+								// 	<Text style={styles.countText}>{numberFormat(count_shares) || 0}</Text>
+								// </TouchableOpacity>
+							}
 							<TouchableOpacity onPress={handleRewardVisible}>
 								<Iconfont name={"reward"} size={30} color={Colors.qqzoneColor} />
 							</TouchableOpacity>
