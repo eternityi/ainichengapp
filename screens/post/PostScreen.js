@@ -159,7 +159,7 @@ class PostScreen extends Component {
 		} else {
 			return (
 				<View style={styles.gridView}>
-					{pictures.map((picture, index) => {
+					{this.pictures.map((picture, index) => {
 						return (
 							<TouchableOpacity
 								activeOpacity={1}
