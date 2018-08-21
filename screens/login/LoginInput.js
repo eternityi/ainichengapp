@@ -7,7 +7,7 @@ class LoginInput extends Component {
 	constructor(props) {
 		super(props);
 		this.value = props.value;
-		this.state = { visibility: true, changes: 0 };
+		this.state = { visibility: true, changes: 0, value: "" };
 	}
 
 	componentDidMount() {
@@ -17,10 +17,9 @@ class LoginInput extends Component {
 	}
 
 	render() {
-		let { visibility } = this.state;
+		let { visibility, value } = this.state;
 		let { secure = false, keys, name, emptyValue, placeholder, focusItem, focusKey, changeValue, customStyle = {} } = this.props;
 		let combineStyle = StyleSheet.flatten([styles.inputWrap, customStyle]);
-		console.log("this.value", this.value);
 		return (
 			<View style={combineStyle}>
 				<Iconfont name={name} size={18} color={Colors.tintFontColor} style={{ marginHorizontal: 22 }} />
@@ -31,9 +30,13 @@ class LoginInput extends Component {
 					autoFocus={keys == focusItem}
 					placeholder={placeholder}
 					placeholderText={Colors.tintFontColor}
-					onChangeText={value => changeValue(keys, value)}
+					onChangeText={value => {
+						this.setState({ value });
+						changeValue(keys, value);
+					}}
+					value={value}
+					defaultValue={this.value}
 					onFocus={() => focusKey(keys)}
-					defaultValue={this.value || ""}
 					secureTextEntry={!visibility}
 					ref={ref => (this.textInput = ref)}
 				/>
@@ -52,8 +55,8 @@ class LoginInput extends Component {
 					<TouchableOpacity
 						style={styles.inputOperation}
 						onPress={() => {
+							this.setState({ value: "" });
 							emptyValue(keys);
-							this.changeText();
 						}}
 					>
 						<Iconfont name={"close"} size={18} color={Colors.lightFontColor} />
@@ -63,11 +66,6 @@ class LoginInput extends Component {
 				)}
 			</View>
 		);
-	}
-
-	changeText() {
-		this.textInput.setNativeProps({ text: "" });
-		this.setState({ changes: this.state.changes++ });
 	}
 }
 
