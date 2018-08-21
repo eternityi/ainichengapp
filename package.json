@@ -16,9 +16,9 @@
     "bugsnag-react-native": "2.9.3",
     "graphql": "^0.13.2",
     "immutable": "^3.8.2",
-    "react": "^16.3.0-alpha.1",
+    "react": "16.4.1",
     "react-apollo": "^2.1.4",
-    "react-native": "0.55.3",
+    "react-native": "0.56.0",
     "react-native-animatable": "^1.2.4",
     "react-native-background-upload": "^4.4.0",
     "react-native-check-box": "^2.1.0",
@@ -52,14 +52,12 @@
   "devDependencies": {
     "babel-jest": "23.0.0-alpha.0",
     "babel-plugin-inline-import-graphql-ast": "^2.3.6",
-    "babel-preset-react-native": "4.0.0",
+    "babel-preset-react-native": "5.0.0",
     "jest": "22.4.2",
     "react-test-renderer": "^16.3.0-alpha.1"
   },
   "rnpm": {
-    "assets": [
-      "./assets/fonts/"
-    ]
+    "assets": ["./assets/fonts/"]
   },
   "jest": {
     "preset": "react-native",
