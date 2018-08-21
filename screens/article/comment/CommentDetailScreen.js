@@ -5,7 +5,7 @@ import KeyboardSpacer from "react-native-keyboard-spacer";
 import Screen from "../../Screen";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import EmitInput from "../../../components/Native/EmitInput";
+import { Input } from "../../../components/elements";
 import CommentItem from "./CommentItem";
 
 import { connect } from "react-redux";
@@ -19,8 +19,8 @@ class CommentDetailScreen extends Component {
 	constructor(props) {
 		super(props);
 		let comment = props.navigation.getParam("comment", {});
-		this.body = "";
 		this.state = {
+			value: "",
 			comment,
 			replyingComment: comment //回复的评论
 		};
@@ -33,16 +33,9 @@ class CommentDetailScreen extends Component {
 		}
 	}
 
-	onEmitterReady = emitter => {
-		this.thingEmitter = emitter;
-		this.thingEmitter.addListener("addCommentChanged", text => {
-			this.body = text;
-		});
-	};
-
 	render() {
 		let { navigation } = this.props;
-		let { comment, replyingComment } = this.state;
+		let { value, comment, replyingComment } = this.state;
 
 		return (
 			<Screen>
@@ -58,14 +51,12 @@ class CommentDetailScreen extends Component {
 					</ScrollView>
 					<View style={styles.addComment}>
 						<View style={{ marginLeft: 10, flex: 1 }}>
-							<EmitInput
+							<Input
 								style={styles.commentInput}
-								placeholder="添加一条评论吧~"
-								name="addComment"
-								defaultValue={this.body}
-								onEmitterReady={this.onEmitterReady}
+								value={value}
+								changeText={this.changeText}
 								onFocus={this._inputFocus.bind(this)}
-								ref={ref => (this.commentInput = ref)}
+								inputRef={ref => (this.inputRef = ref)}
 							/>
 						</View>
 						<Mutation mutation={addCommentMutation}>
@@ -73,19 +64,19 @@ class CommentDetailScreen extends Component {
 								return (
 									<TouchableOpacity
 										onPress={() => {
-											this.commentInput.input.blur();
+											this.inputRef.blur();
 											//验证是否为空
-											if (!(this.body.length > replyingComment.user.name.length + 2)) {
+											if (!(value.length > replyingComment.user.name.length + 2)) {
 												this.setState({
 													comment
 												});
-												this.changeBody("");
+												this.changeText("");
 												return null;
 											}
 											replyComment({
 												variables: {
 													commentable_id: comment.commentable_id,
-													body: this.body,
+													body: value,
 													comment_id: replyingComment.id
 												},
 												refetchQueries: ({ replyComment }) => [
@@ -105,7 +96,7 @@ class CommentDetailScreen extends Component {
 													this.setState({
 														comment
 													});
-													this.changeBody("");
+													this.changeText("");
 												}
 											});
 										}}
@@ -149,9 +140,9 @@ class CommentDetailScreen extends Component {
 	_inputFocus() {
 		let { navigation, login } = this.props;
 		if (login) {
-			let { replyingComment } = this.state;
-			if (this.body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-				this.changeBody(`@${replyingComment.user.name} ` + this.body);
+			let { replyingComment, value } = this.state;
+			if (value.indexOf(`@${replyingComment.user.name}`) !== 0) {
+				this.changeText(`@${replyingComment.user.name} ` + value);
 			}
 		} else {
 			navigation.navigate("登录注册");
@@ -163,15 +154,14 @@ class CommentDetailScreen extends Component {
 		let { navigation, login } = this.props;
 		if (login) {
 			this.setState({ replyingComment });
-			this.commentInput.input.focus();
+			this.inputRef.focus();
 		} else {
 			navigation.navigate("登录注册");
 		}
 	}
 
-	changeBody = body => {
-		this.body = body;
-		this.commentInput.changeText(this.body);
+	changeText = value => {
+		this.setState({ value });
 	};
 }
 

@@ -87,7 +87,6 @@ class CommentsScreen extends Component {
 						}}
 					</Query>
 					<AddCommentModal
-						emitter="replyComment"
 						visible={replyCommentVisible}
 						toggleCommentModal={() => {
 							this.setState(prevState => ({

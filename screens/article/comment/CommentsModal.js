@@ -8,7 +8,7 @@ import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, SlideInUpModal } from "../../../components/Modal";
 import { CategoryGroup } from "../../../components/MediaGroup";
 import { LoadingMore, LoadingError, ContentEnd, Diving } from "../../../components/Pure";
-import EmitInput from "../../../components/Native/EmitInput";
+import { Input } from "../../../components/elements";
 import CommentItem from "./CommentItem";
 
 import { Query, Mutation } from "react-apollo";
@@ -20,8 +20,8 @@ const { width, height } = Dimensions.get("window");
 class CommentsModal extends Component {
 	constructor(props) {
 		super(props);
-		this.body = "";
 		this.state = {
+			value: "",
 			fetchingMore: true,
 			order: props.order,
 			onlyAuthor: props.onlyAuthor,
@@ -29,16 +29,9 @@ class CommentsModal extends Component {
 		};
 	}
 
-	onEmitterReady = emitter => {
-		this.thingEmitter = emitter;
-		this.thingEmitter.addListener("addCommentModalChanged", text => {
-			this.body = text;
-		});
-	};
-
 	render() {
 		let { visible, toggleVisible, article, navigation } = this.props;
-		let { replyingComment, order, onlyAuthor, fetchingMore } = this.state;
+		let { value, replyingComment, order, onlyAuthor, fetchingMore } = this.state;
 		let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
 		return (
 			<SlideInUpModal
@@ -96,14 +89,12 @@ class CommentsModal extends Component {
 										/>
 										<View style={styles.addComment}>
 											<View style={{ marginLeft: 10, flex: 1 }}>
-												<EmitInput
+												<Input
 													style={styles.commentInput}
-													placeholder="添加一条评论吧~"
-													name="addCommentModal"
-													defaultValue={this.body}
-													onEmitterReady={this.onEmitterReady}
+													value={value}
+													changeText={this.changeText}
 													onFocus={this._focusHandler.bind(this)}
-													ref={ref => (this.commentInput = ref)}
+													inputRef={ref => (this.inputRef = ref)}
 												/>
 											</View>
 											<Mutation mutation={addCommentMutation}>
@@ -112,12 +103,12 @@ class CommentsModal extends Component {
 														<TouchableOpacity
 															onPress={() => {
 																//验证是否为空
-																if (this.body.length > 0) {
+																if (value.length > 0) {
 																	addComment({
 																		variables: {
 																			commentable_id: article.id,
-																			body: this.body,
-																			comment_id: replyingComment ? replyingComment.id : "",
+																			body: value,
+																			comment_id: replyingComment ? replyingComment.id : ""
 																		},
 																		refetchQueries: addComment => [
 																			{
@@ -130,9 +121,9 @@ class CommentsModal extends Component {
 																			}
 																		]
 																	});
-																	this.changeBody("");
+																	this.changeText("");
 																}
-																this.commentInput.input.blur();
+																this.inputRef.blur();
 															}}
 														>
 															<View style={{ marginHorizontal: 20 }}>
@@ -229,8 +220,8 @@ class CommentsModal extends Component {
 					this.setState(prevState => ({
 						replyingComment: comment
 					}));
-					this.changeBody(`@${comment.user.name} `);
-					this.commentInput.input.focus();
+					this.changeText(`@${comment.user.name} `);
+					this.inputRef.focus();
 				}}
 				toggleVisible={toggleVisible}
 				navigation={navigation}
@@ -247,17 +238,16 @@ class CommentsModal extends Component {
 	};
 
 	_focusHandler = () => {
-		let { replyingComment } = this.state;
-		if (this.body.length < 1 && replyingComment) {
+		let { value, replyingComment } = this.state;
+		if (value.length < 1 && replyingComment) {
 			this.setState({
 				replyingComment: null
 			});
 		}
 	};
 
-	changeBody = body => {
-		this.body = body;
-		this.commentInput.changeText(this.body);
+	changeText = value => {
+		this.setState({ value });
 	};
 }
 

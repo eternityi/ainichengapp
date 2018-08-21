@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions, Platfo
 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import EmitInput from "../../components/Native/EmitInput";
+import { Input } from "../../components/elements";
 import BasicModal from "./BasicModal";
 import SearchUserModal from "./SearchUserModal";
 
@@ -15,28 +15,22 @@ const { width } = Dimensions.get("window");
 class AddCommentModal extends Component {
 	constructor(props) {
 		super(props);
-		this.body = "";
 		this.toggleVisible = this.toggleVisible.bind(this);
 		this.prevReplyingComment = {};
 		this.state = {
+			value: "",
 			aiteModalVisible: false
 		};
 	}
 
-	onEmitterReady = emitter => {
-		this.thingEmitter = emitter;
-		this.thingEmitter.addListener(this.props.emitter + "Changed", text => {
-			this.body = text;
-		});
-	};
-
 	componentWillUpdate(nextProps, nextState) {
+		// 记录上一个回复
 		this.prevReplyingComment = this.props.replyingComment ? this.props.replyingComment : {};
 	}
 
 	render() {
 		const { visible, toggleCommentModal, article, replyingComment, order = "LATEST_FIRST", filter = "ALL", emitter, navigation } = this.props;
-		let { aiteModalVisible } = this.state;
+		let { value, aiteModalVisible } = this.state;
 		return (
 			<Mutation mutation={addCommentMutation}>
 				{addComment => {
@@ -53,16 +47,12 @@ class AddCommentModal extends Component {
 							}}
 						>
 							<View>
-								<EmitInput
+								<Input
+									style={styles.textInput}
+									value={value}
 									autoFocus
 									onFocus={this._inputFocus.bind(this)}
-									style={styles.textInput}
-									name={emitter}
-									defaultValue={this.body}
-									onEmitterReady={this.onEmitterReady}
-									ref={ref => {
-										this.inputText = ref;
-									}}
+									changeText={this.changeText}
 								/>
 								<View style={styles.textBottom}>
 									<View style={styles.textBottom}>
@@ -71,7 +61,7 @@ class AddCommentModal extends Component {
 										</TouchableOpacity>
 										<TouchableOpacity
 											onPress={() => {
-												this.changeBody(this.body + "😊");
+												this.changeText(value + "😊");
 											}}
 										>
 											<Iconfont name="smile" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
@@ -80,11 +70,11 @@ class AddCommentModal extends Component {
 									<TouchableOpacity
 										onPress={() => {
 											toggleCommentModal();
-											if (!this.body) return null;
+											if (!value) return null;
 											addComment({
 												variables: {
 													commentable_id: article.id,
-													body: this.body,
+													body: value,
 													comment_id: replyingComment ? replyingComment.id : ""
 												},
 												refetchQueries: addComment => [
@@ -98,7 +88,7 @@ class AddCommentModal extends Component {
 													}
 												]
 											});
-											this.changeBody("");
+											this.changeText("");
 										}}
 										style={styles.publishComment}
 									>
@@ -120,7 +110,7 @@ class AddCommentModal extends Component {
 								toggleVisible={this.toggleVisible}
 								handleSelectedUser={user => {
 									this.toggleVisible();
-									this.changeBody(this.body + `@${user.name} `);
+									this.changeText(value + `@${user.name} `);
 								}}
 							/>
 						</BasicModal>
@@ -130,9 +120,8 @@ class AddCommentModal extends Component {
 		);
 	}
 
-	changeBody = body => {
-		this.body = body;
-		this.inputText.changeText(this.body);
+	changeText = value => {
+		this.setState({ value });
 	};
 
 	toggleVisible() {
@@ -141,13 +130,13 @@ class AddCommentModal extends Component {
 
 	_inputFocus() {
 		let { replyingComment } = this.props;
-		if (replyingComment && !replyingComment.reply) {
-			return;
-		}
+		let { value } = this.state;
+
+		// 如果回复的是同一条评论就不重新changeText
 		if (replyingComment && this.prevReplyingComment.id !== replyingComment.id) {
-			this.changeBody(`@${replyingComment.user.name} `);
-		} else if (replyingComment && this.body.indexOf(`@${replyingComment.user.name}`) !== 0) {
-			this.changeBody(`@${replyingComment.user.name} `);
+			this.changeText(`@${replyingComment.user.name} `);
+		} else if (replyingComment && value.indexOf(`@${replyingComment.user.name}`) !== 0) {
+			this.changeText(`@${replyingComment.user.name} `);
 		}
 	}
 

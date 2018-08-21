@@ -8,7 +8,14 @@ import Colors from "../../constants/Colors";
 
 class SearchHeader extends Component {
   render() {
-    let { navigation, name, handleSearch = () => null, changeKeywords = () => null, placeholder = "搜索文章、专题、用户、文集", headerRef } = this.props;
+    let {
+      navigation,
+      name,
+      handleSearch = () => null,
+      changeKeywords = () => null,
+      placeholder = "搜索文章、专题、用户、文集",
+      headerRef
+    } = this.props;
     return (
       <Header
         routeName={true}

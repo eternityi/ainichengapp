@@ -95,9 +95,8 @@ class HomeScreen extends Component {
                       nativeEvent: { contentOffset: { y: offsetTop } }
                     }
                   ])}
-                  scrollEventThrottle={16}
                   renderItem={this._renderItem}
-                  onEndReachedThreshold={0.3}
+                  onEndReachedThreshold={0.8}
                   onEndReached={() => {
                     if (articles) {
                       fetchMore({

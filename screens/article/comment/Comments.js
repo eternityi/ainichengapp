@@ -46,7 +46,8 @@ class Comments extends Component {
                         marginRight: 8
                       }}
                     >
-                      评论({article.count_replies ? article.count_replies : 0})
+                      {article.count_replies ? article.count_replies : 0}
+                      条评论
                     </Text>
                     <TouchableOpacity
                       style={[styles.onlyAuthor, onlyAuthor ? styles.onlyAuthored : ""]}
@@ -155,7 +156,6 @@ class Comments extends Component {
           navigation={navigation}
         />
         <AddCommentModal
-          emitter="replyComment"
           visible={replyCommentVisible}
           toggleCommentModal={this.toggleReplyCommentVisible}
           article={article}
@@ -165,7 +165,6 @@ class Comments extends Component {
           navigation={navigation}
         />
         <AddCommentModal
-          emitter="addComment"
           visible={addCommentVisible}
           toggleCommentModal={toggleCommentModal}
           article={article}
