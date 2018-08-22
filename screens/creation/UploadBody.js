@@ -25,9 +25,8 @@ class UploadBody extends Component {
 			selectCategory
 		} = this.props;
 		return (
-			<View style={{ backgroundColor: Colors.lightGray, flex: 1 }}>
-				<DivisionLine height={10} />
-				<TouchableOpacity
+			<View style={{ backgroundColor: Colors.lightGray, flex: 1, marginTop: 30 }}>
+				{/*				<TouchableOpacity
 					onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}
 				>
 					<View style={styles.item}>
@@ -44,8 +43,7 @@ class UploadBody extends Component {
 							<Iconfont name={"right"} size={14} color={Colors.darkGray} />
 						</View>
 					</View>
-				</TouchableOpacity>
-				<DivisionLine height={10} />
+				</TouchableOpacity>*/}
 				<View style={styles.inputText}>
 					<TextInput
 						ref="textInput"
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
 		padding: 0,
 		paddingLeft: 20,
 		paddingTop: 10,
-		height: 150,
+		height: 200,
 		justifyContent: "flex-start"
 		// marginTop:10,
 	},

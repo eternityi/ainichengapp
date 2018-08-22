@@ -17,27 +17,50 @@ const { width, height } = Dimensions.get("window");
 
 class CreatePostBottom extends Component {
 	render() {
-		let { navigation, covers, uploadType, onPressPhotoUpload, onPressVideoUpload } = this.props;
+		let {
+			navigation,
+			covers,
+			uploadType,
+			onPressPhotoUpload,
+			onPressVideoUpload,
+			selectCategories,
+			selectCategory,
+			publishing,
+			publish,
+			body
+		} = this.props;
+		console.log("dd", body);
 		return (
 			<View style={styles.body}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
-					<TouchableOpacity onPress={onPressPhotoUpload} disabled={uploadType < 0 ? true : false}>
-						<Iconfont
-							name={"image"}
-							size={22}
-							color={uploadType < 0 ? "#999" : "#666"}
-							style={{ paddingRight: 20 }}
-						/>
-					</TouchableOpacity>
 					<TouchableOpacity onPress={onPressVideoUpload} disabled={covers.length > 0 ? true : false}>
 						<Iconfont
-							name={"upload"}
-							size={21}
+							name={"video-up"}
+							size={26}
 							color={covers.length > 0 ? "#999" : "#666"}
-							style={{ paddingRight: 20 }}
+							style={{ paddingRight: 30 }}
 						/>
 					</TouchableOpacity>
+					<TouchableOpacity onPress={onPressPhotoUpload} disabled={uploadType < 0 ? true : false}>
+						<Iconfont
+							name={"picture"}
+							size={22}
+							color={uploadType < 0 ? "#999" : "#666"}
+							style={{ paddingRight: 30 }}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}
+					>
+						<Iconfont name={"category4"} size={25} color={"#666"} style={{ paddingRight: 30 }} />
+					</TouchableOpacity>
 				</View>
+				<TouchableOpacity
+					onPress={!publishing ? publish : null}
+					style={{ backgroundColor: !body ? Colors.themeColor : Colors.themeColor, borderRadius: 30 }}
+				>
+					<Text style={{ paddingVertical: 7, paddingHorizontal: 20, color: Colors.skinColor }}>发表</Text>
+				</TouchableOpacity>
 				{/*	<Iconfont name={"add"} size={22} color={"#666"} />*/}
 			</View>
 		);
@@ -46,8 +69,6 @@ class CreatePostBottom extends Component {
 
 const styles = StyleSheet.create({
 	body: {
-		// position: "absolute",
-
 		bottom: 0,
 		flexDirection: "row",
 		alignItems: "center",

@@ -1,6 +1,18 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform, Keyboard } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  Button,
+  View,
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight,
+  Image,
+  Platform,
+  Keyboard
+} from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -54,7 +66,18 @@ class CreatePostScreen extends React.Component {
   }
 
   render() {
-    let { covers, routeName, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible } = this.state;
+    let {
+      covers,
+      routeName,
+      completed,
+      progress,
+      uploadId,
+      uploadType,
+      uri,
+      selectCategories,
+      category_ids,
+      waitingVisible
+    } = this.state;
     const { navigation } = this.props;
     return (
       <Screen>
@@ -62,22 +85,14 @@ class CreatePostScreen extends React.Component {
           <Header
             navigation={navigation}
             routeName={routeName}
-            rightComponent={
+            customStyle={{ height: 25, alignItems: "flex-start", borderBottomColor: Colors.skinColor }}
+            leftComponent={
               <TouchableOpacity
                 onPress={() => {
-                  if (!this.publishing) {
-                    this.publish();
-                  }
+                  navigation.goBack();
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 17,
-                    color: Colors.themeColor
-                  }}
-                >
-                  发表
-                </Text>
+                <Iconfont name={"chacha"} size={24} />
               </TouchableOpacity>
             }
           />
@@ -98,8 +113,13 @@ class CreatePostScreen extends React.Component {
             navigation={navigation}
             uploadType={uploadType}
             covers={covers}
+            selectCategories={selectCategories}
+            selectCategory={this.selectCategory}
             onPressPhotoUpload={this.onPressPhotoUpload}
             onPressVideoUpload={this.onPressVideoUpload}
+            publish={this.publish}
+            publishing={this.publishing}
+            body={this.body}
           />
           {Platform.OS == "ios" && <KeyboardSpacer />}
         </View>
@@ -128,6 +148,7 @@ class CreatePostScreen extends React.Component {
     this.setState({
       waitingVisible: true
     });
+
     //TODO:这里找后端核实下，这个统一的发布动态接口应该是可以兼容所有发布动态的场景的，前端也应该简化选择上传内容那的操作，
     //简化到和朋友圈一样，和雷坤做的web发布动态一样，无需用户选择图片还是视频这个模态框，直接选择了发布，或者是拍摄。
     createPost({
@@ -159,6 +180,7 @@ class CreatePostScreen extends React.Component {
 
   changeBody = body => {
     this.body = body;
+    console.log(this.body);
   };
 
   onPressVideoUpload = () => {
