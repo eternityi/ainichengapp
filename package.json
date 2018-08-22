@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "bash ./fix_npm.sh && rimraf ./node_modules/.cache/babel-loader && node node_modules/react-native/local-cli/cli.js start",
+    "start":
+      "bash ./fix_npm.sh && rimraf ./node_modules/.cache/babel-loader && node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
@@ -13,14 +14,12 @@
     "appcenter": "^1.6.0",
     "appcenter-analytics": "^1.6.0",
     "appcenter-crashes": "^1.6.0",
-    "bugsnag-react-native": "2.9.3",
     "graphql": "^0.13.2",
     "immutable": "^3.8.2",
     "react": "16.4.1",
     "react-apollo": "^2.1.4",
     "react-native": "0.56.0",
     "react-native-animatable": "^1.2.4",
-    "react-native-background-upload": "^4.4.0",
     "react-native-check-box": "^2.1.0",
     "react-native-code-push": "^5.3.4",
     "react-native-gifted-chat": "^0.4.3",
@@ -57,9 +56,7 @@
     "react-test-renderer": "16.4.1"
   },
   "rnpm": {
-    "assets": [
-      "./assets/fonts/"
-    ]
+    "assets": ["./assets/fonts/"]
   },
   "jest": {
     "preset": "react-native",

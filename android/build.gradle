@@ -45,6 +45,7 @@ task clean(type: Delete) {
 }
 
 ext {
+    name = "ainicheng"
     applicationId = "com.ainicheng"
     buildToolsVersion = "26.0.3"
     minSdkVersion = 16
