@@ -124,7 +124,7 @@ class HomeScreen extends Component {
 									onScroll={this.onScroll}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item }) => <NoteItem post={item} />}
-									onEndReachedThreshold={0.3}
+									onEndReachedThreshold={0.6}
 									onEndReached={() => {
 										if (articles) {
 											fetchMore({

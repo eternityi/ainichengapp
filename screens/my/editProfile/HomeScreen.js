@@ -90,84 +90,87 @@ class EditProfileScreen extends Component {
 							</View>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={() => navigation.navigate("简介编辑", { introduction: user.introduction })}>
-							<SettingItem endItem itemName="编辑个人简介" rightContent={user.introduction} />
+							<SettingItem itemName="编辑个人简介" rightContent={user.introduction} />
 						</TouchableOpacity>
-						<SettingType typeName={`绑定账号登录${Config.AppDisplayName}`} explain={"出于安全因素，你至少需要保留一种登录方式"} />
-						<TouchableOpacity onPress={() => null}>
-							<SettingItem
-								horizontal
-								leftComponent={
-									<View style={{ marginRight: 15 }}>
-										<Iconfont name={"email-fill"} size={21} color={user.email ? Colors.linkColor : Colors.tintFontColor} />
-									</View>
-								}
-								rightComponent={
-									<View>
-										<Text style={styles.settingItemContent}>{user.email ? user.email : "未绑定"}</Text>
-									</View>
-								}
-							/>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => null}>
-							<SettingItem
-								horizontal
-								leftComponent={
-									<View style={{ marginRight: 15 }}>
-										<Iconfont name={"weibo"} size={22} color={user.weibo ? Colors.weiboColor : Colors.tintFontColor} />
-									</View>
-								}
-								rightComponent={
-									<View>
-										<Text style={styles.settingItemContent}>{user.weibo ? user.weibo.name : "未绑定"}</Text>
-									</View>
-								}
-							/>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => null}>
-							<SettingItem
-								horizontal
-								leftComponent={
-									<View style={{ marginRight: 15 }}>
-										<Iconfont name={"weixin"} size={23} color={user.weixin ? Colors.weixinColor : Colors.tintFontColor} />
-									</View>
-								}
-								rightComponent={
-									<View>
-										<Text style={styles.settingItemContent}>{user.weixin ? user.weixin.name : "未绑定"}</Text>
-									</View>
-								}
-							/>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => null}>
-							<SettingItem
-								endItem
-								horizontal
-								leftComponent={
-									<View style={{ marginRight: 15 }}>
-										<Iconfont name={"qq"} size={22} color={user.qq ? Colors.qqColor : Colors.tintFontColor} />
-									</View>
-								}
-								rightComponent={
-									<View>
-										<Text style={styles.settingItemContent}>{user.qq ? user.qq.name : "未绑定"}</Text>
-									</View>
-								}
-							/>
-						</TouchableOpacity>
-						<DivisionLine height={20} />
-						<TouchableOpacity
-							style={{ paddingHorizontal: 15 }}
-							onPress={() =>
-								navigation.navigate("文章详情", {
-									article: { id: "00045" }
-								})
-							}
-						>
-							<SettingItem endItem itemName="绑定账号遇到问题" />
-						</TouchableOpacity>
-						<DivisionLine height={20} />
-						<TouchableOpacity style={{ paddingHorizontal: 15 }} onPress={() => navigation.navigate("重置密码")}>
-							<SettingItem endItem itemName="重置密码" />
+						{
+							// 隐藏功能
+							// <SettingType typeName={`绑定账号登录${Config.AppDisplayName}`} explain={"出于安全因素，你至少需要保留一种登录方式"} />
+							// <TouchableOpacity onPress={() => null}>
+							// 	<SettingItem
+							// 		horizontal
+							// 		leftComponent={
+							// 			<View style={{ marginRight: 15 }}>
+							// 				<Iconfont name={"email-fill"} size={21} color={user.email ? Colors.linkColor : Colors.tintFontColor} />
+							// 			</View>
+							// 		}
+							// 		rightComponent={
+							// 			<View>
+							// 				<Text style={styles.settingItemContent}>{user.email ? user.email : "未绑定"}</Text>
+							// 			</View>
+							// 		}
+							// 	/>
+							// </TouchableOpacity>
+							// <TouchableOpacity onPress={() => null}>
+							// 	<SettingItem
+							// 		horizontal
+							// 		leftComponent={
+							// 			<View style={{ marginRight: 15 }}>
+							// 				<Iconfont name={"weibo"} size={22} color={user.weibo ? Colors.weiboColor : Colors.tintFontColor} />
+							// 			</View>
+							// 		}
+							// 		rightComponent={
+							// 			<View>
+							// 				<Text style={styles.settingItemContent}>{user.weibo ? user.weibo.name : "未绑定"}</Text>
+							// 			</View>
+							// 		}
+							// 	/>
+							// </TouchableOpacity>
+							// <TouchableOpacity onPress={() => null}>
+							// 	<SettingItem
+							// 		horizontal
+							// 		leftComponent={
+							// 			<View style={{ marginRight: 15 }}>
+							// 				<Iconfont name={"weixin"} size={23} color={user.weixin ? Colors.weixinColor : Colors.tintFontColor} />
+							// 			</View>
+							// 		}
+							// 		rightComponent={
+							// 			<View>
+							// 				<Text style={styles.settingItemContent}>{user.weixin ? user.weixin.name : "未绑定"}</Text>
+							// 			</View>
+							// 		}
+							// 	/>
+							// </TouchableOpacity>
+							// <TouchableOpacity onPress={() => null}>
+							// 	<SettingItem
+							// 		endItem
+							// 		horizontal
+							// 		leftComponent={
+							// 			<View style={{ marginRight: 15 }}>
+							// 				<Iconfont name={"qq"} size={22} color={user.qq ? Colors.qqColor : Colors.tintFontColor} />
+							// 			</View>
+							// 		}
+							// 		rightComponent={
+							// 			<View>
+							// 				<Text style={styles.settingItemContent}>{user.qq ? user.qq.name : "未绑定"}</Text>
+							// 			</View>
+							// 		}
+							// 	/>
+							// </TouchableOpacity>
+							// <DivisionLine height={20} />
+							// <TouchableOpacity
+							// 	style={{ paddingHorizontal: 15 }}
+							// 	onPress={() =>
+							// 		navigation.navigate("文章详情", {
+							// 			article: { id: "00045" }
+							// 		})
+							// 	}
+							// >
+							// 	<SettingItem endItem itemName="绑定账号遇到问题" />
+							// </TouchableOpacity>
+							// <DivisionLine height={20} />
+						}
+						<TouchableOpacity onPress={() => navigation.navigate("重置密码")}>
+							<SettingItem itemName="重置密码" />
 						</TouchableOpacity>
 					</ScrollView>
 				</View>

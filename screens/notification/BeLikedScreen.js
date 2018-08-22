@@ -21,7 +21,7 @@ class BeLikedScreen extends Component {
 					<Query query={likeNotificationsQuery}>
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.user)) return <SpinnerLoading />;
+							if (!(data && data.user && data.user.notifications)) return <SpinnerLoading />;
 							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({

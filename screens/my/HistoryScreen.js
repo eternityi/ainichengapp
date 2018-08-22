@@ -83,7 +83,7 @@ class HistoryScreen extends Component {
 			>
 				<View style={{ flex: 1, marginRight: 20 }}>
 					<Text style={styles.title} numberOflines={2}>
-						{item.visited.title}
+						{item.visited.title ? item.visited.title : item.visited.description}
 					</Text>
 				</View>
 				<Text style={styles.timeAgo}>{item.time_ago}</Text>
