@@ -50,14 +50,16 @@
     "redux-effex": "^1.1.2"
   },
   "devDependencies": {
-    "babel-jest": "23.0.0-alpha.0",
     "babel-plugin-inline-import-graphql-ast": "^2.3.6",
-    "babel-preset-react-native": "5.0.0",
-    "jest": "22.4.2",
-    "react-test-renderer": "^16.3.0-alpha.1"
+    "babel-jest": "23.4.0",
+    "babel-preset-react-native": "^5",
+    "jest": "23.4.1",
+    "react-test-renderer": "16.4.1"
   },
   "rnpm": {
-    "assets": ["./assets/fonts/"]
+    "assets": [
+      "./assets/fonts/"
+    ]
   },
   "jest": {
     "preset": "react-native",
