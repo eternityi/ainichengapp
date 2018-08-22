@@ -57,7 +57,8 @@ class CreatePostBottom extends Component {
 				</View>
 				<TouchableOpacity
 					onPress={!publishing ? publish : null}
-					style={{ backgroundColor: !body ? Colors.themeColor : Colors.themeColor, borderRadius: 30 }}
+					style={{ backgroundColor: !body ? "#999" : Colors.themeColor, borderRadius: 30 }}
+					disabled={!body ? true : false}
 				>
 					<Text style={{ paddingVertical: 7, paddingHorizontal: 20, color: Colors.skinColor }}>发表</Text>
 				</TouchableOpacity>

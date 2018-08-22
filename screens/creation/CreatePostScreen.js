@@ -55,6 +55,7 @@ class CreatePostScreen extends React.Component {
       uploadId: null,
       progress: null,
       completed: false,
+      body: "",
       covers: [],
       routeName: "　",
       uri: "",
@@ -76,7 +77,8 @@ class CreatePostScreen extends React.Component {
       uri,
       selectCategories,
       category_ids,
-      waitingVisible
+      waitingVisible,
+      body
     } = this.state;
     const { navigation } = this.props;
     return (
@@ -119,7 +121,7 @@ class CreatePostScreen extends React.Component {
             onPressVideoUpload={this.onPressVideoUpload}
             publish={this.publish}
             publishing={this.publishing}
-            body={this.body}
+            body={body}
           />
           {Platform.OS == "ios" && <KeyboardSpacer />}
         </View>
@@ -142,7 +144,7 @@ class CreatePostScreen extends React.Component {
     console.log("category_ids", category_ids);
     Keyboard.dismiss();
     this.publishing = true;
-    if (!this.body) {
+    if (!this.state.body) {
       this.toast();
     }
     this.setState({
@@ -153,7 +155,7 @@ class CreatePostScreen extends React.Component {
     //简化到和朋友圈一样，和雷坤做的web发布动态一样，无需用户选择图片还是视频这个模态框，直接选择了发布，或者是拍摄。
     createPost({
       variables: {
-        body: this.body,
+        body: this.state.body,
         image_urls: this.image_urls,
         a_cids: category_ids,
         video_id: video_id
@@ -179,8 +181,12 @@ class CreatePostScreen extends React.Component {
   };
 
   changeBody = body => {
+    this.setState({
+      body: body
+    });
     this.body = body;
-    console.log(this.body);
+    console.log("this", this.body);
+    console.log("state", this.state.body);
   };
 
   onPressVideoUpload = () => {
