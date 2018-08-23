@@ -29,7 +29,6 @@ class CreatePostBottom extends Component {
 			publish,
 			body
 		} = this.props;
-		console.log("dd", body);
 		return (
 			<View style={styles.body}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>

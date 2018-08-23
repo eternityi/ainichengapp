@@ -185,8 +185,6 @@ class CreatePostScreen extends React.Component {
       body: body
     });
     this.body = body;
-    console.log("this", this.body);
-    console.log("state", this.state.body);
   };
 
   onPressVideoUpload = () => {
