@@ -20,6 +20,8 @@ class CreatePostBottom extends Component {
 		let {
 			navigation,
 			covers,
+			completed,
+			uploadId,
 			uploadType,
 			onPressPhotoUpload,
 			onPressVideoUpload,
@@ -27,7 +29,8 @@ class CreatePostBottom extends Component {
 			selectCategory,
 			publishing,
 			publish,
-			body
+			body,
+			image_urls
 		} = this.props;
 		return (
 			<View style={styles.body}>
@@ -54,14 +57,30 @@ class CreatePostBottom extends Component {
 						<Iconfont name={"category4"} size={25} color={"#666"} style={{ paddingRight: 30 }} />
 					</TouchableOpacity>
 				</View>
-				<TouchableOpacity
-					onPress={!publishing ? publish : null}
-					style={{ backgroundColor: !body ? "#999" : Colors.themeColor, borderRadius: 30 }}
-					disabled={!body ? true : false}
-				>
-					<Text style={{ paddingVertical: 7, paddingHorizontal: 20, color: Colors.skinColor }}>发表</Text>
-				</TouchableOpacity>
-				{/*	<Iconfont name={"add"} size={22} color={"#666"} />*/}
+				{uploadType < 0 ? (
+					<TouchableOpacity
+						onPress={!publishing ? publish : null}
+						style={{
+							backgroundColor: !body || !uploadId == null || !completed ? "#999" : Colors.themeColor,
+							borderRadius: 30
+						}}
+						disabled={!body || !uploadId == null || !completed ? true : false}
+					>
+						<Text style={{ paddingVertical: 7, paddingHorizontal: 20, color: Colors.skinColor }}>发表</Text>
+					</TouchableOpacity>
+				) : (
+					<TouchableOpacity
+						onPress={!publishing ? publish : null}
+						style={{
+							backgroundColor:
+								!body || !(covers.length == image_urls.length) ? "#999" : Colors.themeColor,
+							borderRadius: 30
+						}}
+						disabled={!body || !(covers.length == image_urls.length) ? true : false}
+					>
+						<Text style={{ paddingVertical: 7, paddingHorizontal: 20, color: Colors.skinColor }}>发表</Text>
+					</TouchableOpacity>
+				)}
 			</View>
 		);
 	}

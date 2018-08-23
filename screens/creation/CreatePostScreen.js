@@ -62,7 +62,8 @@ class CreatePostScreen extends React.Component {
       uploadType: 1,
       selectCategories: category.name == null ? [] : [category],
       category_ids: [],
-      waitingVisible: false
+      waitingVisible: false,
+      ok: true
     };
   }
 
@@ -114,6 +115,8 @@ class CreatePostScreen extends React.Component {
           <CreatePostBottom
             navigation={navigation}
             uploadType={uploadType}
+            completed={completed}
+            uploadId={uploadId}
             covers={covers}
             selectCategories={selectCategories}
             selectCategory={this.selectCategory}
@@ -122,6 +125,7 @@ class CreatePostScreen extends React.Component {
             publish={this.publish}
             publishing={this.publishing}
             body={body}
+            image_urls={this.image_urls}
           />
           {Platform.OS == "ios" && <KeyboardSpacer />}
         </View>
@@ -224,6 +228,9 @@ class CreatePostScreen extends React.Component {
           //optmistic update
           covers.push(image.path);
           console.log("地址", covers);
+          this.setState({
+            waitingVisible: true
+          });
           this.startUploadImage(image.path);
         });
         this.setState({
@@ -263,9 +270,17 @@ class CreatePostScreen extends React.Component {
       .then(photo => {
         this.image_urls.push(photo);
         console.log("this.image_urls", this.image_urls);
+        this.setState({
+          ok: this.image_urls.length == this.state.covers.length
+        });
+        if (this.state.ok) {
+          this.setState({
+            waitingVisible: false
+          });
+        }
       })
       .catch(err => {
-        console.log(err);
+        console.log("网络错误".err);
       });
   };
 

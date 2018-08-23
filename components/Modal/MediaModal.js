@@ -2,10 +2,20 @@
 
 import React from "react";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, TextInput, TouchableHighlight, Modal, TouchableOpacity, Platform, Dimensions, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  Modal,
+  TouchableOpacity,
+  Platform,
+  Dimensions,
+  StatusBar
+} from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 
-import Upload from "react-native-background-upload";
 import ImagePicker from "react-native-image-picker";
 import { throttle } from "lodash";
 const { width, height } = Dimensions.get("window");

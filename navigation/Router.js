@@ -2,7 +2,6 @@ import MainTabNavigator from "./MainTabNavigator";
 
 //creation
 import CreationScreen from "../screens/creation/CreationScreen";
-import ReleaseScreen from "../screens/creation/ReleaseScreen";
 import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
@@ -116,9 +115,6 @@ export default {
   },
   创作: {
     screen: CreationScreen
-  },
-  发布: {
-    screen: ReleaseScreen
   },
   创作封面: {
     screen: CreationIntroduceScreen
