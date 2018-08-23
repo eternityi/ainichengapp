@@ -9,9 +9,13 @@ fi
 echo "copy code to $to ..."
 cd /data/app/$from
 
+/bin/cp -rf ./android/settings.gradle ../$to/android
 /bin/cp -rf ./android/gradle.properties ../$to/android
+
 /bin/cp -rf ./android/app/build.gradle ../$to/android/app
 /bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
+
+/bin/cp -rf ./fix_npm.sh ../$to/
 
 /bin/cp -rf ./package.json ../$to/
 /bin/cp -rf ./appVersion.json ../$to/
