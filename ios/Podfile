@@ -8,7 +8,7 @@ target 'ainicheng' do
   # Pods for ainicheng
   pod 'AppCenter/Crashes', '~> 1.7.1'
   pod 'AppCenter/Analytics', '~> 1.7.1'
-  pod 'AppCenterReactNativeShared', '~> 1.6.0'
+  pod 'AppCenterReactNativeShared', '~> 1.7.1'
 
   
 

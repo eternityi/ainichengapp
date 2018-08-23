@@ -10,7 +10,7 @@ class VideoMark extends Component {
 		let fix = Math.floor(size / 4);
 		return (
 			<View style={[styles.videoMark, { width, height: width, borderRadius: width / 2 }]}>
-				<Iconfont name={"video-play"} size={size} color={"#fff"} style={{ marginLeft: fix }} />
+				<Iconfont name="videoMark" size={size} color={"#fff"} style={{ marginLeft: fix }} />
 			</View>
 		);
 	}

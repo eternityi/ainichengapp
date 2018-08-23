@@ -343,6 +343,7 @@ query favoritedArticlesQuery($offset: Int) {
             user {
                 id
                 name
+                avatar
             }
             hits
             count_likes

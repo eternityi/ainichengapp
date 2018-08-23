@@ -57,9 +57,7 @@ class DetailScreen extends Component {
             if (loading) return <SpinnerLoading />;
             if (!(data && data.article)) return <BlankContent />;
             let article = data.article;
-            this.pictures = article.pictures.map((elem, index) => {
-              return { url: elem.url };
-            });
+            this.pictures = []; //初始化pictures，同时也是防止重复render所以在此清空
             this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
@@ -98,6 +96,11 @@ class DetailScreen extends Component {
                       tagsStyles={tagsStyles}
                       renderers={{
                         img: (htmlAttribs, children, passProps) => {
+                          //往picture填充图片
+                          this.pictures.push({
+                            url: htmlAttribs.src
+                          });
+                          // 获取当前index
                           let index = this.imgKey;
                           this.imgKey++;
                           let width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;

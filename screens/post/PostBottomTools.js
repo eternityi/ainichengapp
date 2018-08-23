@@ -53,10 +53,11 @@ class PostBottomTools extends Component {
 								// 	<Iconfont name={"share-cycle"} size={19} color={Colors.darkFontColor} />
 								// 	<Text style={styles.countText}>{numberFormat(count_shares) || 0}</Text>
 								// </TouchableOpacity>
+								// 隐藏功能
+								// <TouchableOpacity onPress={handleRewardVisible}>
+								// 	<Iconfont name={"reward"} size={30} color={Colors.qqzoneColor} />
+								// </TouchableOpacity>
 							}
-							<TouchableOpacity onPress={handleRewardVisible}>
-								<Iconfont name={"reward"} size={30} color={Colors.qqzoneColor} />
-							</TouchableOpacity>
 						</View>
 					);
 				}}

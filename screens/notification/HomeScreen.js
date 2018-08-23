@@ -28,7 +28,7 @@ class HomeScreen extends React.Component {
     var { login, user } = this.props.users;
     return (
       <Screen>
-        <Header navigation={navigation} goBack={false} notification search />
+        <Header navigation={navigation} goBack={false} search />
         <ScrollView
           style={styles.container}
           removeClippedSubviews={true}

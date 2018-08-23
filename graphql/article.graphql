@@ -159,6 +159,7 @@ query articleQuery($id: Int!) {
 			width
 			height
 		}
+		cover
 		video_url
 		user {
 			id

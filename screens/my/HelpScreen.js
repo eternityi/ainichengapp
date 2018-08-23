@@ -46,21 +46,22 @@ class HelpScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						rightComponent={
-							<TouchableOpacity onPress={() => navigation.navigate("意见反馈")}>
-								<Text
-									style={{
-										fontSize: 16,
-										color: Colors.themeColor
-									}}
-								>
-									去反馈
-								</Text>
-							</TouchableOpacity>
-						}
-					/>
+					<Header navigation={navigation} />
+					{
+						// 隐藏功能
+						// rightComponent={
+						// 	<TouchableOpacity onPress={() => navigation.navigate("意见反馈")}>
+						// 		<Text
+						// 			style={{
+						// 				fontSize: 16,
+						// 				color: Colors.themeColor
+						// 			}}
+						// 		>
+						// 			去反馈
+						// 		</Text>
+						// 	</TouchableOpacity>
+						// }
+					}
 					<ScrollView style={styles.container}>
 						<FlatList
 							data={hot}
@@ -83,34 +84,37 @@ class HelpScreen extends Component {
 							ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
 							ListHeaderComponent={this._renderHeader(`${Config.AppDisplayName}账号问题`)}
 						/>
-						<View style={styles.feedBack}>
-							<Image
-								style={styles.image}
-								source={{
-									uri: "https://dongmeiwei.com/images/feedBack.png"
-								}}
-							/>
-							<View>
-								<Text
-									style={{
-										fontSize: 15,
-										color: Colors.tintFontColor,
-										textAlign: "center"
-									}}
-								>
-									没解决你的疑问？
-									<Text
-										style={{
-											marginLeft: 10,
-											color: Colors.linkColor
-										}}
-										onPress={() => navigation.navigate("意见反馈")}
-									>
-										去反馈~
-									</Text>
-								</Text>
-							</View>
-						</View>
+						{
+							// 隐藏功能
+							// <View style={styles.feedBack}>
+							// 	<Image
+							// 		style={styles.image}
+							// 		source={{
+							// 			uri: "https://dongmeiwei.com/images/feedBack.png"
+							// 		}}
+							// 	/>
+							// 	<View>
+							// 		<Text
+							// 			style={{
+							// 				fontSize: 15,
+							// 				color: Colors.tintFontColor,
+							// 				textAlign: "center"
+							// 			}}
+							// 		>
+							// 			没解决你的疑问？
+							// 			<Text
+							// 				style={{
+							// 					marginLeft: 10,
+							// 					color: Colors.linkColor
+							// 				}}
+							// 				onPress={() => navigation.navigate("意见反馈")}
+							// 			>
+							// 				去反馈~
+							// 			</Text>
+							// 		</Text>
+							// 	</View>
+							// </View>
+						}
 					</ScrollView>
 				</View>
 			</Screen>
