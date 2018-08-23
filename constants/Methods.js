@@ -65,12 +65,16 @@ function numberFormat(number) {
 function imageSize({ width, height }, maxWidth = divece.width) {
 	var scale;
 	var size = {};
-	if (width >= height) {
-		size.width = maxWidth;
-		size.height = Math.round((maxWidth * height) / width);
+	if (width > maxWidth || height > maxWidth) {
+		if (width >= height) {
+			size.width = maxWidth;
+			size.height = Math.round((maxWidth * height) / width);
+		} else {
+			size.height = maxWidth;
+			size.width = Math.round((maxWidth * width) / height);
+		}
 	} else {
-		size.height = maxWidth;
-		size.width = Math.round((maxWidth * width) / height);
+		size = { width, height };
 	}
 	return size;
 	// if(Platform.OS=="ios"){
