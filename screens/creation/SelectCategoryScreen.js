@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import Screen from "../Screen";
+
+import SearchResult from "./SearchResult";
 
 import Toast from "react-native-root-toast";
 import {
@@ -16,31 +18,51 @@ import {
 } from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
+import { SearchHeader } from "../../components/Header";
+import EmitInput from "../../components/Native/EmitInput";
 import CategoryItem from "./CategoryItem";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
-import { Query, Mutation, graphql } from "react-apollo";
-import { topCategoriesQuery } from "../../graphql/category.graphql";
-import { submitArticleMutation, userAdminCategoriesQuery, queryArticleRequestCenter } from "../../graphql/user.graphql";
+import { Query, Mutation, graphql, compose, withApollo } from "react-apollo";
 import { queryArticleRequesRecommend } from "../../graphql/article.graphql";
+import { hotSearchAndLogsQuery, deleteQueryLogMutation } from "../../graphql/user.graphql";
 
 class SeleceCategoryScreen extends React.Component {
 	constructor(props) {
 		super(props);
+		this.handleSearch = this.handleSearch.bind(this);
+		this.closeHistory = this.closeHistory.bind(this);
+		this.deleteHistories = this.deleteHistories.bind(this);
+		this.keywords = "";
 		let selectCategories = props.navigation.getParam("selectCategories", []);
 		selectCategories = [...selectCategories];
 		this.state = {
+			name: "keywords",
+			placeholder: "搜索专题",
 			fetchingMore: true,
 			keywords: "",
 			collection: "收录",
 			submission: "投稿",
 			routeName: "　",
-			selectCategories
+			selectCategories,
+			none_keywords: true,
+			fetchMore: true
 		};
 	}
+
+	onEmitterReady = emitter => {
+		this.thingEmitter = emitter;
+		this.thingEmitter.addListener("keywordsChanged", text => {
+			this.keywords = text;
+			if (this.keywords.length < 1) {
+				this.setState({ none_keywords: true });
+			}
+		});
+	};
 	render() {
-		const { navigation, user } = this.props;
+		let { navigation, user, hot_search, deleteQuery, login } = this.props;
+		let { none_keywords, name, placeholder } = this.state;
 		const callback = navigation.getParam("callback", {});
 		let { fetchingMore, keywords, collection, submission, routeName, selectCategories } = this.state;
 		return (
@@ -49,6 +71,27 @@ class SeleceCategoryScreen extends React.Component {
 					<Header
 						navigation={navigation}
 						routeName={routeName}
+						leftComponent={
+							<View style={styles.searchWrap}>
+								<EmitInput
+									words={false}
+									name={name}
+									style={styles.textInput}
+									autoFocus={true}
+									placeholder={placeholder}
+									onEmitterReady={this.onEmitterReady}
+									ref={ref => (this.inputText = ref)}
+								/>
+								<TouchableOpacity style={styles.searchIcon} onPress={this.handleSearch}>
+									<Iconfont
+										name={"search"}
+										size={22}
+										color={Colors.tintFontColor}
+										style={{ marginRight: 8 }}
+									/>
+								</TouchableOpacity>
+							</View>
+						}
 						rightComponent={
 							<TouchableOpacity
 								onPress={() => {
@@ -58,7 +101,6 @@ class SeleceCategoryScreen extends React.Component {
 											delay: 100
 										});
 									} else {
-										console.log(selectCategories);
 										callback(selectCategories);
 										navigation.goBack();
 									}
@@ -67,78 +109,161 @@ class SeleceCategoryScreen extends React.Component {
 								<Text
 									style={{
 										fontSize: 17,
-										color: Colors.themeColor
+										color: Colors.themeColor,
+										paddingHorizontal: 10
 									}}
 								>
-									完成
+									{selectCategories.length > 0 ? "确认 " : "取消"}
 								</Text>
 							</TouchableOpacity>
 						}
 					/>
-					<Query query={queryArticleRequesRecommend}>
-						{({ loading, error, data, fetchMore, refetch }) => {
-							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.user && data.user.categories)) return <SpinnerLoading />;
-							if (data.user.categories.length < 1) return <BlankContent />;
-							let { categories } = data.user;
-							return (
-								<FlatList
-									data={categories}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => (
-										<CategoryItem
-											selectCategory={this.selectCategory}
-											category={item}
-											navigation={navigation}
-											selectCategories={selectCategories}
-										/>
-									)}
-									refreshing={loading}
-									onRefresh={() => {
-										refetch();
-									}}
-									onEndReachedThreshold={0.3}
-									onEndReached={() => {
-										if (categories) {
-											fetchMore({
-												variables: {
-													offset: categories.length
-												},
-												updateQuery: (prev, { fetchMoreResult }) => {
-													if (
-														!(
-															fetchMoreResult &&
-															fetchMoreResult.categories &&
-															fetchMoreResult.categories.length > 0
-														)
-													) {
-														this.setState({
-															fetchingMore: false
-														});
-														return prev;
-													}
-													return Object.assign({}, prev, {
-														categories: [...prev.categories, ...fetchMoreResult.categories]
-													});
-												}
-											});
-										} else {
-											this.setState({
-												fetchingMore: false
-											});
-										}
-									}}
-									ListFooterComponent={() => {
-										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
-									}}
-								/>
-							);
-						}}
-					</Query>
+					{none_keywords ? (
+						<Query query={hotSearchAndLogsQuery}>
+							{({ loading, error, data, fetchMore, refetch }) => {
+								let histories = [];
+								if (error) return <LoadingError reload={() => refetch()} />;
+								if (login) {
+									if (!(data && data.queries && data.queryLogs)) return <SpinnerLoading />;
+									histories = data.queryLogs;
+								} else {
+									if (!(data && data.queries)) return <SpinnerLoading />;
+								}
+								let hotsearch = data.queries;
+								this.hotsearchs += hotsearch.length;
+								return (
+									<ScrollView style={styles.container} bounces={false}>
+										<View style={{ paddingHorizontal: 15 }}>
+											{histories.length > 0 && (
+												<View style={styles.historyWrap}>
+													{this._renderHistories(histories)}
+													<TouchableOpacity
+														onPress={() =>
+															deleteQuery({
+																update: (cache, { data: { deleteQueryLog } }) => {
+																	let { queries } = cache.readQuery({
+																		query: hotSearchAndLogsQuery
+																	});
+																	cache.writeQuery({
+																		query: hotSearchAndLogsQuery,
+																		data: { queries, queryLogs: [] }
+																	});
+																}
+															})
+														}
+													>
+														<View style={[styles.searchItem, { justifyContent: "center" }]}>
+															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>
+																清除搜索记录
+															</Text>
+														</View>
+													</TouchableOpacity>
+												</View>
+											)}
+										</View>
+									</ScrollView>
+								);
+							}}
+						</Query>
+					) : (
+						<SearchResult
+							keywords={this.keywords}
+							navigation={navigation}
+							selectCategory={this.selectCategory}
+							selectCategories={selectCategories}
+						/>
+					)}
 				</View>
 			</Screen>
 		);
 	}
+	// 搜索记录
+	_renderHistories = data => {
+		let { navigation, deleteQuery } = this.props;
+		let histories = data.map((elem, index) => {
+			return (
+				<TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.query)}>
+					<View style={styles.searchItem}>
+						<View style={styles.verticalCenter}>
+							<Iconfont
+								name={"time-outline"}
+								size={21}
+								color={Colors.lightFontColor}
+								style={{ marginRight: 20 }}
+							/>
+							{elem.query && <Text style={{ fontSize: 16, color: "#666" }}>{elem.query}</Text>}
+						</View>
+						<TouchableOpacity
+							onPress={() =>
+								deleteQuery({
+									variables: {
+										id: elem.id
+									},
+									update: (cache, { data: { deleteQueryLog } }) => {
+										let { queryLogs, queries } = cache.readQuery({
+											query: hotSearchAndLogsQuery
+										});
+										queryLogs = queryLogs.filter((query, index) => {
+											return query.id !== elem.id;
+										});
+										console.log(queryLogs);
+										cache.writeQuery({
+											query: hotSearchAndLogsQuery,
+											data: { queries, queryLogs }
+										});
+									}
+								})
+							}
+						>
+							<View
+								style={{
+									width: 50,
+									height: 50,
+									justifyContent: "center",
+									alignItems: "center"
+								}}
+							>
+								<Iconfont name={"close"} size={20} color={Colors.lightFontColor} />
+							</View>
+						</TouchableOpacity>
+					</View>
+				</TouchableOpacity>
+			);
+		});
+		return <View>{histories}</View>;
+	};
+
+	handleSearch(keywords) {
+		if (keywords.length > 0) {
+			this.changeKeywords(keywords);
+		}
+		if (this.keywords.length > 0) {
+			this.setState({ none_keywords: false });
+		}
+	}
+
+	closeHistory(id) {
+		this.setState(prevState => {
+			if (prevState.histories.length == 1) {
+				return { histories: "" };
+			}
+			return {
+				histories: prevState.histories.filter((elem, index) => elem.id != id)
+			};
+		});
+	}
+
+	deleteHistories(id) {
+		this.setState({ histories: [] });
+		variables: {
+			id;
+		}
+	}
+
+	changeKeywords = keywords => {
+		this.keywords = keywords;
+		this.inputText.changeText(this.keywords);
+	};
 
 	selectCategory = (category, check) => {
 		let { selectCategories } = this.state;
@@ -178,7 +303,50 @@ const styles = StyleSheet.create({
 	listHeaderText: {
 		fontSize: 14,
 		color: Colors.tintFontColor
+	},
+	searchWrap: {
+		flex: 1,
+		height: 36,
+		borderRadius: 18,
+		backgroundColor: Colors.lightGray,
+		flexDirection: "row",
+		alignItems: "center",
+		paddingHorizontal: 12
+	},
+	textInput: {
+		flex: 1,
+		fontSize: 16,
+		height: 22,
+		lineHeight: 22,
+		padding: 0,
+		color: Colors.primaryFontColor
+	},
+	searchIcon: {
+		paddingLeft: 10,
+		borderLeftWidth: 1,
+		borderLeftColor: Colors.lightBorderColor
+	},
+	searchItem: {
+		height: 50,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		borderBottomWidth: 1,
+		borderBottomColor: Colors.lightBorderColor
+	},
+	verticalCenter: {
+		flexDirection: "row",
+		alignItems: "center"
 	}
 });
 
-export default connect(store => ({ user: store.users.user }))(SeleceCategoryScreen);
+export default compose(
+	withApollo,
+	connect(store => ({
+		hot_search: store.search.hot_search,
+		histories: store.search.histories,
+		login: store.users.login
+	})),
+	graphql(deleteQueryLogMutation, { name: "deleteQuery" })
+)(SeleceCategoryScreen);
+// connect(store => ({ user: store.users.user }))(SeleceCategoryScreen);

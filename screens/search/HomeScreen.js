@@ -51,6 +51,7 @@ class HomeScreen extends Component {
             headerRef={ref => (this.inputText = ref)}
             navigation={navigation}
             name="keywords"
+            placeholder={"搜索专题"}
           />
           {none_keywords ? (
             <Query query={hotSearchAndLogsQuery}>
@@ -70,7 +71,12 @@ class HomeScreen extends Component {
                     <View style={{ paddingHorizontal: 15 }}>
                       <TouchableOpacity style={styles.searchItem} onPress={() => navigation.navigate("推荐专题")}>
                         <View style={styles.verticalCenter}>
-                          <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
+                          <Iconfont
+                            name={"category-rotate"}
+                            size={19}
+                            color={Colors.themeColor}
+                            style={{ marginRight: 8 }}
+                          />
                           <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
                         </View>
                         <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
@@ -95,7 +101,13 @@ class HomeScreen extends Component {
                                     offset: this.hotsearchs
                                   },
                                   updateQuery: (prev, { fetchMoreResult }) => {
-                                    if (!(fetchMoreResult && fetchMoreResult.queries && fetchMoreResult.queries.length > 0)) {
+                                    if (
+                                      !(
+                                        fetchMoreResult &&
+                                        fetchMoreResult.queries &&
+                                        fetchMoreResult.queries.length > 0
+                                      )
+                                    ) {
                                       return prev;
                                     }
                                     return Object.assign({}, prev, {
