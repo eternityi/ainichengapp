@@ -54,7 +54,7 @@ class CreatePostBottom extends Component {
 					<TouchableOpacity
 						onPress={() => navigation.navigate("选择专题", { callback: selectCategory, selectCategories })}
 					>
-						<Iconfont name={"category4"} size={25} color={"#666"} style={{ paddingRight: 30 }} />
+						<Iconfont name={"category3"} size={24} color={"#666"} style={{ paddingRight: 30 }} />
 					</TouchableOpacity>
 				</View>
 				{uploadType < 0 ? (
