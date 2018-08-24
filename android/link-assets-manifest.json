@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/.DS_Store",
+      "sha1": "8d98cafd9475fd46bfe1e62d0dc5042bc18cafa9"
+    },
+    {
+      "path": "assets/fonts/SpaceMono-Regular.ttf",
+      "sha1": "fae3a5a43b50e0408fd61e14383d94a023d332b0"
+    },
+    {
+      "path": "assets/fonts/iconfont.ttf",
+      "sha1": "b0f6c1dc13df637720b25eea4808e1dccc44c20f"
+    }
+  ]
+}
