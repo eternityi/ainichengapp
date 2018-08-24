@@ -4703,10 +4703,6 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-background-upload@^4.4.0:
-  version "4.4.0"
-  resolved "http://registry.npm.taobao.org/react-native-background-upload/download/react-native-background-upload-4.4.0.tgz#a23454fc33feeefb3bfe370f0dba175c87065a09"
-
 react-native-check-box@^2.1.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/react-native-check-box/download/react-native-check-box-2.1.0.tgz#a4e5fa2c1860cfc3f5758ae3493b6ec2ec7c2878"

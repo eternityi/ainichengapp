@@ -4,18 +4,20 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.brentvatne.react.ReactVideoPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.microsoft.codepush.react.CodePush;
 
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
 import com.microsoft.appcenter.reactnative.analytics.AppCenterReactNativeAnalyticsPackage;
 import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage;
 
 import com.ainicheng.rnpackages.voduploader.UploaderReactPackage;
-import com.brentvatne.react.ReactVideoPackage;
-import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.react.rnspinkit.RNSpinkitPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.microsoft.codepush.react.CodePush;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -43,16 +45,18 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new WebViewBridgePackage(),
+            new ReactVideoPackage(),
+            new VectorIconsPackage(),
+            new RNSpinkitPackage(),
+            new ImagePickerPackage(),
+            new PickerPackage(),
+            new UploaderReactPackage(),
+
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
             new AppCenterReactNativePackage(MainApplication.this),
-            new ImagePickerPackage(),
-            new ReactVideoPackage(),
-            new WebViewBridgePackage(),
-            new VectorIconsPackage(),
-            new RNSpinkitPackage(),
-            new PickerPackage(),
-            new UploaderReactPackage(),
+            
             new CodePush(getApplicationContext().getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG)
       );
     }
