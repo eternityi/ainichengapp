@@ -4806,6 +4806,10 @@ react-native-modal@^6.0.0:
     prop-types "^15.6.1"
     react-native-animatable "^1.2.4"
 
+react-native-orientation@^3.1.3:
+  version "3.1.3"
+  resolved "http://registry.npm.taobao.org/react-native-orientation/download/react-native-orientation-3.1.3.tgz#d45803841fe94b6cce9acbe904fd5ca191a3711e"
+
 react-native-parsed-text@^0.0.20:
   version "0.0.20"
   resolved "http://registry.npm.taobao.org/react-native-parsed-text/download/react-native-parsed-text-0.0.20.tgz#7bd35fec88c3ca0eb0e8250a98e24092b4ee7fef"

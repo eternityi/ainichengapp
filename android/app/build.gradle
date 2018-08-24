@@ -112,7 +112,7 @@ android {
         renderscriptSupportModeEnabled = true
         multiDexEnabled true
         ndk {
-            abiFilters "armeabi", "armeabi-v7a"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
         }
     }
     signingConfigs {
@@ -125,10 +125,11 @@ android {
     } 
     splits {
         abi {
+            enable true
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
-            include "armeabi", "armeabi-v7a","x86"
+            universalApk true  // If true, also generate a universal APK
+            include "armeabi", "armeabi-v7a","x86", "mips"
         }
     }
     buildTypes {
@@ -177,7 +178,7 @@ dependencies {
     compile project(':react-native-image-picker')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-code-push')
-    compile project(':react-native-background-upload')
+//    compile project(':react-native-background-upload')
     compile project(':appcenter-crashes')
     compile project(':appcenter-analytics')
     compile project(':appcenter')
