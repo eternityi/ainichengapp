@@ -2,6 +2,8 @@ import React from "react";
 import { Platform, StatusBar, StyleSheet, View, Text, YellowBox, Dimensions, Image } from "react-native";
 import codePush from "react-native-code-push";
 import Spinner from "react-native-spinkit";
+import Orientation from "react-native-orientation";
+
 import ApolloApp from "./ApolloApp";
 import Colors from "./constants/Colors";
 import Config from "./constants/Config";
@@ -33,6 +35,7 @@ class App extends React.Component {
 
   async componentWillMount() {
     YellowBox.ignoreWarnings(["Task orphaned"]);
+    Orientation.lockToPortrait();
     await this._loadResourcesAsync();
   }
 

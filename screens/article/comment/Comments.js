@@ -46,7 +46,7 @@ class Comments extends Component {
                         marginRight: 8
                       }}
                     >
-                      {article.count_replies ? article.count_replies : 0}
+                      {article.count_replies || 0}
                       条评论
                     </Text>
                     <TouchableOpacity

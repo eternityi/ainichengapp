@@ -25,6 +25,7 @@ cd /data/app/$from
 /bin/cp -rf ./constants/Config.js ../$to/constants
 /bin/cp -rf ./constants/Layout.js ../$to/constants
 /bin/cp -rf ./constants/Methods.js ../$to/constants
+/bin/cp -rf ./constants/Divice.js ../$to/constants
 
 /bin/cp -rf ./assets ../$to/
 /bin/cp -rf ./components ../$to/

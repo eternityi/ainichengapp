@@ -35,12 +35,15 @@ class ArticleBottomTools extends Component {
                 <CommentsInput showWrite={showWrite} toggleCommentModal={toggleCommentModal} />
               </View>
               <View style={styles.articleTools}>
-                <TouchableOpacity onPress={handleRewardVisible} style={{ flex: 1 }}>
-                  <View style={styles.articleToolItem}>
-                    <Iconfont name={"reward"} size={19} color={Colors.tintFontColor} style={{ marginBottom: -1 }} />
-                    <Text style={styles.articleToolItemText}>赞赏 {rewards}</Text>
-                  </View>
-                </TouchableOpacity>
+                {
+                  // 隐藏功能
+                  // <TouchableOpacity onPress={handleRewardVisible} style={{ flex: 1 }}>
+                  //   <View style={styles.articleToolItem}>
+                  //     <Iconfont name={"reward"} size={19} color={Colors.tintFontColor} style={{ marginBottom: -1 }} />
+                  //     <Text style={styles.articleToolItemText}>赞赏 {rewards}</Text>
+                  //   </View>
+                  // </TouchableOpacity>
+                }
                 <TouchableOpacity onPress={commentHandler} style={{ flex: 1 }}>
                   <View style={styles.articleToolItem}>
                     <Iconfont name={"comment-hollow"} size={17} color={Colors.tintFontColor} />

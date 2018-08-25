@@ -31,7 +31,7 @@ class HomeScreen extends Component {
 
 	render() {
 		let { order, modalVisible, fetchingMore, offset } = this.state;
-		let { navigation, personal, deleteCategory } = this.props;
+		let { navigation, personal, deleteCategory, login } = this.props;
 		let category = navigation.getParam("category", {});
 		return (
 			<Screen>
@@ -165,7 +165,7 @@ class HomeScreen extends Component {
 									}}
 								/>
 								<Animated.View style={[styles.slideSite, { right: offset }]}>
-									<SlideWrite navigation={navigation} category={category} />
+									<SlideWrite navigation={navigation} category={category} login={login} />
 								</Animated.View>
 							</View>
 						);
@@ -284,5 +284,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({
-	personal: store.users.user
+	personal: store.users.user,
+	login: store.users.login
 }))(graphql(deleteCategoryMutation, { name: "deleteCategory" })(HomeScreen));

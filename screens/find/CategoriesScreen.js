@@ -65,7 +65,6 @@ class CategoriesScreen extends React.Component {
                 onRefresh={() => {
                   refetch();
                 }}
-                onEndReachedThreshold={0.3}
                 onEndReached={() => {
                   if (data.categories) {
                     fetchMore({
@@ -142,4 +141,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default compose(withApollo, connect(store => ({ categories: store.categories })))(CategoriesScreen);
+export default compose(
+  withApollo,
+  connect(store => ({ categories: store.categories }))
+)(CategoriesScreen);

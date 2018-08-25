@@ -56,8 +56,8 @@ class CommentsModal extends Component {
 											data={data.comments}
 											keyExtractor={(item, index) => index.toString()}
 											renderItem={this._renderCommentItem}
-											onEndReachedThreshold={0.3}
 											onEndReached={() => {
+												console.log("onEndReached");
 												if (data.comments) {
 													fetchMore({
 														variables: {
@@ -161,7 +161,10 @@ class CommentsModal extends Component {
 					<TouchableOpacity onPress={toggleVisible}>
 						<Iconfont name={"chacha"} size={20} color={Colors.primaryFontColor} />
 					</TouchableOpacity>
-					<Text style={styles.countCommentText}>评论</Text>
+					<Text style={styles.countCommentText}>
+						{article.count_replies || 0}
+						条评论
+					</Text>
 					<Text
 						onPress={() => this.setState({ onlyAuthor: !onlyAuthor })}
 						style={{

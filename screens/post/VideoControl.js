@@ -1,43 +1,27 @@
 "use strict";
 
 import React, { Component } from "react";
-import { StyleSheet, View, Slider, TouchableOpacity, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Slider, TouchableWithoutFeedback, TouchableOpacity, Text, Dimensions } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
 
-const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
-const defaultVideoHeight = (screenWidth * 9) / 16;
-
 class VideoControl extends Component {
 	render() {
-		let {
-			controlVisible,
-			currentTime,
-			duration,
-			paused,
-			fullscreen,
-			onSliderValueChange,
-			onSlidingComplete,
-			playButtonHandler,
-			onSwitchLayout
-		} = this.props;
+		let { controlVisible, currentTime, duration, paused, isFullScreen, onSliderValueChanged, playButtonHandler, onSwitchLayout } = this.props;
 		if (!controlVisible) {
 			return null;
 		}
 		return (
 			<View style={styles.videoControl}>
-				{fullscreen && (
+				{isFullScreen && (
 					<TouchableOpacity activeOpacity={1} onPress={onSwitchLayout} style={styles.headerControl}>
-						<Iconfont name="video" size={22} color="#fff" />
+						<Iconfont name="back-ios" size={22} color="#fff" />
 					</TouchableOpacity>
 				)}
-				<View style={styles.centerControl}>
-					<TouchableOpacity activeOpacity={1} style={styles.pauseMark} onPress={playButtonHandler}>
-						<Iconfont name={paused ? "play" : "paused"} size={40} color="#fff" />
-					</TouchableOpacity>
-				</View>
+				<TouchableWithoutFeedback style={styles.pauseMark} onPress={playButtonHandler}>
+					<Iconfont name={paused ? "play" : "paused"} size={isFullScreen ? 50 : 40} color="#fff" />
+				</TouchableWithoutFeedback>
 				<View style={styles.bottomControl}>
 					<Text style={styles.timeText}>{formatTime(currentTime)}</Text>
 					<Slider
@@ -48,12 +32,11 @@ class VideoControl extends Component {
 						value={currentTime}
 						minimumValue={0}
 						maximumValue={Number(duration)}
-						onValueChange={onSliderValueChange}
-						onSlidingComplete={onSlidingComplete}
+						onValueChange={onSliderValueChanged}
 					/>
 					<Text style={styles.timeText}>{formatTime(duration)}</Text>
-					<TouchableOpacity onPress={onSwitchLayout} style={styles.layoutButton}>
-						<Iconfont name={fullscreen ? "fullscreen" : "exitFullscreen"} size={20} color="#fff" />
+					<TouchableOpacity activeOpacity={1} onPress={onSwitchLayout} style={styles.layoutButton}>
+						<Iconfont name={isFullScreen ? "fullscreen" : "exitFullscreen"} size={20} color="#fff" />
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -84,24 +67,15 @@ const styles = StyleSheet.create({
 		right: 0,
 		bottom: 0,
 		backgroundColor: "transparent",
-		justifyContent: "space-between"
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	headerControl: {
 		position: "absolute",
-		top: 20,
-		left: 20,
-		width: 30,
-		height: 30,
-		flexDirection: "row",
-		alignItems: "center"
-	},
-	centerControl: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		alignItems: "center",
+		top: 15,
+		left: 15,
+		width: 40,
+		height: 40,
 		justifyContent: "center"
 	},
 	pauseMark: {
@@ -119,9 +93,9 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	layoutButton: {
-		marginLeft: 20,
-		width: 30,
-		height: 30,
+		marginLeft: 10,
+		width: 40,
+		height: 40,
 		alignItems: "center",
 		justifyContent: "center"
 	},

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import Toast from "react-native-root-toast";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Screen from "../Screen";
 import SignIn from "./SignIn";
@@ -10,7 +11,7 @@ import { graphql, compose } from "react-apollo";
 import { signUpMutation, signInMutation } from "../../graphql/user.graphql";
 import { NavigationActions } from "react-navigation";
 
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 
@@ -40,6 +41,7 @@ class LoginScreen extends Component {
           ) : (
             <SignIn handleSubmit={this.handleSubmit} handleSkip={this.handleSkip} navigation={this.props.navigation} />
           )}
+          {Divice.isIos && <KeyboardSpacer />}
         </View>
       </Screen>
     );

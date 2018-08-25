@@ -8,7 +8,7 @@ import { Iconfont } from "../../utils/Fonts";
 
 class VideoStatus extends Component {
 	render() {
-		let { loading, over, error, replay } = this.props;
+		let { isFullScreen, loading, over, error, replay } = this.props;
 		if (!(loading || over || error)) {
 			return null;
 		}
@@ -18,8 +18,8 @@ class VideoStatus extends Component {
 					<View style={styles.videoStatus}>
 						<TouchableWithoutFeedback onPress={replay}>
 							<View style={styles.status}>
-								<Iconfont name="replay" size={40} color="#fff" />
-								<Text style={styles.statusText}>好像迷路啦，请检查网络或者重试</Text>
+								<Iconfont name="replay" size={isFullScreen ? 50 : 40} color="#fff" />
+								<Text style={[styles.statusText, isFullScreen && { fontSize: 14 }]}>好像迷路啦，请检查网络或者重试</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
@@ -29,8 +29,13 @@ class VideoStatus extends Component {
 				return (
 					<View style={styles.videoStatus}>
 						<View style={styles.status}>
-							<Spinner size={40} type="FadingCircleAlt" color="#fff" style={Platform.OS == "ios" && { marginBottom: 10 }} />
-							<Text style={styles.statusText}>我在努力加载哦ヾ(◍°∇°◍)ﾉﾞ</Text>
+							<Spinner
+								size={isFullScreen ? 50 : 40}
+								type="FadingCircleAlt"
+								color="#fff"
+								style={Platform.OS == "ios" && { marginBottom: 10 }}
+							/>
+							<Text style={[styles.statusText, isFullScreen && { fontSize: 14 }]}>我在努力加载哦ヾ(◍°∇°◍)ﾉﾞ</Text>
 						</View>
 					</View>
 				);
@@ -40,8 +45,8 @@ class VideoStatus extends Component {
 					<View style={styles.videoStatus}>
 						<TouchableWithoutFeedback onPress={replay}>
 							<View style={styles.status}>
-								<Iconfont name="replay" size={40} color="#fff" />
-								<Text style={styles.statusText}>喜欢就请点个赞鼓励作者吧</Text>
+								<Iconfont name="replay" size={isFullScreen ? 50 : 40} color="#fff" />
+								<Text style={[styles.statusText, isFullScreen && { fontSize: 14 }]}>喜欢就请点个赞鼓励作者吧</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: "rgba(0,0,0,0.7)",
+		backgroundColor: "rgba(0,0,0,0.8)",
 		justifyContent: "center",
 		alignItems: "center"
 	},
