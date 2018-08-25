@@ -2693,7 +2693,7 @@
 				2CB9723C2131A28900C7BEFC /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Staging;
 		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ainicheng" */ = {
 			isa = XCConfigurationList;
@@ -2703,7 +2703,7 @@
 				2CB9723B2131A28900C7BEFC /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Staging;
 		};
 		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ainicheng-tvOS" */ = {
 			isa = XCConfigurationList;
@@ -2713,7 +2713,7 @@
 				2CB9723D2131A28900C7BEFC /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Staging;
 		};
 		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "ainicheng-tvOSTests" */ = {
 			isa = XCConfigurationList;
@@ -2723,7 +2723,7 @@
 				2CB9723E2131A28900C7BEFC /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Staging;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ainicheng" */ = {
 			isa = XCConfigurationList;
@@ -2733,7 +2733,7 @@
 				2CB9723A2131A28900C7BEFC /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Staging;
 		};
 /* End XCConfigurationList section */
 	};
