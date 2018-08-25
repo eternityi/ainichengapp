@@ -11,7 +11,11 @@ class SlideWrite extends Component {
 		return (
 			<TouchableWithoutFeedback
 				onPress={() =>
-					userOperationMiddleware(login, navigation.dispatch(navigationAction({ routeName: "发布动态", params: { category } })), navigation)
+					userOperationMiddleware({
+						login,
+						action: () => navigation.dispatch(navigationAction({ routeName: "发布动态", params: { category } })),
+						navigation
+					})
 				}
 			>
 				<View style={[styles.write, style]} elevation={5}>
