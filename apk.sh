@@ -1,50 +1,25 @@
 #!/bin/bash
 
-echo "gen all apk ..."
+function genapk() {
+	echo " ====================================================================> generating ... $1 apk"
+	cd /data/app/$1
+	yarn
+	sudo bash fix_npm.sh
+	react-native-asset
+	cd ./android
+	./gradlew clean assembleRelease
+}
 
-echo " ====================================================================> generating ... ainicheng apk"
-cd /data/app/ainicheng
-cd ./android
-./gradlew clean assembleRelease
 
-echo " ====================================================================> generating ... dongmeiwei apk"
-cd /data/app/dongmeiwei
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
-
-echo " ====================================================================> generating ... dongdianyi apk"
-cd /data/app/dongdianyi
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
-
-echo " ====================================================================> generating ... dongdianyao apk"
-cd /data/app/dongdianyao
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
-
-echo " ====================================================================> generating ... qunyige apk"
-cd /data/app/qunyige
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
-
-echo " ====================================================================> generating ... dianmoge apk"
-cd /data/app/dianmoge
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
-
-echo " ====================================================================> generating ... youjianqi apk"
-cd /data/app/youjianqi
-yarn
-sudo bash fix_npm.sh
-cd ./android
-./gradlew clean assembleRelease
+if [ ! -z $1 ]; then
+	genapk $1
+else
+	echo "gen all apks ..."
+	genapk "ainicheng"
+	genapk "dongmeiwei"
+	genapk "dongdianyi"
+	genapk "dongdianyao"
+	genapk "qunyige"
+	genapk "dianmoge"
+	genapk "youjianqi"
+fi

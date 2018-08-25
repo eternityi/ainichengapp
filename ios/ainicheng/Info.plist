@@ -21,9 +21,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>23</string>
+	<string>24</string>
 	<key>CodePushDeploymentKey</key>
-	<string>Mbl7FR1ya3ZTm8uK3f_g1OpHHoBm44729bcd-65c1-4f12-8e60-bc400cd168b8</string>
+	<string>$(CODEPUSH_KEY)</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

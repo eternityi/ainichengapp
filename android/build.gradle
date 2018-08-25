@@ -53,4 +53,6 @@ ext {
     compileSdkVersion = 27
     targetSdkVersion = 27
     supportLibVersion = "26.1.0"
+    code_push_key_production = "V5Ivvq43_FC9nqn4FoDwTNcSieopH1n7RJkDX"
+    code_push_key_staging = "JwCu5_BgwwxjjzAjqQ1K6iLvykWBr1hmRyyD7"
 }

@@ -133,10 +133,21 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // Note: CodePush updates should not be tested in Debug mode as they are overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+        }
+        staging {
+            initWith release
+            applicationIdSuffix '.staging'
+            matchingFallbacks = ['release']
+            buildConfigField "String", "CODEPUSH_KEY", '"' + rootProject.code_push_key_staging + '"'
+        }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release 
+            buildConfigField "String", "CODEPUSH_KEY", '"' + rootProject.code_push_key_production + '"'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -170,18 +181,18 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-orientation')
-    compile project(':react-native-webview-bridge')
-    compile project(':react-native-video')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-spinkit')
-    compile project(':react-native-image-picker')
-    compile project(':react-native-image-crop-picker')
-    compile project(':react-native-code-push')
-//    compile project(':react-native-background-upload')
-    compile project(':appcenter-crashes')
-    compile project(':appcenter-analytics')
-    compile project(':appcenter')
+    implementation project(':react-native-orientation')
+    implementation project(':react-native-webview-bridge')
+    implementation project(':react-native-video')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-spinkit')
+    implementation project(':react-native-image-picker')
+    implementation project(':react-native-image-crop-picker')
+    implementation project(':react-native-code-push')
+//    implementation project(':react-native-background-upload')
+    implementation project(':appcenter-crashes')
+    implementation project(':appcenter-analytics')
+    implementation project(':appcenter')
 
     //引入第三方libs,比如qc sdk ..
     implementation fileTree(dir: 'libs', include: ['*.jar'])

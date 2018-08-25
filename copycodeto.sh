@@ -17,13 +17,16 @@ cd /data/app/$from
 
 /bin/cp -rf ./fix_npm.sh ../$to/
 
+/bin/cp -rf ./ios/$from.xcodeproj/project.pbxproj ../$to/ios/$to.xcodeproj/project.pbxproj
+sed -i -e "s/$from/$to/g" "../$to/ios/$to.xcodeproj/project.pbxproj"
+
 /bin/cp -rf ./package.json ../$to/
 /bin/cp -rf ./appVersion.json ../$to/
 /bin/cp -rf ./App.js ../$to/
 /bin/cp -rf ./ApolloApp.js ../$to/
 
 /bin/cp -rf ./constants/Config.js ../$to/constants
-/bin/cp -rf ./constants/Layout.js ../$to/constants
+/bin/cp -rf ./constants/index.js ../$to/constants
 /bin/cp -rf ./constants/Methods.js ../$to/constants
 /bin/cp -rf ./constants/Divice.js ../$to/constants
 

@@ -1,5 +1,14 @@
 import React from "react";
-import { Platform, StatusBar, StyleSheet, View, Text, YellowBox, Dimensions, Image } from "react-native";
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  Text,
+  YellowBox,
+  Dimensions,
+  Image
+} from "react-native";
 import codePush from "react-native-code-push";
 import Spinner from "react-native-spinkit";
 import Orientation from "react-native-orientation";
@@ -122,4 +131,8 @@ const styles = StyleSheet.create({
   slogan: { fontSize: 15, lineHeight: 20, color: Colors.tintFontColor }
 });
 
-export default codePush(App);
+let codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  installMode: codePush.InstallMode.ON_NEXT_RESUME
+};
+export default codePush(codePushOptions)(App);
