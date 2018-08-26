@@ -1,29 +1,32 @@
 #!/bin/bash
+red=$'\e[1;31m'
+grn=$'\e[1;32m'
+yel=$'\e[1;33m'
+blu=$'\e[1;34m'
+mag=$'\e[1;35m'
+cyn=$'\e[1;36m'
+end=$'\e[0m'
 
-cd /data/app/ainicheng
-code-push release-react ainichengapk android
-code-push release-react ainicheng ios
+function codepush(){
+	app=$1
+	echo -e "\n${yel}开始热更新 ${app}...${end}"
+	cd /data/app/$app
+	echo -e "${blu}android 热更新 ${app}...${end}"
+	code-push release-react haxibiao/${app}apk android
+	echo -e "${blu}ios 热更新 ${app}...${end}"
+	code-push release-react haxibiao/$app ios --plistFile=ios/$app/Info.plist
+	echo -e "${grn}完成热更新 ${app}...${end}"
+}
 
-cd /data/app/dongmeiwei
-code-push release-react dongmeiweiapk android
-code-push release-react dongmeiwei ios --plistFile=ios/dongmeiwei/Info.plist
-
-cd /data/app/dongdianyi
-code-push release-react haxibiao/dongdianyiapk android
-code-push release-react haxibiao/dongdianyi ios --plistFile=ios/dongdianyi/Info.plist
-
-cd /data/app/dongdianyao
-code-push release-react dongdianyaoapk android
-code-push release-react dongdianyao ios --plistFile=ios/dongdianyao/Info.plist
-
-cd /data/app/qunyige
-code-push release-react haxibiao/qunyigeapk android
-code-push release-react haxibiao/qunyige ios --plistFile=ios/qunyige/Info.plist
-
-cd /data/app/dianmoge
-code-push release-react dianmogeapk android
-code-push release-react dianmoge ios --plistFile=ios/dianmoge/Info.plist
-
-cd /data/app/youjianqi
-code-push release-react haxibiao/youjianqiapk android
-code-push release-react haxibiao/youjianqi ios --plistFile=ios/youjianqi/Info.plist
+if [ -z $1 ]; then
+	echo "开始热更新全部app,需要单个更新，请传入一个appname"
+	codepush "ainicheng"
+	codepush "dongmeiwei"
+	codepush "dongdianyi"
+	codepush "dongdianyao"
+	codepush "qunyige"
+	codepush "dianmoge"
+	codepush "youjianqi"
+else
+	codepush $1
+fi
