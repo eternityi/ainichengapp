@@ -1,10 +1,9 @@
 import React from "react";
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, RefreshControl, BackHandler, Dimensions } from "react-native";
+import { StyleSheet, View, FlatList, RefreshControl, BackHandler } from "react-native";
 import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
-import Colors from "../../constants/Colors";
-import Config from "../../constants/Config";
+import { Colors, Config, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, RecommendFollow } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
@@ -14,10 +13,7 @@ import ListHeader from "./ListHeader";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, withApollo } from "react-apollo";
-
 import { hotArticlesQuery } from "../../graphql/article.graphql";
-
-const { width, height } = Dimensions.get("window");
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -51,7 +47,7 @@ class HomeScreen extends React.Component {
   // 首页监听物理返回、连续两次才可退出APP；同时保证聚焦在首页
   componentDidMount() {
     let { navigation } = this.props;
-    if (Platform.OS === "android") {
+    if (!Divice.isIos) {
       this.didFocusSubscription = navigation.addListener("didFocus", payload => {
         BackHandler.addEventListener("hardwareBackPress", this.toast);
       });
@@ -62,7 +58,7 @@ class HomeScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    if (Platform.OS === "android") {
+    if (!Divice.isIos) {
       this.didFocusSubscription.remove();
       this.willBlurSubscription.remove();
     }
@@ -151,7 +147,7 @@ class HomeScreen extends React.Component {
       this.continuous = false;
       let toast = Toast.show("再次点击退出" + Config.AppDisplayName, {
         duration: Toast.durations.LONG,
-        position: height - 150,
+        position: Divice.height - 100,
         shadow: true,
         animation: true,
         hideOnPress: true,

@@ -3,7 +3,7 @@ import Colors from "../../constants/Colors";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { Header } from "../../components/Header";
 import { AddCommentModal } from "../../components/Modal";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, ContentType } from "../../components/Pure";
 import { goContentScreen } from "../../constants/Methods";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
@@ -34,16 +34,20 @@ class CommentsScreen extends Component {
 					<Query query={commentNotificationQuery}>
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.user)) return <SpinnerLoading />;
-							if (data.user.notifications.length < 1) return <BlankContent />;
+							if (!(data && data.user && data.user.notifications)) return <SpinnerLoading />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
 								fetchPolicy: "network-only"
 							});
+							// 过滤这两种情况
+							let notifications = data.user.notifications.filter((elem, index) => {
+								return ["评论中提到了你", "评论了文章"].includes(elem.type);
+							});
+							if (notifications.length < 1) return <BlankContent />;
 							return (
 								<FlatList
-									data={data.user.notifications}
+									data={notifications}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
 									onEndReachedThreshold={0.3}
@@ -105,9 +109,6 @@ class CommentsScreen extends Component {
 	_renderItem = ({ item, index }) => {
 		let { navigation } = this.props;
 		let notification = item;
-		if (!["评论中提到了你", "评论了文章"].includes(notification.type)) {
-			return <View />;
-		}
 		return (
 			<MediaGroup
 				navigation={navigation}
@@ -119,8 +120,7 @@ class CommentsScreen extends Component {
 							this.commentedArticle = notification.article;
 							this.replyingComment = {
 								...notification.comment,
-								...notification.user,
-								reply: true
+								user: notification.user
 							};
 							this.setState(prevState => ({
 								replyCommentVisible: !prevState.replyCommentVisible
@@ -145,12 +145,7 @@ class CommentsScreen extends Component {
 			case "评论中提到了你":
 				return (
 					<Text style={{ lineHeight: 24 }}>
-						在
-						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《"}
-							{notification.article.title ? notification.article.title : notification.article.description}
-							{"》 "}
-						</Text>
+						在{<ContentType content={notification.article} />}
 						的评论中提到了你
 					</Text>
 				);
@@ -159,11 +154,7 @@ class CommentsScreen extends Component {
 				return (
 					<Text style={{ lineHeight: 24 }}>
 						评论了你发布的
-						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《"}
-							{notification.article.title ? notification.article.title : notification.article.description}
-							{"》 "}
-						</Text>
+						{<ContentType content={notification.article} />}
 					</Text>
 				);
 				break;

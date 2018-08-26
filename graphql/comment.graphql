@@ -1,3 +1,33 @@
+# 单个评论详情
+query commentQuery($comment_id: Int) {
+  comment(comment_id: $comment_id) {
+    id
+    body
+    likes
+    liked
+    time_ago
+    commentable_id
+    lou
+    user {
+      id
+      name
+      avatar
+    }
+    replyComments {
+      id
+      body
+      user {
+        id
+        name
+      }
+      time_ago
+    }
+  }
+}
+
+# 评论列表
+# article_id 所属文章id = commentable_id字段
+# comment_id 评论id
 query commentsQuery($article_id: Int, $comment_id: Int, $offset: Int, $filter: CommentFilter, $order: CommentOrder) {
   comments(article_id: $article_id, comment_id: $comment_id, offset: $offset, filter: $filter, order: $order) {
     id

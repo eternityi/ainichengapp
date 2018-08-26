@@ -1,5 +1,8 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
 import { NavigationActions } from "react-navigation";
+import Toast from "react-native-root-toast";
+import Colors from "./Colors";
+
 const divece = Dimensions.get("window");
 
 //navigation.dispatch(navigationAction)
@@ -106,4 +109,19 @@ function imageSize({ width, height }, maxWidth = divece.width) {
 	// }
 }
 
-export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, imageSize };
+function toast(message, timeout = 2000) {
+	let toast = Toast.show(message, {
+		duration: Toast.durations.LONG,
+		position: 80,
+		shadow: true,
+		animation: true,
+		hideOnPress: true,
+		delay: 100,
+		backgroundColor: Colors.nightColor
+	});
+	setTimeout(function() {
+		Toast.hide(toast);
+	}, timeout);
+}
+
+export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, imageSize, toast };

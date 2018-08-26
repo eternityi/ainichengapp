@@ -3,14 +3,14 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, Keybo
 import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Screen from "../../Screen";
-import Colors from "../../../constants/Colors";
+import { Colors, Methods } from "../../../constants";
 import { Header } from "../../../components/Header";
 import { Input } from "../../../components/elements";
+import { Diving } from "../../../components/Pure";
 import CommentItem from "./CommentItem";
 
 import { connect } from "react-redux";
-import actions from "../../../store/actions";
-import { commentsQuery, addCommentMutation, replyCommentsQuery } from "../../../graphql/comment.graphql";
+import { commentQuery, commentsQuery, addCommentMutation } from "../../../graphql/comment.graphql";
 import { Query, Mutation, withApollo } from "react-apollo";
 
 const { width } = Dimensions.get("window");
@@ -18,131 +18,119 @@ const { width } = Dimensions.get("window");
 class CommentDetailScreen extends Component {
 	constructor(props) {
 		super(props);
-		let comment = props.navigation.getParam("comment", {});
+		this.replyingComment = {};
 		this.state = {
-			value: "",
-			comment,
-			replyingComment: comment //回复的评论
+			value: ""
 		};
-	}
-
-	componentWillMount() {
-		let { comment } = this.state;
-		if (!comment.replyComments) {
-			this.fetchReplyComments();
-		}
 	}
 
 	render() {
 		let { navigation } = this.props;
-		let { value, comment, replyingComment } = this.state;
+		let comment = navigation.getParam("comment", {});
+		let { value } = this.state;
 
 		return (
 			<Screen>
-				<View style={styles.container}>
-					<Header navigation={navigation} />
-					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
-						<CommentItem
-							comment={comment}
-							navigation={navigation}
-							detail
-							toggleReplyComment={replyingComment => this._handleFocus(replyingComment)}
-						/>
-					</ScrollView>
-					<View style={styles.addComment}>
-						<View style={{ marginLeft: 10, flex: 1 }}>
-							<Input
-								style={styles.commentInput}
-								value={value}
-								changeText={this.changeText}
-								onFocus={this._inputFocus.bind(this)}
-								inputRef={ref => (this.inputRef = ref)}
-							/>
-						</View>
-						<Mutation mutation={addCommentMutation}>
-							{replyComment => {
-								return (
-									<TouchableOpacity
-										onPress={() => {
-											this.inputRef.blur();
-											//验证是否为空
-											if (!(value.length > replyingComment.user.name.length + 2)) {
-												this.setState({
-													comment
-												});
-												this.changeText("");
-												return null;
-											}
-											replyComment({
-												variables: {
-													commentable_id: comment.commentable_id,
-													body: value,
-													comment_id: replyingComment.id
-												},
-												refetchQueries: ({ replyComment }) => [
-													{
-														query: commentsQuery,
-														variables: {
-															article_id: comment.commentable_id,
-															order: "LATEST_FIRST",
-															filter: "ALL"
+				<Header navigation={navigation} />
+				<Query query={commentQuery} variables={{ comment_id: comment.id }}>
+					{({ laoding, error, data, refetch }) => {
+						if (!(data && data.comment)) return <Diving />;
+						let { comment } = data;
+						this.replyingComment = comment;
+						return (
+							<View style={styles.container}>
+								<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
+									<CommentItem
+										comment={comment}
+										navigation={navigation}
+										detail
+										toggleReplyComment={replyingComment => this._handleFocus(replyingComment)}
+									/>
+								</ScrollView>
+								<View style={styles.addComment}>
+									<View style={{ marginLeft: 10, flex: 1 }}>
+										<Input
+											style={styles.commentInput}
+											value={value}
+											changeText={this.changeText}
+											onFocus={this._inputFocus.bind(this)}
+											inputRef={ref => (this.inputRef = ref)}
+										/>
+									</View>
+									<Mutation mutation={addCommentMutation}>
+										{replyComment => {
+											return (
+												<TouchableOpacity
+													onPress={() => {
+														this.inputRef.blur();
+														this.changeText("");
+														//验证是否为空
+														if (!(value.length > this.replyingComment.user.name.length + 2)) {
+															return null;
 														}
-													}
-												],
-												update: (cache, { data: { addComment } }) => {
-													let comment = Object.assign({}, this.state.comment, {
-														replyComments: [...this.state.comment.replyComments, addComment]
-													});
-													this.setState({
-														comment
-													});
-													this.changeText("");
-												}
-											});
+														replyComment({
+															variables: {
+																commentable_id: comment.commentable_id,
+																body: value,
+																comment_id: this.replyingComment.id
+															},
+															refetchQueries: ({ replyComment }) => [
+																{
+																	query: commentsQuery,
+																	variables: {
+																		article_id: comment.commentable_id,
+																		order: "LATEST_FIRST",
+																		filter: "ALL"
+																	}
+																}
+															],
+															update: (cache, { data: { addComment } }) => {
+																cache.writeQuery({
+																	query: commentQuery,
+																	variables: { comment_id: comment.id },
+																	data: {
+																		comment: {
+																			...comment,
+																			replyComments: [...comment.replyComments, addComment]
+																		}
+																	}
+																});
+															}
+														});
+														Methods.toast("回复成功");
+													}}
+												>
+													<View style={{ marginHorizontal: 20 }}>
+														<Text
+															style={{
+																fontSize: 16,
+																color: Colors.themeColor
+															}}
+														>
+															发表
+														</Text>
+													</View>
+												</TouchableOpacity>
+											);
 										}}
-									>
-										<View style={{ marginHorizontal: 20 }}>
-											<Text
-												style={{
-													fontSize: 16,
-													color: Colors.themeColor
-												}}
-											>
-												发表
-											</Text>
-										</View>
-									</TouchableOpacity>
-								);
-							}}
-						</Mutation>
-					</View>
-					{Platform.OS === "ios" && <KeyboardSpacer />}
-				</View>
+									</Mutation>
+								</View>
+								{Platform.OS === "ios" && <KeyboardSpacer />}
+							</View>
+						);
+					}}
+				</Query>
 			</Screen>
 		);
-	}
-
-	async fetchReplyComments() {
-		let { comment } = this.state;
-		let { data } = await this.props.client.query({
-			query: replyCommentsQuery,
-			variables: { comment_id: comment.id }
-		});
-		this.setState(prevState => ({
-			comment: {
-				...prevState.comment,
-				...{ replyComments: data.comments }
-			}
-		}));
 	}
 
 	// 输入框聚焦自带检测是否应该加上@用户名
 	_inputFocus() {
 		let { navigation, login } = this.props;
 		if (login) {
-			let { replyingComment, value } = this.state;
-			if (value.indexOf(`@${replyingComment.user.name}`) !== 0) {
-				this.changeText(`@${replyingComment.user.name} ` + value);
+			let { value } = this.state;
+			if (value.indexOf(`@${this.replyingComment.user.name}`) !== 0) {
+				this.changeText(`@${this.replyingComment.user.name} ` + value);
 			}
 		} else {
 			navigation.navigate("登录注册");
@@ -153,7 +141,7 @@ class CommentDetailScreen extends Component {
 	_handleFocus(replyingComment) {
 		let { navigation, login } = this.props;
 		if (login) {
-			this.setState({ replyingComment });
+			this.replyingComment = replyingComment;
 			this.inputRef.focus();
 		} else {
 			navigation.navigate("登录注册");

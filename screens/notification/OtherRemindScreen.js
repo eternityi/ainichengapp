@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, ContentType } from "../../components/Pure";
 import { goContentScreen } from "../../constants/Methods";
 import Screen from "../Screen";
 
@@ -13,6 +13,13 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class OtherRemindScreen extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			fetchingMore: true
+		};
+	}
+
 	render() {
 		let { navigation } = this.props;
 		return (
@@ -23,18 +30,60 @@ class OtherRemindScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;
-							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
 								fetchPolicy: "network-only"
 							});
+							let notifications = data.user.notifications.filter((elem, index) => {
+								if ((elem.type == "收录了文章" || elem.type == "拒绝了文章") && !elem.article) {
+									return false;
+								} else {
+									return true;
+								}
+							});
+							if (notifications.length < 1) return <BlankContent />;
 							return (
 								<FlatList
-									data={data.user.notifications}
+									data={notifications}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
-									ListFooterComponent={() => <ContentEnd />}
+									onEndReached={() => {
+										if (data.user.notifications) {
+											fetchMore({
+												variables: {
+													offset: data.user.notifications.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user &&
+															fetchMoreResult.user.notifications &&
+															fetchMoreResult.user.notifications.length > 0
+														)
+													) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														user: Object.assign({}, prev.user, {
+															notifications: [...prev.user.notifications, ...fetchMoreResult.user.notifications]
+														})
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
 								/>
 							);
 						}}
@@ -47,9 +96,6 @@ class OtherRemindScreen extends Component {
 	_renderItem = ({ item }) => {
 		let { navigation } = this.props;
 		let notification = item;
-		if ((notification.type == "收录了文章" || notification.type == "拒绝了文章") && !notification.article) {
-			return <View />;
-		}
 		return (
 			<View style={styles.remindItem}>
 				<View style={{ flexDirection: "row" }}>
@@ -80,8 +126,6 @@ class OtherRemindScreen extends Component {
 			case "关注了专题":
 				return "followed";
 				break;
-			case "gift":
-				return "diamond";
 				break;
 			case "收录了文章":
 				return "ranking";
@@ -129,11 +173,7 @@ class OtherRemindScreen extends Component {
 				return (
 					<Text style={styles.remindText}>
 						你投稿的
-						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《"}
-							{notification.article.title ? notification.article.title : notification.article.description}
-							{"》 "}
-						</Text>
+						{<ContentType content={notification.article} />}
 						已被加入专题
 						<Text
 							style={styles.linkText}
@@ -152,11 +192,7 @@ class OtherRemindScreen extends Component {
 				return (
 					<Text style={styles.remindText}>
 						抱歉！你投稿的
-						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《"}
-							{notification.article.title ? notification.article.title : notification.article.description}
-							{"》 "}
-						</Text>
+						{<ContentType content={notification.article} />}
 						未能加入专题
 						<Text
 							style={styles.linkText}

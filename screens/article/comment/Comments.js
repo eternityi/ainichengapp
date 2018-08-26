@@ -10,7 +10,7 @@ import CommentItem from "./CommentItem";
 import CommentsModal from "./CommentsModal";
 
 import { commentsQuery } from "../../../graphql/comment.graphql";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 
 class Comments extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Comments extends Component {
       <View onLayout={onLayout}>
         <Query query={commentsQuery} variables={{ article_id: article.id, order, filter }}>
           {({ laoding, error, data, refetch }) => {
-            if (!(data && data.comments)) return null;
+            if (!(data && data.comments)) return <Diving />;
             let { comments } = data;
             return (
               <View>

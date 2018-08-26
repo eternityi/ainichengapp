@@ -5,7 +5,7 @@ import Colors from "../../constants/Colors";
 import { navigationAction, goContentScreen } from "../../constants/Methods";
 import { Header } from "../../components/Header";
 import { ShareModal } from "../../components/Modal";
-import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, ContentType } from "../../components/Pure";
 import MediaGroup from "./MediaGroup";
 import Screen from "../Screen";
 
@@ -15,6 +15,13 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class BeRewardScreen extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			fetchingMore: true
+		};
+	}
+
 	render() {
 		const { navigation } = this.props;
 		return (
@@ -56,7 +63,42 @@ class BeRewardScreen extends Component {
 									data={data.user.notifications}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
-									ListFooterComponent={() => <ContentEnd />}
+									onEndReached={() => {
+										if (data.user.notifications) {
+											fetchMore({
+												variables: {
+													offset: data.user.notifications.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user &&
+															fetchMoreResult.user.notifications &&
+															fetchMoreResult.user.notifications.length > 0
+														)
+													) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														user: Object.assign({}, prev.user, {
+															notifications: [...prev.user.notifications, ...fetchMoreResult.user.notifications]
+														})
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
 								/>
 							);
 						}}
@@ -89,10 +131,8 @@ class BeRewardScreen extends Component {
 				}
 				description={
 					<Text style={{ lineHeight: 24 }}>
-						向你的作品
-						<Text style={styles.linkText} onPress={() => goContentScreen(navigation, notification.article)}>
-							{" 《" + notification.article.title + "》 "}
-						</Text>
+						向你的发布的
+						{<ContentType content={notification.article} />}
 						送了
 						{notification.tip.amount.slice(0, -3)}
 						颗糖（赞赏
@@ -101,10 +141,12 @@ class BeRewardScreen extends Component {
 					</Text>
 				}
 				message={{
-					body: <Text style={{ fontSize: 16, color: Colors.primaryFontColor }}>{notification.tip.message}</Text>,
+					body: notification.tip.message ? (
+						<Text style={{ fontSize: 16, color: Colors.primaryFontColor }}>{notification.tip.message}</Text>
+					) : null,
 					skipScreen: () => navigation.navigate("交易记录")
 				}}
-				meta={notification.time_ago + " " + `支付宝支付，实时到账${notification.tip.amount}元`}
+				meta={`${notification.time_ago} ，实时到账${notification.tip.amount}元`}
 			/>
 		);
 	};

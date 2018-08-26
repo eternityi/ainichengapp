@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, ContentType } from "../../components/Pure";
 import { goContentScreen } from "../../constants/Methods";
 import { Header } from "../../components/Header";
 import Screen from "../Screen";
@@ -13,6 +13,13 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 
 class BeLikedScreen extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			fetchingMore: true
+		};
+	}
+
 	render() {
 		return (
 			<Screen>
@@ -22,18 +29,57 @@ class BeLikedScreen extends Component {
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.notifications)) return <SpinnerLoading />;
-							if (data.user.notifications.length < 1) return <BlankContent />;
 							//retech unreadsQuery ...
 							client.query({
 								query: unreadsQuery,
 								fetchPolicy: "network-only"
 							});
+							//筛选出article存在的data，避免字段为空导致的错误
+							let notifications = data.user.notifications.filter((elem, index) => {
+								return elem.article;
+							});
+							if (notifications.length < 1) return <BlankContent />;
 							return (
 								<FlatList
-									data={data.user.notifications}
+									data={notifications}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderItem}
-									ListFooterComponent={() => <ContentEnd />}
+									onEndReached={() => {
+										if (data.user.notifications) {
+											fetchMore({
+												variables: {
+													offset: data.user.notifications.length
+												},
+												updateQuery: (prev, { fetchMoreResult }) => {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.user &&
+															fetchMoreResult.user.notifications &&
+															fetchMoreResult.user.notifications.length > 0
+														)
+													) {
+														this.setState({
+															fetchingMore: false
+														});
+														return prev;
+													}
+													return Object.assign({}, prev, {
+														user: Object.assign({}, prev.user, {
+															notifications: [...prev.user.notifications, ...fetchMoreResult.user.notifications]
+														})
+													});
+												}
+											});
+										} else {
+											this.setState({
+												fetchingMore: false
+											});
+										}
+									}}
+									ListFooterComponent={() => {
+										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+									}}
 								/>
 							);
 						}}
@@ -65,13 +111,13 @@ class BeLikedScreen extends Component {
 									{notification.user.name + " "}
 								</Text>
 								{notification.type == "喜欢了文章" ? "喜欢了你发布的" : "赞了你的评论"}
-								<Text style={styles.linkText} onPress={() => this.skipScreen(notification)}>
-									{notification.type == "喜欢了文章"
-										? notification.article.title
-											? " 《" + notification.article.title + "》 "
-											: " 《" + notification.article.description + "》 "
-										: ' "' + notification.comment.body + '" '}
-								</Text>
+								{notification.type == "喜欢了文章" ? (
+									<ContentType content={notification.article} />
+								) : (
+									<Text style={styles.linkText} onPress={() => this.skipScreen(notification)}>
+										{' "' + notification.comment.body + '" '}
+									</Text>
+								)}
 							</Text>
 						</View>
 						<View>

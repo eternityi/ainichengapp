@@ -6,9 +6,9 @@ import Colors from "../../../constants/Colors";
 import { Avatar, Dashed, SubComment } from "../../../components/Pure";
 import { OperationModal, ReportModal } from "../../../components/Modal";
 
-import { Query, Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 import { connect } from "react-redux";
-import { likeCommentMutation, commentsQuery, replyCommentsQuery } from "../../../graphql/comment.graphql";
+import { likeCommentMutation } from "../../../graphql/comment.graphql";
 
 const { width, height } = Dimensions.get("window");
 
@@ -56,7 +56,9 @@ class CommentItem extends Component {
 							<View>
 								<Text style={styles.userName}>{comment.user.name}</Text>
 								<Text style={styles.timeAgo}>
-									{comment.lou}楼·{comment.time_ago}
+									{comment.lou}
+									楼·
+									{comment.time_ago}
 								</Text>
 							</View>
 						</View>
@@ -120,7 +122,7 @@ class CommentItem extends Component {
 					handleOperation={index => {
 						switch (index) {
 							case 0:
-								toggleReplyComment({ ...this.subComment, commentable_id: comment.commentable_id, id: comment.id, reply: true });
+								toggleReplyComment(this.subComment);
 								this.handleOperationModal();
 								break;
 							case 1:
@@ -163,7 +165,10 @@ class CommentItem extends Component {
 								});
 							}}
 						>
-							<Text style={styles.unfoldMore}>共{comment.replyComments.length}条回复</Text>
+							<Text style={styles.unfoldMore}>
+								共{comment.replyComments.length}
+								条回复
+							</Text>
 							<Iconfont name={"right"} size={16} color={Colors.linkColor} />
 						</TouchableOpacity>
 					)}
@@ -188,7 +193,8 @@ class CommentItem extends Component {
 								onPress={() =>
 									navigation.navigate("用户详情", {
 										user: reply.user
-									})}
+									})
+								}
 							>
 								{reply.user.name}
 							</Text>
