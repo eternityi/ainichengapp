@@ -7,7 +7,17 @@ import { Iconfont } from "../../utils/Fonts";
 import { navigationAction } from "../../constants/Methods";
 import Colors from "../../constants/Colors";
 import Config from "../../constants/Config";
-import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, TextContainer, SubComment } from "../../components/Pure";
+import {
+	Avatar,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent,
+	TextContainer,
+	SubComment,
+	ContentType
+} from "../../components/Pure";
 import { Header } from "../../components/Header";
 
 import { userActionsQuery } from "../../graphql/user.graphql";
@@ -148,43 +158,21 @@ class ActionsScreen extends Component {
 	_activityType = action => {
 		switch (action.type) {
 			case "articles":
-				{
-					let { id, type, title, description } = action.postedArticle;
-					let typeText;
-					if (type == "article") {
-						typeText = "创作了文章";
-					} else if (type == "video") {
-						typeText = "创作了视频";
-					} else {
-						typeText = "发布了动态";
-					}
+				if (action.postedArticle) {
 					return (
 						<Text>
-							{" " + typeText + " "}
-							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedArticle)}>
-								《{title ? title : description}》
-							</Text>
+							发布了
+							<ContentType content={action.postedArticle} />
 						</Text>
 					);
 				}
 				break;
 			case "comments":
 				if (action.postedComment.article) {
-					let { id, type, title, description } = action.postedComment.article;
-					let typeText;
-					if (type == "article") {
-						typeText = "评论了文章";
-					} else if (type == "video") {
-						typeText = "评论了视频";
-					} else {
-						typeText = "评论了动态";
-					}
 					return (
 						<Text>
-							{" " + typeText + " "}
-							<Text style={styles.linkText} onPress={() => this.skipContent(action.postedComment.article)}>
-								《{title ? title : description}》
-							</Text>
+							评论了
+							<ContentType content={action.postedComment.article} />
 						</Text>
 					);
 				}
@@ -226,44 +214,21 @@ class ActionsScreen extends Component {
 				}
 				break;
 			case "likes":
-				{
-					let liked = action.liked;
-					let { id, type, title, description } = liked.article;
-					let typeText;
-					if (type == "article") {
-						typeText = "喜欢了文章";
-					} else if (type == "video") {
-						typeText = "喜欢了视频";
-					} else {
-						typeText = "喜欢了动态";
-					}
+				if (action.liked.article) {
 					return (
 						<Text>
-							{" " + typeText + " "}
-							<Text style={styles.linkText} onPress={() => this.skipContent(liked.article)}>
-								《{title ? title : description}》
-							</Text>
+							喜欢了
+							<ContentType content={action.liked.article} />
 						</Text>
 					);
 				}
 				break;
 			case "tips":
 				if (action.tiped.article) {
-					let { id, type, title, description } = action.tiped.article;
-					let typeText;
-					if (type == "article") {
-						typeText = "赞赏了文章";
-					} else if (type == "video") {
-						typeText = "赞赏了视频";
-					} else {
-						typeText = "赞赏了动态";
-					}
 					return (
 						<Text>
-							{" " + typeText + " "}
-							<Text style={styles.linkText} onPress={() => this.skipContent(action.tiped.article)}>
-								《{title ? title : description}》
-							</Text>
+							赞赏了
+							<ContentType content={action.tiped.article} />
 						</Text>
 					);
 				}

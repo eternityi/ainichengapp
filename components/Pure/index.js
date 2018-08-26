@@ -19,10 +19,7 @@ import VideoCover from "./VideoCover";
 import VideoMark from "./VideoMark";
 import SlideWrite from "./SlideWrite";
 import SubComment from "./SubComment";
-
-// export { SearchBar };
-// export { ContentEnd };
-// export { LoadingMore };
+import ContentType from "./ContentType";
 
 export {
 	Avatar,
@@ -45,5 +42,6 @@ export {
 	VideoCover,
 	VideoMark,
 	SlideWrite,
-	SubComment
+	SubComment,
+	ContentType
 };

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions, Platform } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors, Methods } from "../../constants";
 import { Input } from "../../components/elements";
 import BasicModal from "./BasicModal";
 import SearchUserModal from "./SearchUserModal";
@@ -29,7 +29,7 @@ class AddCommentModal extends Component {
 	}
 
 	render() {
-		const { visible, toggleCommentModal, article, replyingComment, order = "LATEST_FIRST", filter = "ALL", emitter, navigation } = this.props;
+		const { visible, toggleCommentModal, article, replyingComment, order = "LATEST_FIRST", filter = "ALL", navigation } = this.props;
 		let { value, aiteModalVisible } = this.state;
 		return (
 			<Mutation mutation={addCommentMutation}>
@@ -89,6 +89,7 @@ class AddCommentModal extends Component {
 												]
 											});
 											this.changeText("");
+											Methods.toast("回复成功");
 										}}
 										style={styles.publishComment}
 									>
@@ -139,15 +140,6 @@ class AddCommentModal extends Component {
 			this.changeText(`@${replyingComment.user.name} `);
 		}
 	}
-
-	// sendTextMsg = event => {
-	// 	console.log("this.inputText", this.inputText._lastNativeText);
-	// 	const { text } = event.nativeEvent;
-	// 	if (text === "") {
-	// 		return;
-	// 	}
-	// 	this.setState({ body: text });
-	// };
 }
 
 const styles = StyleSheet.create({

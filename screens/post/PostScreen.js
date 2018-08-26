@@ -100,9 +100,11 @@ class PostScreen extends Component {
 										/>
 									)}
 									<View style={{ padding: 15 }}>
-										<View style={{ marginBottom: 15 }}>
-											<Text style={styles.body}>{body}</Text>
-										</View>
+										{body && (
+											<View style={{ marginBottom: 15 }}>
+												<Text style={styles.body}>{body}</Text>
+											</View>
+										)}
 										{pictures.length > 0 && this.renderImages(pictures)}
 										{post.type == "article" ? (
 											<BeSelectedCategory categories={categories} navigation={navigation} />

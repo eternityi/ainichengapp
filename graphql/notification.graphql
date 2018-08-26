@@ -43,15 +43,6 @@ query commentNotificationQuery($offset: Int) {
             comment {
                 id
                 body
-                likes
-                liked
-                time_ago
-                commentable_id
-                user {
-                    id
-                    avatar
-                    name
-                }
             }
             article {
                 id
