@@ -141,6 +141,9 @@ android {
             initWith release
             applicationIdSuffix '.staging'
             matchingFallbacks = ['release']
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release 
             buildConfigField "String", "CODEPUSH_KEY", '"' + rootProject.code_push_key_staging + '"'
         }
         release {
