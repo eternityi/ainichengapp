@@ -33,15 +33,14 @@ public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
-        @Override
-        protected String getJSBundleFile() {
+    @Override
+    protected String getJSBundleFile() {
         return CodePush.getJSBundleFile();
-        }
+    }
     
     @Override
     public boolean getUseDeveloperSupport() {
-      // return BuildConfig.DEBUG;
-      return true;
+      return BuildConfig.DEBUG;
     }
 
     @Override
@@ -60,8 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
 
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
-            new AppCenterReactNativePackage(MainApplication.this)
-            ,
+            new AppCenterReactNativePackage(MainApplication.this),
             new CodePush(BuildConfig.CODEPUSH_KEY, getApplicationContext(), BuildConfig.DEBUG)
       );
     }

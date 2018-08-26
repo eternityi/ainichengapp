@@ -86,6 +86,8 @@ echo "  - fix android ..."
 /bin/cp -rf ./android/gradle.properties ../$to/android
 /bin/cp -rf ./android/app/build.gradle ../$to/android/app
 /bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
+/bin/cp -rf ./android/app/src/main/java/com/$from/MainApplication.java ../$to/android/app/src/main/java/com/$to/
+sed -i -e "s/$from/$to/g" "../$to/android/app/src/main/java/com/$to/MainApplication.java"
 
 echo "  - fix ios ..."
 /bin/cp -rf ./ios/$from/Info.plist ../$to/ios/$to/
