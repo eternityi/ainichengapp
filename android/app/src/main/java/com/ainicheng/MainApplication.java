@@ -27,6 +27,7 @@ import com.imagepicker.ImagePickerPackage;
 
 import java.util.Arrays;
 import java.util.List;
+// import com.facebook.react.BuildConfig;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -39,7 +40,8 @@ public class MainApplication extends Application implements ReactApplication {
     
     @Override
     public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+      // return BuildConfig.DEBUG;
+      return true;
     }
 
     @Override
@@ -58,8 +60,8 @@ public class MainApplication extends Application implements ReactApplication {
 
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
-            new AppCenterReactNativePackage(MainApplication.this),
-            
+            new AppCenterReactNativePackage(MainApplication.this)
+            ,
             new CodePush(BuildConfig.CODEPUSH_KEY, getApplicationContext(), BuildConfig.DEBUG)
       );
     }
@@ -75,20 +77,9 @@ public class MainApplication extends Application implements ReactApplication {
     return mReactNativeHost;
   }
 
-
-  //替换成自己购买的
-  private String ugcKey = "dd82fb6b890bba02ed86a9387b7d0a6a";
-  private String ugcLicenceUrl = "http://license.vod2.myqcloud.com/license/v1/0bbe5588e35a8d37586c23910faf074f/TXUgcSDK.licence";
-
   @Override
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-
-    // 短视频licence设置
-//    TXUGCBase.getInstance().setLicence(this, ugcLicenceUrl, ugcKey);
-
-//    String sdkver = TXLiveBase.getSDKVersionStr();
-//    Log.d("liteavsdk", "liteav sdk version is : " + sdkver);
   }
 }
