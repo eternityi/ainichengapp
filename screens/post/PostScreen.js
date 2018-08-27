@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Orientation from "react-native-orientation";
 
@@ -20,9 +20,7 @@ import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 import { articleQuery } from "../../graphql/article.graphql";
 
-const { width, height } = Dimensions.get("window");
-
-const MAX_WIDTH = width - 30;
+const MAX_WIDTH = Divice.width - 30;
 const IMG_INTERVAL = 8;
 const IMG_SIZE = (MAX_WIDTH - 16) / 3;
 
@@ -33,7 +31,7 @@ class PostScreen extends Component {
 		this.handleRewardVisible = this.handleRewardVisible.bind(this);
 		this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
 		this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
-		this.commentsOffsetY = height;
+		this.commentsOffsetY = Divice.height;
 		this.state = {
 			isFullScreen: false,
 			videoWidth: Divice.width,
@@ -242,17 +240,21 @@ class PostScreen extends Component {
 
 	//获取评论区域到顶部的高度
 	_commentsOnLayout = event => {
-		let { x, y, width, height } = event.nativeEvent.layout;
+		let { y } = event.nativeEvent.layout;
 		this.commentsOffsetY = y;
 	};
 
 	//滚动到评论顶部
 	_scrollToComment = () => {
-		this.scrollRef.scrollTo({
-			x: 0,
-			y: this.commentsOffsetY,
-			animated: true
-		});
+		if (this.commentsOffsetY >= Divice.height) {
+			this.scrollRef.scrollTo({
+				x: 0,
+				y: this.commentsOffsetY,
+				animated: true
+			});
+		} else {
+			this.scrollRef.scrollToEnd({ animated: true });
+		}
 	};
 
 	/// 屏幕旋转时宽高会发生变化，可以在onLayout的方法中做处理，比监听屏幕旋转更加及时获取宽高变化
@@ -264,7 +266,6 @@ class PostScreen extends Component {
 		this.scrollRef.scrollTo({ x: 0, y: 0, animated: true });
 		//获取根View的宽高，通过宽高来判断横竖屏
 		let { width, height } = event.nativeEvent.layout;
-		console.log("_onLayout", width, height);
 		let isLandscape = width > height;
 		if (isLandscape) {
 			this.setState({

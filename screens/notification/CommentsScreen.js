@@ -31,7 +31,7 @@ class CommentsScreen extends Component {
 			<Screen>
 				<View style={styles.container}>
 					<Header navigation={navigation} />
-					<Query query={commentNotificationQuery}>
+					<Query query={commentNotificationQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.notifications)) return <SpinnerLoading />;

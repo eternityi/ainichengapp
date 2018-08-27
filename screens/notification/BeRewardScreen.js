@@ -48,7 +48,7 @@ class BeRewardScreen extends Component {
 							</TouchableOpacity>
 						}
 					/>
-					<Query query={tipNotificationsQuery}>
+					<Query query={tipNotificationsQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user)) return <SpinnerLoading />;

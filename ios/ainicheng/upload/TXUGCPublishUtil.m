@@ -24,8 +24,7 @@
     AudioBufferList audioBufferList;
     audioBufferList.mNumberBuffers = 1;
     audioBufferList.mBuffers[0].mNumberChannels=channels;
-    audioBufferList.mBuffers[0].mDataByteSize=len;
-    audioBufferList.mBuffers[0].mData = audioData;
+    audioBufferList.mBuffers[0].mDataByteSize=len;    audioBufferList.mBuffers[0].mData = audioData;
     
     AudioStreamBasicDescription asbd;
     asbd.mSampleRate        = sampleRate;

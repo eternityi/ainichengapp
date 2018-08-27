@@ -25,7 +25,7 @@ class BeLikedScreen extends Component {
 			<Screen>
 				<View style={styles.container}>
 					<Header navigation={this.props.navigation} />
-					<Query query={likeNotificationsQuery}>
+					<Query query={likeNotificationsQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.notifications)) return <SpinnerLoading />;

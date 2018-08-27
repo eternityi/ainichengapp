@@ -12,9 +12,7 @@ class VideoPlayer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: true, //视频加载中
-			over: false, //视频播放完毕
-			error: false, //视频出错
+			status: "loading", //视频播放状态
 			controlVisible: false, //控制器
 			paused: true, //视频是否暂停
 			currentTime: 0, //视频当前时间
@@ -54,7 +52,7 @@ class VideoPlayer extends Component {
 
 	render() {
 		let { video, isFullScreen, videoWidth, videoHeight } = this.props;
-		let { paused, loading, over, error } = this.state;
+		let { paused, status } = this.state;
 		return (
 			<View style={styles.playerContainer}>
 				<Video
@@ -84,7 +82,7 @@ class VideoPlayer extends Component {
 						onSwitchLayout={this.onSwitchLayout}
 					/>
 				</TouchableOpacity>
-				<VideoStatus isFullScreen={isFullScreen} loading={loading} over={over} error={error} replay={this.onReplayVideo} />
+				<VideoStatus isFullScreen={isFullScreen} status={status} replay={this.onReplayVideo} />
 			</View>
 		);
 	}
@@ -102,7 +100,7 @@ class VideoPlayer extends Component {
 		this.setState({
 			duration: data.duration,
 			paused: false,
-			loading: false
+			status: null
 		});
 	};
 
@@ -118,9 +116,8 @@ class VideoPlayer extends Component {
 	_onPlayEnd = () => {
 		console.log("_onPlayEnd");
 		this.setState({
-			currentTime: 0,
 			paused: true,
-			over: true,
+			status: "end",
 			controlVisible: false
 		});
 	};
@@ -128,23 +125,24 @@ class VideoPlayer extends Component {
 	_onPlayError = () => {
 		console.log("_onPlayError");
 		this.setState({
-			error: true
+			status: "error"
 		});
 	};
 
 	// 重播
 	onReplayVideo = () => {
 		this.videoRef.seek(0);
-		this.setState({
-			paused: false,
-			over: false,
-			error: false
-		});
+		setTimeout(() => {
+			this.setState({
+				currentTime: 0,
+				status: null,
+				paused: false
+			});
+		}, 0);
 	};
 
 	// video control visible
 	controlSwitch = () => {
-		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.setState(
 			prevState => ({ controlVisible: !prevState.controlVisible }),
 			() => {
@@ -157,13 +155,12 @@ class VideoPlayer extends Component {
 
 	// 播放/暂停
 	playButtonHandler = () => {
-		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.setState(
 			prevState => ({
 				paused: !prevState.paused
 			}),
 			() => {
-				// 点击播放后videoControl也5三秒后消失
+				// 点击播放后videoControl也5秒后消失
 				if (!this.state.paused) {
 					this.setControlInterval();
 				}
@@ -183,7 +180,6 @@ class VideoPlayer extends Component {
 
 	// 进度条值改变
 	onSliderValueChanged = currentTime => {
-		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.videoRef.seek(currentTime);
 		this.setState(
 			{
@@ -196,6 +192,7 @@ class VideoPlayer extends Component {
 
 	// 进度条定时器
 	setControlInterval = () => {
+		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.controlIntervel = setTimeout(() => {
 			this.setState({ controlVisible: false });
 		}, 5000);

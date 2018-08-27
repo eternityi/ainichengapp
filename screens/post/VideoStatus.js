@@ -8,12 +8,9 @@ import { Iconfont } from "../../utils/Fonts";
 
 class VideoStatus extends Component {
 	render() {
-		let { isFullScreen, loading, over, error, replay } = this.props;
-		if (!(loading || over || error)) {
-			return null;
-		}
-		switch (true) {
-			case error:
+		let { isFullScreen, status, replay } = this.props;
+		switch (status) {
+			case "error":
 				return (
 					<View style={styles.videoStatus}>
 						<TouchableWithoutFeedback onPress={replay}>
@@ -25,7 +22,7 @@ class VideoStatus extends Component {
 					</View>
 				);
 				break;
-			case loading:
+			case "loading":
 				return (
 					<View style={styles.videoStatus}>
 						<View style={styles.status}>
@@ -40,7 +37,7 @@ class VideoStatus extends Component {
 					</View>
 				);
 				break;
-			case over:
+			case "end":
 				return (
 					<View style={styles.videoStatus}>
 						<TouchableWithoutFeedback onPress={replay}>
@@ -52,6 +49,8 @@ class VideoStatus extends Component {
 					</View>
 				);
 				break;
+			default:
+				return null;
 		}
 	}
 }
