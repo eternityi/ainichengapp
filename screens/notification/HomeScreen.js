@@ -63,10 +63,19 @@ class HomeScreen extends React.Component {
                       iconName: "contribute",
                       unreads: data.user.unread_requests
                     })}
-                    {this._renderMessageMenu({
-                      name: "赞赏和付费",
-                      iconName: "coin",
-                      unreads: data.user.unread_tips
+                    {
+                      // 隐藏功能
+                      // this._renderMessageMenu({
+                      // name: "赞赏和付费",
+                      // iconName: "coin",
+                      // unreads: data.user.unread_tips
+                      // })
+                    }
+                    {// 替补
+                    this._renderMessageMenu({
+                      name: "全部关注",
+                      iconName: "star-outline",
+                      unreads: 0
                     })}
                     {this._renderMessageMenu({
                       name: "其它提醒",
