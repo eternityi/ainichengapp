@@ -134,7 +134,6 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
             // Note: CodePush updates should not be tested in Debug mode as they are overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
             buildConfigField "String", "CODEPUSH_KEY", '""'
         }
