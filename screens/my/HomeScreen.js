@@ -192,8 +192,8 @@ class HomeScreen extends React.Component {
   }
 
   navigateMiddlewear(routeName, params) {
-    let { navigation, users } = this.props;
-    if (users.login) {
+    let { navigation, login } = this.props;
+    if (login) {
       navigation.navigate(routeName, { ...params });
     } else {
       navigation.navigate("登录注册", { login: true });

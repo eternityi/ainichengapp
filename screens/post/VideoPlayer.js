@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity, BackHandler } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Video from "react-native-video";
 import Orientation from "react-native-orientation";
 
@@ -20,34 +20,8 @@ class VideoPlayer extends Component {
 		};
 	}
 
-	// 监听安卓物理返回键，横屏时点击回到竖屏，再次点击返回
-	componentDidMount() {
-		let { navigation } = this.props;
-		if (!Divice.isIos) {
-			this.didFocusSubscription = navigation.addListener("didFocus", payload => {
-				BackHandler.addEventListener("hardwareBackPress", this._backButtonPress);
-			});
-			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
-				BackHandler.removeEventListener("hardwareBackPress", this._backButtonPress);
-				//fix 退出页面视频还在播放的bug
-				this.playButtonHandler();
-			});
-		} else {
-			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
-				//fix 退出页面视频还在播放的bug
-				this.playButtonHandler();
-			});
-		}
-	}
-
 	componentWillUnmount() {
 		this.controlIntervel && clearTimeout(this.controlIntervel);
-		if (!Divice.isIos) {
-			this.didFocusSubscription.remove();
-			this.willBlurSubscription.remove();
-		} else {
-			this.willBlurSubscription.remove();
-		}
 	}
 
 	render() {
@@ -88,15 +62,15 @@ class VideoPlayer extends Component {
 	}
 
 	_onLoadStart = () => {
-		console.log("_onLoadStart");
+		// console.log("_onLoadStart");
 	};
 
 	_onBuffering = () => {
-		console.log("_onBuffering");
+		// console.log("_onBuffering");
 	};
 
 	_onLoaded = data => {
-		console.log("_onProgressChanged");
+		// console.log("_onProgressChanged");
 		this.setState({
 			duration: data.duration,
 			paused: false,
@@ -105,7 +79,7 @@ class VideoPlayer extends Component {
 	};
 
 	_onProgressChanged = data => {
-		console.log("_onProgressChanged");
+		// console.log("_onProgressChanged");
 		if (!this.state.paused) {
 			this.setState({
 				currentTime: data.currentTime
@@ -114,7 +88,7 @@ class VideoPlayer extends Component {
 	};
 
 	_onPlayEnd = () => {
-		console.log("_onPlayEnd");
+		// console.log("_onPlayEnd");
 		this.setState({
 			paused: true,
 			status: "end",
@@ -123,7 +97,7 @@ class VideoPlayer extends Component {
 	};
 
 	_onPlayError = () => {
-		console.log("_onPlayError");
+		// console.log("_onPlayError");
 		this.setState({
 			status: "error"
 		});
@@ -138,11 +112,12 @@ class VideoPlayer extends Component {
 				status: null,
 				paused: false
 			});
-		}, 0);
+		}, 10);
 	};
 
 	// video control visible
 	controlSwitch = () => {
+		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.setState(
 			prevState => ({ controlVisible: !prevState.controlVisible }),
 			() => {
@@ -155,6 +130,7 @@ class VideoPlayer extends Component {
 
 	// 播放/暂停
 	playButtonHandler = () => {
+		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.setState(
 			prevState => ({
 				paused: !prevState.paused
@@ -180,6 +156,7 @@ class VideoPlayer extends Component {
 
 	// 进度条值改变
 	onSliderValueChanged = currentTime => {
+		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.videoRef.seek(currentTime);
 		this.setState(
 			{
@@ -192,34 +169,24 @@ class VideoPlayer extends Component {
 
 	// 进度条定时器
 	setControlInterval = () => {
-		this.controlIntervel && clearInterval(this.controlIntervel);
 		this.controlIntervel = setTimeout(() => {
 			this.setState({ controlVisible: false });
 		}, 5000);
-	};
-
-	_backButtonPress = () => {
-		if (this.props.isFullScreen) {
-			Orientation.lockToPortrait();
-		} else {
-			this.props.navigation.goBack();
-		}
-		return true;
 	};
 
 	//外部调用
 	//播放
 	play = () => {
 		this.setState({
-			paused: true,
-			showVideoCover: false
+			paused: false
 		});
 	};
 
 	//暂停
 	pause = () => {
 		this.setState({
-			paused: false
+			paused: true,
+			controlVisible: true
 		});
 	};
 }

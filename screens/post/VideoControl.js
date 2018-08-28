@@ -1,7 +1,7 @@
 "use strict";
 
 import React, { Component } from "react";
-import { StyleSheet, View, Slider, TouchableWithoutFeedback, TouchableOpacity, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Slider, TouchableWithoutFeedback, TouchableOpacity, Text } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	pauseMark: {
-		width: 50,
-		height: 50,
+		width: 60,
+		height: 60,
 		alignItems: "center",
 		justifyContent: "center"
 	},

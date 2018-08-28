@@ -77,10 +77,7 @@ class HistoryScreen extends Component {
 	_historyItem = ({ item, index }) => {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity
-				style={styles.historyItem}
-				onPress={() => goContentScreen(navigation, { type: item.type.slice(0, -1), ...item.visited })}
-			>
+			<TouchableOpacity style={styles.historyItem} onPress={() => goContentScreen(navigation, { ...item.visited, type: item.type })}>
 				<View style={{ flex: 1, marginRight: 20 }}>
 					<Text style={styles.title} numberOflines={2}>
 						{item.visited.title ? item.visited.title : item.visited.description}

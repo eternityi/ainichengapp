@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar, BackHandler } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Orientation from "react-native-orientation";
 
@@ -44,8 +44,34 @@ class PostScreen extends Component {
 		};
 	}
 
-	// 离开该screen固定竖屏
+	// 监听安卓物理返回键，横屏时点击回到竖屏，再次点击返回
+	componentDidMount() {
+		let { navigation } = this.props;
+		if (!Divice.isIos) {
+			this.didFocusSubscription = navigation.addListener("didFocus", payload => {
+				BackHandler.addEventListener("hardwareBackPress", this._backButtonPress);
+			});
+			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
+				BackHandler.removeEventListener("hardwareBackPress", this._backButtonPress);
+				//fix 退出页面视频还在播放的bug
+				this.videoPlayer.pause();
+			});
+		} else {
+			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
+				//fix 退出页面视频还在播放的bug
+				this.videoPlayer.pause();
+			});
+		}
+	}
+
 	componentWillUnmount() {
+		if (!Divice.isIos) {
+			this.didFocusSubscription.remove();
+			this.willBlurSubscription.remove();
+		} else {
+			this.willBlurSubscription.remove();
+		}
+		// 离开该screen固定竖屏
 		Orientation.lockToPortrait();
 	}
 
@@ -90,6 +116,7 @@ class PostScreen extends Component {
 								>
 									{post.type == "video" && (
 										<VideoPlayer
+											ref={ref => (this.videoPlayer = ref)}
 											video={post}
 											isFullScreen={isFullScreen}
 											videoWidth={videoWidth}
@@ -275,11 +302,20 @@ class PostScreen extends Component {
 			});
 		} else {
 			this.setState({
-				videoWidth: width,
-				videoHeight: (width * 9) / 16,
+				videoWidth: Divice.width,
+				videoHeight: (Divice.width * 9) / 16,
 				isFullScreen: false
 			});
 		}
+	};
+
+	_backButtonPress = () => {
+		if (this.state.isFullScreen) {
+			Orientation.lockToPortrait();
+		} else {
+			this.props.navigation.goBack();
+		}
+		return true;
 	};
 }
 
