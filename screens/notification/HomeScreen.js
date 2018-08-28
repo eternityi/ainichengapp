@@ -22,10 +22,22 @@ class HomeScreen extends React.Component {
     };
   }
 
+  // 更新通知badge
+  updateUnreads = unreads => {
+    const { dispatch } = this.props;
+    let count;
+    let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_tips", "unread_others"];
+    keys.reduce((result, elem) => {
+      count = result;
+      return result + unreads[elem];
+    }, 0);
+    dispatch(actions.updateUnreads(count));
+  };
+
   render() {
     let { refreshing } = this.state;
-    const { navigation } = this.props;
-    var { login, user } = this.props.users;
+    const { navigation, login, user } = this.props;
+
     return (
       <Screen>
         <Header navigation={navigation} goBack={false} search />
@@ -36,11 +48,15 @@ class HomeScreen extends React.Component {
         >
           <View style={styles.menuWrap}>
             <Query query={unreadsQuery} pollInterval={10000}>
-              {({ loading, error, data }) => {
+              {({ loading, error, data, stopPolling }) => {
+                if (!login) {
+                  stopPolling();
+                }
                 if (!(data && data.user)) {
                   data = {};
                   data.user = {};
                 }
+                this.updateUnreads(data.user);
                 return (
                   <View style={styles.menuList}>
                     {this._renderMessageMenu({
@@ -103,7 +119,10 @@ class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
           <Query query={chatsQuery} pollInterval={10000}>
-            {({ loading, error, data, refetch }) => {
+            {({ loading, error, data, refetch, stopPolling }) => {
+              if (!login) {
+                stopPolling();
+              }
               if (!login) return <Diving customStyle={{ marginTop: 20 }} />;
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.user && data.user.chats && data.user.chats.length > 0)) return <Diving customStyle={{ marginTop: 20 }} />;
@@ -140,7 +159,7 @@ class HomeScreen extends React.Component {
   _keyExtractor = (item, index) => (item.key ? item.key : index.toString());
 
   _renderMessageMenu = item => {
-    let { user, login } = this.props.users;
+    let { user, login } = this.props;
     const { navigate } = this.props.navigation;
     return (
       <View style={{ width: (width - 30) / 3 }}>
@@ -276,4 +295,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(store => ({ users: store.users }))(withApollo(HomeScreen));
+export default connect(store => ({ user: store.users.user, login: store.users.login }))(withApollo(HomeScreen));

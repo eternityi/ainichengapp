@@ -15,7 +15,6 @@ query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilte
 query userResourceCountQuery($id: Int!) {
     user(id: $id) {
         count_likes
-        count_words
         count_articles
         count_follows
         count_followers
@@ -128,7 +127,6 @@ mutation signInMutation($email: String!, $password: String!) {
         avatar
         token
         introduction
-        count_words
         count_articles
         count_likes
         count_follows
@@ -151,7 +149,6 @@ mutation signUpMutation($email: String!, $password: String!, $name: String!) {
         avatar
         token
         introduction
-        count_words
         count_articles
         count_likes
         count_follows
@@ -207,7 +204,6 @@ query userDetailQuery($id: Int!, $offset: Int) {
         name
         avatar
         introduction
-        count_words
         count_articles
         count_likes
         count_follows

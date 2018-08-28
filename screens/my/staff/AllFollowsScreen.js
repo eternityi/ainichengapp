@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 
 import { Iconfont } from "../../../utils/Fonts";
-import Colors from "../../../constants/Colors";
+import { Colors, Methods } from "../../../constants";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { FollowedGroup } from "../../../components/MediaGroup";
 import { CustomPopoverMenu } from "../../../components/Modal";
@@ -98,9 +98,8 @@ class AllFollowsScreen extends Component {
 										return (
 											<TouchableOpacity
 												onPress={() =>
-													navigation.navigate(this.routeName(item.followed_type), {
-														[this.paramKey(item.followed_type)]: { ...item, id: item.followed_id }
-													})}
+													Methods.goContentScreen(navigation, { ...item, id: item.followed_id, type: item.followed_type })
+												}
 											>
 												<FollowedGroup follow={item} />
 											</TouchableOpacity>
@@ -161,34 +160,6 @@ class AllFollowsScreen extends Component {
 				break;
 			case "COLLECTION":
 				return "只看文集";
-				break;
-		}
-	};
-
-	routeName = followType => {
-		switch (followType) {
-			case "users":
-				return "用户详情";
-				break;
-			case "categories":
-				return "专题详情";
-				break;
-			case "collections":
-				return "文集详情";
-				break;
-		}
-	};
-
-	paramKey = followType => {
-		switch (followType) {
-			case "users":
-				return "user";
-				break;
-			case "categories":
-				return "category";
-				break;
-			case "collections":
-				return "collection";
 				break;
 		}
 	};

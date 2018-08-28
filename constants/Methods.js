@@ -6,7 +6,8 @@ import Colors from "./Colors";
 const divece = Dimensions.get("window");
 
 //navigation.dispatch(navigationAction)
-function navigationAction({ routeName, params = null, action = null, key = routeName + Math.random().toString() }) {
+// 路由名称，参数，导航动作，key唯一可以防止重复调整
+function navigationAction({ routeName, params = null, action = null, key = params ? Math.random().toString() : routeName }) {
 	return NavigationActions.navigate({
 		routeName,
 		params,
@@ -31,24 +32,31 @@ function goContentScreen(navigation, data) {
 	let params;
 	switch (type) {
 		case "video":
-			routeName = "动态详情";
-			params = { post: data };
-			break;
+		case "videos":
 		case "post":
+		case "posts":
 			routeName = "动态详情";
 			params = { post: data };
 			break;
 		case "article":
+		case "articles":
 			routeName = "文章详情";
 			params = { article: data };
 			break;
 		case "category":
+		case "categories":
 			routeName = "专题详情";
 			params = { category: data };
 			break;
 		case "collection":
+		case "collections":
 			routeName = "文集详情";
 			params = { collection: data };
+			break;
+		case "user":
+		case "users":
+			routeName = "用户详情";
+			params = { user: data };
 			break;
 	}
 	navigation.dispatch(navigationAction({ routeName, params }));

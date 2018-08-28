@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import OfficialColumn from "../../components/Category/OfficialColumn";
 
-import Colors from "../../constants/Colors";
+import { Colors, Methods } from "../../constants";
 import { official_categories } from "../../constants/AppData";
 
 class OfficialCategories extends React.Component {
@@ -42,24 +42,25 @@ class OfficialCategories extends React.Component {
 	}
 
 	_renderColumnItem = ({ item, index }) => {
-		const { navigate } = this.props.navigation;
 		return (
-			<TouchableOpacity
-				key={index}
-				style={{ flex: 1 }}
-				onPress={() =>
-					navigate(
-						item.type,
-						item.type == "专题详情"
-							? { category: item }
-							: { filter: item.filter }
-					)
-				}
-			>
+			<TouchableOpacity key={index} style={{ flex: 1 }} onPress={() => this.onPress(item)}>
 				<OfficialColumn data={item} />
 			</TouchableOpacity>
 		);
 	};
+
+	onPress(item) {
+		const { login, navigation } = this.props;
+		let params = { category: item };
+		let routeName = item.type;
+		if (item.type == "全部关注") {
+			params = { filter: item.filter };
+			if (!login) {
+				routeName = "登录注册";
+			}
+		}
+		navigation.dispatch(Methods.navigationAction({ routeName, params }));
+	}
 }
 
 const styles = StyleSheet.create({

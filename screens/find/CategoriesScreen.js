@@ -44,7 +44,7 @@ class CategoriesScreen extends React.Component {
   }
 
   render() {
-    let { navigation } = this.props;
+    let { navigation, login } = this.props;
     return (
       <View style={styles.container}>
         <Query query={topCategoriesQuery}>
@@ -58,7 +58,7 @@ class CategoriesScreen extends React.Component {
                 }}
                 removeClippedSubviews
                 data={data.categories}
-                ListHeaderComponent={() => <OfficialCategories navigation={navigation} />}
+                ListHeaderComponent={() => <OfficialCategories login={login} navigation={navigation} />}
                 keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
                 renderItem={this._renderCategoryItem}
                 refreshing={loading}
@@ -143,5 +143,5 @@ const styles = StyleSheet.create({
 
 export default compose(
   withApollo,
-  connect(store => ({ categories: store.categories }))
+  connect(store => ({ categories: store.categories, login: store.users.login }))
 )(CategoriesScreen);

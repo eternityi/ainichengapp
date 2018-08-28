@@ -4,27 +4,22 @@ export const users = Record({
 	login: false,
 	count_unreads: 0,
 	user: {
-		// id: 1996,
-		// name: "眸若止水",
-		// email: "wang@haxibiao.com",
-		// avatar: "https://dongmeiwei.com/images/xbx.jpg",
-		// cover: "https://dongmeiwei.com/images/app/cover05.jpg",
-		// token: null,
-		// introduction: "可以说是非常的完美了~~",
-		// reward_description: "谁稀罕你的臭钱？？？",
-		// count_words: 26800,
-		// count_likes: 228,
-		// count_articles: 68,
-		// count_follows: 98,
-		// count_followings: 5200,
-		// count_drafts: 10,
-		// collect_articles: 28,
-		// count_favorites: 16,
-		// purchased_content: 0,
-		// count_categories: 3,
-		// count_collections: 6,
-		// count_followed_books: 22,
-		// balance: 99.0
+		id: 1996,
+		name: "眸若止水",
+		email: "wang@haxibiao.com",
+		avatar: "https://dongmeiwei.com/images/xbx.jpg",
+		cover: "https://dongmeiwei.com/images/app/cover05.jpg",
+		token: null,
+		introduction: "可以说是非常的完美了~~",
+		count_likes: 228,
+		count_articles: 68,
+		count_follows: 98,
+		count_followings: 5200,
+		count_drafts: 10,
+		count_favorites: 16,
+		count_categories: 3,
+		count_collections: 6,
+		balance: 99.0
 	},
 	// 关注（作者） 订阅（专题、文集） 喜欢（文章、评论） 发表 文章 评论@ 不@
 	dynamic: [
@@ -82,7 +77,8 @@ export const users = Record({
 			article: {
 				id: 7,
 				title: "简单美味的蛋包饭",
-				description: "蛋包饭是日本一种比较普通且很受亲睐的主食，一种由蛋皮包裹炒饭而成的饭料理。一般是将打匀的蛋汁倒入平底锅煎成厚薄均匀的蛋皮，再放上炒好的炒饭、韩式辣椒酱、番茄酱、色拉油和其他各种材料包好制成。"
+				description:
+					"蛋包饭是日本一种比较普通且很受亲睐的主食，一种由蛋皮包裹炒饭而成的饭料理。一般是将打匀的蛋汁倒入平底锅煎成厚薄均匀的蛋皮，再放上炒好的炒饭、韩式辣椒酱、番茄酱、色拉油和其他各种材料包好制成。"
 			},
 			time: "03-05 11:45"
 		},

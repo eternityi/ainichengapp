@@ -25,29 +25,36 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    // 请求数据更新 user resource
-    let { users, client, dispatch } = this.props;
-    if (users.user && users.user.id) {
-      client
-        .query({
-          query: userResourceCountQuery,
-          variables: {
-            id: users.user.id
-          }
-        })
-        .then(({ data }) => {
-          dispatch(actions.updateUserResource(data.user));
-        })
-        .catch(error => {
-          console.log("error", error);
-        });
-    }
+    let { navigation } = this.props;
+    this.didFocusSubscription = navigation.addListener("didFocus", payload => {
+      let { user, client, dispatch } = this.props;
+      if (user && user.id) {
+        client
+          .query({
+            query: userResourceCountQuery,
+            variables: {
+              id: user.id
+            },
+            fetchPolicy: "network-only"
+          })
+          .then(({ data }) => {
+            console.log("data", data);
+            dispatch(actions.updateUserResource(data.user));
+          })
+          .catch(error => {
+            console.log("error", error);
+          });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
   }
 
   render() {
     let { modalVisible } = this.state;
-    const { navigation, users } = this.props;
-    var { user, login } = users;
+    const { navigation, user, login } = this.props;
     return (
       <Screen>
         <View style={styles.container}>
@@ -82,21 +89,18 @@ class HomeScreen extends React.Component {
                 <View style={styles.columnItem}>
                   <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>私密作品</Text>
-                  <Text style={styles.columnQuantity}>{user.count_drafts || ""}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.navigateMiddlewear("我的收藏")}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的收藏</Text>
-                  <Text style={styles.columnQuantity}>{user.count_favorites || ""}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我喜欢的</Text>
-                  <Text style={styles.columnQuantity}>{user.count_likes || ""}</Text>
                 </View>
               </TouchableOpacity>
               {
@@ -105,7 +109,6 @@ class HomeScreen extends React.Component {
                 //   <View style={[styles.columnItem, styles.noBorder]}>
                 //     <Iconfont name={"diamond"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                 //     <Text style={styles.columnType}>已购内容</Text>
-                //     <Text style={styles.columnQuantity}>{user.purchased_content || ""}</Text>
                 //   </View>
                 // </TouchableOpacity>
               }
@@ -116,21 +119,18 @@ class HomeScreen extends React.Component {
                 <View style={styles.columnItem}>
                   <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的专题</Text>
-                  <Text style={styles.columnQuantity}>{user.count_categories || ""}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.navigateMiddlewear("个人文集", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"collection"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>我的文集</Text>
-                  <Text style={styles.columnQuantity}>{user.count_collections || ""}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.navigateMiddlewear("关注的专题和文集", { user })}>
                 <View style={styles.columnItem}>
                   <Iconfont name={"followed"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                   <Text style={styles.columnType}>关注的专题/文集</Text>
-                  <Text style={styles.columnQuantity}>{""}</Text>
                 </View>
               </TouchableOpacity>
               {
@@ -256,5 +256,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => {
-  return { users: store.users };
+  return { user: store.users.user, login: store.users.login };
 })(withApollo(HomeScreen));

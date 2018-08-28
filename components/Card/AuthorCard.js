@@ -44,7 +44,7 @@ class AuthorCard extends Component {
 									color: Color.tintFontColor
 								}}
 							>
-								{user.introduction || "此人很潇洒，没有留下信息~~~"}
+								{user.introduction || "TA还没有freestyle"}
 							</Text>
 						</View>
 					</View>
