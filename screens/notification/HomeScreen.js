@@ -20,18 +20,24 @@ class HomeScreen extends React.Component {
     this.state = {
       refreshing: false
     };
+    this.count_unreads = null;
   }
+
+  syncUnreads = () => {
+    const { dispatch } = this.props;
+    dispatch(actions.updateUnreads(this.count_unreads));
+  };
 
   // 更新通知badge
   updateUnreads = unreads => {
-    const { dispatch } = this.props;
     let count;
     let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_tips", "unread_others"];
     keys.reduce((result, elem) => {
       count = result;
       return result + unreads[elem];
     }, 0);
-    dispatch(actions.updateUnreads(count));
+    this.count_unreads = count;
+    setTimeout(this.syncUnreads, 0);
   };
 
   render() {
@@ -57,6 +63,7 @@ class HomeScreen extends React.Component {
                   data.user = {};
                 }
                 this.updateUnreads(data.user);
+                console.log("data.user", data.user);
                 return (
                   <View style={styles.menuList}>
                     {this._renderMessageMenu({
