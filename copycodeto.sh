@@ -90,13 +90,15 @@ echo "  - fix android ..."
 sed -i -e "s/$from/$to/g" "../$to/android/app/src/main/java/com/$to/MainApplication.java"
 
 echo "  - fix ios ..."
+/bin/cp -rf ./ios/Podfile ../$to/ios/
+sed -i -e "s/$from/$to/g" "../$to/ios/Podfile"
 /bin/cp -rf ./ios/$from/Info.plist ../$to/ios/$to/
 sed -i -e "s/$from/$to/g" "../$to/ios/$to/Info.plist"
 sed -i -e "s/$appname_from/$appname_to/g" "../$to/ios/$to/Info.plist"
 
 /bin/cp -rf ./ios/$from.xcodeproj/project.pbxproj ../$to/ios/$to.xcodeproj/project.pbxproj
 sed -i -e "s/$from/$to/g" "../$to/ios/$to.xcodeproj/project.pbxproj"
-echo " ... replacing codepush keys ..."
+# echo " ... replacing codepush keys ..."
 sed -i -e "s/$codepush_key_ios_staging_ainicheng/$codepush_key_ios_staging_to/g" "../$to/ios/$to.xcodeproj/project.pbxproj"
 sed -i -e "s/$codepush_key_ios_production_ainicheng/$codepush_key_ios_production_to/g" "../$to/ios/$to.xcodeproj/project.pbxproj"
 
