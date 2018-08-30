@@ -1,5 +1,5 @@
 <resources>
-    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">3ZKVNwn-ZI51M39cUMjT-zZdWzgt44729bcd-65c1-4f12-8e60-bc400cd168b8</string>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">JwCu5_BgwwxjjzAjqQ1K6iLvykWBr1hmRyyD7</string>
     <string name="app_name">爱你城</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">ALWAYS_SEND</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">ALWAYS_SEND</string>
