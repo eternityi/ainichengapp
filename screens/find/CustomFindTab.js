@@ -1,6 +1,6 @@
 import React from "react";
 import Search from "../../components/Header/Search";
-import Color from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button, FlatList, StatusBar } from "react-native";
 
 export default class CustomFindTab extends React.Component {
@@ -42,12 +42,12 @@ const styles = {
     tab: {
         paddingLeft: 15,
         paddingRight: 20,
-        height: 70,
-        paddingTop: 24,
+        height: Divice.HEADER_HEIGHT,
+        paddingTop: Divice.STATUSBAR_HEIGHT,
         paddingBottom: 2,
         borderBottomWidth: 1,
-        borderBottomColor: Color.tintBorderColor,
-        backgroundColor: Color.skinColor,
+        borderBottomColor: Colors.tintBorderColor,
+        backgroundColor: Colors.skinColor,
         flexDirection: "row",
         alignItems: "center"
     },

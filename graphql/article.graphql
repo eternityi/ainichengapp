@@ -160,6 +160,12 @@ query articleQuery($id: Int!) {
 			height
 		}
 		cover
+		video {
+			info {
+				height
+				width
+			}
+		}
 		video_url
 		user {
 			id

@@ -25,7 +25,7 @@ class VideoPlayer extends Component {
 	}
 
 	render() {
-		let { video, isFullScreen, videoWidth, videoHeight } = this.props;
+		let { video, isFullScreen, videoWidth, videoHeight, isPortrait } = this.props;
 		let { paused, status } = this.state;
 		return (
 			<View style={styles.playerContainer}>
@@ -50,13 +50,14 @@ class VideoPlayer extends Component {
 				<TouchableOpacity activeOpacity={1} onPress={this.controlSwitch} style={styles.controlContainer}>
 					<VideoControl
 						{...this.state}
+						isPortrait={isPortrait}
 						isFullScreen={isFullScreen}
 						playButtonHandler={this.playButtonHandler}
 						onSliderValueChanged={this.onSliderValueChanged}
 						onSwitchLayout={this.onSwitchLayout}
 					/>
 				</TouchableOpacity>
-				<VideoStatus isFullScreen={isFullScreen} status={status} replay={this.onReplayVideo} />
+				<VideoStatus isLandscape={isPortrait || isFullScreen} status={status} replay={this.onReplayVideo} />
 			</View>
 		);
 	}

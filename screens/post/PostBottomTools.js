@@ -1,14 +1,13 @@
 "use strict";
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { userOperationMiddleware, numberFormat } from "../../constants/Methods";
 
 import { likeArticleMutation } from "../../graphql/user.graphql";
 import { Query, Mutation } from "react-apollo";
-
-const { width, height } = Dimensions.get("window");
 
 class PostBottomTools extends Component {
 	render() {
@@ -68,9 +67,9 @@ class PostBottomTools extends Component {
 
 const styles = StyleSheet.create({
 	BottomTools: {
-		width,
+		height: Divice.BOTTOM_BAR_HEIGHT,
+		width: Divice.width,
 		paddingHorizontal: 10,
-		paddingVertical: 4,
 		borderTopWidth: 1,
 		borderTopColor: Colors.lightBorderColor,
 		backgroundColor: Colors.skinColor,

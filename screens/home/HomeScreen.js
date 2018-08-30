@@ -88,7 +88,6 @@ class HomeScreen extends React.Component {
                   ref={scrollview => {
                     this.scrollview = scrollview;
                   }}
-                  removeClippedSubviews
                   ListHeaderComponent={() => <ListHeader navigation={navigation} />}
                   refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                   data={data.articles}

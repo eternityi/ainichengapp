@@ -51,12 +51,12 @@ class CategoriesScreen extends React.Component {
           {({ loading, error, data, fetchMore, refetch }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.categories)) return null;
+
             return (
               <FlatList
                 ref={scrollview => {
                   this.scrollview = scrollview;
                 }}
-                removeClippedSubviews
                 data={data.categories}
                 ListHeaderComponent={() => <OfficialCategories login={login} navigation={navigation} />}
                 keyExtractor={(item, index) => (item.key ? item.key : index.toString())}

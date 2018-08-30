@@ -17,8 +17,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { userOperationMiddleware } from "../../constants/Methods";
+import { Colors, Divice, Methods } from "../../constants";
 import NoteItem from "../../components/Article/NoteItem";
 import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
@@ -30,9 +29,6 @@ import { connect } from "react-redux";
 import { Query, Mutation, graphql, compose } from "react-apollo";
 import { createChatMutation } from "../../graphql/chat.graphql";
 import { userDetailQuery, blockUserMutation, blockedUsersQuery } from "../../graphql/user.graphql";
-
-const { width, height } = Dimensions.get("window");
-const HEADER_HEIGHT = 70;
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -57,22 +53,22 @@ class HomeScreen extends Component {
     const self = user.id == personal.id;
     let { fetchingMore, backdropVisible, reportVisible, avatarViewerVisible, shareModalVisible, offsetTop } = this.state;
     let headerTransparence = offsetTop.interpolate({
-      inputRange: [0, HEADER_HEIGHT * 2],
+      inputRange: [0, Divice.HEADER_HEIGHT * 2],
       outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
       extrapolate: "clamp"
     });
     let lightHeaderOpacity = offsetTop.interpolate({
-      inputRange: [0, HEADER_HEIGHT],
+      inputRange: [0, Divice.HEADER_HEIGHT],
       outputRange: [1, 0],
       extrapolate: "clamp"
     });
     let darkHeaderOpacity = offsetTop.interpolate({
-      inputRange: [HEADER_HEIGHT, HEADER_HEIGHT * 2],
+      inputRange: [Divice.HEADER_HEIGHT, Divice.HEADER_HEIGHT * 2],
       outputRange: [0, 1],
       extrapolate: "clamp"
     });
     return (
-      <Screen noPadding>
+      <Screen>
         <Query query={userDetailQuery} variables={{ id: user.id }}>
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
@@ -90,6 +86,7 @@ class HomeScreen extends Component {
                     fetch();
                   }}
                   keyExtractor={(item, index) => index.toString()}
+                  scrollEventThrottle={16}
                   onScroll={Animated.event([
                     {
                       nativeEvent: { contentOffset: { y: offsetTop } }
@@ -133,7 +130,7 @@ class HomeScreen extends Component {
                       navigation={navigation}
                       routeName={user.name}
                       customStyle={styles.customStyle}
-                      lightTabBar
+                      lightBar
                       rightComponent={this._headerRight("#fff", user, self)}
                     />
                   </Animated.View>
@@ -346,8 +343,8 @@ class HomeScreen extends Component {
             imageUrls={[
               {
                 url: user.avatar,
-                width,
-                height: width,
+                width: Divice.width,
+                height: Divice.width,
                 resizeMode: "cover"
               }
             ]}
@@ -386,7 +383,7 @@ class HomeScreen extends Component {
   // 举报模态框
   handleReportVisible() {
     let { login, navigation } = this.props;
-    userOperationMiddleware({
+    Methods.userOperationMiddleware({
       login,
       navigation,
       action: () => this.setState(prevState => ({ reportVisible: !prevState.reportVisible }))
@@ -408,7 +405,7 @@ class HomeScreen extends Component {
   // 加入黑名单
   putBlacklist(id) {
     let { login, navigation, blockUserMutation } = this.props;
-    userOperationMiddleware({
+    Methods.userOperationMiddleware({
       login,
       navigation,
       action: () => {
@@ -432,7 +429,7 @@ class HomeScreen extends Component {
   // 发信息
   chatting(user) {
     let { login, navigation } = this.props;
-    userOperationMiddleware({
+    Methods.userOperationMiddleware({
       login,
       navigation,
       action: () =>
@@ -467,7 +464,7 @@ const styles = StyleSheet.create({
     marginRight: 3
   },
   backdrop: {
-    width,
+    width: Divice.width,
     height: 160
   },
   userInfo: {
@@ -534,9 +531,8 @@ const styles = StyleSheet.create({
   },
   header: {
     position: "absolute",
-    width,
-    height: HEADER_HEIGHT,
-    paddingTop: 24
+    width: Divice.width,
+    height: Divice.HEADER_HEIGHT
   },
   customStyle: { backgroundColor: "transparent", borderBottomColor: "transparent" }
 });

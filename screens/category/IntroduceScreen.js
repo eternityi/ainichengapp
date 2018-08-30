@@ -32,7 +32,7 @@ class IntroduceScreen extends Component {
 		return (
 			<Screen customStyle={{ backgroundColor: Colors.nightColor }} lightBar>
 				<View style={styles.container}>
-					<Header navigation={navigation} customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }} lightTabBar />
+					<Header navigation={navigation} customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }} lightBar />
 					<ScrollView style={styles.visitingCardContainer}>
 						<View style={styles.visitingCard}>
 							<View style={{ alignItems: "center" }}>

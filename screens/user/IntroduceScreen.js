@@ -40,7 +40,7 @@ class IntroduceScreen extends Component {
 								<Header
 									navigation={navigation}
 									customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
-									lightTabBar
+									lightBar
 								/>
 								<ScrollView style={styles.visitingCardContainer}>
 									<View style={styles.visitingCard}>

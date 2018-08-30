@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, Text, FlatList } from "react
 import Modal from "react-native-modal";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
 
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, HeaderLeft } from "../../components/Header";
 import { Avatar } from "../../components/Pure";
@@ -37,7 +37,7 @@ class PostHeader extends Component {
 
   render() {
     let { reportModalVisible } = this.state;
-    let { navigation, post, share, personal, login } = this.props;
+    let { navigation, post, share, personal, login, lightBar } = this.props;
     let { user, time_ago } = post;
     let self = personal.id == user.id ? true : false;
     return (
@@ -46,19 +46,22 @@ class PostHeader extends Component {
           return (
             <View>
               <Header
+                customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
                 navigation={navigation}
                 leftComponent={
-                  <HeaderLeft navigation={navigation} routeName={true}>
+                  <HeaderLeft navigation={navigation} routeName={true} color={lightBar ? "#fff" : "#515151"}>
                     <TouchableOpacity style={{ marginRight: 6 }} onPress={() => navigation.navigate("用户详情", { user })}>
                       <Avatar size={30} uri={user.avatar} />
                     </TouchableOpacity>
-                    <Text style={styles.name}>{user.name}</Text>
+                    <Text style={[styles.name, lightBar && { color: "#fff" }]}>{user.name}</Text>
                     <FollowButton
                       plain
-                      outline
                       id={user.id}
                       type={"user"}
-                      customStyle={styles.followWrap}
+                      customStyle={lightBar ? styles.transparentButton : styles.fillButton}
+                      fontColor={lightBar ? "#fff" : null}
+                      theme={lightBar ? "transparent" : Colors.weixinColor}
+                      under={lightBar ? "transparent" : Colors.darkGray}
                       status={user.followed_status}
                       fontSize={user.followed_status == 2 ? 13 : 14}
                     />
@@ -96,7 +99,7 @@ class PostHeader extends Component {
                             break;
                         }
                       }}
-                      triggerComponent={<Iconfont name={"more-vertical"} size={23} color={Colors.tintFontColor} />}
+                      triggerComponent={<Iconfont name={"more-vertical"} size={23} color={lightBar ? "#fff" : Colors.tintFontColor} />}
                     >
                       {self ? (
                         <View>
@@ -157,11 +160,19 @@ const styles = StyleSheet.create({
     color: Colors.primaryFontColor,
     marginLeft: 6
   },
-  followWrap: {
+  fillButton: {
     width: 66,
     height: 28,
     marginLeft: 15,
     borderRadius: 15
+  },
+  transparentButton: {
+    width: 66,
+    height: 28,
+    marginLeft: 15,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#fff"
   }
 });
 
