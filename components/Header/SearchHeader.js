@@ -44,8 +44,8 @@ class SearchHeader extends Component {
 const styles = StyleSheet.create({
   searchWrap: {
     flex: 1,
-    height: 36,
-    borderRadius: 18,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: Colors.lightGray,
     flexDirection: "row",
     alignItems: "center",

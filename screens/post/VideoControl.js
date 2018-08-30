@@ -8,7 +8,17 @@ import { Iconfont } from "../../utils/Fonts";
 
 class VideoControl extends Component {
 	render() {
-		let { controlVisible, currentTime, duration, paused, isFullScreen, onSliderValueChanged, playButtonHandler, onSwitchLayout } = this.props;
+		let {
+			controlVisible,
+			currentTime,
+			duration,
+			paused,
+			isPortrait,
+			isFullScreen,
+			onSliderValueChanged,
+			playButtonHandler,
+			onSwitchLayout
+		} = this.props;
 		if (!controlVisible) {
 			return null;
 		}
@@ -20,7 +30,7 @@ class VideoControl extends Component {
 					</TouchableOpacity>
 				)}
 				<TouchableWithoutFeedback style={styles.pauseMark} onPress={playButtonHandler}>
-					<Iconfont name={paused ? "play" : "paused"} size={isFullScreen ? 50 : 40} color="#fff" />
+					<Iconfont name={paused ? "play" : "paused"} size={isFullScreen || isPortrait ? 50 : 40} color="#fff" />
 				</TouchableWithoutFeedback>
 				<View style={styles.bottomControl}>
 					<Text style={styles.timeText}>{formatTime(currentTime)}</Text>
@@ -35,9 +45,11 @@ class VideoControl extends Component {
 						onValueChange={onSliderValueChanged}
 					/>
 					<Text style={styles.timeText}>{formatTime(duration)}</Text>
-					<TouchableOpacity activeOpacity={1} onPress={onSwitchLayout} style={styles.layoutButton}>
-						<Iconfont name={isFullScreen ? "fullscreen" : "exitFullscreen"} size={20} color="#fff" />
-					</TouchableOpacity>
+					{!isPortrait && (
+						<TouchableOpacity activeOpacity={1} onPress={onSwitchLayout} style={styles.layoutButton}>
+							<Iconfont name={isFullScreen ? "fullscreen" : "exitFullscreen"} size={20} color="#fff" />
+						</TouchableOpacity>
+					)}
 				</View>
 			</View>
 		);

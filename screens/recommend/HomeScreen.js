@@ -86,9 +86,6 @@ class HomeScreen extends React.Component {
     let { navigation } = this.props;
     return (
       <View>
-        <View style={{ paddingHorizontal: 15, paddingVertical: 5 }}>
-          <SearchBar navigation={navigation} />
-        </View>
         <View style={styles.recommendClassify}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("推荐作者")}>
             <View style={{ alignItems: "center" }}>
@@ -195,9 +192,7 @@ const styles = StyleSheet.create({
   recommendClassify: {
     height: 90,
     flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: Colors.lightBorderColor
+    alignItems: "center"
   },
   classify: {
     fontSize: 13,

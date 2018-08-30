@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 
 class HeaderLeft extends Component {
   render() {
@@ -10,7 +10,8 @@ class HeaderLeft extends Component {
     return (
       <View style={styles.headerLeft}>
         {goBack && (
-          <TouchableOpacity
+          <TouchableWithoutFeedback
+            style={styles.goBack}
             onPress={() => {
               if (backHandler) {
                 backHandler();
@@ -20,7 +21,7 @@ class HeaderLeft extends Component {
             }}
           >
             <Iconfont name={"back-ios"} size={23} color={color} style={{ marginRight: 15 }} />
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
         )}
         <Text style={{ fontSize: 17, color }}>{routeName ? routeName : navigation.state.routeName}</Text>
         {children}

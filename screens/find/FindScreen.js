@@ -1,5 +1,5 @@
 import React from "react";
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { TabNavigator, TabBarTop } from "react-navigation";
 import { Text, View, Platform } from "react-native";
 
@@ -31,8 +31,8 @@ export default TabNavigator(
         borderBottomWidth: 1,
         borderBottomColor: Colors.lightBorderColor,
         elevation: 0,
-        height: 70,
-        paddingTop: 24,
+        height: Divice.HEADER_HEIGHT,
+        paddingTop: Divice.STATUSBAR_HEIGHT,
         paddingLeft: 15
       },
       indicatorStyle: {
@@ -48,9 +48,6 @@ export default TabNavigator(
       tabStyle: {
         width: 50,
         paddingHorizontal: 0
-      },
-      tabBarOnPress: ({ scene, jumpToIndex }) => {
-        console.log("tabBarOnPress");
       }
     },
     tabBarComponent: props => <TabBarTop {...props} />

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar, BackHandler } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar, BackHandler, Animated } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import Orientation from "react-native-orientation";
 
@@ -8,7 +8,6 @@ import VideoPlayer from "./VideoPlayer";
 import RewardPanel from "./RewardPanel";
 import PostBottomTools from "./PostBottomTools";
 import Comments from "../article/comment/Comments";
-import BeSelectedCategory from "../article/BeSelectedCategory";
 import Screen from "../Screen";
 import { Colors, Divice, Methods } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
@@ -40,7 +39,8 @@ class PostScreen extends Component {
 			addCommentVisible: false,
 			shareModalVisible: false,
 			imageViewerVisible: false,
-			initImage: 0 //图片预览模式下首先打开的图片索引
+			initImage: 0, //图片预览模式下首先打开的图片索引
+			offsetTop: new Animated.Value(0)
 		};
 	}
 
@@ -54,12 +54,12 @@ class PostScreen extends Component {
 			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
 				BackHandler.removeEventListener("hardwareBackPress", this._backButtonPress);
 				//fix 退出页面视频还在播放的bug
-				this.videoPlayer.pause();
+				this.videoPlayer && this.videoPlayer.pause();
 			});
 		} else {
 			this.willBlurSubscription = navigation.addListener("willBlur", payload => {
 				//fix 退出页面视频还在播放的bug
-				this.videoPlayer.pause();
+				this.videoPlayer && this.videoPlayer.pause();
 			});
 		}
 	}
@@ -84,70 +84,97 @@ class PostScreen extends Component {
 			addCommentVisible,
 			shareModalVisible,
 			imageViewerVisible,
-			initImage
+			initImage,
+			offsetTop
 		} = this.state;
 		let { navigation, login } = this.props;
 		const post = navigation.getParam("post", {});
+		let bottomToolsOffset = offsetTop.interpolate({
+			inputRange: [0, Divice.BOTTOM_BAR_HEIGHT],
+			outputRange: [-Divice.BOTTOM_BAR_HEIGHT, 0],
+			extrapolate: "clamp"
+		});
+		let headerBackground = offsetTop.interpolate({
+			inputRange: [Divice.height - Divice.HEADER_HEIGHT * 2, Divice.height - Divice.HEADER_HEIGHT],
+			outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
+			extrapolate: "clamp"
+		});
+		let lightHeaderOpacity = offsetTop.interpolate({
+			inputRange: [Divice.height - Divice.HEADER_HEIGHT * 3, Divice.height - Divice.HEADER_HEIGHT * 2],
+			outputRange: [1, 0],
+			extrapolate: "clamp"
+		});
+		let darkHeaderOpacity = offsetTop.interpolate({
+			inputRange: [Divice.height - Divice.HEADER_HEIGHT * 2, Divice.height - Divice.HEADER_HEIGHT],
+			outputRange: [0, 1],
+			extrapolate: "clamp"
+		});
 		return (
-			<Screen noPadding={isFullScreen}>
+			<Screen>
 				<Query query={articleQuery} variables={{ id: post.id }}>
 					{({ loading, error, data, refetch }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (loading) return <SpinnerLoading />;
 						if (!(data && data.article)) return <BlankContent />;
 						let post = data.article;
-						let { body, pictures, user, categories, category, count_tips, count_replies, time_ago, hits } = post;
+						let { type, body, pictures, user, categories, category, count_tips, count_replies, time_ago, hits, video } = post;
+						this.isPortrait = video && video.info && video.info.width < video.info.height;
 						this.pictures = pictures.map((elem, index) => {
 							return { url: elem.url };
 						});
 						return (
 							<View style={styles.container} onLayout={event => this._onLayout(post, event)}>
-								{post.type !== "video" && (
-									<StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
-								)}
-								{!isFullScreen && <PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />}
+								{type !== "video" && <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />}
+								{!isFullScreen &&
+									!this.isPortrait && (
+										<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
+									)}
 								<ScrollView
 									style={styles.container}
+									onScroll={Animated.event([
+										{
+											nativeEvent: { contentOffset: { y: offsetTop } }
+										}
+									])}
 									bounces={false}
 									scrollEnabled={!isFullScreen}
 									ref={ref => (this.scrollRef = ref)}
 									keyboardShouldPersistTaps={"handled"}
 									scrollEventThrottle={16}
 								>
-									{post.type == "video" && (
+									{type == "video" && (
 										<VideoPlayer
 											ref={ref => (this.videoPlayer = ref)}
 											video={post}
 											isFullScreen={isFullScreen}
-											videoWidth={videoWidth}
-											videoHeight={videoHeight}
+											isPortrait={this.isPortrait}
+											videoWidth={this.isPortrait ? Divice.width : videoWidth}
+											videoHeight={this.isPortrait ? Divice.height : videoHeight}
 											navigation={navigation}
 										/>
 									)}
 									<View style={{ padding: 15 }}>
-										{body && (
+										{body ? (
 											<View style={{ marginBottom: 15 }}>
 												<Text style={styles.body}>{body}</Text>
 											</View>
-										)}
+										) : null}
 										{pictures.length > 0 && this.renderImages(pictures)}
-										{post.type == "article" ? (
-											<BeSelectedCategory categories={categories} navigation={navigation} />
-										) : (
-											category && (
-												<View style={{ marginBottom: 10 }}>
-													<Text
-														style={styles.category}
-														onPress={() => Methods.goContentScreen(navigation, { ...category, type: "category" })}
-													>
-														#{category.name}
-													</Text>
-												</View>
-											)
+										{category && (
+											<View style={{ marginBottom: 10 }}>
+												<Text
+													style={styles.category}
+													onPress={() => Methods.goContentScreen(navigation, { ...category, type: "category" })}
+												>
+													#{category.name}
+												</Text>
+											</View>
 										)}
-										<View>
-											<Text style={styles.time_ago}>{time_ago}</Text>
-										</View>
+										{time_ago ? (
+											<View>
+												<Text style={styles.time_ago}>{time_ago}</Text>
+											</View>
+										) : null}
 									</View>
 									<RewardPanel
 										navigation={navigation}
@@ -163,16 +190,34 @@ class PostScreen extends Component {
 										toggleCommentModal={this.toggleAddCommentVisible}
 									/>
 								</ScrollView>
+								{this.isPortrait && (
+									<Animated.View style={[styles.headPosition, { backgroundColor: headerBackground }]}>
+										<Animated.View style={[styles.headPosition, { opacity: lightHeaderOpacity }]}>
+											<PostHeader
+												lightBar
+												navigation={navigation}
+												post={post}
+												share={this.handleSlideShareMenu}
+												login={login}
+											/>
+										</Animated.View>
+										<Animated.View style={[styles.headPosition, { opacity: darkHeaderOpacity }]}>
+											<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
+										</Animated.View>
+									</Animated.View>
+								)}
 								{!isFullScreen && (
-									<PostBottomTools
-										post={post}
-										login={login}
-										navigation={navigation}
-										toggleCommentModal={this.toggleAddCommentVisible}
-										handleRewardVisible={this.handleRewardVisible}
-										handleSlideShareMenu={this.handleSlideShareMenu}
-										scrollToComment={this._scrollToComment}
-									/>
+									<Animated.View style={[this.isPortrait && { ...styles.toolsPosition, bottom: bottomToolsOffset }]}>
+										<PostBottomTools
+											post={post}
+											login={login}
+											navigation={navigation}
+											toggleCommentModal={this.toggleAddCommentVisible}
+											handleRewardVisible={this.handleRewardVisible}
+											handleSlideShareMenu={this.handleSlideShareMenu}
+											scrollToComment={this._scrollToComment}
+										/>
+									</Animated.View>
 								)}
 								<RewardModal visible={rewardVisible} handleVisible={this.handleRewardVisible} article={post} />
 							</View>
@@ -194,6 +239,7 @@ class PostScreen extends Component {
 	}
 
 	renderImages(images) {
+		// 单张图片计算比例自适应
 		if (images.length == 1) {
 			let size = Methods.imageSize({ width: images[0].width, height: images[0].height }, MAX_WIDTH);
 			return (
@@ -224,9 +270,6 @@ class PostScreen extends Component {
 									});
 								}}
 							>
-								{
-									// TODO：wyk, 需要给图片宽高下面控制下
-								}
 								<Image source={{ uri: picture.url }} style={[styles.gridImage]} />
 							</TouchableOpacity>
 						);
@@ -284,28 +327,35 @@ class PostScreen extends Component {
 		}
 	};
 
-	/// 屏幕旋转时宽高会发生变化，可以在onLayout的方法中做处理，比监听屏幕旋转更加及时获取宽高变化
+	//屏幕旋转时宽高会发生变化，可以在onLayout的方法中做处理，比监听屏幕旋转更加及时获取宽高变化
 	_onLayout = (post, event) => {
-		if (post.type !== "video") {
-			return;
-		}
-		// 让scrollview滚动到顶部并且禁止滚动
-		this.scrollRef.scrollTo({ x: 0, y: 0, animated: true });
-		//获取根View的宽高，通过宽高来判断横竖屏
-		let { width, height } = event.nativeEvent.layout;
-		let isLandscape = width > height;
-		if (isLandscape) {
-			this.setState({
-				videoWidth: Divice.height,
-				videoHeight: Divice.width,
-				isFullScreen: true
-			});
-		} else {
-			this.setState({
-				videoWidth: Divice.width,
-				videoHeight: (Divice.width * 9) / 16,
-				isFullScreen: false
-			});
+		if (post.type == "video") {
+			let { width, height } = event.nativeEvent.layout;
+			//该视频比例为手机长视频
+			if (this.isPortrait) {
+				// this.setState({
+				// 	videoWidth: width,
+				// 	videoHeight: height
+				// });
+				return;
+			}
+			// 让scrollview滚动到顶部并且禁止滚动
+			this.scrollRef.scrollTo({ x: 0, y: 0, animated: true });
+			//通过View的宽高来判断横竖屏
+			let isLandscape = width > height;
+			if (isLandscape) {
+				this.setState({
+					videoWidth: Divice.height,
+					videoHeight: Divice.width,
+					isFullScreen: true
+				});
+			} else {
+				this.setState({
+					videoWidth: Divice.width,
+					videoHeight: (Divice.width * 9) / 16,
+					isFullScreen: false
+				});
+			}
 		}
 	};
 
@@ -359,6 +409,19 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.tintGray,
 		marginLeft: IMG_INTERVAL,
 		marginTop: IMG_INTERVAL
+	},
+	headPosition: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		height: Divice.HEADER_HEIGHT
+	},
+	toolsPosition: {
+		position: "absolute",
+		left: 0,
+		right: 0,
+		bottom: 0
 	}
 });
 

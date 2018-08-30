@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, Platform } from "react-native";
 import { withNavigation } from "react-navigation";
 
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import HeaderLeft from "./HeaderLeft";
 import Search from "./Search";
 import NotificationSetting from "./NotificationSetting";
@@ -24,7 +24,7 @@ class Header extends React.Component {
 			notification = false,
 			setting = false,
 			search = false,
-			lightTabBar = false,
+			lightBar = false,
 			customStyle = {},
 			searchRouteName = "搜索中心"
 		} = this.props;
@@ -38,7 +38,7 @@ class Header extends React.Component {
 						routeName={routeName}
 						backHandler={backHandler}
 						goBack={goBack}
-						color={lightTabBar ? "#fff" : "#515151"}
+						color={lightBar ? "#fff" : "#515151"}
 					/>
 				)}
 				{rightComponent ? (
@@ -57,7 +57,7 @@ class Header extends React.Component {
 						)}
 						{search && (
 							<View style={{ marginLeft: 15 }}>
-								<Search navigation={navigation} color={lightTabBar ? "#fff" : "#515151"} routeName={searchRouteName} />
+								<Search navigation={navigation} color={lightBar ? "#fff" : "#515151"} routeName={searchRouteName} />
 							</View>
 						)}
 					</View>
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
 	header: {
 		// height: Platform.OS === "ios" ? 65 : 45,
 		// paddingTop: Platform.OS === "ios" ? 20 : 0,
-		height: 46,
+		paddingTop: Divice.STATUSBAR_HEIGHT,
+		height: Divice.HEADER_HEIGHT,
 		paddingHorizontal: 15,
 		flexDirection: "row",
 		alignItems: "center",

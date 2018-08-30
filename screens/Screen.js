@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-
 import { StyleSheet, View, StatusBar } from "react-native";
+
+import { Divice } from "../constants";
 
 class Screen extends Component {
 	render() {
-		let { noPadding, customStyle = {}, lightBar } = this.props;
+		let { customStyle = {}, lightBar } = this.props;
 		return (
 			<View
 				style={[
 					{
 						flex: 1,
-						paddingTop: noPadding ? 0 : 24,
 						backgroundColor: "#ffffff"
 					},
 					customStyle

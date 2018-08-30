@@ -1,18 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  Button,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableHighlight,
-  Image,
-  Platform,
-  Keyboard
-} from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform, Keyboard } from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -57,7 +45,6 @@ class CreatePostScreen extends React.Component {
       completed: false,
       body: "",
       covers: [],
-      routeName: "　",
       uri: "",
       uploadType: 1,
       selectCategories: category.name == null ? [] : [category],
@@ -68,27 +55,15 @@ class CreatePostScreen extends React.Component {
   }
 
   render() {
-    let {
-      covers,
-      routeName,
-      completed,
-      progress,
-      uploadId,
-      uploadType,
-      uri,
-      selectCategories,
-      category_ids,
-      waitingVisible,
-      body
-    } = this.state;
+    let { covers, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible, body } = this.state;
     const { navigation } = this.props;
     return (
       <Screen>
         <View style={styles.container}>
           <Header
             navigation={navigation}
-            routeName={routeName}
-            customStyle={{ height: 25, alignItems: "flex-start", borderBottomColor: Colors.skinColor }}
+            routeName
+            customStyle={{ borderBottomColor: Colors.skinColor }}
             leftComponent={
               <TouchableOpacity
                 onPress={() => {
@@ -375,8 +350,7 @@ class CreatePostScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.skinColor,
-    paddingTop: 24
+    backgroundColor: Colors.skinColor
   }
 });
 export default compose(

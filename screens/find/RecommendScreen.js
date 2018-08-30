@@ -34,9 +34,10 @@ class RecommendScreen extends React.Component {
     };
   };
 
-  state = {
-    fetchingMore: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = { fetchingMore: true };
+  }
 
   componentWillMount() {
     this.props.navigation.setParams({
@@ -57,7 +58,6 @@ class RecommendScreen extends React.Component {
                 ref={scrollview => {
                   this.scrollview = scrollview;
                 }}
-                removeClippedSubviews
                 ListHeaderComponent={() => {
                   return (
                     <View>

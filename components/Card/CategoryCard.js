@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { StyleSheet, View, Text, TouchableWithoutFeedback, Platform } from "react-native";
 import { withNavigation } from "react-navigation";
 
@@ -7,7 +7,7 @@ import { Avatar } from "../../components/Pure";
 import { FollowButton } from "../../components/Button";
 import { navigationAction } from "../../constants/Methods";
 
-class CategoryCard extends Component {
+class CategoryCard extends PureComponent {
 	render() {
 		let { category, navigation } = this.props;
 		let { id, logo, name, description, count_follows, followed } = category;
