@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Slider, TouchableWithoutFeedback, TouchableOpacity, Text } from "react-native";
 
-import Colors from "../../constants/Colors";
+import { Colors, Methods } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 
 class VideoControl extends Component {
@@ -33,7 +33,7 @@ class VideoControl extends Component {
 					<Iconfont name={paused ? "play" : "paused"} size={isFullScreen || isPortrait ? 50 : 40} color="#fff" />
 				</TouchableWithoutFeedback>
 				<View style={styles.bottomControl}>
-					<Text style={styles.timeText}>{formatTime(currentTime)}</Text>
+					<Text style={styles.timeText}>{Methods.formatTime(currentTime)}</Text>
 					<Slider
 						style={{ flex: 1, marginHorizontal: 10 }}
 						maximumTrackTintColor="rgba(225,225,225,0.5)" //滑块右侧轨道的颜色
@@ -44,7 +44,7 @@ class VideoControl extends Component {
 						maximumValue={Number(duration)}
 						onValueChange={onSliderValueChanged}
 					/>
-					<Text style={styles.timeText}>{formatTime(duration)}</Text>
+					<Text style={styles.timeText}>{Methods.formatTime(duration)}</Text>
 					{!isPortrait && (
 						<TouchableOpacity activeOpacity={1} onPress={onSwitchLayout} style={styles.layoutButton}>
 							<Iconfont name={isFullScreen ? "fullscreen" : "exitFullscreen"} size={20} color="#fff" />
@@ -54,21 +54,6 @@ class VideoControl extends Component {
 			</View>
 		);
 	}
-}
-
-function formatTime(second) {
-	let h = 0,
-		i = 0,
-		s = parseInt(second);
-	if (s > 60) {
-		i = parseInt(s / 60);
-		s = parseInt(s % 60);
-	}
-	// 补零
-	let zero = function(v) {
-		return v >> 0 < 10 ? "0" + v : v;
-	};
-	return [zero(h), zero(i), zero(s)].join(":");
 }
 
 const styles = StyleSheet.create({

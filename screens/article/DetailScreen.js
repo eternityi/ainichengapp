@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, Dimensions, FlatList, Modal, StatusBar } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import HTML from "react-native-render-html";
 
 import Screen from "../Screen";
-import Colors from "../../constants/Colors";
-import { imageSize } from "../../constants/Methods";
+import { Colors, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 import PostHeader from "../post/PostHeader";
 import BeSelectedCategory from "./BeSelectedCategory";
@@ -22,9 +21,7 @@ import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 import { articleQuery } from "../../graphql/article.graphql";
 
-const { width, height } = Dimensions.get("window");
-
-const IMG_WIDTH = width - 30;
+const IMG_WIDTH = Divice.width - 30;
 
 class DetailScreen extends Component {
   constructor(props) {
@@ -33,8 +30,9 @@ class DetailScreen extends Component {
     this.handleRewardVisible = this.handleRewardVisible.bind(this);
     this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
     this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
-    this.footOffsetY = height;
-    this.commentsOffsetY = height;
+    this.footOffsetY = Divice.height;
+    this.commentsOffsetY = 0;
+    this.commentsHeight = 0;
     this.state = {
       showWrite: false,
       addCommentVisible: false,
@@ -88,7 +86,7 @@ class DetailScreen extends Component {
                   <View style={{ paddingHorizontal: 15 }}>
                     <HTML
                       html={article.body}
-                      imagesMaxWidth={width}
+                      imagesMaxWidth={Divice.width}
                       baseFontStyle={{
                         fontSize: 15,
                         color: Colors.primaryFontColor
@@ -105,7 +103,7 @@ class DetailScreen extends Component {
                           this.imgKey++;
                           let width = htmlAttribs.width ? parseInt(htmlAttribs.width) : IMG_WIDTH;
                           let height = htmlAttribs.height ? parseInt(htmlAttribs.height) : IMG_WIDTH;
-                          let size = imageSize({ width, height }, IMG_WIDTH);
+                          let size = imageSize({ width, height });
                           return (
                             <TouchableOpacity
                               activeOpacity={1}
@@ -233,14 +231,15 @@ class DetailScreen extends Component {
 
   //获取评论区域到顶部的高度
   _commentsOnLayout(event) {
-    let { x, y, width, height } = event.nativeEvent.layout;
+    let { y, height } = event.nativeEvent.layout;
     this.commentsOffsetY = y;
+    this.commentsHeight = height;
   }
 
   //scrollView 滚动事件
   _onScroll(event) {
     let { y } = event.nativeEvent.contentOffset;
-    if (y >= this.footOffsetY - height) {
+    if (y >= this.footOffsetY - Divice.height) {
       if (!this.state.showWrite) this.setState({ showWrite: true });
     } else {
       if (this.state.showWrite) this.setState({ showWrite: false });
@@ -248,13 +247,17 @@ class DetailScreen extends Component {
   }
 
   //滚动到评论顶部
-  _scrollToComments() {
-    this.scrollRef.scrollTo({
-      x: 0,
-      y: this.commentsOffsetY,
-      animated: true
-    });
-  }
+  _scrollToComments = () => {
+    if (this.commentsHeight >= Divice.height) {
+      this.scrollRef.scrollTo({
+        x: 0,
+        y: this.commentsOffsetY,
+        animated: true
+      });
+    } else {
+      this.scrollRef.scrollToEnd({ animated: true });
+    }
+  };
 
   //分享slide
   handleSlideShareMenu() {
@@ -262,6 +265,17 @@ class DetailScreen extends Component {
       shareModalVisible: !prevState.shareModalVisible
     }));
   }
+}
+
+function imageSize({ width, height }) {
+  var size = {};
+  if (width > Divice.width) {
+    size.width = Divice.width;
+    size.height = Math.round((Divice.width * height) / width);
+  } else {
+    size = { width, height };
+  }
+  return size;
 }
 
 //html targets style

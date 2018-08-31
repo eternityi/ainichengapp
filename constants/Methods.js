@@ -28,8 +28,7 @@ function userOperationMiddleware({ login, action, navigation }) {
 //查看内容详情页
 function goContentScreen(navigation, data) {
 	let { type } = data;
-	let routeName;
-	let params;
+	let routeName, params, key;
 	switch (type) {
 		case "video":
 		case "videos":
@@ -59,10 +58,13 @@ function goContentScreen(navigation, data) {
 			params = { user: data };
 			break;
 	}
-	navigation.dispatch(navigationAction({ routeName, params }));
+	if (data.id) {
+		key = routeName + data.id;
+	}
+	navigation.dispatch(navigationAction({ routeName, params, key }));
 }
 
-// 数字格式化
+// 数字进制格式化
 function numberFormat(number) {
 	number = parseFloat(number);
 	if (number >= 10000) {
@@ -70,6 +72,22 @@ function numberFormat(number) {
 	} else {
 		return number;
 	}
+}
+
+// 时间格式化
+function formatTime(second) {
+	let h = 0,
+		i = 0,
+		s = parseInt(second);
+	if (s > 60) {
+		i = parseInt(s / 60);
+		s = parseInt(s % 60);
+	}
+	// 补零
+	let zero = function(v) {
+		return v >> 0 < 10 ? "0" + v : v;
+	};
+	return [zero(h), zero(i), zero(s)].join(":");
 }
 
 // response images
@@ -132,4 +150,4 @@ function toast(message, timeout = 2000) {
 	}, timeout);
 }
 
-export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, imageSize, toast };
+export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, formatTime, imageSize, toast };

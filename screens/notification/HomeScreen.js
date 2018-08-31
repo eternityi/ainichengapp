@@ -34,11 +34,10 @@ class HomeScreen extends React.Component {
     let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_tips", "unread_others"];
     keys.reduce((result, elem) => {
       let number = unreads[elem] ? unreads[elem] : 0;
-      count = result + number;
+      count = result + parseInt(number);
       return count;
     }, 0);
     this.count_unreads = count;
-    console.log("this.count_unreads", this.count_unreads);
     setTimeout(this.syncUnreads, 0);
   };
 
@@ -67,7 +66,6 @@ class HomeScreen extends React.Component {
                 if (data && data.user && login) {
                   this.updateUnreads(data.user);
                 }
-                console.log("data.user", data.user);
                 return (
                   <View style={styles.menuList}>
                     {this._renderMessageMenu({

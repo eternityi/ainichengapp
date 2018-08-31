@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import OfficialColumn from "../../components/Category/OfficialColumn";
@@ -7,6 +7,10 @@ import { Colors, Methods } from "../../constants";
 import { official_categories } from "../../constants/AppData";
 
 class OfficialCategories extends React.Component {
+	shouldComponentUpdate(nextProps, nextState) {
+		return false;
+	}
+
 	render() {
 		return (
 			<View style={styles.officialWrap}>
@@ -53,13 +57,14 @@ class OfficialCategories extends React.Component {
 		const { login, navigation } = this.props;
 		let params = { category: item };
 		let routeName = item.type;
+		let key = routeName + item.id;
 		if (item.type == "全部关注") {
 			params = { filter: item.filter };
 			if (!login) {
 				routeName = "登录注册";
 			}
 		}
-		navigation.dispatch(Methods.navigationAction({ routeName, params }));
+		navigation.dispatch(Methods.navigationAction({ routeName, params, key }));
 	}
 }
 

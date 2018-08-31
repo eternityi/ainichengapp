@@ -30,7 +30,8 @@ class PostScreen extends Component {
 		this.handleRewardVisible = this.handleRewardVisible.bind(this);
 		this.handleSlideShareMenu = this.handleSlideShareMenu.bind(this);
 		this.toggleAddCommentVisible = this.toggleAddCommentVisible.bind(this);
-		this.commentsOffsetY = Divice.height;
+		this.commentsOffsetY = 0;
+		this.commentsHeight = 0;
 		this.state = {
 			isFullScreen: false,
 			videoWidth: Divice.width,
@@ -310,13 +311,14 @@ class PostScreen extends Component {
 
 	//获取评论区域到顶部的高度
 	_commentsOnLayout = event => {
-		let { y } = event.nativeEvent.layout;
+		let { y, height } = event.nativeEvent.layout;
 		this.commentsOffsetY = y;
+		this.commentsHeight = height;
 	};
 
 	//滚动到评论顶部
 	_scrollToComment = () => {
-		if (this.commentsOffsetY >= Divice.height) {
+		if (this.commentsHeight >= Divice.height) {
 			this.scrollRef.scrollTo({
 				x: 0,
 				y: this.commentsOffsetY,
