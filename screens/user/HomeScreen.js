@@ -18,7 +18,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import { Colors, Divice, Methods } from "../../constants";
-import NoteItem from "../../components/Article/NoteItem";
+import PostItem from "../../components/Article/PostItem";
 import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
 import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
@@ -355,7 +355,7 @@ class HomeScreen extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    return <NoteItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
+    return <PostItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
   };
 
   _onScroll(event) {

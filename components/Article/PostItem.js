@@ -1,80 +1,125 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight, TouchableOpacity, ImageBackground } from "react-native";
+import { StyleSheet, View, Image, Text, FlatList, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import PostToolBar from "./PostToolBar";
 import { Avatar, VideoCover } from "../Pure";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { navigationAction, goContentScreen } from "../../constants/Methods";
+import { Colors, Methods, Divice } from "../../constants";
 
-const { height, width } = Dimensions.get("window");
-const IMG_INTERVAL = 8;
-const COVER_WIDTH = width - 30;
-const IMG_WIDTH = (width - 46) / 3;
+const IMG_SPACE = 3;
+const COVER_WIDTH = Divice.width;
 
 class PostItem extends PureComponent {
 	render() {
 		const { post, navigation, toggleShareModal } = this.props;
-		let { type, user, time_ago, title, description, images, cover, has_image } = post;
+		let { type, user, time_ago, title, description, images, cover, category, hits, count_likes, count_replies } = post;
 		return (
-			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => goContentScreen(navigation, post)}>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => Methods.goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
-					<View style={styles.layoutFlexRow}>
+					<View style={[styles.layoutFlexRow, { paddingHorizontal: 15 }]}>
 						<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
-							<Avatar size={30} uri={user.avatar} />
+							<Avatar size={38} uri={user.avatar} />
 						</TouchableOpacity>
-						<Text style={styles.userName}>{user.name}</Text>
-						<Text style={styles.timeAgo}>{time_ago}</Text>
+						<View style={styles.user}>
+							<Text style={styles.userName}>{user.name}</Text>
+							<Text style={styles.timeAgo}>{time_ago}</Text>
+						</View>
 					</View>
-					{type == "article" ? (
-						<View style={styles.abstract}>
-							<Text numberOfLines={2} style={styles.title}>
-								{title}
-							</Text>
-							{description ? (
-								<Text numberOfLines={2} style={styles.description}>
-									{description}
+					{this.renderContent(type, title, description)}
+					{images && images.length > 0 && <View style={{ marginTop: 10 }}>{this.renderImage(type, images, cover)}</View>}
+					{
+						// <View style={{ paddingHorizontal: 15 }}>
+						// 隐藏功能
+						// <PostToolBar
+						// 	post={post}
+						// 	navigation={navigation}
+						// 	skip={() => Methods.goContentScreen(navigation, post)}
+						// 	toggleShareModal={toggleShareModal}
+						// />
+						// </View>
+					}
+					<View style={styles.footer}>
+						{category ? (
+							<TouchableWithoutFeedback
+								onPress={() => navigation.dispatch(Methods.navigationAction({ routeName: "专题详情", params: { category } }))}
+							>
+								<View>
+									<Text style={styles.categoryName}>#{category.name}</Text>
+								</View>
+							</TouchableWithoutFeedback>
+						) : null}
+						<View style={styles.layoutFlexRow}>
+							{hits > 0 && (
+								<Text style={styles.metaCount}>
+									{hits || 0}
+									次查看
 								</Text>
-							) : null}
+							)}
+							{count_likes > 0 && (
+								<Text style={styles.metaCount}>
+									{"· " + count_likes || 0}
+									人喜欢
+								</Text>
+							)}
+							{count_replies > 0 && (
+								<Text style={styles.metaCount}>
+									{"· " + count_replies || 0}
+									条评论
+								</Text>
+							)}
 						</View>
-					) : (
-						<View style={styles.abstract}>
-							<Text numberOfLines={2} style={styles.title}>
-								{title ? title : description}
-							</Text>
-						</View>
-					)}
-					<View>{has_image && this.renderImage(type, images, cover)}</View>
-					<PostToolBar
-						post={post}
-						navigation={navigation}
-						skip={() => goContentScreen(navigation, post)}
-						toggleShareModal={toggleShareModal}
-					/>
+					</View>
 				</View>
 			</TouchableHighlight>
 		);
 	}
 
+	renderContent = (type, title, description) => {
+		if (type == "article") {
+			return (
+				<View style={styles.abstract}>
+					<Text numberOfLines={2} style={styles.title}>
+						{title}
+					</Text>
+					{description ? (
+						<Text numberOfLines={2} style={styles.description}>
+							{description}
+						</Text>
+					) : null}
+				</View>
+			);
+		} else {
+			return (
+				<View style={styles.abstract}>
+					<Text numberOfLines={2} style={styles.title}>
+						{title ? title : description}
+					</Text>
+				</View>
+			);
+		}
+	};
+
 	renderImage = (type, images, cover) => {
+		let images_length = images.length;
 		if (type == "video") {
 			return (
 				<View style={styles.coverWrap}>
 					<VideoCover width={COVER_WIDTH} height={(COVER_WIDTH * 9) / 16} cover={cover} />
 				</View>
 			);
-		} else if (images.length == 1) {
+		} else if (type == "article") {
 			return (
 				<View style={styles.coverWrap}>
 					<Image style={styles.cover} source={{ uri: cover }} />
 				</View>
 			);
-		} else if (images.length > 1) {
+		} else if (type == "post") {
+			let sizeArr = Methods.imgsLayoutSize(images_length, IMG_SPACE);
 			return (
-				<View style={[styles.gridView, styles.layoutFlexRow]}>
-					{images.slice(0, 3).map(function(img, i) {
-						if (img) return <Image style={[styles.gridImage, styles.imgWrap]} source={{ uri: img }} key={i} />;
+				<View style={[styles.layoutFlexRow, styles.gridView]}>
+					{images.slice(0, 9).map(function(img, i) {
+						if (img) return <Image style={[sizeArr[i], styles.gridImage]} source={{ uri: img }} key={i} />;
 					})}
 				</View>
 			);
@@ -86,8 +131,7 @@ const styles = StyleSheet.create({
 	postContainer: {
 		flex: 1,
 		backgroundColor: Colors.skinColor,
-		paddingHorizontal: 15,
-		paddingTop: 10,
+		paddingTop: 20,
 		borderBottomWidth: 6,
 		borderBottomColor: Colors.lightBorderColor
 	},
@@ -95,27 +139,17 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center"
 	},
+	user: {
+		marginLeft: 10
+	},
 	userName: {
 		fontSize: 14,
-		marginHorizontal: 10,
-		color: Colors.primaryFontColor
+		color: Colors.darkFontColor
 	},
 	timeAgo: {
-		fontSize: 14,
+		fontSize: 12,
+		marginTop: 6,
 		color: Colors.tintFontColor
-	},
-	cover: {
-		width: COVER_WIDTH,
-		height: COVER_WIDTH * 0.5,
-		resizeMode: "cover"
-	},
-	gridView: {
-		marginLeft: -IMG_INTERVAL
-	},
-	gridImage: {
-		width: IMG_WIDTH,
-		height: IMG_WIDTH,
-		resizeMode: "cover"
 	},
 	coverWrap: {
 		borderTopWidth: 1,
@@ -124,15 +158,24 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.tintGray,
 		overflow: "hidden"
 	},
-	imgWrap: {
-		borderWidth: 1,
+	cover: {
+		width: COVER_WIDTH,
+		height: COVER_WIDTH * 0.5,
+		resizeMode: "cover"
+	},
+	gridView: {
+		flexWrap: "wrap",
+		marginLeft: -IMG_SPACE,
+		marginTop: -IMG_SPACE
+	},
+	gridImage: {
+		resizeMode: "cover",
 		borderColor: Colors.lightBorderColor,
-		backgroundColor: Colors.tintGray,
-		marginLeft: IMG_INTERVAL
+		backgroundColor: Colors.tintGray
 	},
 	abstract: {
-		marginTop: 15,
-		marginBottom: 10
+		paddingHorizontal: 15,
+		marginTop: 15
 	},
 	title: {
 		fontSize: 16,
@@ -144,6 +187,23 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		lineHeight: 20,
 		color: Colors.tintFontColor
+	},
+	footer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		paddingHorizontal: 15,
+		paddingVertical: 10
+	},
+	categoryName: {
+		fontSize: 14,
+		fontWeight: "500",
+		color: Colors.themeColor
+	},
+	metaCount: {
+		fontSize: 13,
+		color: Colors.lightFontColor,
+		marginLeft: 3
 	}
 });
 

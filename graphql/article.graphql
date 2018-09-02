@@ -248,6 +248,7 @@ query hotArticlesQuery($offset: Int) {
 		cover
 		description
 		time_ago
+		liked
 		user {
 			id
 			name

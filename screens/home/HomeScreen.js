@@ -7,7 +7,7 @@ import { Colors, Config, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 import { Header, RecommendFollow } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import CoverItem from "../../components/Article/CoverItem";
+import PostItem from "../../components/Article/PostItem";
 import ListHeader from "./ListHeader";
 
 import { connect } from "react-redux";
@@ -92,7 +92,7 @@ class HomeScreen extends React.Component {
                   refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                   data={data.articles}
                   keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
-                  renderItem={({ item, index }) => <CoverItem post={item} />}
+                  renderItem={({ item, index }) => <PostItem post={item} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
                     if (data.articles) {

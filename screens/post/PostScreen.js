@@ -19,9 +19,7 @@ import actions from "../../store/actions";
 import { Query, Mutation } from "react-apollo";
 import { articleQuery } from "../../graphql/article.graphql";
 
-const MAX_WIDTH = Divice.width - 30;
-const IMG_INTERVAL = 8;
-const IMG_SIZE = (MAX_WIDTH - 16) / 3;
+const IMG_SPACE = 3;
 
 class PostScreen extends Component {
 	constructor(props) {
@@ -154,28 +152,24 @@ class PostScreen extends Component {
 											navigation={navigation}
 										/>
 									)}
-									<View style={{ padding: 15 }}>
+									<View>
 										{body ? (
-											<View style={{ marginBottom: 15 }}>
+											<View style={{ margin: 15 }}>
 												<Text style={styles.body}>{body}</Text>
 											</View>
 										) : null}
-										{pictures.length > 0 && this.renderImages(pictures)}
-										{category && (
-											<View style={{ marginBottom: 10 }}>
+										{pictures && pictures.length > 0 && this.renderImages(pictures)}
+										<View style={styles.meta}>
+											{category && (
 												<Text
 													style={styles.category}
 													onPress={() => Methods.goContentScreen(navigation, { ...category, type: "category" })}
 												>
 													#{category.name}
 												</Text>
-											</View>
-										)}
-										{time_ago ? (
-											<View>
-												<Text style={styles.time_ago}>{time_ago}</Text>
-											</View>
-										) : null}
+											)}
+											{time_ago ? <Text style={styles.time_ago}>{time_ago}</Text> : null}
+										</View>
 									</View>
 									<RewardPanel
 										navigation={navigation}
@@ -240,9 +234,10 @@ class PostScreen extends Component {
 	}
 
 	renderImages(images) {
+		let images_length = images.length;
 		// 单张图片计算比例自适应
-		if (images.length == 1) {
-			let size = Methods.imageSize({ width: images[0].width, height: images[0].height }, MAX_WIDTH);
+		if (images_length == 1) {
+			let size = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
@@ -257,21 +252,22 @@ class PostScreen extends Component {
 				</TouchableOpacity>
 			);
 		} else {
+			let sizeArr = Methods.imgsLayoutSize(images_length, IMG_SPACE);
 			return (
 				<View style={styles.gridView}>
-					{this.pictures.map((picture, index) => {
+					{images.map((img, i) => {
 						return (
 							<TouchableOpacity
 								activeOpacity={1}
-								key={index}
+								key={i}
 								onPress={() => {
 									this.setState({
 										imageViewerVisible: true,
-										initImage: index
+										initImage: i
 									});
 								}}
 							>
-								<Image source={{ uri: picture.url }} style={[styles.gridImage]} />
+								<Image source={{ uri: img.url }} style={[sizeArr[i], styles.gridImage]} />
 							</TouchableOpacity>
 						);
 					})}
@@ -381,6 +377,7 @@ const styles = StyleSheet.create({
 		lineHeight: 22,
 		color: Colors.darkFontColor
 	},
+	meta: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", margin: 15 },
 	category: {
 		fontSize: 15,
 		lineHeight: 20,
@@ -396,21 +393,15 @@ const styles = StyleSheet.create({
 	},
 	gridView: {
 		flexDirection: "row",
-		flexWrap: "nowrap",
+		flexWrap: "wrap",
 		alignItems: "center",
-		marginLeft: -IMG_INTERVAL,
-		marginTop: -IMG_INTERVAL,
-		marginBottom: 15
+		marginLeft: -IMG_SPACE,
+		marginTop: -IMG_SPACE
 	},
 	gridImage: {
-		width: IMG_SIZE,
-		height: IMG_SIZE,
 		resizeMode: "cover",
-		borderWidth: 1,
 		borderColor: Colors.lightBorderColor,
-		backgroundColor: Colors.tintGray,
-		marginLeft: IMG_INTERVAL,
-		marginTop: IMG_INTERVAL
+		backgroundColor: Colors.tintGray
 	},
 	headPosition: {
 		position: "absolute",

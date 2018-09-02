@@ -66,12 +66,14 @@ class HomeScreen extends Component {
 						<TouchableOpacity onPress={() => this.navigateMiddlewear("编辑个人资料")}>
 							<SettingItem itemName="编辑个人资料" />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
-							<SettingItem itemName="赞赏设置" />
-						</TouchableOpacity>
-						<TouchableOpacity onPress={this.handleFontModalVisible}>
-							<SettingItem itemName="字号设置" />
-						</TouchableOpacity>
+						{
+							// <TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
+							// 	<SettingItem itemName="赞赏设置" />
+							// </TouchableOpacity>
+							// <TouchableOpacity onPress={this.handleFontModalVisible}>
+							// 	<SettingItem itemName="字号设置" />
+							// </TouchableOpacity>
+						}
 						<TouchableOpacity onPress={() => this.navigateMiddlewear("黑名单")}>
 							<SettingItem itemName="黑名单" endItem />
 						</TouchableOpacity>

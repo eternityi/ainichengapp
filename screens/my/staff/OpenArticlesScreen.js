@@ -17,6 +17,7 @@ class OpenArticlesScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.handleModal = this.handleModal.bind(this);
+		this.article = {};
 		this.state = {
 			fetchingMore: true,
 			modalVisible: false
@@ -87,57 +88,96 @@ class OpenArticlesScreen extends Component {
 										{removeArticle => {
 											return (
 												<OperationModal
-													operation={["编辑", "删除文章", "投稿管理", "转为私密", "文集设置"]}
+													operation={
+														this.article.type == "post"
+															? ["删除", "转为私密"]
+															: ["编辑", "删除", "投稿管理", "转为私密", "文集设置"]
+													}
 													visible={modalVisible}
 													handleVisible={this.handleModal}
 													handleOperation={index => {
 														this.handleModal();
-														switch (index) {
-															case 0:
-																navigation.navigate("创作", {
-																	article: this.article
-																});
-																break;
-															case 1:
-																removeArticle({
-																	variables: {
-																		id: this.article.id
-																	},
-																	refetchQueries: result => [
-																		{
-																			query: userArticlesQuery,
-																			variables: {
-																				user_id: user.id
+														if (this.article.type == "post") {
+															switch (index) {
+																case 0:
+																	removeArticle({
+																		variables: {
+																			id: this.article.id
+																		},
+																		refetchQueries: result => [
+																			{
+																				query: userArticlesQuery,
+																				variables: {
+																					user_id: user.id
+																				}
 																			}
-																		}
-																	]
-																});
-																break;
-															case 2:
-																navigation.navigate("投稿管理", {
-																	article: this.article
-																});
-																break;
-															case 3:
-																unpublishArticle({
-																	variables: {
-																		id: this.article.id
-																	},
-																	refetchQueries: result => [
-																		{
-																			query: userArticlesQuery,
-																			variables: {
-																				user_id: user.id
+																		]
+																	});
+																	break;
+																case 1:
+																	unpublishArticle({
+																		variables: {
+																			id: this.article.id
+																		},
+																		refetchQueries: result => [
+																			{
+																				query: userArticlesQuery,
+																				variables: {
+																					user_id: user.id
+																				}
 																			}
-																		}
-																	]
-																});
-																break;
-															case 4:
-																navigation.navigate("选择文集", {
-																	article: this.article
-																});
-																break;
+																		]
+																	});
+																	break;
+															}
+														} else {
+															switch (index) {
+																case 0:
+																	navigation.navigate("创作", {
+																		article: this.article
+																	});
+																	break;
+																case 1:
+																	removeArticle({
+																		variables: {
+																			id: this.article.id
+																		},
+																		refetchQueries: result => [
+																			{
+																				query: userArticlesQuery,
+																				variables: {
+																					user_id: user.id
+																				}
+																			}
+																		]
+																	});
+																	break;
+																case 2:
+																	navigation.navigate("投稿管理", {
+																		article: this.article
+																	});
+																	break;
+																case 3:
+																	unpublishArticle({
+																		variables: {
+																			id: this.article.id
+																		},
+																		refetchQueries: result => [
+																			{
+																				query: userArticlesQuery,
+																				variables: {
+																					user_id: user.id
+																				}
+																			}
+																		]
+																	});
+																	break;
+																case 4:
+																	navigation.navigate("选择文集", {
+																		article: this.article
+																	});
+																	break;
+															}
 														}
 													}}
 												/>
