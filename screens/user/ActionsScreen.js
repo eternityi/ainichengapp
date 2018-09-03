@@ -44,7 +44,6 @@ class ActionsScreen extends Component {
 							if (!(data && data.actions)) return <SpinnerLoading />;
 							if (data.actions.length < 1) return <BlankContent />;
 							let actions = data.actions;
-							this.firstActivity = actions.length;
 							return (
 								<View style={styles.container}>
 									<FlatList

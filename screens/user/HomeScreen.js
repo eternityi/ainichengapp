@@ -121,7 +121,7 @@ class HomeScreen extends Component {
                   ListEmptyComponent={() => <BlankContent remind="TA还没有发布任何作品" />}
                   ListFooterComponent={() => {
                     if (articles.length < 1) return <View />;
-                    return <View style={{ paddingBottom: 25, backgroundColor: "#fff" }}>{fetchingMore ? <LoadingMore /> : <ContentEnd />}</View>;
+                    return fetchingMore ? <LoadingMore /> : <ContentEnd />;
                   }}
                 />
                 <Animated.View style={[styles.header, { backgroundColor: headerTransparence }, avatarViewerVisible && { backgroundColor: "#000" }]}>

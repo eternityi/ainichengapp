@@ -34,8 +34,7 @@ class PostBottomTools extends Component {
 										action: () => {
 											likeArticle({
 												variables: {
-													article_id: post.id,
-													undo: liked
+													article_id: post.id
 												}
 											});
 										},

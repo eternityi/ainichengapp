@@ -13,7 +13,7 @@ const COVER_WIDTH = Divice.width;
 class PostItem extends PureComponent {
 	render() {
 		const { post, navigation, toggleShareModal } = this.props;
-		let { type, user, time_ago, title, description, images, cover, category, hits, count_likes, count_replies } = post;
+		let { type, user, time_ago, title, description, has_image, images, cover, category, hits, count_likes, count_replies } = post;
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => Methods.goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
@@ -27,7 +27,7 @@ class PostItem extends PureComponent {
 						</View>
 					</View>
 					{this.renderContent(type, title, description)}
-					{images && images.length > 0 && <View style={{ marginTop: 10 }}>{this.renderImage(type, images, cover)}</View>}
+					{has_image && <View style={{ marginTop: 10 }}>{this.renderImage(type, images, cover)}</View>}
 					{
 						// <View style={{ paddingHorizontal: 15 }}>
 						// 隐藏功能
@@ -100,8 +100,7 @@ class PostItem extends PureComponent {
 		}
 	};
 
-	renderImage = (type, images, cover) => {
-		let images_length = images.length;
+	renderImage = (type, images = [], cover) => {
 		if (type == "video") {
 			return (
 				<View style={styles.coverWrap}>
@@ -115,6 +114,7 @@ class PostItem extends PureComponent {
 				</View>
 			);
 		} else if (type == "post") {
+			let images_length = images.length;
 			let sizeArr = Methods.imgsLayoutSize(images_length, IMG_SPACE);
 			return (
 				<View style={[styles.layoutFlexRow, styles.gridView]}>
@@ -129,7 +129,6 @@ class PostItem extends PureComponent {
 
 const styles = StyleSheet.create({
 	postContainer: {
-		flex: 1,
 		backgroundColor: Colors.skinColor,
 		paddingTop: 20,
 		borderBottomWidth: 6,

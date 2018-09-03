@@ -19,10 +19,11 @@ class MetaBottom extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     if (login) {
+                      if (this.likeArticleAction) return null;
+                      this.likeArticleAction = true;
                       likeArticle({
                         variables: {
-                          article_id: article.id,
-                          undo: liked
+                          article_id: article.id
                         },
                         optimisticResponse: {
                           __typename: "Mutation",
@@ -45,6 +46,7 @@ class MetaBottom extends Component {
                               }
                             }
                           });
+                          this.likeArticleAction = false;
                         }
                       });
                     } else {

@@ -177,13 +177,15 @@ class PostScreen extends Component {
 										rewardDescrib={post.user.tip_words}
 										handleRewardVisible={this.handleRewardVisible}
 									/>
-									<Comments
-										addCommentVisible={addCommentVisible}
-										article={post}
-										navigation={navigation}
-										onLayout={this._commentsOnLayout}
-										toggleCommentModal={this.toggleAddCommentVisible}
-									/>
+									<View style={this.isPortrait && { marginBottom: Divice.BOTTOM_BAR_HEIGHT }}>
+										<Comments
+											addCommentVisible={addCommentVisible}
+											article={post}
+											navigation={navigation}
+											onLayout={this._commentsOnLayout}
+											toggleCommentModal={this.toggleAddCommentVisible}
+										/>
+									</View>
 								</ScrollView>
 								{this.isPortrait && (
 									<Animated.View style={[styles.headPosition, { backgroundColor: headerBackground }]}>
@@ -237,10 +239,11 @@ class PostScreen extends Component {
 		let images_length = images.length;
 		// 单张图片计算比例自适应
 		if (images_length == 1) {
-			let size = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
+			let { imgWidth, imgHeight } = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
+					style={imgWidth < (Divice.width * 2) / 3 ? { marginLeft: 15 } : { alignItems: "center" }}
 					onPress={() => {
 						this.setState({
 							imageViewerVisible: true,
@@ -248,7 +251,7 @@ class PostScreen extends Component {
 						});
 					}}
 				>
-					<Image source={{ uri: images[0].url }} style={[{ width: size.width, height: size.height }, styles.singleImage]} />
+					<Image source={{ uri: images[0].url }} style={[{ width: imgWidth, height: imgHeight }, styles.singleImage]} />
 				</TouchableOpacity>
 			);
 		} else {

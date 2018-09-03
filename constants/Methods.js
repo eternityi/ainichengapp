@@ -145,7 +145,7 @@ function imgsLayoutSize(imgCount, space = 4, maxWidth = divece.width) {
 		case imgCount == 1:
 			width = maxWidth;
 			height = maxWidth / 2;
-			imgSize.push({ width, height });
+			imgSize.push({ width, height, marginLeft: space, marginTop: space });
 			break;
 		case imgCount == 7:
 			for (; i < imgCount; i++) {
