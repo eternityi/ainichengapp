@@ -92,6 +92,9 @@ class EditProfileScreen extends Component {
 						<TouchableOpacity onPress={() => navigation.navigate("简介编辑", { introduction: user.introduction })}>
 							<SettingItem itemName="编辑个人简介" rightContent={user.introduction} />
 						</TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate("重置密码")}>
+							<SettingItem itemName="重置密码" />
+						</TouchableOpacity>
 						{
 							// 隐藏功能
 							// <SettingType typeName={`绑定账号登录${Config.AppDisplayName}`} explain={"出于安全因素，你至少需要保留一种登录方式"} />
@@ -142,7 +145,6 @@ class EditProfileScreen extends Component {
 							// </TouchableOpacity>
 							// <TouchableOpacity onPress={() => null}>
 							// 	<SettingItem
-							// 		endItem
 							// 		horizontal
 							// 		leftComponent={
 							// 			<View style={{ marginRight: 15 }}>
@@ -156,22 +158,7 @@ class EditProfileScreen extends Component {
 							// 		}
 							// 	/>
 							// </TouchableOpacity>
-							// <DivisionLine height={20} />
-							// <TouchableOpacity
-							// 	style={{ paddingHorizontal: 15 }}
-							// 	onPress={() =>
-							// 		navigation.navigate("文章详情", {
-							// 			article: { id: "00045" }
-							// 		})
-							// 	}
-							// >
-							// 	<SettingItem endItem itemName="绑定账号遇到问题" />
-							// </TouchableOpacity>
-							// <DivisionLine height={20} />
 						}
-						<TouchableOpacity onPress={() => navigation.navigate("重置密码")}>
-							<SettingItem itemName="重置密码" />
-						</TouchableOpacity>
 					</ScrollView>
 				</View>
 				<Mutation mutation={updateUserNameMutation}>

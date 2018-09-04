@@ -1,8 +1,7 @@
 import React from "react";
 import { ScrollView, FlatList, StyleSheet, Text, View, Button, TouchableOpacity, TouchableHighlight, Image } from "react-native";
 
-import Colors from "../../constants/Colors";
-import Config from "../../constants/Config";
+import { Colors, Config, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
 import { ShareModal } from "../../components/Modal";
 import UserTopInfo from "./UserTopInfo";
@@ -57,135 +56,110 @@ class HomeScreen extends React.Component {
     const { navigation, user, login } = this.props;
     return (
       <Screen>
-        <View style={styles.container}>
-          <Header navigation={navigation} goBack={false} setting search />
-          <ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
+        <ScrollView style={styles.container} bounces={false}>
+          <View style={{ marginTop: Divice.STATUSBAR_HEIGHT }}>
             <UserTopInfo user={user} login={login} navigation={navigation} />
-            {login && (
-              <View style={styles.flowContainer}>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("我的发布", { user })}>
-                  <View style={styles.flowList}>
-                    <Text style={styles.flowQuantity}>{user.count_articles || 0}</Text>
-                    <Text style={styles.flowType}>发布</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("关注", { user })}>
-                  <View style={styles.flowList}>
-                    <Text style={styles.flowQuantity}>{user.count_followings || 0}</Text>
-                    <Text style={styles.flowType}>关注</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("粉丝", { user })}>
-                  <View style={styles.flowList}>
-                    <Text style={styles.flowQuantity}>{user.count_followers || 0}</Text>
-                    <Text style={styles.flowType}>粉丝</Text>
-                  </View>
-                </TouchableOpacity>
+          </View>
+          {login && (
+            <View style={styles.flowContainer}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("我的发布", { user })}>
+                <View style={styles.flowList}>
+                  <Text style={styles.flowQuantity}>{user.count_production || 0}</Text>
+                  <Text style={styles.flowType}>发布</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("关注", { user })}>
+                <View style={styles.flowList}>
+                  <Text style={styles.flowQuantity}>{user.count_followings || 0}</Text>
+                  <Text style={styles.flowType}>关注</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("粉丝", { user })}>
+                <View style={styles.flowList}>
+                  <Text style={styles.flowQuantity}>{user.count_followers || 0}</Text>
+                  <Text style={styles.flowType}>粉丝</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+          <DivisionLine style={{ height: 15, marginTop: -1 }} />
+          <View style={styles.columnContainer}>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("私密作品")}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>私密作品</Text>
               </View>
-            )}
-            <DivisionLine height={15} />
-            <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("私密作品")}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>私密作品</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("我的收藏")}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>我的收藏</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢", { user })}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>我喜欢的</Text>
-                </View>
-              </TouchableOpacity>
-              {
-                // 隐藏功能
-                // <TouchableOpacity onPress={() => this.navigateMiddlewear("已购内容", { user })}>
-                //   <View style={[styles.columnItem, styles.noBorder]}>
-                //     <Iconfont name={"diamond"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                //     <Text style={styles.columnType}>已购内容</Text>
-                //   </View>
-                // </TouchableOpacity>
-              }
-            </View>
-            <DivisionLine height={15} />
-            <View style={styles.columnContainer}>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("个人专题", { user })}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>我的专题</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("个人文集", { user })}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"collection"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>我的文集</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("关注的专题和文集", { user })}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"followed"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>关注的专题/文集</Text>
-                </View>
-              </TouchableOpacity>
-              {
-                // 隐藏钱包
-                // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
-                //   <View style={[styles.columnItem, styles.noBorder]}>
-                //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                //     <Text style={styles.columnType}>我的钱包</Text>
-                //   </View>
-                // </TouchableOpacity>
-              }
-            </View>
-            <DivisionLine height={15} />
-            <View style={styles.columnContainer}>
-              {
-                // 隐藏功能
-                // <TouchableOpacity onPress={this.toggleModalVisible}>
-                //   <View style={styles.columnItem}>
-                //     <Iconfont name={"share"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                //     <Text style={styles.columnType}>分享{Config.AppDisplayName}</Text>
-                //   </View>
-                // </TouchableOpacity>
-              }
-              <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>浏览记录</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("常见帮助")}>
-                <View style={styles.columnItem}>
-                  <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                  <Text style={styles.columnType}>帮助与反馈</Text>
-                </View>
-              </TouchableOpacity>
-              {
-                // 隐藏功能
-                // <TouchableOpacity
-                //   onPress={() => {
-                //     null;
-                //   }}
-                // >
-                //   <View style={[styles.columnItem, styles.noBorder]}>
-                //     <Iconfont name={"star"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                //     <Text style={styles.columnType}>
-                //       给{Config.AppDisplayName}
-                //       评分
-                //     </Text>
-                //   </View>
-                // </TouchableOpacity>
-              }
-            </View>
-            <DivisionLine height={15} />
-          </ScrollView>
-        </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("我的收藏")}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>我的收藏</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢", { user })}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>我喜欢的</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <DivisionLine style={{ height: 15, marginTop: -1 }} />
+          <View style={styles.columnContainer}>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("个人专题", { user })}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>我的专题</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("个人文集", { user })}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"collection"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>我的文集</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("关注的专题和文集", { user })}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"followed"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>关注的专题/文集</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <DivisionLine style={{ height: 15, marginTop: -1 }} />
+          <View style={styles.columnContainer}>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>浏览记录</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("设置")}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"fill-setting"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>设置</Text>
+              </View>
+            </TouchableOpacity>
+            {
+              // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
+              //   <View style={[styles.columnItem, styles.noBorder]}>
+              //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+              //     <Text style={styles.columnType}>我的钱包</Text>
+              //   </View>
+              // </TouchableOpacity>
+              // <TouchableOpacity onPress={() => navigation.navigate("意见反馈")}>
+              //   <View style={styles.columnItem}>
+              //     <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+              //     <Text style={styles.columnType}>意见反馈</Text>
+              //   </View>
+              // </TouchableOpacity>
+              // <TouchableOpacity onPress={this.toggleModalVisible}>
+              //   <View style={styles.columnItem}>
+              //     <Iconfont name={"share"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+              //     <Text style={styles.columnType}>分享{Config.AppDisplayName}</Text>
+              //   </View>
+              // </TouchableOpacity>
+            }
+          </View>
+        </ScrollView>
         <ShareModal plain visible={modalVisible} toggleVisible={this.toggleModalVisible} />
       </Screen>
     );

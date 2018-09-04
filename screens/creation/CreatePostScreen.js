@@ -255,6 +255,10 @@ class CreatePostScreen extends React.Component {
         }
       })
       .catch(err => {
+        this.toast("出错啦，请检查网络是否正常");
+        this.setState({
+          waitingVisible: false
+        });
         console.log("网络错误".err);
       });
   };
@@ -327,12 +331,11 @@ class CreatePostScreen extends React.Component {
         })
         .catch(err => {
           this.setState({ uploadId: null, progress: null });
-          console.log("上传错误!", err);
         });
     });
   };
-  toast() {
-    let toast = Toast.show("内容不能为空哦~", {
+  toast(message = "内容不能为空哦~") {
+    let toast = Toast.show(message, {
       duration: Toast.durations.LONG,
       position: -70,
       shadow: true,

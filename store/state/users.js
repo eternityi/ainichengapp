@@ -11,6 +11,7 @@ export const users = Record({
 		cover: "https://dongmeiwei.com/images/app/cover05.jpg",
 		token: null,
 		introduction: "可以说是非常的完美了~~",
+		count_production: 111,
 		count_likes: 228,
 		count_articles: 68,
 		count_follows: 98,

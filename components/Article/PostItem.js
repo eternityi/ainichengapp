@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, FlatList, TouchableHighlight, TouchableW
 import { withNavigation } from "react-navigation";
 
 import PostToolBar from "./PostToolBar";
+import { CustomPopoverMenu } from "../../components/Modal";
 import { Avatar, VideoCover } from "../Pure";
 import { Iconfont } from "../../utils/Fonts";
 import { Colors, Methods, Divice } from "../../constants";
@@ -12,19 +13,27 @@ const COVER_WIDTH = Divice.width;
 
 class PostItem extends PureComponent {
 	render() {
-		const { post, navigation, toggleShareModal } = this.props;
+		const { post, navigation, toggleShareModal, options = ["不感兴趣"], popoverHandler = () => null } = this.props;
 		let { type, user, time_ago, title, description, has_image, images, cover, category, hits, count_likes, count_replies } = post;
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => Methods.goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
-					<View style={[styles.layoutFlexRow, { paddingHorizontal: 15 }]}>
-						<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
-							<Avatar size={38} uri={user.avatar} />
-						</TouchableOpacity>
-						<View style={styles.user}>
-							<Text style={styles.userName}>{user.name}</Text>
-							<Text style={styles.timeAgo}>{time_ago}</Text>
+					<View style={styles.postHeader}>
+						<View style={styles.layoutFlexRow}>
+							<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
+								<Avatar size={38} uri={user.avatar} />
+							</TouchableOpacity>
+							<View style={{ marginLeft: 10 }}>
+								<Text style={styles.userName}>{user.name}</Text>
+								<Text style={styles.timeAgo}>{time_ago}</Text>
+							</View>
 						</View>
+						<CustomPopoverMenu
+							width={110}
+							selectHandler={popoverHandler}
+							triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
+							options={options}
+						/>
 					</View>
 					{this.renderContent(type, title, description)}
 					{has_image && <View style={{ marginTop: 10 }}>{this.renderImage(type, images, cover)}</View>}
@@ -138,8 +147,11 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center"
 	},
-	user: {
-		marginLeft: 10
+	postHeader: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		paddingHorizontal: 15
 	},
 	userName: {
 		fontSize: 14,

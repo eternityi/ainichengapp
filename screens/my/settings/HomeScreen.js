@@ -10,7 +10,6 @@ import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
 import { Avatar } from "../../../components/Pure";
 import { BasicModal, DialogModal } from "../../../components/Modal";
-import SettingType from "../../../components/Setting/SettingType";
 import SettingItem from "../../../components/Setting/SettingItem";
 
 import { connect } from "react-redux";
@@ -39,13 +38,12 @@ class HomeScreen extends Component {
 			wordSize: ["小号字", "中号字(默认)", "大号字"],
 			checkedWordSize: 1,
 			dialog: "",
-			dialogType: "",
 			storageSize: "当前缓存1.2Mb"
 		};
 	}
 
 	render() {
-		let { promotModalVisible, fontModalVisible, dialog, dialogType, storageSize, wordSize, checkedWordSize } = this.state;
+		let { promotModalVisible, fontModalVisible, dialog, storageSize, wordSize, checkedWordSize } = this.state;
 		const { navigation, users, client } = this.props;
 		const { login } = users;
 		return (
@@ -53,19 +51,6 @@ class HomeScreen extends Component {
 				<View style={styles.container}>
 					<Header navigation={navigation} />
 					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
-						<SettingType typeName={"消息推送"} customStyle={{ borderTopColor: "transparent" }} />
-						{
-							// <TouchableOpacity onPress={() => navigation.navigate("文章更新推送")}>
-							// 	<SettingItem itemName="文章更新推送" />
-							// </TouchableOpacity>
-						}
-						<TouchableOpacity onPress={() => navigation.navigate("推送通知")}>
-							<SettingItem itemName="推送通知" endItem />
-						</TouchableOpacity>
-						<SettingType typeName={"通用设置"} />
-						<TouchableOpacity onPress={() => this.navigateMiddlewear("编辑个人资料")}>
-							<SettingItem itemName="编辑个人资料" />
-						</TouchableOpacity>
 						{
 							// <TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
 							// 	<SettingItem itemName="赞赏设置" />
@@ -74,17 +59,25 @@ class HomeScreen extends Component {
 							// 	<SettingItem itemName="字号设置" />
 							// </TouchableOpacity>
 						}
-						<TouchableOpacity onPress={() => this.navigateMiddlewear("黑名单")}>
-							<SettingItem itemName="黑名单" endItem />
+						<TouchableOpacity onPress={() => navigation.navigate("推送通知")}>
+							<SettingItem itemName="推送通知" />
 						</TouchableOpacity>
-						<SettingType typeName={"其他"} />
+						<TouchableOpacity onPress={() => this.navigateMiddlewear("黑名单")}>
+							<SettingItem itemName="黑名单" />
+						</TouchableOpacity>
 						<TouchableOpacity onPress={() => this.navigateMiddlewear("回收站")}>
 							<SettingItem itemName="回收站" />
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate("用户协议")}>
+							<SettingItem itemName="用户协议" />
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate("隐私政策")}>
+							<SettingItem itemName="隐私政策" />
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => {
 								if (storageSize.length > 0) {
-									this.setState({ dialog: "当前缓存1.2Mb", dialogType: "resetStore" });
+									this.setState({ dialog: "确认清除缓存内容吗？" });
 									this.handlePromotModalVisible();
 								}
 							}}
@@ -101,9 +94,7 @@ class HomeScreen extends Component {
 						>
 							<SettingItem itemName="版本更新" explain={"当前版本: " + Config.AppVersion} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => navigation.navigate("关于我们")}>
-							<SettingItem itemName="关于我们" />
-						</TouchableOpacity>
+
 						{login && (
 							<View
 								style={{
@@ -140,7 +131,7 @@ class HomeScreen extends Component {
 							this.props.dispatch(actions.signOut());
 							this.props.navigation.dispatch(navigateAction);
 							this.handlePromotModalVisible();
-						} else if (dialogType == "resetStore") {
+						} else if (dialog == "确认清除缓存内容吗？") {
 							this.clearCache();
 						}
 					}}

@@ -219,6 +219,7 @@ class CreationScreen extends React.Component {
                 this.setState({
                   waitingVisible: false
                 });
+                navigation.goBack();
                 this.publishing = false;
               });
           } else {
@@ -244,6 +245,7 @@ class CreationScreen extends React.Component {
                 this.setState({
                   waitingVisible: false
                 });
+                navigation.goBack();
                 this.publishing = false;
               });
           }

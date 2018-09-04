@@ -34,8 +34,8 @@ import VerificationEmailScreen from "../screens/login/VerificationEmailScreen";
 
 //my
 import BrowsingHistoryScreen from "../screens/my/HistoryScreen";
-import HelpScreen from "../screens/my/HelpScreen";
 import FeedbackScreen from "../screens/my/FeedbackScreen";
+// import HelpScreen from "../screens/my/HelpScreen";
 
 //my editProfile
 import EditProfileScreen from "../screens/my/editProfile/HomeScreen";
@@ -50,7 +50,9 @@ import RewardDescriptionScreen from "../screens/my/settings/RewardDescriptionScr
 import BlacklistScreen from "../screens/my/settings/BlacklistScreen";
 import RecycleScreen from "../screens/my/settings/RecycleScreen";
 import RecycleDetailScreen from "../screens/my/settings/RecycleDetailScreen";
-import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
+import UserAgreementScreen from "../screens/my/settings/UserAgreementScreen";
+import PrivacyPolicyScreen from "../screens/my/settings/PrivacyPolicyScreen";
+// import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
 
 //my staff
 import PrivacyArticle from "../screens/my/staff/DraftsScreen";
@@ -161,9 +163,15 @@ export default {
   回收详情: {
     screen: RecycleDetailScreen
   },
-  关于我们: {
-    screen: AboutUsScreen
+  用户协议: {
+    screen: UserAgreementScreen
   },
+  隐私政策: {
+    screen: PrivacyPolicyScreen
+  },
+  // 关于我们: {
+  //   screen: AboutUsScreen
+  // },
   文章详情: {
     screen: ArticleDetailScreen
   },
@@ -197,9 +205,9 @@ export default {
   浏览记录: {
     screen: BrowsingHistoryScreen
   },
-  常见帮助: {
-    screen: HelpScreen
-  },
+  // 常见帮助: {
+  //   screen: HelpScreen
+  // },
   意见反馈: {
     screen: FeedbackScreen
   },

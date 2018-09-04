@@ -9,6 +9,7 @@ import SearchUserModal from "./SearchUserModal";
 
 import { Query, Mutation } from "react-apollo";
 import { commentsQuery, addCommentMutation } from "../../graphql/comment.graphql";
+import { articleQuery } from "../../graphql/article.graphql";
 
 const { width } = Dimensions.get("window");
 
@@ -86,7 +87,21 @@ class AddCommentModal extends Component {
 															filter
 														}
 													}
-												]
+												],
+												update: (cache, { data: { addComment } }) => {
+													if (article.count_replies) {
+														cache.writeQuery({
+															query: articleQuery,
+															variables: { id: article.id },
+															data: {
+																article: {
+																	...article,
+																	count_replies: article.count_replies + 1
+																}
+															}
+														});
+													}
+												}
 											});
 											this.changeText("");
 											Methods.toast("回复成功");

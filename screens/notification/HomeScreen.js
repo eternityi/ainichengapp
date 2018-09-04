@@ -47,7 +47,7 @@ class HomeScreen extends React.Component {
 
     return (
       <Screen>
-        <Header navigation={navigation} goBack={false} search />
+        <Header navigation={navigation} goBack={false} />
         <ScrollView
           style={styles.container}
           removeClippedSubviews={true}

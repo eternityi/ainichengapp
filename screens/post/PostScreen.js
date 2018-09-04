@@ -158,7 +158,7 @@ class PostScreen extends Component {
 												<Text style={styles.body}>{body}</Text>
 											</View>
 										) : null}
-										{pictures && pictures.length > 0 && this.renderImages(pictures)}
+										<View style={{ flexDirection: "row" }}>{pictures && pictures.length > 0 && this.renderImages(pictures)}</View>
 										<View style={styles.meta}>
 											{category && (
 												<Text
@@ -239,7 +239,7 @@ class PostScreen extends Component {
 		let images_length = images.length;
 		// 单张图片计算比例自适应
 		if (images_length == 1) {
-			let { imgWidth, imgHeight } = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
+			let { width: imgWidth, height: imgHeight } = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
 			return (
 				<TouchableOpacity
 					activeOpacity={1}
@@ -334,10 +334,22 @@ class PostScreen extends Component {
 			let { width, height } = event.nativeEvent.layout;
 			//该视频比例为手机长视频
 			if (this.isPortrait) {
-				// this.setState({
-				// 	videoWidth: width,
-				// 	videoHeight: height
-				// });
+				// let { width, height } = post.video.info;
+				// let video_width, video_height;
+				// video_width = Divice.width;
+				// video_height = (video_width * height) / width;
+				// if (Divice.height <= video_height) {
+				// 	this.fullPortrait = true;
+				// 	this.setState({
+				// 		videoWidth: Divice.width,
+				// 		videoHeight: Divice.height
+				// 	});
+				// } else {
+				// 	this.setState({
+				// 		videoWidth: video_width,
+				// 		videoHeight: video_height
+				// 	});
+				// }
 				return;
 			}
 			// 让scrollview滚动到顶部并且禁止滚动

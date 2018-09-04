@@ -4,7 +4,7 @@ import Toast from "react-native-root-toast";
 
 import BasicModal from "./BasicModal";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors, Config } from "../../constants";
 
 import { reportArticleMutation } from "../../graphql/article.graphql";
 import { reportUserMutation, reportUserCommentMutation } from "../../graphql/user.graphql";
@@ -121,9 +121,9 @@ class ReportModal extends Component {
 
 	toast() {
 		setTimeout(function() {
-			let toast = Toast.show("举报成功，感谢您的守护", {
+			let toast = Toast.show(`举报成功，感谢您对${Config.AppDisplayName}的守护`, {
 				duration: Toast.durations.LONG,
-				position: 70,
+				position: 100,
 				shadow: true,
 				animation: true,
 				hideOnPress: true,

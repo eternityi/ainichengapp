@@ -181,14 +181,10 @@ class HomeScreen extends Component {
   // 头部popover
   _headerRight = (color, user, self) => {
     let { login, navigation } = this.props;
-    if (self) {
-      // 隐藏功能
-      return null;
-    }
     return (
       <HeaderRight
         color={color}
-        // options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
+        options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
         options={["举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
         selectHandler={index => {
           switch (index) {

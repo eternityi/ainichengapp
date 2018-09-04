@@ -128,6 +128,7 @@ mutation signInMutation($email: String!, $password: String!) {
         token
         introduction
         count_articles
+        count_production
         count_likes
         count_follows
         count_followers
@@ -150,6 +151,7 @@ mutation signUpMutation($email: String!, $password: String!, $name: String!) {
         token
         introduction
         count_articles
+        count_production
         count_likes
         count_follows
         count_followers

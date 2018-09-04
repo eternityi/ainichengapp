@@ -146,7 +146,7 @@ class HomeScreen extends React.Component {
       this.continuous = false;
       let toast = Toast.show("再次点击退出" + Config.AppDisplayName, {
         duration: Toast.durations.LONG,
-        position: Divice.height - 100,
+        position: 100,
         shadow: true,
         animation: true,
         hideOnPress: true,
