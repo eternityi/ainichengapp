@@ -132,7 +132,7 @@ class HomeScreen extends React.Component {
                 <Text style={styles.columnType}>浏览记录</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("设置")}>
+            <TouchableOpacity onPress={() => navigation.navigate("设置")}>
               <View style={styles.columnItem}>
                 <Iconfont name={"fill-setting"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                 <Text style={styles.columnType}>设置</Text>
