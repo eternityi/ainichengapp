@@ -1,6 +1,16 @@
 # 用户关注
-query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilter) {
-    follows(user_id: $user_id, filter: $filter, offset: $offset, limit: $limit) {
+query userFollows(
+    $user_id: Int
+    $limit: Int
+    $offset: Int
+    $filter: FollowFilter
+) {
+    follows(
+        user_id: $user_id
+        filter: $filter
+        offset: $offset
+        limit: $limit
+    ) {
         id
         followed_id
         followed_type
@@ -23,6 +33,7 @@ query userResourceCountQuery($id: Int!) {
         count_favorites
         count_categories
         count_collections
+        count_production
     }
 }
 
@@ -53,7 +64,12 @@ mutation reportUserMutation($id: Int!, $type: String, $reason: String) {
     }
 }
 
-mutation reportUserCommentMutation($id: Int!, $type: String, $reason: String, $comment_id: Int!) {
+mutation reportUserCommentMutation(
+    $id: Int!
+    $type: String
+    $reason: String
+    $comment_id: Int!
+) {
     reportUser(id: $id, type: $type, reason: $reason, comment_id: $comment_id) {
         id
     }
@@ -584,7 +600,11 @@ query userArticlesSubmitStatusQuery($category_id: Int!) {
 
 # 推荐关注
 query recommendFollowsQuery($recommend_for_user_id: Int!, $offset: Int) {
-    follows(recommend_for_user_id: $recommend_for_user_id, filter: USER_CATEGORY, offset: $offset) {
+    follows(
+        recommend_for_user_id: $recommend_for_user_id
+        filter: USER_CATEGORY
+        offset: $offset
+    ) {
         id
         user {
             id
@@ -615,7 +635,11 @@ query recommendFollowsQuery($recommend_for_user_id: Int!, $offset: Int) {
 
 # 推荐关注的用户
 query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
-    follows(recommend_for_user_id: $recommend_for_user_id, filter: USER, offset: $offset) {
+    follows(
+        recommend_for_user_id: $recommend_for_user_id
+        filter: USER
+        offset: $offset
+    ) {
         id
         user {
             id
@@ -645,8 +669,15 @@ query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
 }
 
 # 推荐关注的专题
-query recommendFollowCategoriesQuery($recommend_for_user_id: Int!, $offset: Int) {
-    follows(recommend_for_user_id: $recommend_for_user_id, filter: CATEGORY, offset: $offset) {
+query recommendFollowCategoriesQuery(
+    $recommend_for_user_id: Int!
+    $offset: Int
+) {
+    follows(
+        recommend_for_user_id: $recommend_for_user_id
+        filter: CATEGORY
+        offset: $offset
+    ) {
         id
         user {
             id
@@ -717,8 +748,19 @@ query queryArticleRequestCenter($id: Int) {
 #keyword:搜索的关键字
 #type   :VIDEO代表视频，ARTICLE代表文章.默认查询查询所有
 #order  :文章排序规则。 HOT：按热度排序 ，默认是按照时间排序
-query SearchResaultQueries($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
-    articles(keyword: $keyword, type: $type, order: $order, offset: $offset, limit: 10) {
+query SearchResaultQueries(
+    $keyword: String!
+    $type: ArticleType
+    $order: ArticleOrder
+    $offset: Int
+) {
+    articles(
+        keyword: $keyword
+        type: $type
+        order: $order
+        offset: $offset
+        limit: 10
+    ) {
         id
         title
         type
@@ -788,8 +830,16 @@ mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
     }
 }
 
-mutation approveArticleMutation($article_id: Int!, $category_id: Int!, $is_reject: Boolean!) {
-    approveArticle(article_id: $article_id, category_id: $category_id, is_reject: $is_reject) {
+mutation approveArticleMutation(
+    $article_id: Int!
+    $category_id: Int!
+    $is_reject: Boolean!
+) {
+    approveArticle(
+        article_id: $article_id
+        category_id: $category_id
+        is_reject: $is_reject
+    ) {
         id
         pivot_status
     }
