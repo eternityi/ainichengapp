@@ -10,7 +10,6 @@ class PrivacyPolicyScreen extends Component {
 	render() {
 		return (
 			<Screen>
-				<Header />
 				<ScrollView style={styles.container}>
 					<View style={{ paddingHorizontal: 15, paddingVertical: 20 }}>
 						<Text style={styles.title}>

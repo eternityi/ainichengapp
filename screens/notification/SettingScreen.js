@@ -32,7 +32,6 @@ class SettingScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
 						<SettingItem
 							endItem

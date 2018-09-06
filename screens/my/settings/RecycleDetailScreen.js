@@ -59,8 +59,7 @@ class RecycleDetailScreen extends Component {
 		const { navigation } = this.props;
 		let { promotModalVisible } = this.state;
 		return (
-			<Screen>
-				<Header navigation={navigation} routeName />
+			<Screen header={<Header routeName />}>
 				<Query query={trashQuery} variables={{ id: article.id }}>
 					{({ loading, error, data, refetch }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;

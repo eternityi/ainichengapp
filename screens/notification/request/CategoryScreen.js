@@ -2,15 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import Colors from "../../../constants/Colors";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import {
-	CustomScrollTabBar,
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading,
-	BlankContent
-} from "../../../components/Pure";
-import { Header, HeaderLeft } from "../../../components/Header";
+import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { Header } from "../../../components/Header";
 import NotificationItem from "./NotificationItem";
 import Screen from "../../Screen";
 
@@ -31,12 +24,11 @@ class CategoryScreen extends Component {
 
 	render() {
 		let { fetchingMore } = this.state;
-		let { category } = this.props.navigation.state.params;
 		let { user, navigation } = this.props;
+		let category = navigation.getParam("category", {});
 		return (
-			<Screen>
+			<Screen header={<Header routeName={category.name} />}>
 				<View style={styles.container}>
-					<Header navigation={navigation} routeName={navigation.state.params.category.name} />
 					<ScrollableTabView
 						renderTabBar={() => (
 							<CustomScrollTabBar
@@ -47,10 +39,7 @@ class CategoryScreen extends Component {
 						)}
 					>
 						<View style={styles.container}>
-							<Query
-								query={categoryPendingArticlesQuery}
-								variables={{ category_id: category.id, filter: "ALL" }}
-							>
+							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "ALL" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
@@ -59,9 +48,7 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => (
-												<NotificationItem article={item} navigation={navigation} />
-											)}
+											renderItem={({ item }) => <NotificationItem article={item} navigation={navigation} />}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}
@@ -72,10 +59,7 @@ class CategoryScreen extends Component {
 						</View>
 						<View style={styles.container}>
 							{/*PEDING（pending） 后端参数单词错误**/}
-							<Query
-								query={categoryPendingArticlesQuery}
-								variables={{ category_id: category.id, filter: "PEDING" }}
-							>
+							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "PEDING" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
 									if (!(data && data.category)) return <SpinnerLoading />;
@@ -84,9 +68,7 @@ class CategoryScreen extends Component {
 										<FlatList
 											data={data.category.articles}
 											keyExtractor={(item, index) => index.toString()}
-											renderItem={({ item }) => (
-												<NotificationItem article={item} navigation={navigation} />
-											)}
+											renderItem={({ item }) => <NotificationItem article={item} navigation={navigation} />}
 											ListFooterComponent={() => {
 												return <ContentEnd />;
 											}}

@@ -69,13 +69,13 @@ class HomeScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           <Header
             leftComponent={<RecommendFollow navigation={navigation} />}
-            rightComponent={
-              <View style={{ flex: 1, marginLeft: 15, marginTop: 3 }}>
-                <SearchBar navigation={navigation} height={28} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
+            centerComponent={
+              <View style={{ flex: 1 }}>
+                <SearchBar navigation={navigation} height={30} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
               </View>
             }
           />

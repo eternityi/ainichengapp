@@ -3,7 +3,7 @@ import { SectionList, FlatList, Image, StyleSheet, Text, View, TouchableOpacity 
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { GiftedChat, Bubble, Send, Composer, InputToolbar } from "react-native-gifted-chat";
-import { HeaderLeft, HeaderRight, Header } from "../../components/Header";
+import { HeaderRight, Header } from "../../components/Header";
 import { ReportModal } from "../../components/Modal";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import Screen from "../Screen";
@@ -29,46 +29,14 @@ class ChatScreen extends React.Component {
 	}
 
 	render() {
-		let { reportVisible, isBlocked } = this.state;
+		let { reportVisible } = this.state;
 		const { navigation } = this.props;
 		const { user } = this.props.users;
 		let { chat, withUser } = navigation.state.params;
 		let chatWithUser = chat && chat.withUser ? chat.withUser : withUser;
 		return (
-			<Screen>
+			<Screen header={this.renderHeader(chatWithUser)}>
 				<View style={styles.container}>
-					<Mutation mutation={blockUserMutation}>
-						{blockUser => (
-							<Header
-								navigation={navigation}
-								routeName={chatWithUser.name}
-								rightComponent={
-									<HeaderRight
-										options={["举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
-										selectHandler={index => {
-											if (index == 0) {
-												this.handleReportVisible();
-											} else {
-												blockUser({
-													variables: {
-														user_id: chatWithUser.id
-													},
-													refetchQueries: result => [
-														{
-															query: blockedUsersQuery
-														}
-													]
-												});
-												this.setState(prevState => ({
-													isBlocked: !prevState.isBlocked
-												}));
-											}
-										}}
-									/>
-								}
-							/>
-						)}
-					</Mutation>
 					{chat ? (
 						this._renderMessagesQuery(chat)
 					) : (
@@ -85,6 +53,43 @@ class ChatScreen extends React.Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = chatWithUser => {
+		let { isBlocked } = this.state;
+		return (
+			<Mutation mutation={blockUserMutation}>
+				{blockUser => (
+					<Header
+						routeName={chatWithUser.name}
+						rightComponent={
+							<HeaderRight
+								options={["举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
+								selectHandler={index => {
+									if (index == 0) {
+										this.handleReportVisible();
+									} else {
+										blockUser({
+											variables: {
+												user_id: chatWithUser.id
+											},
+											refetchQueries: result => [
+												{
+													query: blockedUsersQuery
+												}
+											]
+										});
+										this.setState(prevState => ({
+											isBlocked: !prevState.isBlocked
+										}));
+									}
+								}}
+							/>
+						}
+					/>
+				)}
+			</Mutation>
+		);
+	};
 
 	_renderMessagesQuery(chat) {
 		let { end } = this.state;

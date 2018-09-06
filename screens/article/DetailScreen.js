@@ -48,7 +48,7 @@ class DetailScreen extends Component {
     let { navigation, login } = this.props;
     const article = navigation.getParam("article", {});
     return (
-      <Screen>
+      <Screen header>
         <Query query={articleQuery} variables={{ id: article.id }}>
           {({ loading, error, data, refetch }) => {
             if (error) return <LoadingError reload={() => refetch()} />;

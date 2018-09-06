@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 
 import Colors from "../../../constants/Colors";
-import Header from "../../../components/Header/Header";
+import { Header } from "../../../components/Header";
 import Screen from "../../Screen";
 
 import { connect } from "react-redux";
@@ -24,13 +24,12 @@ class RewardDescriptionScreen extends Component {
 		const { navigation } = this.props;
 		const { reward_description } = this.state;
 		return (
-			<Screen>
+			<Screen header>
 				<Mutation mutation={updateUserIntroductionMutation}>
 					{updateUserIntroduction => {
 						return (
 							<Header
 								routeName="更改赞赏描述"
-								navigation={navigation}
 								rightComponent={
 									<TouchableOpacity
 										onPress={() => {

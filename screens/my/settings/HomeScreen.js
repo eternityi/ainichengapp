@@ -49,12 +49,11 @@ class HomeScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
 						{
-							// <TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
-							// 	<SettingItem itemName="赞赏设置" />
-							// </TouchableOpacity>
+							<TouchableOpacity onPress={() => this.navigateMiddlewear("赞赏设置")}>
+								<SettingItem itemName="赞赏设置" />
+							</TouchableOpacity>
 							// <TouchableOpacity onPress={this.handleFontModalVisible}>
 							// 	<SettingItem itemName="字号设置" />
 							// </TouchableOpacity>

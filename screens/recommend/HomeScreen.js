@@ -31,7 +31,6 @@ class HomeScreen extends React.Component {
     let { modalVisible, operation } = this.state;
     return (
       <Screen>
-        <Header navigation={navigation} />
         <View style={styles.container}>
           <Query query={recommendFollowsQuery} variables={{ recommend_for_user_id: user.id }}>
             {({ loading, error, data, fetchMore, fetch }) => {

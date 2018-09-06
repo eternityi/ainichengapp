@@ -8,19 +8,10 @@ import Colors from "../../constants/Colors";
 
 class SearchHeader extends Component {
   render() {
-    let {
-      navigation,
-      name,
-      handleSearch = () => null,
-      changeKeywords = () => null,
-      placeholder = "搜索文章、专题、用户、文集",
-      headerRef
-    } = this.props;
+    let { name, handleSearch = () => null, changeKeywords = () => null, placeholder = "搜索文章、专题、用户、文集", headerRef } = this.props;
     return (
       <Header
-        routeName={true}
-        navigation={navigation}
-        rightComponent={
+        centerComponent={
           <View style={styles.searchWrap}>
             <EmitInput
               words={false}
@@ -49,14 +40,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGray,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 12
+    marginLeft: 40,
+    marginRight: 10
   },
   textInput: {
     flex: 1,
     fontSize: 16,
     height: 22,
     lineHeight: 22,
-    padding: 0,
+    paddingVertical: 0,
+    paddingHorizontal: 10,
     color: Colors.primaryFontColor
   },
   searchIcon: {

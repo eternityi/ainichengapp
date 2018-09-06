@@ -37,62 +37,10 @@ class CreateScreen extends Component {
 	}
 
 	render() {
-		let { createCategoryMutation, editCategoryMutation, navigation, user, admin_uids } = this.props;
+		let { navigation, user, admin_uids } = this.props;
 		let { id, logo, name, description, allow_submit, need_approve, modalVisible } = this.state;
 		return (
-			<Screen>
-				<Header
-					navigation={navigation}
-					routeName={id ? "编辑专题" : "新建专题"}
-					rightComponent={
-						<TouchableOpacity
-							onPress={() => {
-								if (id) {
-									editCategoryMutation({
-										variables: {
-											id,
-											name,
-											description,
-											logo,
-											allow_submit,
-											need_approve
-										}
-									});
-								} else {
-									createCategoryMutation({
-										variables: {
-											name,
-											description,
-											logo,
-											allow_submit,
-											need_approve,
-											//只接受string类型 id
-											admin_uids: admin_uids.toString()
-										},
-										refetchQueries: result => [
-											{
-												query: userCategoriesQuery,
-												variables: {
-													user_id: user.id
-												}
-											}
-										]
-									});
-								}
-								navigation.goBack();
-							}}
-						>
-							<Text
-								style={{
-									fontSize: 17,
-									color: Colors.weixinColor
-								}}
-							>
-								提交
-							</Text>
-						</TouchableOpacity>
-					}
-				/>
+			<Screen header={this.renderHeader()}>
 				<ScrollView style={styles.container} bounces={false}>
 					<View style={styles.uploadWrap}>
 						<TouchableOpacity style={styles.uploadLogo} onPress={this._uploadLogo.bind(this)}>
@@ -215,6 +163,64 @@ class CreateScreen extends Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = () => {
+		let { createCategoryMutation, editCategoryMutation, navigation, user, admin_uids } = this.props;
+		let { id, logo, name, description, allow_submit, need_approve } = this.state;
+		return (
+			<Header
+				routeName={id ? "编辑专题" : "新建专题"}
+				rightComponent={
+					<TouchableOpacity
+						onPress={() => {
+							if (id) {
+								editCategoryMutation({
+									variables: {
+										id,
+										name,
+										description,
+										logo,
+										allow_submit,
+										need_approve
+									}
+								});
+							} else {
+								createCategoryMutation({
+									variables: {
+										name,
+										description,
+										logo,
+										allow_submit,
+										need_approve,
+										//只接受string类型 id
+										admin_uids: admin_uids.toString()
+									},
+									refetchQueries: result => [
+										{
+											query: userCategoriesQuery,
+											variables: {
+												user_id: user.id
+											}
+										}
+									]
+								});
+							}
+							navigation.goBack();
+						}}
+					>
+						<Text
+							style={{
+								fontSize: 17,
+								color: Colors.weixinColor
+							}}
+						>
+							提交
+						</Text>
+					</TouchableOpacity>
+				}
+			/>
+		);
+	};
 
 	_uploadLogo() {
 		ImagePicker.openPicker({
@@ -347,7 +353,8 @@ const styles = StyleSheet.create({
 });
 
 export default connect(store => ({ user: store.users.user, admin_uids: store.categories.admin_uids }))(
-	compose(graphql(createCategoryMutation, { name: "createCategoryMutation" }), graphql(editCategoryMutation, { name: "editCategoryMutation" }))(
-		CreateScreen
-	)
+	compose(
+		graphql(createCategoryMutation, { name: "createCategoryMutation" }),
+		graphql(editCategoryMutation, { name: "editCategoryMutation" })
+	)(CreateScreen)
 );

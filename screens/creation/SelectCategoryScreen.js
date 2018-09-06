@@ -7,18 +7,9 @@ import Screen from "../Screen";
 import SearchResult from "./SearchResult";
 
 import Toast from "react-native-root-toast";
-import {
-	SearchTypeBar,
-	Avatar,
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading,
-	BlankContent
-} from "../../components/Pure";
+import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
-import { SearchHeader } from "../../components/Header";
 import EmitInput from "../../components/Native/EmitInput";
 import CategoryItem from "./CategoryItem";
 
@@ -44,7 +35,6 @@ class SeleceCategoryScreen extends React.Component {
 			keywords: "",
 			collection: "收录",
 			submission: "投稿",
-			routeName: "　",
 			selectCategories,
 			none_keywords: true,
 			fetchMore: true
@@ -64,14 +54,14 @@ class SeleceCategoryScreen extends React.Component {
 		let { navigation, user, hot_search, deleteQuery, login } = this.props;
 		let { none_keywords, name, placeholder } = this.state;
 		const callback = navigation.getParam("callback", {});
-		let { fetchingMore, keywords, collection, submission, routeName, selectCategories } = this.state;
+		let { fetchingMore, keywords, collection, submission, selectCategories } = this.state;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<Header
-						navigation={navigation}
-						routeName={routeName}
-						leftComponent={
+						routeName
+						leftComponent
+						centerComponent={
 							<View style={styles.searchWrap}>
 								<EmitInput
 									words={false}
@@ -83,12 +73,7 @@ class SeleceCategoryScreen extends React.Component {
 									ref={ref => (this.inputText = ref)}
 								/>
 								<TouchableOpacity style={styles.searchIcon} onPress={this.handleSearch}>
-									<Iconfont
-										name={"search"}
-										size={22}
-										color={Colors.tintFontColor}
-										style={{ marginRight: 8 }}
-									/>
+									<Iconfont name={"search"} size={22} color={Colors.tintFontColor} style={{ marginRight: 8 }} />
 								</TouchableOpacity>
 							</View>
 						}
@@ -153,9 +138,7 @@ class SeleceCategoryScreen extends React.Component {
 														}
 													>
 														<View style={[styles.searchItem, { justifyContent: "center" }]}>
-															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>
-																清除搜索记录
-															</Text>
+															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
 														</View>
 													</TouchableOpacity>
 												</View>
@@ -185,12 +168,7 @@ class SeleceCategoryScreen extends React.Component {
 				<TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.query)}>
 					<View style={styles.searchItem}>
 						<View style={styles.verticalCenter}>
-							<Iconfont
-								name={"time-outline"}
-								size={21}
-								color={Colors.lightFontColor}
-								style={{ marginRight: 20 }}
-							/>
+							<Iconfont name={"time-outline"} size={21} color={Colors.lightFontColor} style={{ marginRight: 20 }} />
 							{elem.query && <Text style={{ fontSize: 16, color: "#666" }}>{elem.query}</Text>}
 						</View>
 						<TouchableOpacity
@@ -306,12 +284,13 @@ const styles = StyleSheet.create({
 	},
 	searchWrap: {
 		flex: 1,
-		height: 36,
-		borderRadius: 18,
+		height: 32,
+		borderRadius: 16,
 		backgroundColor: Colors.lightGray,
 		flexDirection: "row",
 		alignItems: "center",
-		paddingHorizontal: 12
+		paddingHorizontal: 12,
+		marginRight: 60
 	},
 	textInput: {
 		flex: 1,

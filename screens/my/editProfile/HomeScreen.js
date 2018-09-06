@@ -78,7 +78,6 @@ class EditProfileScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
 						<SettingType typeName={"常规设置"} customStyle={{ borderTopColor: "transparent" }} />
 						<TouchableOpacity onPress={this._changeAvatar.bind(this)}>

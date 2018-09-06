@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { OperationModal } from "../../../components/Modal";
-import { Header, HeaderLeft } from "../../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
@@ -26,7 +25,6 @@ class RecycleScreen extends Component {
 		let { navigation, drafts, deleteArticle, restoreArticle } = this.props;
 		return (
 			<Screen>
-				<Header navigation={navigation} routeName={"回收站"} />
 				<Query query={userTrashQuery}>
 					{({ loading, error, data, refetch, fetchMore }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;

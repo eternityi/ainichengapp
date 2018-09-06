@@ -40,74 +40,72 @@ class ListScreen extends Component {
 			is_self = true;
 		}
 		return (
-			<Screen>
-				<View style={[styles.container, !is_self && { backgroundColor: Colors.skinColor }]}>
-					<Header
-						navigation={navigation}
-						routeName="文集"
-						rightComponent={
-							is_self ? (
-								<TouchableOpacity onPress={() => navigation.navigate("文集排序", { collections: this.collections })}>
-									<Text
-										style={{
-											fontSize: 17,
-											color: Colors.weixinColor
-										}}
-									>
-										排序
-									</Text>
-								</TouchableOpacity>
-							) : null
-						}
-					/>
-					<View style={styles.container}>
-						<Query query={userCollectionsQuery} variables={{ user_id: user.id }}>
-							{({ loading, error, data, refetch, fetchMore }) => {
-								if (error) return <LoadingError reload={() => refetch()} />;
-								if (!(data && data.collections)) return <SpinnerLoading />;
-								if (data.collections.length < 1) return <BlankContent />;
-								this.collections = data.collections;
-								return (
-									<FlatList
-										data={data.collections}
-										ListHeaderComponent={() => this._listHeader(is_self)}
-										keyExtractor={item => item.id.toString()}
-										getItemLayout={(data, index) => ({
-											length: 85,
-											offset: 85 * index,
-											index
-										})}
-										renderItem={({ item }) => (
-											<TouchableOpacity
-												style={styles.collectionItem}
-												onPress={() =>
-													navigation.navigate("文集详情", {
-														collection: item
-													})
-												}
-												onLongPress={() => {
-													this.setState({ currentCollection: item });
-													this.toggleEditModal();
-												}}
-											>
-												<CollectionGroup
-													navigation={navigation}
-													collection={item}
-													customStyle={{
-														logo: 44,
-														mateSize: 13
+			<Screen header>
+				<Query query={userCollectionsQuery} variables={{ user_id: user.id }}>
+					{({ loading, error, data, refetch, fetchMore }) => {
+						if (error) return <LoadingError reload={() => refetch()} />;
+						if (!(data && data.collections)) return <SpinnerLoading />;
+						if (data.collections.length < 1) return <BlankContent />;
+						this.collections = data.collections;
+						return (
+							<View style={[styles.container, !is_self && { backgroundColor: Colors.skinColor }]}>
+								<Header
+									routeName="文集"
+									rightComponent={
+										is_self &&
+										this.collections && (
+											<TouchableOpacity onPress={() => navigation.navigate("文集排序", { collections: this.collections })}>
+												<Text
+													style={{
+														fontSize: 17,
+														color: Colors.weixinColor
 													}}
-													hideButton
-												/>
+												>
+													排序
+												</Text>
 											</TouchableOpacity>
-										)}
-										ListFooterComponent={() => <ContentEnd />}
-									/>
-								);
-							}}
-						</Query>
-					</View>
-				</View>
+										)
+									}
+								/>
+								<FlatList
+									data={data.collections}
+									ListHeaderComponent={() => this._listHeader(is_self)}
+									keyExtractor={item => item.id.toString()}
+									getItemLayout={(data, index) => ({
+										length: 85,
+										offset: 85 * index,
+										index
+									})}
+									renderItem={({ item }) => (
+										<TouchableOpacity
+											style={styles.collectionItem}
+											onPress={() =>
+												navigation.navigate("文集详情", {
+													collection: item
+												})
+											}
+											onLongPress={() => {
+												this.setState({ currentCollection: item });
+												this.toggleEditModal();
+											}}
+										>
+											<CollectionGroup
+												navigation={navigation}
+												collection={item}
+												customStyle={{
+													logo: 44,
+													mateSize: 13
+												}}
+												hideButton
+											/>
+										</TouchableOpacity>
+									)}
+									ListFooterComponent={() => <ContentEnd />}
+								/>
+							</View>
+						);
+					}}
+				</Query>
 				<Mutation mutation={createCollectionMutation}>
 					{createCollection => {
 						return (

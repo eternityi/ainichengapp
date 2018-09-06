@@ -31,7 +31,6 @@ class OpenArticlesScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} search searchRouteName={"搜索文章"} />
 					<Query
 						query={userArticlesQuery}
 						variables={{
@@ -89,9 +88,7 @@ class OpenArticlesScreen extends Component {
 											return (
 												<OperationModal
 													operation={
-														this.article.type == "post"
-															? ["删除", "转为私密"]
-															: ["编辑", "删除", "投稿管理", "转为私密", "文集设置"]
+														this.article.type == "post" ? ["删除", "转为私密"] : ["编辑", "删除", "投稿管理", "转为私密"]
 													}
 													visible={modalVisible}
 													handleVisible={this.handleModal}
@@ -172,11 +169,11 @@ class OpenArticlesScreen extends Component {
 																		]
 																	});
 																	break;
-																case 4:
-																	navigation.navigate("选择文集", {
-																		article: this.article
-																	});
-																	break;
+																// case 4:
+																// 	navigation.navigate("选择文集", {
+																// 		article: this.article
+																// 	});
+																// 	break;
 															}
 														}
 													}}

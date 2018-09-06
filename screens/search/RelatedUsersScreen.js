@@ -20,7 +20,6 @@ class RelatedUsersScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<FlatList
 						style={{ paddingHorizontal: 15 }}
 						data={users}
@@ -48,7 +47,8 @@ class RelatedUsersScreen extends Component {
 				onPress={() =>
 					navigation.navigate("用户详情", {
 						user: item
-					})}
+					})
+				}
 			>
 				<UserMetaGroup
 					navigation={navigation}

@@ -31,7 +31,6 @@ class CommentDetailScreen extends Component {
 
 		return (
 			<Screen>
-				<Header navigation={navigation} />
 				<Query query={commentQuery} variables={{ comment_id: comment.id }}>
 					{({ laoding, error, data, refetch }) => {
 						if (!(data && data.comment)) return <Diving />;

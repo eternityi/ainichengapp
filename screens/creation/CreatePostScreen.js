@@ -58,12 +58,11 @@ class CreatePostScreen extends React.Component {
     let { covers, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible, body } = this.state;
     const { navigation } = this.props;
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           <Header
-            navigation={navigation}
             routeName
-            customStyle={{ borderBottomColor: Colors.skinColor }}
+            lightBar
             leftComponent={
               <TouchableOpacity
                 onPress={() => {

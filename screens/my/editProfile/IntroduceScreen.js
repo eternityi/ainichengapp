@@ -20,13 +20,12 @@ class IntroduceScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<Mutation mutation={updateUserIntroductionMutation}>
 						{updateUserIntroduction => {
 							return (
 								<Header
-									navigation={navigation}
 									rightComponent={
 										<TouchableOpacity
 											onPress={() => {

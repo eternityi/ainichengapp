@@ -109,7 +109,7 @@ class PostScreen extends Component {
 			extrapolate: "clamp"
 		});
 		return (
-			<Screen>
+			<Screen header>
 				<Query query={articleQuery} variables={{ id: post.id }}>
 					{({ loading, error, data, refetch }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;

@@ -5,16 +5,7 @@ import { NavigationActions } from "react-navigation";
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { SearchHeader } from "../../components/Header";
-import {
-	Avatar,
-	DivisionLine,
-	ContentEnd,
-	LoadingMore,
-	LoadingError,
-	SpinnerLoading,
-	BlankContent
-} from "../../components/Pure";
+import { Avatar, DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 import CategoryItem from "./CategoryItem";
 
@@ -66,13 +57,7 @@ class SearchResult extends Component {
 												offset: data.categories.length
 											},
 											updateQuery: (prev, { fetchMoreResult }) => {
-												if (
-													!(
-														fetchMoreResult &&
-														fetchMoreResult.categories &&
-														fetchMoreResult.categories.length > 0
-													)
-												) {
+												if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
 													this.setState({
 														fetchingMore: false
 													});
@@ -91,13 +76,7 @@ class SearchResult extends Component {
 								}}
 								ListEmptyComponent={() => <BlankContent />}
 								ListFooterComponent={() => {
-									return data.categories.length > 0 ? (
-										fetchingMore ? (
-											<LoadingMore />
-										) : (
-											<ContentEnd />
-										)
-									) : null;
+									return data.categories.length > 0 ? fetchingMore ? <LoadingMore /> : <ContentEnd /> : null;
 								}}
 							/>
 						);

@@ -55,11 +55,9 @@ class HomeScreen extends React.Component {
     let { modalVisible } = this.state;
     const { navigation, user, login } = this.props;
     return (
-      <Screen>
+      <Screen header customStyle={{ paddingTop: Divice.STATUSBAR_HEIGHT }}>
         <ScrollView style={styles.container} bounces={false}>
-          <View style={{ marginTop: Divice.STATUSBAR_HEIGHT }}>
-            <UserTopInfo user={user} login={login} navigation={navigation} />
-          </View>
+          <UserTopInfo user={user} login={login} navigation={navigation} />
           {login && (
             <View style={styles.flowContainer}>
               <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("我的发布", { user })}>

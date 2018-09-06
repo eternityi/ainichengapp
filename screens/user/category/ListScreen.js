@@ -36,26 +36,8 @@ class ListScreen extends Component {
 			is_self = true;
 		}
 		return (
-			<Screen>
+			<Screen header={this.renderHeader(is_self)}>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						leftComponent={<HeaderLeft navigation={navigation} routeName={"专题"} />}
-						rightComponent={
-							is_self ? (
-								<TouchableOpacity onPress={() => navigation.navigate("新建专题")}>
-									<Text
-										style={{
-											fontSize: 17,
-											color: Colors.weixinColor
-										}}
-									>
-										新建专题
-									</Text>
-								</TouchableOpacity>
-							) : null
-						}
-					/>
 					<ScrollableTabView
 						renderTabBar={() => (
 							<CustomScrollTabBar
@@ -89,7 +71,8 @@ class ListScreen extends Component {
 													onPress={() =>
 														navigation.navigate("专题详情", {
 															category: item
-														})}
+														})
+													}
 													onLongPress={() => {
 														if (is_self) {
 															this.setState({
@@ -138,7 +121,8 @@ class ListScreen extends Component {
 													onPress={() =>
 														navigation.navigate("专题详情", {
 															category: item
-														})}
+														})
+													}
 												>
 													<CategoryGroup
 														navigation={navigation}
@@ -194,6 +178,29 @@ class ListScreen extends Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = isSelf => {
+		let { navigation } = this.props;
+
+		return (
+			<Header
+				rightComponent={
+					isSelf ? (
+						<TouchableOpacity onPress={() => navigation.navigate("新建专题")}>
+							<Text
+								style={{
+									fontSize: 17,
+									color: Colors.weixinColor
+								}}
+							>
+								新建专题
+							</Text>
+						</TouchableOpacity>
+					) : null
+				}
+			/>
+		);
+	};
 
 	toggleEditModal() {
 		this.setState(prevState => ({

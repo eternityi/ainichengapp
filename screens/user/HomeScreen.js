@@ -68,7 +68,7 @@ class HomeScreen extends Component {
       extrapolate: "clamp"
     });
     return (
-      <Screen>
+      <Screen header>
         <Query query={userDetailQuery} variables={{ id: user.id }}>
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
@@ -126,27 +126,21 @@ class HomeScreen extends Component {
                 />
                 <Animated.View style={[styles.header, { backgroundColor: headerTransparence }, avatarViewerVisible && { backgroundColor: "#000" }]}>
                   <Animated.View style={[styles.header, { opacity: lightHeaderOpacity }]}>
-                    <Header
-                      navigation={navigation}
-                      routeName={user.name}
-                      customStyle={styles.customStyle}
-                      lightBar
-                      rightComponent={this._headerRight("#fff", user, self)}
-                    />
+                    <Header lightBar routeName rightComponent={this._headerRight(user, self, "#fff")} />
                   </Animated.View>
                   <Animated.View style={[styles.header, { opacity: darkHeaderOpacity }]}>
                     <Header
-                      navigation={navigation}
-                      customStyle={styles.customStyle}
+                      customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
                       leftComponent={
-                        <HeaderLeft navigation={navigation} routeName={true}>
+                        <HeaderLeft>
                           <View style={styles.layoutFlexRow}>
                             <Avatar size={28} uri={user.avatar} />
                             <Text style={[styles.tintText14, { marginLeft: 5 }]}>{user.name}</Text>
                           </View>
                         </HeaderLeft>
                       }
-                      rightComponent={this._headerRight("#515151", user, self)}
+                      centerComponent
+                      rightComponent={this._headerRight(user, self)}
                     />
                   </Animated.View>
                 </Animated.View>
@@ -179,22 +173,21 @@ class HomeScreen extends Component {
   }
 
   // 头部popover
-  _headerRight = (color, user, self) => {
+  _headerRight = (user, self, color = Colors.primaryFontColor) => {
+    if (self) {
+      return null;
+    }
     let { login, navigation } = this.props;
     return (
       <HeaderRight
         color={color}
-        options={self ? ["分享用户"] : ["分享用户", "举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
-        options={["举报用户", user.isBlocked ? "移除黑名单" : "加入黑名单"]}
+        options={["举报用户", isBlocked ? "移除黑名单" : "加入黑名单"]}
         selectHandler={index => {
           switch (index) {
             case 0:
-              navigation.navigate("个人介绍", { user });
-              break;
-            case 1:
               this.handleReportVisible();
               break;
-            case 2:
+            case 1:
               this.putBlacklist(user.id);
               break;
           }
@@ -415,9 +408,6 @@ class HomeScreen extends Component {
             }
           ]
         });
-        this.setState(prevState => ({
-          isBlocked: !prevState.isBlocked
-        }));
       }
     });
   }
@@ -451,7 +441,7 @@ const styles = StyleSheet.create({
   },
   tintText14: {
     fontSize: 14,
-    color: Colors.tintFontColor
+    color: Colors.primaryFontColor
   },
   darkText16: {
     fontSize: 16,
@@ -527,10 +517,11 @@ const styles = StyleSheet.create({
   },
   header: {
     position: "absolute",
-    width: Divice.width,
+    top: 0,
+    left: 0,
+    right: 0,
     height: Divice.HEADER_HEIGHT
-  },
-  customStyle: { backgroundColor: "transparent", borderBottomColor: "transparent" }
+  }
 });
 
 export default connect(store => {

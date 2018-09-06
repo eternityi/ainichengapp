@@ -33,7 +33,6 @@ class FavoritedArticlesScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<Query query={favoritedArticlesQuery}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;

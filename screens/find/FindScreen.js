@@ -31,15 +31,14 @@ export default TabNavigator(
         borderBottomWidth: 1,
         borderBottomColor: Colors.lightBorderColor,
         elevation: 0,
-        height: Divice.HEADER_HEIGHT,
         paddingTop: Divice.STATUSBAR_HEIGHT,
-        paddingLeft: 15
+        paddingLeft: Divice.width / 2 - 50
       },
       indicatorStyle: {
         height: 2,
         width: 50,
         backgroundColor: Colors.themeColor,
-        marginLeft: 15
+        marginLeft: Divice.width / 2 - 50
       },
       labelStyle: {
         fontSize: 17,

@@ -23,7 +23,6 @@ class FollowScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<Query query={followersNotificationsQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;

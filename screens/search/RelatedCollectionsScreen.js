@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 
 import Colors from "../../constants/Colors";
-import { Header } from "../../components/Header";
 import { CollectionGroup } from "../../components/MediaGroup";
 import { ContentEnd, LoadingMore } from "../../components/Pure";
 import Screen from "../Screen";
@@ -19,7 +18,6 @@ class RelatedCollectionsScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header />
 					<FlatList
 						style={{ paddingHorizontal: 15 }}
 						data={collections}
@@ -47,7 +45,8 @@ class RelatedCollectionsScreen extends Component {
 				onPress={() =>
 					navigation.navigate("文集详情", {
 						collection: item
-					})}
+					})
+				}
 			>
 				<CollectionGroup collection={item} navigation={navigation} showCreator customStyle={{ logo: 44, nameSize: 17, mateSize: 13 }} />
 			</TouchableOpacity>

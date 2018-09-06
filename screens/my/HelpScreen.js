@@ -46,7 +46,7 @@
 // 		return (
 // 			<Screen>
 // 				<View style={styles.container}>
-// 					<Header navigation={navigation} />
+//
 // 					{
 // 						// 隐藏功能
 // 						// rightComponent={

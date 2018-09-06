@@ -31,7 +31,6 @@ class FeedbackScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<ScrollView style={styles.container}>
 						<View style={[styles.formTitleWrap, { borderTopColor: "transparent" }]}>
 							<Text style={styles.formTitle}>问题和意见</Text>
@@ -52,7 +51,10 @@ class FeedbackScreen extends Component {
 						<View style={styles.formTitleWrap}>
 							<Text style={styles.formTitle}>
 								<Text>图片（选填，提供问题截图）</Text>
-								<Text>{images_path.length}/4</Text>
+								<Text>
+									{images_path.length}
+									/4
+								</Text>
 							</Text>
 						</View>
 						<ScrollView horizontal>

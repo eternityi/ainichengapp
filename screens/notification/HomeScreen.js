@@ -1,7 +1,8 @@
 import React from "react";
 import { ScrollView, FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
+
 import { Iconfont } from "../../utils/Fonts";
-import Color from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import { Header } from "../../components/Header";
 import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, Diving } from "../../components/Pure";
 import Screen from "../Screen";
@@ -46,8 +47,7 @@ class HomeScreen extends React.Component {
     const { navigation, login, user } = this.props;
 
     return (
-      <Screen>
-        <Header navigation={navigation} goBack={false} />
+      <Screen header customStyle={{ paddingTop: Divice.STATUSBAR_HEIGHT }}>
         <ScrollView
           style={styles.container}
           removeClippedSubviews={true}
@@ -124,7 +124,7 @@ class HomeScreen extends React.Component {
                 }
               }}
             >
-              <Text style={[styles.chatsTitleText, { color: Color.themeColor }]}>新消息</Text>
+              <Text style={[styles.chatsTitleText, { color: Colors.themeColor }]}>新消息</Text>
             </TouchableOpacity>
           </View>
           <Query query={chatsQuery} pollInterval={10000}>
@@ -183,7 +183,7 @@ class HomeScreen extends React.Component {
           }}
         >
           <View style={{ position: "relative" }}>
-            <Iconfont name={item.iconName} size={24} color={Color.themeColor} style={{ marginBottom: 6 }} />
+            <Iconfont name={item.iconName} size={24} color={Colors.themeColor} style={{ marginBottom: 6 }} />
             <View style={styles.badge}>
               <Badge radius={9} count={item.unreads} />
             </View>
@@ -224,7 +224,7 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.skinColor
+    backgroundColor: Colors.skinColor
   },
   menuWrap: {
     paddingHorizontal: 15,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   menuName: {
     fontSize: 14,
-    color: Color.primaryFontColor
+    color: Colors.primaryFontColor
   },
   badge: {
     position: "absolute",
@@ -254,14 +254,14 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: Color.tintBorderColor,
+    borderBottomColor: Colors.tintBorderColor,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
   },
   chatsTitleText: {
     fontSize: 16,
-    color: Color.primaryFontColor
+    color: Colors.primaryFontColor
   },
   chatItem: {
     paddingTop: 15,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: Color.lightBorderColor
+    borderBottomColor: Colors.lightBorderColor
   },
   chatInfo: {
     flexDirection: "row",
@@ -291,16 +291,16 @@ const styles = StyleSheet.create({
   },
   chatName: {
     fontSize: 14,
-    color: Color.primaryFontColor
+    color: Colors.primaryFontColor
   },
   chatTime: {
     fontSize: 11,
-    color: Color.tintFontColor
+    color: Colors.tintFontColor
   },
   chatmessage: {
     fontSize: 12,
     marginTop: 8,
-    color: Color.tintFontColor
+    color: Colors.tintFontColor
   }
 });
 

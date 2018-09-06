@@ -14,7 +14,7 @@
 // 		const { navigation } = this.props;
 // 		return (
 // 			<Screen>
-// 				<Header navigation={navigation} />
+//
 // 				<View style={styles.container}>
 // 					<View style={styles.appMark}>
 // 						<Text style={styles.appName}>{Config.AppDisplayName}</Text>

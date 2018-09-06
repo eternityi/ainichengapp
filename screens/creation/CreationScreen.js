@@ -59,7 +59,7 @@ class CreationScreen extends React.Component {
     const { navigation } = this.props;
     let { article, waitingVisible } = this.state;
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           <Header
             navigation={navigation}

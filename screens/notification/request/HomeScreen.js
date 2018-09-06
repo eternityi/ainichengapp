@@ -17,7 +17,6 @@ class HomeScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<Query query={newRequestedCategoriesQuery}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -74,7 +73,9 @@ class HomeScreen extends Component {
 					{item.new_requests > 0 && (
 						<View style={{ marginTop: 12 }}>
 							<Text numberOfLines={1} style={styles.contributeInfo}>
-								还有{item.new_requests}个投稿未处理，快去处理吧:)
+								还有
+								{item.new_requests}
+								个投稿未处理，快去处理吧:)
 							</Text>
 						</View>
 					)}

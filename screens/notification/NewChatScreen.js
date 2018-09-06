@@ -27,11 +27,10 @@ class NewChatScreen extends Component {
 		let { keywords } = this.state;
 		let { follows, navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeHeader
 						placeholder="搜索好友"
-						navigation={navigation}
 						keywords={keywords}
 						changeKeywords={value => this.setState({ keywords: value })}
 						handleSearch={() => null}
@@ -107,7 +106,8 @@ class NewChatScreen extends Component {
 								handler={() =>
 									navigation.navigate("聊天页", {
 										withUser: user
-									})}
+									})
+								}
 							/>
 						</View>
 					}

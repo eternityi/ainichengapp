@@ -4,13 +4,11 @@ import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Dimensions } from
 
 import Screen from "../../Screen";
 import { Colors, Config } from "../../../constants";
-import { Header } from "../../../components/Header";
 
 class UserAgreementScreen extends Component {
 	render() {
 		return (
 			<Screen>
-				<Header />
 				<ScrollView style={styles.container}>
 					<View style={{ paddingHorizontal: 15, paddingVertical: 20 }}>
 						<Text style={styles.title}>

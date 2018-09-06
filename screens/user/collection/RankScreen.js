@@ -27,10 +27,9 @@ class RankScreen extends React.Component {
 		let { data, order } = this.state;
 		let { navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<Header
-						navigation={navigation}
 						routeName="文集排序"
 						rightComponent={
 							<TouchableOpacity onPress={() => navigation.goBack()}>

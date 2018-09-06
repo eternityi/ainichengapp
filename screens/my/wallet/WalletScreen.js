@@ -19,7 +19,6 @@ class WalletScreen extends Component {
 			<Screen>
 				<View style={{ flex: 1, backgroundColor: Colors.lightGray }}>
 					<View style={styles.container}>
-						<Header navigation={navigation} />
 						<View style={styles.walletTop}>
 							<View style={styles.balanceBanner}>
 								<View style={styles.walletMark}>
@@ -78,7 +77,8 @@ class WalletScreen extends Component {
 										onPress={() =>
 											navigation.navigate("文章详情", {
 												article: { id: "008" }
-											})}
+											})
+										}
 									>
 										查看提现帮助
 									</Text>

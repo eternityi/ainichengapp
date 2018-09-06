@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Dimensions, ScrollView, Image } from "react-native";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
-import Header from "../../../components/Header/Header";
-import HeaderLeft from "../../../components/Header/HeaderLeft";
+import { Header } from "../../../components/Header";
 import HTML from "react-native-render-html";
 import { ShareModal } from "../../../components/Modal";
 import Screen from "../../Screen";
@@ -59,23 +58,7 @@ class DraftDetailScreen extends Component {
 		const { article } = this.props.navigation.state.params;
 		const { navigation } = this.props;
 		return (
-			<Screen>
-				<Header
-					navigation={navigation}
-					routeName
-					rightComponent={
-						<TouchableOpacity onPress={() => null}>
-							<Text
-								style={{
-									fontSize: 15,
-									color: Colors.themeColor
-								}}
-							>
-								公开发布
-							</Text>
-						</TouchableOpacity>
-					}
-				/>
+			<Screen header={this.renderHeader()}>
 				<Query query={draftQuery} variables={{ id: article.id }}>
 					{({ loading, error, data }) => {
 						if (!(data && data.article)) return null;
@@ -142,6 +125,26 @@ class DraftDetailScreen extends Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = () => {
+		return (
+			<Header
+				routeName
+				rightComponent={
+					<TouchableOpacity onPress={() => null}>
+						<Text
+							style={{
+								fontSize: 15,
+								color: Colors.themeColor
+							}}
+						>
+							公开发布
+						</Text>
+					</TouchableOpacity>
+				}
+			/>
+		);
+	};
 
 	toggleModalVisible() {
 		this.setState(prevState => ({

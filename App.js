@@ -1,21 +1,11 @@
 import React from "react";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  YellowBox,
-  Dimensions,
-  Image
-} from "react-native";
+import { Platform, StatusBar, StyleSheet, View, Text, YellowBox, Dimensions, Image } from "react-native";
 import codePush from "react-native-code-push";
 import Spinner from "react-native-spinkit";
 import Orientation from "react-native-orientation";
 
 import ApolloApp from "./ApolloApp";
-import Colors from "./constants/Colors";
-import Config from "./constants/Config";
+import { Config, Colors, Divice } from "./constants";
 
 //redux
 import { Provider, connect } from "react-redux";
@@ -51,7 +41,7 @@ class App extends React.Component {
   render() {
     let { isLoadingComplete } = this.state;
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={this.layoutChange}>
         <MenuProvider backHandler={this.customBackHandler}>
           <Provider store={store}>
             <ApolloApp onReady={this._handleFinishLoading} />
@@ -91,6 +81,12 @@ class App extends React.Component {
 
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
+  };
+
+  layoutChange = event => {
+    let { width, height } = event.nativeEvent.layout;
+    Divice.layoutChange(width, height);
+    // this.setState({width,height});
   };
 }
 

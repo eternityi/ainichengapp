@@ -33,7 +33,6 @@ class VerificationEmailScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View style={styles.textWrap}>
 						<TextInput
 							textAlignVertical="center"

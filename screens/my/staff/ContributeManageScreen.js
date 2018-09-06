@@ -19,7 +19,6 @@ class ContributeManageScreen extends React.Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<DivisionLine />
 					<Query query={querySubmitedArticles}>
 						{({ loading, error, data, refetch, fetchMore }) => {
@@ -48,8 +47,7 @@ class ContributeManageScreen extends React.Component {
 				<View style={styles.itemInfo}>
 					<View>
 						<Text style={styles.darkText}>
-							向
-							<Text style={styles.title}>《{item.submitedCategory.name}》</Text>
+							向<Text style={styles.title}>《{item.submitedCategory.name}》</Text>
 							投稿
 						</Text>
 					</View>
@@ -90,8 +88,7 @@ class ContributeManageScreen extends React.Component {
 						<View style={styles.itemInfo}>
 							<View>
 								<Text style={styles.darkText}>
-									被
-									<Text style={styles.title}>《{category.name}》</Text>
+									被<Text style={styles.title}>《{category.name}》</Text>
 									收入
 								</Text>
 							</View>

@@ -4,7 +4,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import NoteItem from "../../../components/Article/NoteItem";
 import { CustomPopoverMenu, OperationModal } from "../../../components/Modal";
-import { Header, HeaderLeft } from "../../../components/Header";
+import { Header } from "../../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
@@ -29,12 +29,6 @@ class DraftsScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						search
-						searchRouteName={"搜索文章"}
-						leftComponent={<HeaderLeft navigation={navigation} routeName />}
-					/>
 					<Query query={draftsQuery}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;

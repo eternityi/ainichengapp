@@ -8,20 +8,19 @@ import { Iconfont } from "../../utils/Fonts";
 
 class SearchTypeHeader extends Component {
 	render() {
-		let { placeholder, keywords, changeKeywords, handleSearch, navigation, leftComponent = false, backHandler = null } = this.props;
+		let { placeholder, keywords, changeKeywords, handleSearch, backHandler = null } = this.props;
 		return (
 			<Header
-				routeName={true}
-				navigation={navigation}
 				backHandler={backHandler}
-				rightComponent={
+				centerComponent={
 					<View style={styles.searchBar}>
 						<TextInput
 							words={false}
+							autoFocus
 							underlineColorAndroid="transparent"
+							textAlignVertical="top"
 							selectionColor={Colors.themeColor}
 							style={styles.textInput}
-							autoFocus={true}
 							placeholder={placeholder}
 							placeholderText={Colors.tintFontColor}
 							onChangeText={changeKeywords}
@@ -40,16 +39,18 @@ class SearchTypeHeader extends Component {
 const styles = StyleSheet.create({
 	searchBar: {
 		flex: 1,
+		height: 32,
 		flexDirection: "row",
-		alignItems: "center"
+		alignItems: "center",
+		marginLeft: 40
 	},
 	textInput: {
 		flex: 1,
 		fontSize: 16,
-		height: 25,
-		lineHeight: 25,
-		padding: 0,
-		paddingLeft: 10,
+		height: 22,
+		lineHeight: 22,
+		paddingVertical: 0,
+		paddingHorizontal: 10,
 		color: Colors.primaryFontColor
 	},
 	searchButton: {

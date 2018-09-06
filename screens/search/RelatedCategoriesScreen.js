@@ -19,7 +19,6 @@ class RelatedCategoriesScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<FlatList
 						style={{ paddingHorizontal: 15 }}
 						data={categories}
@@ -47,7 +46,8 @@ class RelatedCategoriesScreen extends Component {
 				onPress={() =>
 					navigation.navigate("用户详情", {
 						user: item
-					})}
+					})
+				}
 			>
 				<CategoryGroup category={item} navigation={navigation} showCreator customStyle={{ logo: 44, nameSize: 17, mateSize: 13 }} />
 			</TouchableOpacity>

@@ -28,10 +28,9 @@ class CategoriesScreen extends Component {
 		let { keywords, fetching, fetchingMore } = this.state;
 		const article = navigation.getParam("article", {});
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeHeader
-						navigation={navigation}
 						placeholder={"搜索专题"}
 						keywords={keywords}
 						changeKeywords={this.changeKeywords.bind(this)}

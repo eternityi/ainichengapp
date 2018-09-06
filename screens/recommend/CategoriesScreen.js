@@ -23,7 +23,6 @@ class CategoriesScreen extends Component {
 		let { user, navigation } = this.props;
 		return (
 			<Screen>
-				<Header navigation={navigation} />
 				<View style={styles.container}>
 					<Query query={recommendFollowCategoriesQuery} variables={{ recommend_for_user_id: user.id }}>
 						{({ loading, error, data, fetchMore, refetch }) => {

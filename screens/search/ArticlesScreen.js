@@ -30,10 +30,9 @@ class ArticlesScreen extends Component {
     // 把type传递给query的variable 获取不同集合下的article
     let type = navigation.getParam("type", "user");
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           <SearchTypeHeader
-            navigation={navigation}
             placeholder={"搜索文章的内容或标题"}
             keywords={keywords}
             changeKeywords={this.changeKeywords.bind(this)}

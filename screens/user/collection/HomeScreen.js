@@ -31,7 +31,7 @@ class HomeScreen extends Component {
 		let { navigation, personal, deleteCategory } = this.props;
 		let collection = navigation.getParam("collection", {});
 		return (
-			<Screen>
+			<Screen header>
 				<Query query={collectionQuery} variables={{ id: collection.id, order }}>
 					{({ loading, error, data, refetch, fetchMore }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
@@ -42,35 +42,26 @@ class HomeScreen extends Component {
 						return (
 							<View style={styles.container}>
 								<Header
-									routeName={true}
+									routeName
 									rightComponent={
-										<CustomPopoverMenu
-											width={160}
-											selectHandler={index => {
-												switch (index) {
-													case 0:
-														if (self) {
-															navigation.navigate("编辑文集", {
-																collection
-															});
-														} else {
-															this.toggleModalVisible();
-														}
-														break;
-													case 1:
-														this.toggleModalVisible();
-														break;
-												}
-											}}
-											triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
-											customOptionStyle={{
-												optionWrapper: {
-													alignItems: "flex-start",
-													paddingHorizontal: 10
-												}
-											}}
-											options={self ? ["编辑", "分享文集"] : ["分享文集"]}
-										/>
+										self && (
+											<CustomPopoverMenu
+												width={160}
+												selectHandler={index => {
+													navigation.navigate("编辑文集", {
+														collection
+													});
+												}}
+												triggerComponent={<Iconfont name={"more-vertical"} size={20} color={Colors.tintFontColor} />}
+												customOptionStyle={{
+													optionWrapper: {
+														alignItems: "flex-start",
+														paddingHorizontal: 10
+													}
+												}}
+												options={["编辑"]}
+											/>
+										)
 									}
 								/>
 

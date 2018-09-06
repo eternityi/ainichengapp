@@ -30,61 +30,8 @@ class AllFollowsScreen extends Component {
 		let { filter } = this.state;
 		let { navigation, user } = this.props;
 		return (
-			<Screen>
+			<Screen header={this.renderHeader()}>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						search
-						leftComponent={
-							<HeaderLeft navigation={navigation} routeName={true}>
-								<CustomPopoverMenu
-									width={120}
-									customOptionStyle={{
-										optionWrapper: {
-											alignItems: "flex-start",
-											paddingLeft: 10
-										}
-									}}
-									selectHandler={index => {
-										switch (index) {
-											case 0:
-												this.setState({ filter: "USER_CATEGORY" });
-												break;
-											case 1:
-												this.setState({ filter: "USER" });
-												break;
-											case 2:
-												this.setState({ filter: "CATEGORY" });
-												break;
-											case 3:
-												this.setState({ filter: "COLLECTION" });
-												break;
-										}
-									}}
-									triggerComponent={
-										<View
-											style={{
-												flexDirection: "row",
-												alignItems: "center"
-											}}
-										>
-											<Text
-												style={{
-													fontSize: 16,
-													color: Colors.tintFontColor,
-													marginRight: 5
-												}}
-											>
-												{this.followType(filter)}
-											</Text>
-											<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
-										</View>
-									}
-									options={this.menuOptions}
-								/>
-							</HeaderLeft>
-						}
-					/>
 					<Query query={userFollows} variables={{ user_id: user.id, filter }}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -147,6 +94,62 @@ class AllFollowsScreen extends Component {
 		);
 	}
 
+	renderHeader = () => {
+		let { filter } = this.state;
+		return (
+			<Header
+				centerComponent={
+					<View style={styles.filter}>
+						<CustomPopoverMenu
+							width={120}
+							customOptionStyle={{
+								optionWrapper: {
+									alignItems: "center"
+								}
+							}}
+							selectHandler={index => {
+								switch (index) {
+									case 0:
+										this.setState({ filter: "USER_CATEGORY" });
+										break;
+									case 1:
+										this.setState({ filter: "USER" });
+										break;
+									case 2:
+										this.setState({ filter: "CATEGORY" });
+										break;
+									case 3:
+										this.setState({ filter: "COLLECTION" });
+										break;
+								}
+							}}
+							triggerComponent={
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center"
+									}}
+								>
+									<Text
+										style={{
+											fontSize: 16,
+											color: Colors.tintFontColor,
+											marginRight: 5
+										}}
+									>
+										{this.followType(filter)}
+									</Text>
+									<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
+								</View>
+							}
+							options={this.menuOptions}
+						/>
+					</View>
+				}
+			/>
+		);
+	};
+
 	followType = filter => {
 		switch (filter) {
 			case "USER_CATEGORY":
@@ -169,6 +172,13 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colors.skinColor
+	},
+	filter: {
+		flex: 1,
+		marginHorizontal: 40,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });
 

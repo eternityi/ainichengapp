@@ -3,7 +3,7 @@ import { ScrollView, Text, StyleSheet, View, FlatList, TouchableOpacity } from "
 import { NavigationActions } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants";
 import { SearchHeader } from "../../components/Header";
 import { RefreshControl, LoadingError, SpinnerLoading } from "../../components/Pure";
 import Screen from "../Screen";
@@ -43,7 +43,7 @@ class HomeScreen extends Component {
     let { navigation, hot_search, deleteQuery, login } = this.props;
     // 未登录没有搜索记录，所以要排除该条件检测
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           <SearchHeader
             changeKeywords={this.onEmitterReady}
@@ -71,12 +71,7 @@ class HomeScreen extends Component {
                     <View style={{ paddingHorizontal: 15 }}>
                       <TouchableOpacity style={styles.searchItem} onPress={() => navigation.navigate("推荐专题")}>
                         <View style={styles.verticalCenter}>
-                          <Iconfont
-                            name={"category-rotate"}
-                            size={19}
-                            color={Colors.themeColor}
-                            style={{ marginRight: 8 }}
-                          />
+                          <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
                           <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
                         </View>
                         <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
@@ -101,13 +96,7 @@ class HomeScreen extends Component {
                                     offset: this.hotsearchs
                                   },
                                   updateQuery: (prev, { fetchMoreResult }) => {
-                                    if (
-                                      !(
-                                        fetchMoreResult &&
-                                        fetchMoreResult.queries &&
-                                        fetchMoreResult.queries.length > 0
-                                      )
-                                    ) {
+                                    if (!(fetchMoreResult && fetchMoreResult.queries && fetchMoreResult.queries.length > 0)) {
                                       return prev;
                                     }
                                     return Object.assign({}, prev, {

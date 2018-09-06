@@ -35,7 +35,6 @@ class RetrievePasswordScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View
 						style={{
 							height: 20,

@@ -36,7 +36,6 @@ class LikedArticlesScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <Header navigation={navigation} />
           <Query query={userLikedArticlesQuery} variables={{ user_id: user.id }}>
             {({ loading, error, data, refetch, fetchMore }) => {
               if (error) return <LoadingError reload={() => refetch()} />;

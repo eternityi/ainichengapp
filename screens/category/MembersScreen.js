@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Dimensi
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { Header, HeaderLeft, Search } from "../../components/Header";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 
 import { categoryAdminsQuery, categoryAuthorsQuery, categoryFollowersQuery } from "../../graphql/category.graphql";
@@ -25,7 +24,6 @@ class MembersScreen extends Component {
 		let { authors, admins } = this.category;
 		return (
 			<Screen>
-				<Header />
 				<View style={styles.container}>
 					<Query query={categoryFollowersQuery} variables={{ id: this.category.id }}>
 						{({ loading, error, data, fetchMore, refetch }) => {
@@ -116,7 +114,10 @@ class MembersScreen extends Component {
 						}}
 					>
 						<View style={styles.membersType}>
-							<Text style={styles.memberItemText}>管理员({admins.length})</Text>
+							<Text style={styles.memberItemText}>
+								管理员(
+								{admins.length})
+							</Text>
 						</View>
 						<View style={{ flexDirection: "row", flexWrap: "wrap" }}>
 							{admins.map((user, index) => {
@@ -139,7 +140,10 @@ class MembersScreen extends Component {
 						}}
 					>
 						<View style={styles.membersType}>
-							<Text style={styles.memberItemText}>活跃用户({authors.length})</Text>
+							<Text style={styles.memberItemText}>
+								活跃用户(
+								{authors.length})
+							</Text>
 						</View>
 						<View
 							style={{
@@ -161,7 +165,10 @@ class MembersScreen extends Component {
 				)}
 				{this.category.count_follows > 0 && (
 					<View style={styles.membersType}>
-						<Text style={styles.memberItemText}>关注的人({this.category.count_follows})</Text>
+						<Text style={styles.memberItemText}>
+							关注的人(
+							{this.category.count_follows})
+						</Text>
 					</View>
 				)}
 			</View>

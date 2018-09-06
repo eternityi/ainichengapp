@@ -34,7 +34,7 @@ class HomeScreen extends Component {
 		let { navigation, personal, deleteCategory, login } = this.props;
 		let category = navigation.getParam("category", {});
 		return (
-			<Screen>
+			<Screen header>
 				<Query query={categoryQuery} variables={{ id: category.id, order }}>
 					{({ loading, error, data, refetch, fetchMore, client }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;

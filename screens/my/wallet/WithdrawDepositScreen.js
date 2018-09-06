@@ -25,7 +25,6 @@ class WithdrawDepositScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View style={styles.form}>
 						<TouchableOpacity
 							style={[
@@ -104,7 +103,8 @@ class WithdrawDepositScreen extends Component {
 								>
 									可提现金额
 									<Iconfont name={"RMB"} size={14} color={Colors.tintFontColor} />
-									{balance}.00
+									{balance}
+									.00
 								</Text>
 							)}
 							<TouchableOpacity onPress={() => this.changeValue(balance + "")}>

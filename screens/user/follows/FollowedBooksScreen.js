@@ -20,7 +20,6 @@ class FollowedBooksScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <Header navigation={navigation} />
           <ScrollableTabView
             renderTabBar={() => (
               <CustomScrollTabBar
@@ -54,7 +53,8 @@ class FollowedBooksScreen extends Component {
                           onPress={() =>
                             navigation.navigate("专题详情", {
                               category: item
-                            })}
+                            })
+                          }
                         >
                           <CategoryGroup navigation={navigation} category={item} showCreator customStyle={{ logo: 44, mateSize: 13 }} plain />
                         </TouchableOpacity>
@@ -86,7 +86,8 @@ class FollowedBooksScreen extends Component {
                           onPress={() =>
                             navigation.navigate("文集详情", {
                               collection: item
-                            })}
+                            })
+                          }
                         >
                           <CollectionGroup navigation={navigation} collection={item} customStyle={{ logo: 44, mateSize: 13 }} plain />
                         </TouchableOpacity>

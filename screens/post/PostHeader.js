@@ -46,10 +46,9 @@ class PostHeader extends Component {
           return (
             <View>
               <Header
-                customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
-                navigation={navigation}
+                lightBar
                 leftComponent={
-                  <HeaderLeft navigation={navigation} routeName={true} color={lightBar ? "#fff" : "#515151"}>
+                  <HeaderLeft color={lightBar ? "#fff" : Colors.primaryFontColor}>
                     <TouchableOpacity style={{ marginRight: 6 }} onPress={() => navigation.navigate("用户详情", { user })}>
                       <Avatar size={30} uri={user.avatar} />
                     </TouchableOpacity>
@@ -67,6 +66,7 @@ class PostHeader extends Component {
                     />
                   </HeaderLeft>
                 }
+                centerComponent
                 rightComponent={
                   <View>
                     <CustomPopoverMenu
@@ -99,7 +99,7 @@ class PostHeader extends Component {
                             break;
                         }
                       }}
-                      triggerComponent={<Iconfont name={"more-vertical"} size={23} color={lightBar ? "#fff" : Colors.tintFontColor} />}
+                      triggerComponent={<Iconfont name={"more-vertical"} size={23} color={lightBar ? "#fff" : Colors.primaryFontColor} />}
                     >
                       {self ? (
                         <View>

@@ -23,31 +23,9 @@ class BeRewardScreen extends Component {
 	}
 
 	render() {
-		const { navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header={this.renderHeader()}>
 				<View style={styles.container}>
-					<Header
-						navigation={navigation}
-						rightComponent={
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("文章详情", {
-										article: { id: 12574 }
-									})
-								}
-							>
-								<Text
-									style={{
-										fontSize: 17,
-										color: Colors.themeColor
-									}}
-								>
-									常见问题
-								</Text>
-							</TouchableOpacity>
-						}
-					/>
 					<Query query={tipNotificationsQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore, client }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -107,6 +85,32 @@ class BeRewardScreen extends Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = () => {
+		const { navigation } = this.props;
+		return (
+			<Header
+				rightComponent={
+					<TouchableOpacity
+						onPress={() =>
+							navigation.navigate("文章详情", {
+								article: { id: 12574 }
+							})
+						}
+					>
+						<Text
+							style={{
+								fontSize: 17,
+								color: Colors.themeColor
+							}}
+						>
+							常见问题
+						</Text>
+					</TouchableOpacity>
+				}
+			/>
+		);
+	};
 
 	_renderItem = ({ item, index }) => {
 		let { navigation } = this.props;

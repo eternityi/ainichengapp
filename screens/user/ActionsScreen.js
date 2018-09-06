@@ -35,9 +35,8 @@ class ActionsScreen extends Component {
 
 	render() {
 		return (
-			<Screen>
+			<Screen header={<Header routeName={this.self ? "我的动态" : "TA的动态"} />}>
 				<View style={styles.container}>
-					<Header routeName={this.self ? "我的动态" : "TA的动态"} />
 					<Query query={userActionsQuery} variables={{ user_id: this.user.id }}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;

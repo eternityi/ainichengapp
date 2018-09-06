@@ -59,13 +59,12 @@ class EditScreen extends Component {
 		let { data, order, modalVisible, collectionId } = this.state;
 		let { navigation, user } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<Mutation mutation={deleteCollectionMutation}>
 						{deleteCollection => {
 							return (
 								<Header
-									navigation={navigation}
 									routeName="编辑文集"
 									rightComponent={
 										<HeaderRight

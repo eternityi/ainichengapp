@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import { Colors, Divice } from "../../constants";
+import { Iconfont } from "../../utils/Fonts";
 import HeaderLeft from "./HeaderLeft";
 import Search from "./Search";
 import NotificationSetting from "./NotificationSetting";
@@ -17,51 +18,42 @@ class Header extends React.Component {
 		let {
 			routeName,
 			leftComponent,
+			centerComponent,
 			rightComponent,
 			navigation,
-			backHandler = null,
-			goBack = true,
-			notification = false,
-			setting = false,
-			search = false,
+			hidden = false,
 			lightBar = false,
 			customStyle = {},
-			searchRouteName = "搜索中心"
+			backHandler,
+			onLayout = event => null
 		} = this.props;
 		return (
-			<View style={[styles.header, customStyle]}>
+			<View style={[styles.header, lightBar && styles.lightHeader, customStyle]} onLayout={onLayout}>
 				{leftComponent ? (
 					leftComponent
 				) : (
-					<HeaderLeft
-						navigation={navigation}
-						routeName={routeName}
-						backHandler={backHandler}
-						goBack={goBack}
-						color={lightBar ? "#fff" : "#515151"}
-					/>
+					<TouchableOpacity
+						activeOpacity={1}
+						style={[styles.side, { width: 40, left: 15 }]}
+						onPress={() => {
+							if (backHandler) {
+								backHandler();
+							} else {
+								navigation.goBack();
+							}
+						}}
+					>
+						<Iconfont name={"back-ios"} size={23} color={lightBar ? "#fff" : Colors.primaryFontColor} />
+					</TouchableOpacity>
 				)}
-				{rightComponent ? (
-					rightComponent
+				{centerComponent ? (
+					centerComponent
 				) : (
-					<View style={{ flexDirection: "row", alignItems: "center" }}>
-						{notification && (
-							<View style={{ marginLeft: 15 }}>
-								<NotificationSetting navigation={navigation} />
-							</View>
-						)}
-						{setting && (
-							<View style={{ marginLeft: 15 }}>
-								<Setting navigation={navigation} />
-							</View>
-						)}
-						{search && (
-							<View style={{ marginLeft: 15 }}>
-								<Search navigation={navigation} color={lightBar ? "#fff" : "#515151"} routeName={searchRouteName} />
-							</View>
-						)}
+					<View style={styles.title}>
+						<Text style={[styles.routeName, lightBar && { color: "#fff" }]}>{routeName ? routeName : navigation.state.routeName}</Text>
 					</View>
 				)}
+				{rightComponent && <View style={[styles.side, { right: 15 }]}>{rightComponent}</View>}
 			</View>
 		);
 	}
@@ -69,17 +61,34 @@ class Header extends React.Component {
 
 const styles = StyleSheet.create({
 	header: {
-		// height: Platform.OS === "ios" ? 65 : 45,
-		// paddingTop: Platform.OS === "ios" ? 20 : 0,
 		paddingTop: Divice.STATUSBAR_HEIGHT,
-		height: Divice.HEADER_HEIGHT,
 		paddingHorizontal: 15,
+		height: Divice.STATUSBAR_HEIGHT + 40,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.lightBorderColor,
 		backgroundColor: Colors.skinColor
+	},
+	lightHeader: { backgroundColor: "transparent", borderBottomColor: "transparent" },
+	side: {
+		position: "absolute",
+		flexDirection: "row",
+		alignItems: "center",
+		height: 40,
+		bottom: 0
+	},
+	title: {
+		flex: 1,
+		marginHorizontal: 40,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center"
+	},
+	routeName: {
+		fontSize: 17,
+		color: Colors.primaryFontColor
 	}
 });
 

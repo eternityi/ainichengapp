@@ -13,14 +13,21 @@ class RecommendFollow extends Component {
   render() {
     const { customStyle = {}, color = "#515151" } = this.props;
     return (
-      <TouchableOpacity onPress={() => this.navigate()}>
-        <Iconfont name={"add-person"} size={22} style={customStyle} color={color} />
+      <TouchableOpacity style={styles.wrap} onPress={() => this.navigate()}>
+        <Iconfont name={"add-person"} size={23} style={customStyle} color={color} />
       </TouchableOpacity>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  wrap: {
+    height: 40,
+    width: 40,
+    flexDirection: "row",
+    alignItems: "center"
+  }
+});
 
 export default connect(store => ({
   login: store.users.login

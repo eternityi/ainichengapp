@@ -25,7 +25,6 @@ class PaidContentScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<Query query={userArticlesQuery}>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <BlankContent />;

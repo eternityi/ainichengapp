@@ -31,7 +31,6 @@ class PasswordVerificationScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View style={{ height: 10, backgroundColor: Colors.lightGray }} />
 					<View style={styles.textWrap}>
 						<TextInput

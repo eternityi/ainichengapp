@@ -19,7 +19,6 @@ class PublishedScreen extends React.Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View style={styles.published}>
 						<View style={styles.publishedShare}>
 							<View style={styles.sharetLeft}>

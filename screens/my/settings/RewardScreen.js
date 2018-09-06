@@ -8,7 +8,7 @@ import Screen from "../../Screen";
 
 import { Query, Mutation } from "react-apollo";
 
-class ResetPasswordScreen extends Component {
+class RewardScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -22,7 +22,6 @@ class ResetPasswordScreen extends Component {
 		const { rewarding, loose } = this.state;
 		return (
 			<Screen>
-				<Header navigation={navigation} routeName="赞赏设置" />
 				<View style={styles.container}>
 					<View>
 						<SettingItem
@@ -46,7 +45,9 @@ class ResetPasswordScreen extends Component {
 						/>
 					</View>
 					<View style={styles.settingStateWrap}>
-						<Text style={styles.settingState}>{rewarding ? "已启用,赞赏按钮会出现在您的文章底部" : "开启后,赞赏按钮会出现在您的文章底部"}</Text>
+						<Text style={styles.settingState}>
+							{rewarding ? "已启用,赞赏按钮会出现在您的文章底部" : "开启后,赞赏按钮会出现在您的文章底部"}
+						</Text>
 					</View>
 					<View>
 						<SettingItem
@@ -70,7 +71,9 @@ class ResetPasswordScreen extends Component {
 						/>
 					</View>
 					<View style={styles.settingStateWrap}>
-						<Text style={styles.settingState}>{loose ? "已启用,低于10.00元的支付不用输入密码" : "开启后,低于10.00元的支付不用输入密码"}</Text>
+						<Text style={styles.settingState}>
+							{loose ? "已启用,低于10.00元的支付不用输入密码" : "开启后,低于10.00元的支付不用输入密码"}
+						</Text>
 					</View>
 					<TouchableOpacity
 						style={{ borderBottomWidth: 1, borderBottomColor: Colors.lightBorderColor }}
@@ -101,4 +104,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default ResetPasswordScreen;
+export default RewardScreen;

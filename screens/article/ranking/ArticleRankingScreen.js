@@ -16,7 +16,6 @@ class ArticleRankingScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <Header navigation={navigation} />
           <ScrollableTabView
             renderTabBar={() => (
               <CustomScrollTabBar

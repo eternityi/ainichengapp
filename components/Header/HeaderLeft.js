@@ -1,29 +1,20 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { withNavigation } from "react-navigation";
+
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
 
 class HeaderLeft extends Component {
   render() {
-    // backHandler是用来处理点击左边箭头不是navigation.goBack()的情况
-    const { navigation, routeName, goBack = true, backHandler = null, color = Colors.primaryFontColor, children } = this.props;
+    const { color = Colors.primaryFontColor, children, navigation, goBack = true } = this.props;
     return (
       <View style={styles.headerLeft}>
         {goBack && (
-          <TouchableWithoutFeedback
-            style={styles.goBack}
-            onPress={() => {
-              if (backHandler) {
-                backHandler();
-              } else {
-                navigation.goBack();
-              }
-            }}
-          >
-            <Iconfont name={"back-ios"} size={23} color={color} style={{ marginRight: 15 }} />
-          </TouchableWithoutFeedback>
+          <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
+            <Iconfont name={"back-ios"} size={23} color={color} />
+          </TouchableOpacity>
         )}
-        <Text style={{ fontSize: 17, color }}>{routeName ? routeName : navigation.state.routeName}</Text>
         {children}
       </View>
     );
@@ -33,8 +24,15 @@ class HeaderLeft extends Component {
 const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: "row",
+    alignItems: "center",
+    marginRight: 15
+  },
+  goBack: {
+    height: 40,
+    width: 40,
+    flexDirection: "row",
     alignItems: "center"
   }
 });
 
-export default HeaderLeft;
+export default withNavigation(HeaderLeft);

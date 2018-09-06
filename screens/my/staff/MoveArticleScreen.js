@@ -35,23 +35,7 @@ class MoveArticleScreen extends Component {
 		let { navigation, user, moveArticle } = this.props;
 		let { createModalVisible, selectCollection } = this.state;
 		return (
-			<Screen>
-				<Header
-					navigation={navigation}
-					routeName="文集"
-					rightComponent={
-						<TouchableOpacity onPress={this.toggleCreateModal}>
-							<Text
-								style={{
-									fontSize: 17,
-									color: Colors.themeColor
-								}}
-							>
-								新建
-							</Text>
-						</TouchableOpacity>
-					}
-				/>
+			<Screen header={this.renderHeader()}>
 				<View style={styles.container}>
 					<Query query={userCollectionsQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, refetch }) => {
@@ -124,6 +108,26 @@ class MoveArticleScreen extends Component {
 			</Screen>
 		);
 	}
+
+	renderHeader = () => {
+		return (
+			<Header
+				routeName="文集"
+				rightComponent={
+					<TouchableOpacity onPress={this.toggleCreateModal}>
+						<Text
+							style={{
+								fontSize: 17,
+								color: Colors.themeColor
+							}}
+						>
+							新建
+						</Text>
+					</TouchableOpacity>
+				}
+			/>
+		);
+	};
 
 	changeCollectionName(val) {
 		this.collectionName = val;

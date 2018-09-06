@@ -19,7 +19,6 @@ class TransactionRecordScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<FlatList
 						style={{ paddingHorizontal: 15 }}
 						data={transaction_record}
@@ -46,7 +45,9 @@ class TransactionRecordScreen extends Component {
 							<Text style={styles.linkText}>{item.user.name + " "}</Text>
 							向你的文章
 							<Text style={styles.linkText}>{" 《" + item.article.title + "》 "}</Text>
-							送了{item.money}颗糖
+							送了
+							{item.money}
+							颗糖
 						</Text>
 					</TransactionRecordItem>
 				);
@@ -59,7 +60,9 @@ class TransactionRecordScreen extends Component {
 							<Text style={styles.linkText}>{item.user.name + " "}</Text>
 							的文章
 							<Text style={styles.linkText}>{" 《" + item.article.title + "》 "}</Text>
-							送了{item.money}颗糖
+							送了
+							{item.money}
+							颗糖
 						</Text>
 					</TransactionRecordItem>
 				);
@@ -69,7 +72,9 @@ class TransactionRecordScreen extends Component {
 					<TransactionRecordItem type={"奖励"} money={item.money} time={item.time_ago} status={item.status}>
 						<Text style={styles.recordText}>
 							<Text style={styles.linkText}>{item.user.name + " "}</Text>
-							送了你{item.money}颗糖
+							送了你
+							{item.money}
+							颗糖
 						</Text>
 					</TransactionRecordItem>
 				);
@@ -80,7 +85,8 @@ class TransactionRecordScreen extends Component {
 						<Text style={styles.recordText}>
 							你送了
 							<Text style={styles.linkText}>{" " + item.user.name + " "}</Text>
-							{item.money}颗糖
+							{item.money}
+							颗糖
 						</Text>
 					</TransactionRecordItem>
 				);

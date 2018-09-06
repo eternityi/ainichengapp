@@ -30,18 +30,13 @@ class IntroduceScreen extends Component {
 		let { navigation } = this.props;
 		let { user } = navigation.state.params;
 		return (
-			<Screen customStyle={{ backgroundColor: Colors.nightColor }} lightBar>
+			<Screen customStyle={{ backgroundColor: Colors.nightColor }} lightBar header={<Header lightBar />}>
 				<Query query={userDetailQuery} variables={{ id: user.id }}>
 					{({ loading, error, data }) => {
 						if (!(data && data.user)) return null;
 						let user = data.user;
 						return (
 							<View style={styles.container}>
-								<Header
-									navigation={navigation}
-									customStyle={{ backgroundColor: "transparent", borderBottomColor: "transparent" }}
-									lightBar
-								/>
 								<ScrollView style={styles.visitingCardContainer}>
 									<View style={styles.visitingCard}>
 										<View>

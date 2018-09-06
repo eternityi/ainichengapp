@@ -5,7 +5,6 @@ import { NavigationActions } from "react-navigation";
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { SearchHeader } from "../../components/Header";
 import { Avatar, DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 

@@ -14,7 +14,6 @@ class ResetPasswordScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Header navigation={navigation} />
 					<View style={styles.hint}>
 						<Text style={{ fontSize: 15, color: Colors.themeColor }}>为了你的账户安全，请选择以下方式进行身份验证</Text>
 					</View>

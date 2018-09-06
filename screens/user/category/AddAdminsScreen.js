@@ -32,23 +32,8 @@ class AddAdminsScreen extends Component {
     let { modalVisible, category, admin_users } = this.state;
     let { navigation } = this.props;
     return (
-      <Screen>
+      <Screen header={this.renderHeader()}>
         <View style={styles.container}>
-          <Header
-            navigation={navigation}
-            rightComponent={
-              <TouchableOpacity onPress={this.toggleVisible}>
-                <Text
-                  style={{
-                    fontSize: 17,
-                    color: Colors.weixinColor
-                  }}
-                >
-                  添加
-                </Text>
-              </TouchableOpacity>
-            }
-          />
           {category.id ? (
             <Query query={categoryAdminsQuery} variables={{ id: category.id }}>
               {({ loading, error, data }) => {
@@ -124,6 +109,25 @@ class AddAdminsScreen extends Component {
       </Screen>
     );
   }
+
+  renderHeader = () => {
+    return (
+      <Header
+        rightComponent={
+          <TouchableOpacity onPress={this.toggleVisible}>
+            <Text
+              style={{
+                fontSize: 17,
+                color: Colors.weixinColor
+              }}
+            >
+              添加
+            </Text>
+          </TouchableOpacity>
+        }
+      />
+    );
+  };
 
   _renderUserItem = ({ item }) => {
     let { navigation } = this.props;
