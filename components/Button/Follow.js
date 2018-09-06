@@ -49,7 +49,6 @@ class Follow extends Component {
 			id,
 			type,
 			status,
-			plain = false,
 			customStyle = {},
 			fontSize = 15,
 			fontColor,
@@ -74,8 +73,7 @@ class Follow extends Component {
 						}
 					]}
 				>
-					{!plain && status !== 2 && <Iconfont name={status ? (status == 2 ? "follow-eachOther" : "gougou") : "add"} size={fontSize} />}
-					{status ? (status == 2 ? "互相关注" : " 已关注") : " 关 注"}
+					{status ? (status == 2 ? "互相关注" : "已关注") : "关 注"}
 				</Text>
 			</TouchableOpacity>
 		);

@@ -49,7 +49,7 @@ class AuthorCard extends Component {
 						</View>
 					</View>
 					<View style={styles.followAuthor}>
-						<FollowButton type={"user"} id={user.id} status={user.followed_status} plain />
+						<FollowButton type={"user"} id={user.id} status={user.followed_status} />
 					</View>
 				</View>
 			</View>

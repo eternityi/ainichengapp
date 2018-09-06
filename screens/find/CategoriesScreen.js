@@ -45,6 +45,7 @@ class CategoriesScreen extends React.Component {
 
   render() {
     let { navigation, login } = this.props;
+    console.log("screenProps", this.props.screenProps);
     return (
       <View style={styles.container}>
         <Query query={topCategoriesQuery}>

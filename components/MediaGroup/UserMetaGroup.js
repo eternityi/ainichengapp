@@ -46,7 +46,10 @@ class UserMetaGroup extends Component {
 								bottomInfo
 							) : (
 								<Text>
-									{user.count_articles || "0"}个作品，获得了{user.count_likes || "0"}个喜欢
+									{user.count_articles || "0"}
+									个作品，获得了
+									{user.count_likes || "0"}
+									个喜欢
 								</Text>
 							)}
 						</Text>
@@ -56,7 +59,6 @@ class UserMetaGroup extends Component {
 					<FollowButton
 						type={"user"}
 						id={user.id}
-						plain={plain}
 						status={user.followed_status}
 						customStyle={plain ? { height: 28, width: 72 } : null}
 						fontSize={plain ? 14 : 15}

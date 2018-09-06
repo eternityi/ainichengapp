@@ -33,7 +33,6 @@ class CategoryGroup extends Component {
         </View>
         {!hideButton && (
           <FollowButton
-            plain={plain}
             type={"category"}
             id={category.id}
             status={category.followed}

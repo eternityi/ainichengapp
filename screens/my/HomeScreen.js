@@ -58,51 +58,36 @@ class HomeScreen extends React.Component {
       <Screen header customStyle={{ paddingTop: Divice.STATUSBAR_HEIGHT }}>
         <ScrollView style={styles.container} bounces={false}>
           <UserTopInfo user={user} login={login} navigation={navigation} />
-          {login && (
-            <View style={styles.flowContainer}>
-              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("我的发布", { user })}>
-                <View style={styles.flowList}>
-                  <Text style={styles.flowQuantity}>{user.count_production || 0}</Text>
-                  <Text style={styles.flowType}>发布</Text>
-                </View>
+          <View style={styles.itemContainer}>
+            <View style={styles.columnContainer}>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("我的发布", { user })}>
+                <Text style={styles.countFont}>{user.count_production || 0}</Text>
+                <Text style={styles.rowsType}>发布</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("关注", { user })}>
-                <View style={styles.flowList}>
-                  <Text style={styles.flowQuantity}>{user.count_followings || 0}</Text>
-                  <Text style={styles.flowType}>关注</Text>
-                </View>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("关注", { user })}>
+                <Text style={styles.countFont}>{user.count_followings || 0}</Text>
+                <Text style={styles.rowsType}>关注</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("粉丝", { user })}>
-                <View style={styles.flowList}>
-                  <Text style={styles.flowQuantity}>{user.count_followers || 0}</Text>
-                  <Text style={styles.flowType}>粉丝</Text>
-                </View>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("粉丝", { user })}>
+                <Text style={styles.countFont}>{user.count_followers || 0}</Text>
+                <Text style={styles.rowsType}>粉丝</Text>
               </TouchableOpacity>
             </View>
-          )}
-          <DivisionLine style={{ height: 15, marginTop: -1 }} />
-          <View style={styles.columnContainer}>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("私密作品")}>
-              <View style={styles.columnItem}>
-                <Iconfont name={"lock"} size={20} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                <Text style={styles.columnType}>私密作品</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("我的收藏")}>
-              <View style={styles.columnItem}>
-                <Iconfont name={"label"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                <Text style={styles.columnType}>我的收藏</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("喜欢", { user })}>
-              <View style={styles.columnItem}>
-                <Iconfont name={"like"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                <Text style={styles.columnType}>我喜欢的</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <DivisionLine style={{ height: 15, marginTop: -1 }} />
-          <View style={styles.columnContainer}>
+            <View style={styles.columnContainer}>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("私密作品")}>
+                <Iconfont name={"lock"} size={26} color={Colors.tintColor} style={{ marginTop: -1 }} />
+                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>私密</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("我的收藏")}>
+                <Iconfont name={"star"} size={26} color={Colors.qqzoneColor} style={{ marginTop: -1 }} />
+                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>收藏</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("喜欢", { user })}>
+                <Iconfont name={"like"} size={24} color={Colors.weiboColor} />
+                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>喜欢</Text>
+              </TouchableOpacity>
+            </View>
+            <DivisionLine style={{ height: 15, marginTop: -1, marginHorizontal: -15 }} />
             <TouchableOpacity onPress={() => this.navigateMiddlewear("个人专题", { user })}>
               <View style={styles.columnItem}>
                 <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
@@ -121,9 +106,6 @@ class HomeScreen extends React.Component {
                 <Text style={styles.columnType}>关注的专题/文集</Text>
               </View>
             </TouchableOpacity>
-          </View>
-          <DivisionLine style={{ height: 15, marginTop: -1 }} />
-          <View style={styles.columnContainer}>
             <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
               <View style={styles.columnItem}>
                 <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
@@ -138,7 +120,7 @@ class HomeScreen extends React.Component {
             </TouchableOpacity>
             {
               // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
-              //   <View style={[styles.columnItem, styles.noBorder]}>
+              //   <View style={styles.columnItem}>
               //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
               //     <Text style={styles.columnType}>我的钱包</Text>
               //   </View>
@@ -184,46 +166,43 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.skinColor
   },
-  flowContainer: {
-    flexDirection: "row",
-    height: 60,
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  flowList: {
-    alignItems: "center"
-  },
-  flowQuantity: {
-    fontSize: 18,
-    color: Colors.primaryFontColor
-  },
-  flowType: {
-    marginTop: 6,
-    fontSize: 13,
-    color: Colors.tintFontColor
-  },
-  columnContainer: {
+  itemContainer: {
     paddingHorizontal: 15
   },
+  columnContainer: {
+    height: 90,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightBorderColor,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around"
+  },
+  rowsItem: {
+    height: 50,
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  rowsType: {
+    fontSize: 14,
+    color: Colors.tintFontColor
+  },
+  countFont: {
+    fontSize: 18,
+    fontWeight: "500",
+    color: Colors.darkFontColor
+  },
   columnItem: {
-    height: 46,
+    height: 48,
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: Colors.lightBorderColor
-  },
-  noBorder: {
-    borderBottomWidth: 0
   },
   columnType: {
     flex: 1,
     paddingHorizontal: 8,
     fontSize: 15,
     color: "#666"
-  },
-  columnQuantity: {
-    fontSize: 13,
-    color: Colors.tintFontColor
   }
 });
 

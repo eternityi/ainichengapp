@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableWithoutFeedback } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors, Config } from "../../constants";
 import Avatar from "../../components/Pure/Avatar";
 
 class UserTopInfo extends Component {
@@ -15,59 +15,36 @@ class UserTopInfo extends Component {
 				}}
 			>
 				<View style={styles.userInfoContainer}>
-					<View style={styles.userAvatarWrap}>
-						{login ? (
-							<Avatar uri={user.avatar} size={60} />
-						) : (
-							<View style={styles.defaultAvatar}>
-								<Iconfont name={"user"} size={40} color={Colors.lightFontColor} />
-							</View>
-						)}
-					</View>
-					{login ? (
-						<View style={{ flex: 1 }}>
-							<View style={styles.userInfo}>
-								<Text style={styles.userName}>{user.name}</Text>
-								<TouchableOpacity
-									onPress={() => {
-										this.props.navigation.navigate("编辑个人资料");
-									}}
-								>
-									<Iconfont name={"editor"} size={16} color={Colors.tintFontColor} />
-								</TouchableOpacity>
-							</View>
-							{user.introduction && (
-								<View style={[styles.userInfo, { marginTop: 6 }]}>
-									<Text numberOfLines={1} style={styles.introduction}>
-										{user.introduction}
-									</Text>
+					<View style={styles.userInfo}>
+						<View>
+							{login ? (
+								<Avatar uri={user.avatar} size={60} />
+							) : (
+								<View style={styles.defaultAvatar}>
+									<Iconfont name={"user"} size={40} color={Colors.lightFontColor} />
 								</View>
 							)}
 						</View>
-					) : (
-						<View>
-							<View style={{ marginBottom: 5 }}>
-								<Text
-									style={{
-										fontSize: 18,
-										color: Colors.tintFontColor
-									}}
-								>
-									点击登录账号
-								</Text>
-							</View>
-							<View>
-								<Text
-									style={{
-										fontSize: 16,
-										color: Colors.tintFontColor
-									}}
-								>
-									立即加入这座暖心的小城
-								</Text>
+
+						<View style={{ flex: 1 }}>
+							<View style={styles.userInfo}>
+								{login ? (
+									<Text style={styles.userName}>{user.name}</Text>
+								) : (
+									<Text style={styles.userName}>
+										立即加入
+										{Config.AppDisplayName}
+									</Text>
+								)}
 							</View>
 						</View>
-					)}
+						{login && (
+							<View style={styles.label}>
+								<Iconfont name="city" size={13} color="#fff" />
+								<Text style={styles.homepage}>个人主页</Text>
+							</View>
+						)}
+					</View>
 				</View>
 			</TouchableWithoutFeedback>
 		);
@@ -76,15 +53,15 @@ class UserTopInfo extends Component {
 
 const styles = StyleSheet.create({
 	userInfoContainer: {
-		paddingHorizontal: 20,
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightBorderColor,
+		paddingLeft: 20,
+		height: 120,
+		backgroundColor: Colors.lightGray,
 		flexDirection: "row",
 		alignItems: "center"
 	},
-	userAvatarWrap: {
-		marginRight: 20
+	userInfo: {
+		flexDirection: "row",
+		alignItems: "center"
 	},
 	defaultAvatar: {
 		width: 60,
@@ -99,13 +76,26 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	userName: {
-		fontSize: 15,
-		color: Colors.primaryFontColor,
-		marginRight: 6
+		fontSize: 17,
+		color: Colors.darkFontColor,
+		fontWeight: "500",
+		marginLeft: 20
 	},
-	introduction: {
-		fontSize: 14,
-		color: Colors.tintFontColor
+	label: {
+		paddingLeft: 8,
+		paddingRight: 6,
+		height: 28,
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		borderTopLeftRadius: 14,
+		borderBottomLeftRadius: 14,
+		backgroundColor: Colors.themeColor
+	},
+	homepage: {
+		fontSize: 13,
+		color: "#fff",
+		marginLeft: 4
 	}
 });
 

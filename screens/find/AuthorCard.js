@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
 	},
 	name: {
 		fontSize: 14,
+		lineHeight: 18,
 		color: Colors.darkFontColor,
 		paddingTop: 8
 	},

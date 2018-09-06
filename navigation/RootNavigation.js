@@ -61,7 +61,7 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator ref="rootStackNavigator" />;
+    return <RootStackNavigator ref="rootStackNavigator" screenProps={{ divice: this.props.divice }} />;
   }
 
   _registerForPushNotifications() {

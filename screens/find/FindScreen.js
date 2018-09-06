@@ -24,28 +24,28 @@ export default TabNavigator(
     lazy: false,
     backBehavior: "none",
     tabBarOptions: {
-      activeTintColor: Colors.themeColor,
+      activeTintColor: Colors.darkFontColor,
       inactiveTintColor: Colors.primaryFontColor,
       style: {
         backgroundColor: "#fff",
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.lightBorderColor,
+        borderBottomWidth: 0,
         elevation: 0,
         paddingTop: Divice.STATUSBAR_HEIGHT,
-        paddingLeft: Divice.width / 2 - 50
+        paddingLeft: Divice.width / 2 - 60
       },
       indicatorStyle: {
         height: 2,
-        width: 50,
+        width: 20,
+        marginHorizontal: 20,
         backgroundColor: Colors.themeColor,
-        marginLeft: Divice.width / 2 - 50
+        left: Divice.width / 2 - 60
       },
       labelStyle: {
         fontSize: 17,
         margin: 3
       },
       tabStyle: {
-        width: 50,
+        width: 60,
         paddingHorizontal: 0
       }
     },

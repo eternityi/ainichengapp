@@ -39,7 +39,6 @@ class CollectionGroup extends Component {
 				</View>
 				{!hideButton && (
 					<FollowButton
-						plain={plain}
 						type={"collection"}
 						id={collection.id}
 						status={collection.followed}

@@ -40,7 +40,7 @@ class AllFollowsScreen extends Component {
 							return (
 								<FlatList
 									data={data.follows}
-									keyExtractor={item => item.id.toString()}
+									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item }) => {
 										return (
 											<TouchableOpacity
@@ -133,13 +133,13 @@ class AllFollowsScreen extends Component {
 									<Text
 										style={{
 											fontSize: 16,
-											color: Colors.tintFontColor,
+											color: Colors.primaryFontColor,
 											marginRight: 5
 										}}
 									>
 										{this.followType(filter)}
 									</Text>
-									<Iconfont name={"downward-arrow"} size={12} color={Colors.tintFontColor} />
+									<Iconfont name={"downward-arrow"} size={12} color={Colors.primaryFontColor} />
 								</View>
 							}
 							options={this.menuOptions}

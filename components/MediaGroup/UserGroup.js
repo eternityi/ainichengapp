@@ -36,7 +36,6 @@ class UserGroup extends Component {
             id={user.id}
             type={"user"}
             status={user.followed_status}
-            plain={plain}
             customStyle={plain ? { height: 28, width: 72 } : null}
             fontSize={plain ? 14 : 15}
           />

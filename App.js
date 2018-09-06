@@ -20,7 +20,9 @@ const { width, height } = Dimensions.get("window");
 
 class App extends React.Component {
   state = {
-    isLoadingComplete: false
+    isLoadingComplete: false,
+    width: Divice.width,
+    height: Divice.height
   };
 
   customBackHandler = instance => {
@@ -39,12 +41,12 @@ class App extends React.Component {
   }
 
   render() {
-    let { isLoadingComplete } = this.state;
+    let { isLoadingComplete, width, height } = this.state;
     return (
       <View style={styles.container} onLayout={this.layoutChange}>
         <MenuProvider backHandler={this.customBackHandler}>
           <Provider store={store}>
-            <ApolloApp onReady={this._handleFinishLoading} />
+            <ApolloApp onReady={this._handleFinishLoading} divice={{ width, height }} />
           </Provider>
         </MenuProvider>
         {!isLoadingComplete && (
@@ -85,8 +87,7 @@ class App extends React.Component {
 
   layoutChange = event => {
     let { width, height } = event.nativeEvent.layout;
-    Divice.layoutChange(width, height);
-    // this.setState({width,height});
+    this.setState({ width, height });
   };
 }
 

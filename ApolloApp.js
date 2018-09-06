@@ -70,7 +70,7 @@ class ApolloApp extends Component {
 	render() {
 		return (
 			<ApolloProvider client={this.client}>
-				<RootNavigation />
+				<RootNavigation divice={{ divice: this.props.divice }} />
 			</ApolloProvider>
 		);
 	}

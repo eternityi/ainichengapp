@@ -34,7 +34,7 @@ class LoginScreen extends Component {
   render() {
     let { login } = this.state;
     return (
-      <Screen>
+      <Screen header>
         <View style={styles.container}>
           {!login ? (
             <SignUp handleSubmit={this.handleSubmit} handleSkip={this.handleSkip} navigation={this.props.navigation} />
