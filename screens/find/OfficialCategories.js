@@ -1,8 +1,9 @@
 import React from "react";
 
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableWithoutFeedback, Text } from "react-native";
 import OfficialColumn from "../../components/Category/OfficialColumn";
 
+import { Iconfont } from "../../utils/Fonts";
 import { Colors, Methods } from "../../constants";
 import { official_categories } from "../../constants/AppData";
 
@@ -12,6 +13,8 @@ class OfficialCategories extends React.Component {
 	}
 
 	render() {
+		const { navigation } = this.props;
+
 		return (
 			<View style={styles.officialWrap}>
 				<View style={styles.officialList}>
@@ -38,57 +41,40 @@ class OfficialCategories extends React.Component {
 						});
 					})}
 				</View>
-				<View style={styles.categoryHeader}>
-					<Text style={styles.boldText}>全部专题</Text>
-				</View>
 			</View>
 		);
 	}
 
 	_renderColumnItem = ({ item, index }) => {
 		return (
-			<TouchableOpacity key={index} style={{ flex: 1 }} onPress={() => this.onPress(item)}>
-				<OfficialColumn data={item} />
-			</TouchableOpacity>
+			<TouchableWithoutFeedback key={index} onPress={() => this.onPress(item)}>
+				<View style={{ flex: 1 }}>
+					<OfficialColumn data={item} />
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	};
 
 	onPress(item) {
-		const { login, navigation } = this.props;
+		const { navigation } = this.props;
 		let params = { category: item };
 		let routeName = item.type;
 		let key = routeName + item.id;
-		if (item.type == "全部关注") {
-			params = { filter: item.filter };
-			if (!login) {
-				routeName = "登录注册";
-			}
-		}
 		navigation.dispatch(Methods.navigationAction({ routeName, params, key }));
 	}
 }
 
 const styles = StyleSheet.create({
 	officialWrap: {
-		backgroundColor: Colors.skinColor
+		backgroundColor: Colors.skinColor,
+		paddingBottom: 15,
+		borderBottomWidth: 6,
+		borderBottomColor: Colors.lightBorderColor
 	},
 	officialList: {
 		flexDirection: "row",
-		justifyContent: "space-around",
 		alignItems: "center",
 		paddingTop: 20
-	},
-	categoryHeader: {
-		marginTop: 20,
-		paddingTop: 15,
-		paddingHorizontal: 15,
-		paddingBottom: 10,
-		backgroundColor: Colors.lightGray
-	},
-	boldText: {
-		fontSize: 16,
-		fontWeight: "500",
-		color: Colors.darkFontColor
 	}
 });
 

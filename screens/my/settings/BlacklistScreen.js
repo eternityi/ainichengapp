@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
-import { UserMetaGroup, UserGroup } from "../../../components/MediaGroup";
+import { UserGroup } from "../../../components/MediaGroup";
 import { LoadingError, LoadingMore, ContentEnd, BlankContent, SpinnerLoading } from "../../../components/Pure";
 import Screen from "../../Screen";
 

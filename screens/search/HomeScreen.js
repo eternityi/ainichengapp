@@ -120,10 +120,10 @@ class HomeScreen extends Component {
                                   let { queries } = cache.readQuery({
                                     query: hotSearchAndLogsQuery
                                   });
-                                  cache.writeQuery({
-                                    query: hotSearchAndLogsQuery,
-                                    data: { queries, queryLogs: [] }
-                                  });
+                                  // cache.writeQuery({
+                                  //   query: hotSearchAndLogsQuery,
+                                  //   data: { queries, queryLogs: [] }
+                                  // });
                                 }
                               })
                             }
@@ -185,10 +185,10 @@ class HomeScreen extends Component {
                       return query.id !== elem.id;
                     });
                     console.log(queryLogs);
-                    cache.writeQuery({
-                      query: hotSearchAndLogsQuery,
-                      data: { queries, queryLogs }
-                    });
+                    // cache.writeQuery({
+                    //   query: hotSearchAndLogsQuery,
+                    //   data: { queries, queryLogs }
+                    // });
                   }
                 })
               }

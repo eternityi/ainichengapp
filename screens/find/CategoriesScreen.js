@@ -1,16 +1,18 @@
 import React from "react";
-import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
 
 import Screen from "../Screen";
+import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import CategoryCard from "../../components/Card/CategoryCard";
 import OfficialCategories from "./OfficialCategories";
+import RecommendCategory from "./RecommendCategory";
 
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { topCategoriesQuery } from "../../graphql/category.graphql";
-import { followCategoryMutation } from "../../graphql/user.graphql";
+import { followCategoryMutation, userFollowedCategoriesQuery } from "../../graphql/user.graphql";
 import { Query, Mutation, compose, withApollo } from "react-apollo";
 
 const { width, height } = Dimensions.get("window");
@@ -44,23 +46,35 @@ class CategoriesScreen extends React.Component {
   }
 
   render() {
-    let { navigation, login } = this.props;
-    console.log("screenProps", this.props.screenProps);
+    let { navigation, user } = this.props;
     return (
       <View style={styles.container}>
-        <Query query={topCategoriesQuery}>
+        <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
           {({ loading, error, data, fetchMore, refetch }) => {
-            if (error) return <LoadingError reload={() => refetch()} />;
-            if (!(data && data.categories)) return null;
-
+            let categories;
+            if (error || !(data && data.categories) || data.categories.length < 1) {
+              categories = [];
+            }
+            if (data && data.categories) {
+              categories = data.categories;
+            }
             return (
               <FlatList
                 ref={scrollview => {
                   this.scrollview = scrollview;
                 }}
-                data={data.categories}
-                ListHeaderComponent={() => <OfficialCategories login={login} navigation={navigation} />}
-                keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+                data={categories}
+                ListHeaderComponent={() => (
+                  <View>
+                    <OfficialCategories navigation={navigation} />
+                    {categories.length > 0 && (
+                      <View style={{ marginTop: 15, marginLeft: 15 }}>
+                        <Text style={{ fontSize: 14 }}>关注的专题</Text>
+                      </View>
+                    )}
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={this._renderCategoryItem}
                 refreshing={loading}
                 onRefresh={() => {
@@ -90,8 +104,20 @@ class CategoriesScreen extends React.Component {
                     });
                   }
                 }}
+                ListEmptyComponent={() => <RecommendCategory />}
                 ListFooterComponent={() => {
-                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                  if (categories.length > 0) {
+                    return (
+                      <TouchableWithoutFeedback onPress={() => navigation.navigate("全部专题")}>
+                        <View style={styles.refresh}>
+                          <Iconfont name="fresh" size={14} color={Colors.themeColor} />
+                          <Text style={styles.refreshText}>关注更多专题</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    );
+                  } else {
+                    return <View />;
+                  }
                 }}
               />
             );
@@ -112,10 +138,10 @@ class CategoriesScreen extends React.Component {
   _scrollToTop = () => {
     if (this.scrollview) {
       this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
-      this.props.client.query({
-        query: topCategoriesQuery,
-        fetchPolicy: "network-only"
-      });
+      // this.props.client.query({
+      //   query: topCategoriesQuery,
+      //   fetchPolicy: "network-only"
+      // });
     }
   };
 }
@@ -123,11 +149,11 @@ class CategoriesScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lightGray
+    backgroundColor: Colors.skinColor
   },
   categoryCardWrap: {
     marginHorizontal: 15,
-    marginBottom: 15
+    marginTop: 15
   },
   followCategory: {
     flex: 1,
@@ -139,10 +165,22 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 15,
     paddingVertical: 15
+  },
+  refresh: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    paddingVertical: 10
+  },
+  refreshText: {
+    fontSize: 14,
+    color: Colors.themeColor,
+    marginLeft: 4
   }
 });
 
 export default compose(
   withApollo,
-  connect(store => ({ categories: store.categories, login: store.users.login }))
+  connect(store => ({ categories: store.categories, user: store.users.user }))
 )(CategoriesScreen);

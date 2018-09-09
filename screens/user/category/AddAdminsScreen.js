@@ -134,7 +134,7 @@ class AddAdminsScreen extends Component {
     return (
       <TouchableOpacity style={[styles.friendItem, styles.layout]} onPress={() => navigation.navigate("用户详情", { user: item })}>
         <View style={{ flex: 1 }}>
-          <UserMetaGroup hideButton navigation={navigation} user={item} />
+          <UserMetaGroup user={item} />
         </View>
         <TouchableOpacity onPress={() => this.deleteUser(item.id)}>
           <Iconfont name={"chacha"} size={23} color={"#666"} />

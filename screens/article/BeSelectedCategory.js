@@ -44,27 +44,16 @@ class BeSelectedCategory extends Component {
         <SlideInUpModal visible={modalVisible} toggleVisible={this.toggleVisible}>
           <View style={{ height: height * 0.6 }}>
             <View style={styles.beSelectedHeader}>
-              <Text style={{ fontSize: 12, color: Colors.lightFontColor }}>入选专题</Text>
+              <Text style={{ fontSize: 13, color: Colors.tintFontColor }}>入选专题</Text>
             </View>
             <FlatList
               data={categories}
               keyExtractor={item => item.id.toString()}
               renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.categoryItem}
-                  onPress={() => {
-                    this.toggleVisible();
-                    navigation.navigate("专题详情", { category: item });
-                  }}
-                >
-                  <CategoryGroup category={item} plain />
-                </TouchableOpacity>
+                <View style={styles.categoryItem}>
+                  <CategoryGroup category={item} />
+                </View>
               )}
-              getItemLayout={(data, index) => ({
-                length: 70,
-                offset: 70 * index,
-                index
-              })}
               ListFooterComponent={() => <ContentEnd />}
             />
           </View>
@@ -108,7 +97,7 @@ const styles = StyleSheet.create({
   },
   categoryItem: {
     paddingHorizontal: 15,
-    paddingVertical: 20,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: Colors.lightBorderColor
   }

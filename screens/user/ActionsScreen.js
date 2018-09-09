@@ -198,17 +198,18 @@ class ActionsScreen extends Component {
 								</Text>
 							</Text>
 						);
-					} else if (followed.collection) {
-						let collection = followed.collection;
-						return (
-							<Text>
-								{" " + "关注了文集" + " "}
-								<Text style={styles.linkText} onPress={() => this.skipFollowed({ collection })}>
-									{collection.name}
-								</Text>
-							</Text>
-						);
 					}
+					// else if (followed.collection) {
+					// 	let collection = followed.collection;
+					// 	return (
+					// 		<Text>
+					// 			{" " + "关注了文集" + " "}
+					// 			<Text style={styles.linkText} onPress={() => this.skipFollowed({ collection })}>
+					// 				{collection.name}
+					// 			</Text>
+					// 		</Text>
+					// 	);
+					// }
 				}
 				break;
 			case "likes":
@@ -314,9 +315,10 @@ class ActionsScreen extends Component {
 			navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }));
 		} else if (category) {
 			navigation.dispatch(navigationAction({ routeName: "专题详情", params: { category } }));
-		} else if (collection) {
-			navigation.dispatch(navigationAction({ routeName: "文集详情", params: { collection } }));
 		}
+		// else if (collection) {
+		// 	navigation.dispatch(navigationAction({ routeName: "文集详情", params: { collection } }));
+		// }
 	};
 }
 

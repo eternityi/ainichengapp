@@ -68,11 +68,6 @@ class ListScreen extends Component {
 											renderItem={({ item }) => (
 												<TouchableOpacity
 													style={styles.categoryItem}
-													onPress={() =>
-														navigation.navigate("专题详情", {
-															category: item
-														})
-													}
 													onLongPress={() => {
 														if (is_self) {
 															this.setState({
@@ -82,16 +77,7 @@ class ListScreen extends Component {
 														}
 													}}
 												>
-													<CategoryGroup
-														navigation={navigation}
-														category={item}
-														showCreator
-														customStyle={{
-															logo: 44,
-															mateSize: 13
-														}}
-														plain
-													/>
+													<CategoryGroup category={item} />
 												</TouchableOpacity>
 											)}
 											ListFooterComponent={() => <ContentEnd />}
@@ -116,25 +102,9 @@ class ListScreen extends Component {
 												index
 											})}
 											renderItem={({ item }) => (
-												<TouchableOpacity
-													style={styles.categoryItem}
-													onPress={() =>
-														navigation.navigate("专题详情", {
-															category: item
-														})
-													}
-												>
-													<CategoryGroup
-														navigation={navigation}
-														category={item}
-														showCreator
-														plain
-														customStyle={{
-															logo: 44,
-															mateSize: 13
-														}}
-													/>
-												</TouchableOpacity>
+												<View style={styles.categoryItem}>
+													<CategoryGroup category={item} />
+												</View>
 											)}
 											ListFooterComponent={() => <ContentEnd />}
 										/>

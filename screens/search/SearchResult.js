@@ -37,6 +37,8 @@ class SearchResult extends Component {
 			<View style={styles.container}>
 				<Query query={SearchResaultQueries} variables={{ keyword: keywords, order: order }}>
 					{({ loading, error, data, fetchMore, refetch, client }) => {
+						console.log("keywords", keywords);
+						console.log("error", error);
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (!(data && data.articles && data.users && data.categories && data.collections)) return <SpinnerLoading />;
 						if (data.articles.length < 1 && data.users.length < 1 && data.categories.length < 1 && data.collections.length < 1)
@@ -143,15 +145,6 @@ class SearchResult extends Component {
 								return this._renderRelatedCategoryItem(elem, idnex);
 							})}
 						</View>
-						<DivisionLine height={18} />
-					</View>
-				)}
-				{collections.length > 0 && (
-					<View>
-						<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关文集", { collections })}>
-							<Text style={styles.relatedTypeText}>相关文集</Text>
-							<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
-						</TouchableOpacity>
 						<DivisionLine height={18} />
 					</View>
 				)}

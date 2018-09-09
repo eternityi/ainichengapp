@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableWithoutFeedback } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import { FollowButton } from "../Button";
@@ -8,29 +8,18 @@ import Colors from "../../constants/Colors";
 
 class UserMetaGroup extends Component {
 	render() {
-		const {
-			user = {},
-			customStyle = {},
-			height = 45,
-			navigation,
-			hideButton = false,
-			plain = false,
-			topInfo = false,
-			bottomInfo = false
-		} = this.props;
-		let { avatar = 34, nameSize = 16, metaSize = 14 } = customStyle;
+		const { user = {}, customStyle = {}, navigation, topInfo = false, bottomInfo = false } = this.props;
+		let { avatar = 48, nameSize = 15, metaSize = 13 } = customStyle;
 		return (
-			<View style={styles.groupWrap}>
-				<View style={styles.groupLeft}>
-					<TouchableOpacity onPress={() => navigation.navigate("用户详情", { user })}>
-						<Avatar size={avatar} uri={user.avatar} />
-					</TouchableOpacity>
-					<View style={[styles.userInfo, { height }]}>
+			<TouchableWithoutFeedback onPress={() => navigation.navigate("用户详情", { user })}>
+				<View style={styles.groupWrap}>
+					<Avatar size={avatar} uri={user.avatar} />
+					<View style={styles.userInfo}>
 						<Text
 							numberOfLines={1}
 							style={{
-								color: Colors.primaryFontColor,
-								fontSize: nameSize
+								fontSize: nameSize,
+								color: Colors.primaryFontColor
 							}}
 						>
 							{topInfo ? topInfo : <Text>{user.name || " "}</Text>}
@@ -38,33 +27,25 @@ class UserMetaGroup extends Component {
 						<Text
 							numberOfLines={1}
 							style={{
+								fontSize: metaSize,
 								color: Colors.tintFontColor,
-								fontSize: metaSize
+								marginTop: 6
 							}}
 						>
 							{bottomInfo ? (
 								bottomInfo
 							) : (
 								<Text>
-									{user.count_articles || "0"}
-									个作品，获得了
-									{user.count_likes || "0"}
-									个喜欢
+									{user.count_articles || "0"} 作品
+									{"  "}
+									{user.count_likes || "0"} 喜欢
 								</Text>
 							)}
 						</Text>
 					</View>
+					<FollowButton type={"user"} id={user.id} status={user.followed_status} />
 				</View>
-				{!hideButton && (
-					<FollowButton
-						type={"user"}
-						id={user.id}
-						status={user.followed_status}
-						customStyle={plain ? { height: 28, width: 72 } : null}
-						fontSize={plain ? 14 : 15}
-					/>
-				)}
-			</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
@@ -75,15 +56,8 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	userInfo: {
-		justifyContent: "space-between",
 		flex: 1,
-		paddingLeft: 12
-	},
-	groupLeft: {
-		flexDirection: "row",
-		alignItems: "center",
-		flex: 1,
-		marginRight: 20
+		marginHorizontal: 15
 	}
 });
 

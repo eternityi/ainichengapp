@@ -42,24 +42,9 @@ class RelatedUsersScreen extends Component {
 	_renderItem({ item }) {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity
-				style={styles.userItem}
-				onPress={() =>
-					navigation.navigate("用户详情", {
-						user: item
-					})
-				}
-			>
-				<UserMetaGroup
-					navigation={navigation}
-					customStyle={{
-						avatar: 44,
-						nameSize: 17,
-						metaSize: 13
-					}}
-					user={item}
-				/>
-			</TouchableOpacity>
+			<View style={styles.userItem}>
+				<UserMetaGroup user={item} />
+			</View>
 		);
 	}
 }

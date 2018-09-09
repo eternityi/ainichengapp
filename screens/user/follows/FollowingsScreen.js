@@ -1,119 +1,54 @@
-import React, { Component } from "react";
-import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
-import { Iconfont } from "../../../utils/Fonts";
-import Colors from "../../../constants/Colors";
-import { Header } from "../../../components/Header";
-import { UserMetaGroup } from "../../../components/MediaGroup";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, Find } from "../../../components/Pure";
-import Screen from "../../Screen";
+import React from "react";
+import { Colors, Divice } from "../../../constants";
+import { TabNavigator, TabBarTop } from "react-navigation";
 
-import { Query } from "react-apollo";
-import { userFollowingsQuery } from "../../../graphql/user.graphql";
-import { connect } from "react-redux";
-import actions from "../../../store/actions";
+import FollowedUserScreen from "./FollowedUserScreen";
+import FollowedCategoryScreen from "./FollowedCategoryScreen";
 
-class FollowingsScreen extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			fetchingMore: true
-		};
-	}
-
-	render() {
-		const { user = {} } = this.props.navigation.state.params;
-		let { follows, navigation, personal } = this.props;
-		let self = personal.id == user.id ? true : false;
-		return (
-			<Screen>
-				<View style={styles.container}>
-					<Query query={userFollowingsQuery} variables={{ user_id: user.id }}>
-						{({ loading, error, data, refetch, fetchMore }) => {
-							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.users)) return <SpinnerLoading />;
-							if (data.users.length < 1) self ? <Find /> : <BlankContent />;
-							return (
-								<FlatList
-									data={data.users}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={this._renderItem.bind(this)}
-									onEndReachedThreshold={0.3}
-									onEndReached={() => {
-										if (data.users) {
-											fetchMore({
-												variables: {
-													offset: data.users.length
-												},
-												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.users && fetchMoreResult.users.length > 0)) {
-														this.setState({
-															fetchingMore: false
-														});
-														return prev;
-													}
-													return Object.assign({}, prev, {
-														users: [...prev.users, ...fetchMoreResult.users]
-													});
-												}
-											});
-										} else {
-											this.setState({
-												fetchingMore: false
-											});
-										}
-									}}
-									ListFooterComponent={() => {
-										return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
-									}}
-								/>
-							);
-						}}
-					</Query>
-				</View>
-			</Screen>
-		);
-	}
-
-	_renderItem({ item, index }) {
-		let { navigation } = this.props;
-		let user = item;
-		return (
-			<TouchableOpacity
-				style={styles.followerItem}
-				onPress={() =>
-					navigation.navigate("用户详情", {
-						user
-					})
-				}
-			>
-				<UserMetaGroup
-					navigation={navigation}
-					plain
-					customStyle={{
-						avatar: 42,
-						nameSize: 17,
-						metaSize: 13
-					}}
-					user={user}
-				/>
-			</TouchableOpacity>
-		);
-	}
-}
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colors.skinColor
+export default TabNavigator(
+	{
+		用户: {
+			screen: FollowedUserScreen
+		},
+		专题: {
+			screen: FollowedCategoryScreen
+		}
 	},
-	followerItem: {
-		padding: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: Colors.lightBorderColor
+	{
+		tabBarPosition: "top",
+		animationEnabled: false,
+		swipeEnabled: true,
+		lazy: false,
+		backBehavior: "none",
+		tabBarOptions: {
+			activeTintColor: Colors.darkFontColor,
+			inactiveTintColor: Colors.primaryFontColor,
+			style: {
+				backgroundColor: "#fff",
+				borderBottomWidth: 0,
+				elevation: 0,
+				shadowColor: "transparent",
+				paddingTop: Divice.STATUSBAR_HEIGHT,
+				paddingBottom: 10,
+				paddingLeft: Divice.width / 2 - 60
+			},
+			indicatorStyle: {
+				height: 2,
+				width: 20,
+				marginHorizontal: 20,
+				backgroundColor: Colors.themeColor,
+				left: Divice.width / 2 - 60,
+				bottom: 10
+			},
+			labelStyle: {
+				fontSize: 17,
+				margin: 3
+			},
+			tabStyle: {
+				width: 60,
+				paddingHorizontal: 0
+			}
+		},
+		tabBarComponent: props => <TabBarTop {...props} />
 	}
-});
-
-export default connect(store => ({
-	follows: store.users.follows,
-	personal: store.users.user
-}))(FollowingsScreen);
+);

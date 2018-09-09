@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableWithoutFeedback } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import Avatar from "../Pure/Avatar";
@@ -8,39 +8,26 @@ import Colors from "../../constants/Colors";
 
 class CategoryGroup extends Component {
   render() {
-    const { category = {}, customStyle = {}, plain = false, hideButton = false, showCreator = false, navigation } = this.props;
-    let { logo = 36, nameSize = 16, mateSize = 14 } = customStyle;
+    const { category = {}, customStyle = {}, plain = false, hideButton = false, navigation } = this.props;
+    let { logo = 48, nameSize = 15, mateSize = 13 } = customStyle;
     return (
-      <View style={styles.groupWrap}>
-        <View style={styles.groupLeft}>
-          <TouchableOpacity onPress={() => navigation.navigate("专题详情", { category })}>
-            <Avatar type="category" size={logo} uri={category.logo} />
-          </TouchableOpacity>
-          <View style={[styles.categoryInfo, { height: logo, minHeight: 40 }]}>
-            <Text numberOfLines={1} style={{ color: Colors.primaryFontColor, fontSize: nameSize }}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("专题详情", { user })}>
+        <View style={styles.groupWrap}>
+          <Avatar type="category" size={logo} uri={category.logo} />
+          <View style={styles.categoryInfo}>
+            <Text numberOfLines={1} style={{ color: Colors.primaryFontColor, fontSize: nameSize, marginBottom: 6 }}>
               {category.name || ""}
             </Text>
-            {showCreator ? (
-              <Text numberOfLines={1} style={{ color: Colors.tintFontColor, fontSize: mateSize }}>
-                {`${category.user.name} · ${category.count_articles}篇文章 · ${category.count_follows}人关注`}
-              </Text>
-            ) : (
-              <Text numberOfLines={1} style={{ color: Colors.tintFontColor, fontSize: mateSize }}>
-                {category.count_articles + "篇文章  " + category.count_follows + "人关注" || ""}
-              </Text>
-            )}
+            <Text numberOfLines={1} style={{ color: Colors.tintFontColor, fontSize: mateSize }}>
+              {category.count_articles || 0}
+              {"个内容  "}
+              {category.count_follows || 0}
+              {"人关注 "}
+            </Text>
           </View>
+          {!hideButton && <FollowButton type={"category"} id={category.id} status={category.followed} />}
         </View>
-        {!hideButton && (
-          <FollowButton
-            type={"category"}
-            id={category.id}
-            status={category.followed}
-            customStyle={plain ? { height: 28, width: 72 } : null}
-            fontSize={plain ? 14 : 15}
-          />
-        )}
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -53,7 +40,8 @@ const styles = StyleSheet.create({
   categoryInfo: {
     justifyContent: "space-between",
     flex: 1,
-    paddingLeft: 10
+    marginLeft: 10,
+    marginRight: 20
   },
   groupLeft: {
     flexDirection: "row",

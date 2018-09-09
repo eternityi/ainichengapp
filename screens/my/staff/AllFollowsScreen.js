@@ -19,7 +19,7 @@ class AllFollowsScreen extends Component {
 	constructor(props) {
 		super(props);
 		let filter = props.navigation.getParam("filter", "USER_CATEGORY");
-		this.menuOptions = ["全部关注", "只看用户", "只看专题", "只看文集"];
+		this.menuOptions = ["全部关注", "只看用户", "只看专题"];
 		this.state = {
 			filter: filter,
 			fetchingMore: true

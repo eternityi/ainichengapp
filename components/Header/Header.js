@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
 	},
 	routeName: {
 		fontSize: 17,
+		fontWeight: "500",
 		color: Colors.primaryFontColor
 	}
 });

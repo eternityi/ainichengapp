@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 import { Header } from "../../components/Header";
@@ -55,27 +55,9 @@ class FollowScreen extends Component {
 			return null;
 		}
 		return (
-			<TouchableOpacity
-				style={styles.followerItem}
-				onPress={() =>
-					navigation.navigate("用户详情", {
-						user
-					})
-				}
-			>
-				<UserMetaGroup
-					navigation={navigation}
-					plain
-					customStyle={{
-						avatar: 42,
-						nameSize: 17,
-						metaSize: 13
-					}}
-					user={user}
-					topInfo={user.name + " 关注了你"}
-					bottomInfo={time_ago}
-				/>
-			</TouchableOpacity>
+			<View style={styles.followerItem}>
+				<UserMetaGroup user={user} topInfo={user.name + " 关注了你"} bottomInfo={time_ago} />
+			</View>
 		);
 	}
 }

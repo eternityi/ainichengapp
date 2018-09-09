@@ -1,12 +1,9 @@
 import React from "react";
 import { Colors, Divice } from "../../constants";
 import { TabNavigator, TabBarTop } from "react-navigation";
-import { Text, View, Platform } from "react-native";
 
-import Search from "../../components/Header/Search";
 import RecommendScreen from "./RecommendScreen";
 import CategoriesScreen from "./CategoriesScreen";
-import CustomFindTab from "./CustomFindTab";
 
 export default TabNavigator(
   {
@@ -30,6 +27,7 @@ export default TabNavigator(
         backgroundColor: "#fff",
         borderBottomWidth: 0,
         elevation: 0,
+        shadowColor: "transparent",
         paddingTop: Divice.STATUSBAR_HEIGHT,
         paddingLeft: Divice.width / 2 - 60
       },

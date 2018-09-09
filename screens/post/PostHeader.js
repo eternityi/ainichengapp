@@ -54,7 +54,6 @@ class PostHeader extends Component {
                     </TouchableOpacity>
                     <Text style={[styles.name, lightBar && { color: "#fff" }]}>{user.name}</Text>
                     <FollowButton
-                      plain
                       id={user.id}
                       type={"user"}
                       customStyle={lightBar ? styles.transparentButton : styles.fillButton}
@@ -62,7 +61,6 @@ class PostHeader extends Component {
                       theme={lightBar ? "transparent" : Colors.weixinColor}
                       under={lightBar ? "transparent" : Colors.darkGray}
                       status={user.followed_status}
-                      fontSize={user.followed_status == 2 ? 13 : 14}
                     />
                   </HeaderLeft>
                 }

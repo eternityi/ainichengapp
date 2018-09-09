@@ -3,24 +3,26 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableWithoutFeedback, Touc
 import { withNavigation } from "react-navigation";
 
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { navigationAction, goContentScreen } from "../../constants/Methods";
+import { Colors, Divice, Methods } from "../../constants";
 import { Avatar, VideoCover } from "../Pure";
 import { CustomPopoverMenu } from "../../components/Modal";
 
-const { width, height } = Dimensions.get("window");
-const IMG_INTERVAL = 8;
-const IMG_WIDTH = (width - 46) / 3;
-const COVER_WIDTH = width - 30;
+const IMG_INTERVAL = 4;
+const IMG_WIDTH = (Divice.width - 38) / 3;
+const COVER_WIDTH = Divice.width - 30;
 
 class NoteItem extends Component {
 	render() {
 		const { post, navigation, compress, longPress = () => null, onPress, popoverMenu, options, popoverHandler = () => null } = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_replies } = post;
+		let landscape = false;
+		if (type !== "video" && has_image && images.length == 1) {
+			landscape = true;
+		}
 		return (
 			<TouchableHighlight
 				underlayColor={Colors.tintGray}
-				onPress={onPress ? onPress : () => goContentScreen(navigation, post)}
+				onPress={onPress ? onPress : () => Methods.goContentScreen(navigation, post)}
 				onLongPress={longPress}
 			>
 				<View style={styles.noteContainer}>
@@ -31,7 +33,7 @@ class NoteItem extends Component {
 							<View style={styles.userInfo}>
 								<TouchableOpacity
 									activeOpacity={0.5}
-									onPress={() => navigation.dispatch(navigationAction({ routeName: "用户详情", params: { user } }))}
+									onPress={() => navigation.dispatch(Methods.navigationAction({ routeName: "用户详情", params: { user } }))}
 								>
 									<Avatar size={28} uri={user.avatar} />
 								</TouchableOpacity>
@@ -47,25 +49,27 @@ class NoteItem extends Component {
 							/>
 						)}
 					</View>
-					{type == "article" ? (
-						<View style={styles.abstract}>
-							<Text numberOfLines={2} style={styles.title}>
-								{title}
-							</Text>
-							{description ? (
-								<Text numberOfLines={2} style={styles.description}>
-									{description}
+					<View style={landscape ? styles.landscape : {}}>
+						{type == "article" ? (
+							<View style={[styles.abstract, landscape && { flex: 1 }]}>
+								<Text numberOfLines={2} style={styles.title}>
+									{title}
 								</Text>
-							) : null}
-						</View>
-					) : (
-						<View style={styles.abstract}>
-							<Text numberOfLines={2} style={styles.title}>
-								{title ? title : description}
-							</Text>
-						</View>
-					)}
-					<View>{has_image && this.renderImage(type, images, cover)}</View>
+								{description ? (
+									<Text numberOfLines={2} style={styles.description}>
+										{description}
+									</Text>
+								) : null}
+							</View>
+						) : (
+							<View style={[styles.abstract, landscape && { flex: 1 }]}>
+								<Text numberOfLines={2} style={styles.title}>
+									{title ? title : description}
+								</Text>
+							</View>
+						)}
+						<View>{has_image && this.renderImage(type, images, cover)}</View>
+					</View>
 					{this._renderFooter(category, hits, count_replies, count_likes)}
 				</View>
 			</TouchableHighlight>
@@ -77,7 +81,9 @@ class NoteItem extends Component {
 		return (
 			<View style={styles.noteFooter}>
 				{category ? (
-					<TouchableWithoutFeedback onPress={() => navigation.dispatch(navigationAction({ routeName: "专题详情", params: { category } }))}>
+					<TouchableWithoutFeedback
+						onPress={() => navigation.dispatch(Methods.navigationAction({ routeName: "专题详情", params: { category } }))}
+					>
 						<View style={styles.layoutFlexRow}>
 							<Iconfont name="category-rotate" size={12} color={Colors.lightFontColor} />
 							<Text style={styles.categoryName}>{category.name}</Text>
@@ -111,8 +117,8 @@ class NoteItem extends Component {
 			);
 		} else if (images.length == 1) {
 			return (
-				<View style={styles.coverWrap}>
-					<Image style={styles.cover} source={{ uri: cover }} />
+				<View style={styles.landscapeImg}>
+					<Image style={styles.rightImage} source={{ uri: cover }} />
 				</View>
 			);
 		} else if (images.length > 1) {
@@ -133,6 +139,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.lightBorderColor
+	},
+	landscape: {
+		flexDirection: "row",
+		alignItems: "center"
 	},
 	noteUser: {
 		flexDirection: "row",
@@ -158,10 +168,22 @@ const styles = StyleSheet.create({
 	gridView: {
 		marginLeft: -IMG_INTERVAL
 	},
+	rightImage: {
+		width: 92,
+		height: 92,
+		resizeMode: "cover"
+	},
 	gridImage: {
 		width: IMG_WIDTH,
 		height: IMG_WIDTH,
 		resizeMode: "cover"
+	},
+	landscapeImg: {
+		borderRadius: 3,
+		borderWidth: 1,
+		borderColor: Colors.lightBorderColor,
+		marginLeft: 10,
+		overflow: "hidden"
 	},
 	coverWrap: {
 		borderTopWidth: 1,

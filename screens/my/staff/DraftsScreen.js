@@ -51,7 +51,7 @@ class DraftsScreen extends Component {
 												this.article = item;
 												this.handleModal();
 											}}
-											options={["编辑", "删除", "公开发布", "文集设置"]}
+											options={["编辑", "删除", "公开发布"]}
 											popoverHandler={index => {
 												this.article = item;
 												this.operationHandler(index);
@@ -100,7 +100,7 @@ class DraftsScreen extends Component {
 					</Query>
 				</View>
 				<OperationModal
-					operation={["编辑", "删除", "公开发布", "文集设置"]}
+					operation={["编辑", "删除", "公开发布"]}
 					visible={modalVisible}
 					handleVisible={this.handleModal}
 					handleOperation={index => {
@@ -150,9 +150,6 @@ class DraftsScreen extends Component {
 						}
 					]
 				});
-				break;
-			case 3:
-				navigation.navigate("选择文集", { article: this.article });
 				break;
 		}
 	};

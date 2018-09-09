@@ -4,10 +4,10 @@ import { StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Iconfont } from "../../utils/Fonts";
 import { connect } from "react-redux";
 
-class RecommendFollow extends Component {
+class RecommendUser extends Component {
   navigate() {
     let { login, navigation } = this.props;
-    login ? navigation.navigate("推荐关注") : navigation.navigate("登录注册", { login: true });
+    login ? navigation.navigate("推荐好友") : navigation.navigate("登录注册", { login: true });
   }
 
   render() {
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
 
 export default connect(store => ({
   login: store.users.login
-}))(RecommendFollow);
+}))(RecommendUser);

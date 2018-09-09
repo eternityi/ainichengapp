@@ -13,11 +13,7 @@ class FollowItem extends Component {
 		}
 		return (
 			<View>
-				{follow.user ? (
-					<UserGroup customStyle={{ avatar: 42, height: 45, nameSize: 17 }} user={follow.user} />
-				) : (
-					<CategoryGroup customStyle={{ logo: 42, height: 45, nameSize: 17 }} category={follow.category} />
-				)}
+				{follow.user ? <UserGroup user={follow.user} /> : <CategoryGroup category={follow.category} />}
 				<View style={{ paddingLeft: 50, marginTop: 20 }}>
 					<View>
 						<Text numberOfLines={3} style={[styles.recommendInfo, follow.category && { lineHeight: 22 }]}>

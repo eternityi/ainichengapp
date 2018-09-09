@@ -16,7 +16,6 @@ import CategoryItem from "./CategoryItem";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, graphql, compose, withApollo } from "react-apollo";
-import { queryArticleRequesRecommend } from "../../graphql/article.graphql";
 import { hotSearchAndLogsQuery, deleteQueryLogMutation } from "../../graphql/user.graphql";
 
 class SeleceCategoryScreen extends React.Component {

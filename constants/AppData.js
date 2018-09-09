@@ -1,12 +1,5 @@
 export const official_categories = [
 	{
-		id: 1,
-		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
-		name: "关注的专题",
-		type: "全部关注",
-		filter: "CATEGORY"
-	},
-	{
 		id: 64,
 		avatar: "https://www.ainicheng.com/images/appicons/guanfangketang.png",
 		name: "官方课堂",
@@ -89,5 +82,11 @@ export const official_categories = [
 		avatar: "https://ainicheng.com/images/appicons/xinqing.png",
 		name: "心情",
 		type: "专题详情"
+	},
+	{
+		id: 0,
+		avatar: "https://ainicheng.com/images/appicons/wodeguanzhu.png",
+		name: "更多专题",
+		type: "全部专题"
 	}
 ];

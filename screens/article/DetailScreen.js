@@ -79,8 +79,6 @@ class DetailScreen extends Component {
                       <Text style={styles.articleInfoText}>
                         {article.time_ago + " · 字数" + article.count_words + " · 阅读" + article.hits + "  "}
                       </Text>
-                      {article.collection && <Iconfont name={"collection-two"} style={styles.articleInfoText} />}
-                      <Text style={styles.articleInfoText}>{article.collection && article.collection.name}</Text>
                     </View>
                   </View>
                   <View style={{ paddingHorizontal: 15 }}>

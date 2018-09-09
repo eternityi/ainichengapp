@@ -6,7 +6,6 @@ import { MenuProvider } from "react-native-popup-menu";
 import { Iconfont } from "../../../utils/Fonts";
 import Colors from "../../../constants/Colors";
 import { CustomPopoverMenu, SlideInUpModal } from "../../../components/Modal";
-import { CategoryGroup } from "../../../components/MediaGroup";
 import { LoadingMore, LoadingError, ContentEnd, Diving } from "../../../components/Pure";
 import { Input } from "../../../components/elements";
 import CommentItem from "./CommentItem";

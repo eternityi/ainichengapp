@@ -78,25 +78,9 @@ class FollowersScreen extends Component {
 		let { navigation } = this.props;
 		let user = item;
 		return (
-			<TouchableOpacity
-				style={styles.followerItem}
-				onPress={() =>
-					navigation.navigate("用户详情", {
-						user
-					})
-				}
-			>
-				<UserMetaGroup
-					navigation={navigation}
-					plain
-					customStyle={{
-						avatar: 42,
-						nameSize: 17,
-						metaSize: 13
-					}}
-					user={user}
-				/>
-			</TouchableOpacity>
+			<View style={styles.followerItem}>
+				<UserMetaGroup user={user} />
+			</View>
 		);
 	}
 }

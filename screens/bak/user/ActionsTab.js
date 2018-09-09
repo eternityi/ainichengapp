@@ -168,7 +168,8 @@ class ActionsTab extends Component {
                   onPress={() =>
                     navigation.navigate("文章详情", {
                       article: action.postedComment.article
-                    })}
+                    })
+                  }
                 >
                   {action.postedComment.article.title}
                 </Text>
@@ -178,7 +179,8 @@ class ActionsTab extends Component {
               onPress={() =>
                 navigation.navigate("评论详情", {
                   comment: action.postedComment
-                })}
+                })
+              }
             >
               <View style={styles.commentBox}>
                 <Text numberOfLines={3} style={styles.commentText}>
@@ -188,7 +190,8 @@ class ActionsTab extends Component {
                       onPress={() =>
                         navigation.navigate("用户详情", {
                           user: action.postedComment.atUser
-                        })}
+                        })
+                      }
                     >
                       @{action.postedComment.atUser.name + " "}
                     </Text>
@@ -210,7 +213,8 @@ class ActionsTab extends Component {
                 onPress={() =>
                   navigation.navigate("文章详情", {
                     article: action.tiped.article
-                  })}
+                  })
+                }
               >
                 {action.tiped.article.title}
               </Text>
@@ -230,7 +234,8 @@ class ActionsTab extends Component {
                     onPress={() =>
                       navigation.navigate("文章详情", {
                         articleId: action.liked.article.id
-                      })}
+                      })
+                    }
                   >
                     {action.liked.article.title}
                   </Text>
@@ -247,7 +252,8 @@ class ActionsTab extends Component {
                       onPress={() =>
                         navigation.navigate("用户详情", {
                           user: action.liked.comment.user
-                        })}
+                        })
+                      }
                     >
                       {action.liked.comment.user.name}
                     </Text>
@@ -257,7 +263,8 @@ class ActionsTab extends Component {
                       onPress={() =>
                         navigation.navigate("文章详情", {
                           article: action.liked.comment.article
-                        })}
+                        })
+                      }
                     >
                       {action.liked.comment.article.title}
                     </Text>
@@ -268,7 +275,8 @@ class ActionsTab extends Component {
                   onPress={() =>
                     navigation.navigate("评论详情", {
                       comment: action.liked.comment
-                    })}
+                    })
+                  }
                 >
                   <View style={styles.commentBox}>
                     <Text numberOfLines={3} style={styles.commentText}>
@@ -292,7 +300,8 @@ class ActionsTab extends Component {
                   onPress={() =>
                     navigation.navigate("文章详情", {
                       article: action.postedArticle
-                    })}
+                    })
+                  }
                 >
                   {action.postedArticle.title}
                 </Text>
@@ -302,7 +311,8 @@ class ActionsTab extends Component {
               onPress={() =>
                 navigation.navigate("文章详情", {
                   article: action.postedArticle
-                })}
+                })
+              }
             >
               <View style={styles.commentBox}>
                 <Text numberOfLines={6} style={styles.commentText}>
@@ -314,14 +324,11 @@ class ActionsTab extends Component {
         );
         break;
       case "follows":
-        if (!action.followed) return null;
-
+        if (!action.followed || action.followed.collection) {
+          return null;
+        }
         let routeName = "专题详情";
         let params = { category: action.followed.category };
-        if (action.followed.collection) {
-          routeName = "文集详情";
-          params = { collection: action.followed.collection };
-        }
         if (action.followed.user) {
           routeName = "用户详情";
           params = { user: action.followed.user };
@@ -331,11 +338,9 @@ class ActionsTab extends Component {
             <Text style={styles.dynamicText}>
               {user.name + " 关注了 "}
               {action.followed.category && "专题 "}
-              {action.followed.collection && "文集 "}
               {action.followed.user && "作者 "}
               <Text style={{ color: Colors.linkColor }} onPress={() => navigation.navigate(routeName, params)}>
                 {action.followed.category && action.followed.category.name}
-                {action.followed.collection && action.followed.collection.name}
                 {action.followed.user && action.followed.user.name}
               </Text>
             </Text>

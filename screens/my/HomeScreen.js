@@ -37,7 +37,6 @@ class HomeScreen extends React.Component {
             fetchPolicy: "network-only"
           })
           .then(({ data }) => {
-            console.log("data", data);
             dispatch(actions.updateUserResource(data.user));
           })
           .catch(error => {
@@ -60,31 +59,31 @@ class HomeScreen extends React.Component {
           <UserTopInfo user={user} login={login} navigation={navigation} />
           <View style={styles.itemContainer}>
             <View style={styles.columnContainer}>
-              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("我的发布", { user })}>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("我的发布", { user })}>
                 <Text style={styles.countFont}>{user.count_production || 0}</Text>
-                <Text style={styles.rowsType}>发布</Text>
+                <Text style={styles.rowsType1}>发布</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("关注", { user })}>
-                <Text style={styles.countFont}>{user.count_followings || 0}</Text>
-                <Text style={styles.rowsType}>关注</Text>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("全部关注", { user })}>
+                <Text style={styles.countFont}>{user.count_followings + user.count_follows || 0}</Text>
+                <Text style={styles.rowsType1}>关注</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rowsItem} onPress={() => navigation.navigate("粉丝", { user })}>
+              <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("粉丝", { user })}>
                 <Text style={styles.countFont}>{user.count_followers || 0}</Text>
-                <Text style={styles.rowsType}>粉丝</Text>
+                <Text style={styles.rowsType1}>粉丝</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.columnContainer}>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("私密作品")}>
                 <Iconfont name={"lock"} size={26} color={Colors.tintColor} style={{ marginTop: -1 }} />
-                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>私密</Text>
+                <Text style={styles.rowsType2}>私密</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("我的收藏")}>
                 <Iconfont name={"star"} size={26} color={Colors.qqzoneColor} style={{ marginTop: -1 }} />
-                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>收藏</Text>
+                <Text style={styles.rowsType2}>收藏</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("喜欢", { user })}>
                 <Iconfont name={"like"} size={24} color={Colors.weiboColor} />
-                <Text style={[styles.rowsType, { color: Colors.primaryFontColor }]}>喜欢</Text>
+                <Text style={styles.rowsType2}>喜欢</Text>
               </TouchableOpacity>
             </View>
             <DivisionLine style={{ height: 15, marginTop: -1, marginHorizontal: -15 }} />
@@ -92,18 +91,6 @@ class HomeScreen extends React.Component {
               <View style={styles.columnItem}>
                 <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
                 <Text style={styles.columnType}>我的专题</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("个人文集", { user })}>
-              <View style={styles.columnItem}>
-                <Iconfont name={"collection"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                <Text style={styles.columnType}>我的文集</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.navigateMiddlewear("关注的专题和文集", { user })}>
-              <View style={styles.columnItem}>
-                <Iconfont name={"followed"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-                <Text style={styles.columnType}>关注的专题/文集</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
@@ -119,16 +106,16 @@ class HomeScreen extends React.Component {
               </View>
             </TouchableOpacity>
             {
-              // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
-              //   <View style={styles.columnItem}>
-              //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-              //     <Text style={styles.columnType}>我的钱包</Text>
-              //   </View>
-              // </TouchableOpacity>
               // <TouchableOpacity onPress={() => navigation.navigate("意见反馈")}>
               //   <View style={styles.columnItem}>
               //     <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
               //     <Text style={styles.columnType}>意见反馈</Text>
+              //   </View>
+              // </TouchableOpacity>
+              // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
+              //   <View style={styles.columnItem}>
+              //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+              //     <Text style={styles.columnType}>我的钱包</Text>
               //   </View>
               // </TouchableOpacity>
               // <TouchableOpacity onPress={this.toggleModalVisible}>
@@ -182,9 +169,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  rowsType: {
+  rowsType1: {
     fontSize: 14,
     color: Colors.tintFontColor
+  },
+  rowsType2: {
+    fontSize: 14,
+    color: Colors.primaryFontColor
   },
   countFont: {
     fontSize: 18,
@@ -202,7 +193,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 8,
     fontSize: 15,
-    color: "#666"
+    color: Colors.primaryFontColor
   }
 });
 

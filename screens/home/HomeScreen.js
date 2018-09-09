@@ -5,7 +5,7 @@ import Toast from "react-native-root-toast";
 import Screen from "../Screen";
 import { Colors, Config, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
-import { Header, RecommendFollow } from "../../components/Header";
+import { Header, RecommendUser } from "../../components/Header";
 import { SearchBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import PostItem from "../../components/Article/PostItem";
 import ListHeader from "./ListHeader";
@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
       <Screen header>
         <View style={styles.container}>
           <Header
-            leftComponent={<RecommendFollow navigation={navigation} />}
+            leftComponent={<RecommendUser navigation={navigation} />}
             centerComponent={
               <View style={{ flex: 1 }}>
                 <SearchBar navigation={navigation} height={30} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
@@ -88,10 +88,9 @@ class HomeScreen extends React.Component {
                   ref={scrollview => {
                     this.scrollview = scrollview;
                   }}
-                  ListHeaderComponent={() => <ListHeader navigation={navigation} />}
                   refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                   data={data.articles}
-                  keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+                  keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => <PostItem post={item} />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {

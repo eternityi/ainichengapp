@@ -28,11 +28,12 @@ query specialCategoriesQuery {
 }
 
 query topCategoriesQuery($offset: Int) {
-	categories(offset: $offset, limit: 12) {
+	categories(offset: $offset, limit: 3) {
 		id
 		name
 		logo
 		count_follows
+		count_articles
 		followed
 		description
 		need_approve

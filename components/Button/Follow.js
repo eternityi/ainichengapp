@@ -50,15 +50,16 @@ class Follow extends Component {
 			type,
 			status,
 			customStyle = {},
-			fontSize = 15,
+			fontSize = 14,
 			fontColor,
-			theme = Colors.weixinColor,
+			theme = Colors.themeColor,
 			under = Colors.darkGray,
 			personal,
 			login
 		} = this.props;
 		if (!login) status = 0;
 		let mergeStyle = StyleSheet.flatten([styles.followButton, customStyle]);
+		fontSize = status == 2 ? fontSize - 1 : fontSize;
 		let color = fontColor ? fontColor : status ? "#666" : "#fff";
 		if (type == "user" && personal.id == id) {
 			return null;
@@ -73,7 +74,7 @@ class Follow extends Component {
 						}
 					]}
 				>
-					{status ? (status == 2 ? "互相关注" : "已关注") : "关 注"}
+					{status ? (status == 2 ? "互相关注" : "已关注") : "关注"}
 				</Text>
 			</TouchableOpacity>
 		);
@@ -85,9 +86,9 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 3,
-		width: 80,
-		height: 32
+		width: 72,
+		height: 30,
+		borderRadius: 3
 	}
 });
 export default compose(

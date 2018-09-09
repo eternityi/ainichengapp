@@ -1,15 +1,14 @@
 import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl } from "react-native";
-import Swiper from "react-native-swiper";
-import Poster from "./Poster";
 
 import Colors from "../../constants/Colors";
+import Carousel from "./Carousel";
+import RecommendAuthor from "./RecommendAuthor";
 import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import RecommendAuthor from "./RecommendAuthor";
 import Screen from "../Screen";
 
-import { recommendArticlesQuery, topArticleWithImagesQuery } from "../../graphql/article.graphql";
+import { recommendArticlesQuery } from "../../graphql/article.graphql";
 import { Mutation, Query, compose, withApollo } from "react-apollo";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -58,19 +57,12 @@ class RecommendScreen extends React.Component {
                 ref={scrollview => {
                   this.scrollview = scrollview;
                 }}
-                ListHeaderComponent={() => {
-                  return (
-                    <View>
-                      <Query query={topArticleWithImagesQuery}>
-                        {({ loading, error, data }) => {
-                          if (!(data && data.articles)) return null;
-                          return <Poster data={data.articles} />;
-                        }}
-                      </Query>
-                      <RecommendAuthor navigation={navigation} />
-                    </View>
-                  );
-                }}
+                ListHeaderComponent={() => (
+                  <View>
+                    <Carousel navigation={navigation} />
+                    <RecommendAuthor />
+                  </View>
+                )}
                 refreshing={loading}
                 onRefresh={() => {
                   refetch();
@@ -112,35 +104,6 @@ class RecommendScreen extends React.Component {
       </View>
     );
   }
-
-  _renderCarouselItem() {
-    <TouchableOpacity key={index} onPress={() => this.props.navigation.navigate("文章详情", { article: article })}>
-      <Image style={styles.posterImage} source={{ uri: article.top_image }} />
-      <View style={styles.posterTitle}>
-        <Text style={styles.posterTitleText} numberOfLines={1}>
-          {article.title}
-        </Text>
-      </View>
-    </TouchableOpacity>;
-  }
-
-  _renderSwiperImage(poster) {
-    var posterList = [];
-    poster.forEach((article, index) => {
-      posterList.push(
-        <TouchableOpacity key={index} onPress={() => this.props.navigation.navigate("文章详情", { article: article })}>
-          <Image style={styles.posterImage} source={{ uri: article.top_image }} />
-          <View style={styles.posterTitle}>
-            <Text style={styles.posterTitleText} numberOfLines={1}>
-              {article.title}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    });
-    return posterList;
-  }
-
   _scrollToTop = () => {
     if (this.scrollview) {
       this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
@@ -156,30 +119,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff"
-  },
-  swiperContainer: {
-    height: width * 0.5
-  },
-  posterImage: {
-    width,
-    height: width * 0.5,
-    resizeMode: "cover"
-  },
-  posterTitle: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 32,
-    paddingHorizontal: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  posterTitleText: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#fff"
   }
 });
 

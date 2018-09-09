@@ -169,11 +169,6 @@ class OpenArticlesScreen extends Component {
 																		]
 																	});
 																	break;
-																// case 4:
-																// 	navigation.navigate("选择文集", {
-																// 		article: this.article
-																// 	});
-																// 	break;
 															}
 														}
 													}}

@@ -1,4 +1,8 @@
 import MainTabNavigator from "./MainTabNavigator";
+import AllCategoiesScreen from "../screens/find/AllCategoiesScreen";
+
+//home
+import RecommendFriendsScreen from "../screens/home/RecommendFriendsScreen";
 
 //creation
 import CreationScreen from "../screens/creation/CreationScreen";
@@ -22,11 +26,6 @@ import BeRewardScreen from "../screens/notification/BeRewardScreen";
 import OtherRemindScreen from "../screens/notification/OtherRemindScreen";
 import NotificationSettingScreen from "../screens/notification/SettingScreen";
 
-//recommend
-import RecommendHomeScreen from "../screens/recommend/HomeScreen";
-import RecommendAuthorsScreen from "../screens/recommend/AuthorsScreen";
-import RecommendCategoriesScreen from "../screens/recommend/CategoriesScreen";
-
 //login
 import LoginScreen from "../screens/login/LoginScreen";
 import RetrievePasswordScreen from "../screens/login/RetrievePasswordScreen";
@@ -35,7 +34,6 @@ import VerificationEmailScreen from "../screens/login/VerificationEmailScreen";
 //my
 import BrowsingHistoryScreen from "../screens/my/HistoryScreen";
 import FeedbackScreen from "../screens/my/FeedbackScreen";
-// import HelpScreen from "../screens/my/HelpScreen";
 
 //my editProfile
 import EditProfileScreen from "../screens/my/editProfile/HomeScreen";
@@ -52,14 +50,12 @@ import RecycleScreen from "../screens/my/settings/RecycleScreen";
 import RecycleDetailScreen from "../screens/my/settings/RecycleDetailScreen";
 import UserAgreementScreen from "../screens/my/settings/UserAgreementScreen";
 import PrivacyPolicyScreen from "../screens/my/settings/PrivacyPolicyScreen";
-// import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
 
 //my staff
 import PrivacyArticle from "../screens/my/staff/DraftsScreen";
 import OpenArticlesScreen from "../screens/my/staff/OpenArticlesScreen";
 import FavoritedArticlesScreen from "../screens/my/staff/FavoritedArticlesScreen";
 import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
-import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
 import MoveArticleScreen from "../screens/my/staff/MoveArticleScreen";
 import ContributeManageScreen from "../screens/my/staff/ContributeManageScreen";
 
@@ -78,18 +74,11 @@ import UserActionsScreen from "../screens/user/ActionsScreen";
 //user follows
 import FollowersScreen from "../screens/user/follows/FollowersScreen";
 import FollowingsScreen from "../screens/user/follows/FollowingsScreen";
-import FollowedBooksScreen from "../screens/user/follows/FollowedBooksScreen";
 
 //user category
 import CategoriesScreen from "../screens/user/category/ListScreen";
 import CategoryCreateScreen from "../screens/user/category/CreateScreen";
 import CategoryEditorsScreen from "../screens/user/category/AddAdminsScreen";
-
-//user collection
-import CollectionHomeScreen from "../screens/user/collection/HomeScreen";
-import CollectionsScreen from "../screens/user/collection/ListScreen";
-import CollectionEditScreen from "../screens/user/collection/EditScreen";
-import CollectionRankScreen from "../screens/user/collection/RankScreen";
 
 //article
 import ArticleDetailScreen from "../screens/article/DetailScreen";
@@ -109,11 +98,16 @@ import SearchArticlesScreen from "../screens/search/ArticlesScreen";
 import SearchCategoriesScreen from "../screens/search/CategoriesScreen";
 import RelatedUsersScreen from "../screens/search/RelatedUsersScreen";
 import RelatedCategoriesScreen from "../screens/search/RelatedCategoriesScreen";
-import RelatedCollectionsScreen from "../screens/search/RelatedCollectionsScreen";
 
 export default {
   主页: {
     screen: MainTabNavigator
+  },
+  推荐好友: {
+    screen: RecommendFriendsScreen
+  },
+  全部专题: {
+    screen: AllCategoiesScreen
   },
   创作: {
     screen: CreationScreen
@@ -169,9 +163,6 @@ export default {
   隐私政策: {
     screen: PrivacyPolicyScreen
   },
-  // 关于我们: {
-  //   screen: AboutUsScreen
-  // },
   文章详情: {
     screen: ArticleDetailScreen
   },
@@ -199,26 +190,12 @@ export default {
   相关专题: {
     screen: RelatedCategoriesScreen
   },
-  相关文集: {
-    screen: RelatedCollectionsScreen
-  },
+
   浏览记录: {
     screen: BrowsingHistoryScreen
   },
-  // 常见帮助: {
-  //   screen: HelpScreen
-  // },
   意见反馈: {
     screen: FeedbackScreen
-  },
-  推荐关注: {
-    screen: RecommendHomeScreen
-  },
-  推荐作者: {
-    screen: RecommendAuthorsScreen
-  },
-  推荐专题: {
-    screen: RecommendCategoriesScreen
   },
   用户详情: {
     screen: UserHomeScreen
@@ -250,21 +227,7 @@ export default {
   编辑列表: {
     screen: CategoryEditorsScreen
   },
-  文集详情: {
-    screen: CollectionHomeScreen
-  },
-  个人文集: {
-    screen: CollectionsScreen
-  },
-  文集排序: {
-    screen: CollectionRankScreen
-  },
-  编辑文集: {
-    screen: CollectionEditScreen
-  },
-  关注的专题和文集: {
-    screen: FollowedBooksScreen
-  },
+
   编辑个人资料: {
     screen: EditProfileScreen
   },
@@ -307,12 +270,6 @@ export default {
   新的关注: {
     screen: FollowNotificationsScreen
   },
-  全部关注: {
-    screen: AllFollowsScreen
-  },
-  选择文集: {
-    screen: MoveArticleScreen
-  },
   投稿管理: {
     screen: ContributeManageScreen
   },
@@ -322,7 +279,7 @@ export default {
   喜欢和赞: {
     screen: BeLikedScreen
   },
-  关注: {
+  全部关注: {
     screen: FollowingsScreen
   },
   粉丝: {
@@ -347,3 +304,56 @@ export default {
     screen: NotificationSettingScreen
   }
 };
+
+// import CollectionHomeScreen from "../screens/user/collection/HomeScreen";
+// import CollectionsScreen from "../screens/user/collection/ListScreen";
+// import CollectionEditScreen from "../screens/user/collection/EditScreen";
+// import CollectionRankScreen from "../screens/user/collection/RankScreen";
+// import RelatedCollectionsScreen from "../screens/search/RelatedCollectionsScreen";
+// import RecommendHomeScreen from "../screens/recommend/HomeScreen";
+// import RecommendAuthorsScreen from "../screens/recommend/AuthorsScreen";
+// import RecommendCategoriesScreen from "../screens/recommend/CategoriesScreen";
+// import HelpScreen from "../screens/my/HelpScreen";
+// import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
+// import FollowedBooksScreen from "../screens/user/follows/FollowedBooksScreen";
+// import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
+
+// 选择文集: {
+//     screen: MoveArticleScreen
+//   },
+// 相关文集: {
+//     screen: RelatedCollectionsScreen
+//   },
+// 文集详情: {
+//   screen: CollectionHomeScreen
+// },
+// 个人文集: {
+//   screen: CollectionsScreen
+// },
+// 文集排序: {
+//   screen: CollectionRankScreen
+// },
+// 编辑文集: {
+//   screen: CollectionEditScreen
+// },
+// 关于我们: {
+//   screen: AboutUsScreen
+// },
+// 常见帮助: {
+//   screen: HelpScreen
+// },
+// 推荐关注: {
+//   screen: RecommendHomeScreen
+// },
+// 推荐作者: {
+//   screen: RecommendAuthorsScreen
+// },
+// 推荐专题: {
+//   screen: RecommendCategoriesScreen
+// },
+// 关注的专题和文集: {
+//   screen: FollowedBooksScreen
+// },
+// 全部关注: {
+//   screen: AllFollowsScreen
+// },
