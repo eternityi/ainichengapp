@@ -100,9 +100,6 @@ class HomeScreen extends React.Component {
                           offset: data.articles.length
                         },
                         updateQuery: (prev, { fetchMoreResult }) => {
-                          console.log("prev", prev);
-
-                          console.log("fetchMoreResult", fetchMoreResult);
                           if (
                             !(
                               fetchMoreResult &&

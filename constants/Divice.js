@@ -19,19 +19,19 @@ const hp = heightPercent => {
 	return PixelRatio.roundToNearestPixel((height * elemHeight) / 100);
 };
 
-const listenOrientationChange = () => {
+const listenOrientationChange = that => {
 	Dimensions.addEventListener("change", newDimensions => {
 		width = newDimensions.window.width;
 		height = newDimensions.window.height;
 
-		this.setState({
+		that.setState({
 			orientation: width < height ? "portrait" : "landscape"
 		});
 	});
 };
 
 const removeOrientationListener = () => {
-	Dimensions.removeEventListener("change", () => {});
+	Dimensions.removeEventListener("change", () => null);
 };
 
 export default {

@@ -10,7 +10,7 @@ import { topArticleWithImagesQuery } from "../../graphql/article.graphql";
 
 class Carousel extends Component {
 	componentDidMount() {
-		Divice.listenOrientationChange();
+		Divice.listenOrientationChange(this);
 	}
 
 	componentWillUnMount() {

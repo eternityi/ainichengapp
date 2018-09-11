@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView, FlatList 
 
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { RefreshControl, LoadingError } from "../../components/Pure";
+import { SpinnerLoading, LoadingError } from "../../components/Pure";
 import { Button } from "../../components/Button";
 import AuthorItem from "./AuthorItem";
 
@@ -22,10 +22,10 @@ class RecommendAuthors extends Component {
   render() {
     let { navigation } = this.props;
     return (
-      <Query query={recommendAuthorss}>
+      <Query query={recommendAuthors}>
         {({ loading, error, data, refetch, fetchMore }) => {
           if (error) return <LoadingError reload={() => refetch()} />;
-          if (!(data && data.users)) return null;
+          if (!(data && data.users)) return <SpinnerLoading />;
           let users = data.users;
           return (
             <View>

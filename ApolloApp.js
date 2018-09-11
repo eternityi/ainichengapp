@@ -38,6 +38,7 @@ class ApolloApp extends Component {
 		let { query } = this.client;
 		let promises = [
 			query({ query: hotArticlesQuery }),
+			query({ query: recommendArticlesQuery }),
 			query({ query: topArticleWithImagesQuery }),
 			query({ query: recommendAuthors }),
 			query({ query: topCategoriesQuery })
