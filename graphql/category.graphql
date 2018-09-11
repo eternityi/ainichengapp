@@ -28,7 +28,7 @@ query specialCategoriesQuery {
 }
 
 query topCategoriesQuery($offset: Int) {
-	categories(offset: $offset, limit: 3) {
+	categories(offset: $offset, limit: 10) {
 		id
 		name
 		logo

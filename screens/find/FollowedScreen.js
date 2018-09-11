@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 
-import Colors from "../../constants/Colors";
+import { Colors, Divice } from "../../constants";
 import Carousel from "./Carousel";
-import RecommendAuthor from "./RecommendAuthor";
+import RecommendAuthors from "./RecommendAuthors";
 import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import Screen from "../Screen";
@@ -18,7 +18,7 @@ const { width, height } = Dimensions.get("window");
 const sliderWidth = width;
 const itemWidth = width - 40;
 
-class RecommendScreen extends React.Component {
+class FollowedScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       //当前tab页，点击tabbar跳转到顶部并刷新页面
@@ -52,22 +52,29 @@ class RecommendScreen extends React.Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
+            // let articles = data.articles;
+            let articles = [];
             return (
               <FlatList
                 ref={scrollview => {
                   this.scrollview = scrollview;
                 }}
-                ListHeaderComponent={() => (
-                  <View>
-                    <Carousel navigation={navigation} />
-                    <RecommendAuthor />
-                  </View>
-                )}
+                ListHeaderComponent={() => {
+                  if (articles.length < 1) {
+                    return (
+                      <View>
+                        <Image style={styles.banner} source={require("../../assets/images/plane.png")} />
+                      </View>
+                    );
+                  } else {
+                    return <View />;
+                  }
+                }}
                 refreshing={loading}
                 onRefresh={() => {
                   refetch();
                 }}
-                data={data.articles}
+                data={articles}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => <NoteItem post={item} popoverMenu options={["不感兴趣"]} popoverHandler={() => null} />}
                 onEndReached={() => {
@@ -94,8 +101,9 @@ class RecommendScreen extends React.Component {
                     });
                   }
                 }}
+                ListEmptyComponent={() => <RecommendAuthors navigation={navigation} />}
                 ListFooterComponent={() => {
-                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
+                  return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
                 }}
               />
             );
@@ -119,10 +127,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff"
-  }
+  },
+  banner: { width: Divice.wp("100%"), height: 100, resizeMode: "cover" }
 });
 
 export default compose(
   withApollo,
   connect(store => ({ articles: store.articles.articles }))
-)(RecommendScreen);
+)(FollowedScreen);

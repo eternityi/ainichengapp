@@ -8,7 +8,7 @@ import { Avatar, VideoCover } from "../Pure";
 import { Iconfont } from "../../utils/Fonts";
 import { Colors, Methods, Divice } from "../../constants";
 
-const IMG_SPACE = 3;
+const IMG_SPACE = 2;
 const COVER_WIDTH = Divice.width;
 
 class PostItem extends PureComponent {

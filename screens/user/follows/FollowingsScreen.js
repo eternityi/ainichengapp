@@ -29,7 +29,7 @@ export default TabNavigator(
 				elevation: 0,
 				shadowColor: "transparent",
 				paddingTop: Divice.STATUSBAR_HEIGHT,
-				paddingBottom: 10,
+				paddingBottom: 6,
 				paddingLeft: Divice.width / 2 - 60
 			},
 			indicatorStyle: {
@@ -38,7 +38,7 @@ export default TabNavigator(
 				marginHorizontal: 20,
 				backgroundColor: Colors.themeColor,
 				left: Divice.width / 2 - 60,
-				bottom: 10
+				bottom: 6
 			},
 			labelStyle: {
 				fontSize: 17,

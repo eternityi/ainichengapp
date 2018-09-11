@@ -23,7 +23,7 @@ import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
 import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
 
-import { Avatar, BlankContent, LoadingError, SpinnerLoading, LoadingMore, ContentEnd } from "../../components/Pure";
+import { DivisionLine, Avatar, BlankContent, LoadingError, SpinnerLoading, LoadingMore, ContentEnd } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import { Query, Mutation, graphql, compose } from "react-apollo";
@@ -269,6 +269,7 @@ class HomeScreen extends Component {
             </View>
           </View>
         </View>
+        <DivisionLine />
         {
           // <View style={[styles.layoutFlexRow, styles.tabList]}>
           //   <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("喜欢", { user })}>
@@ -481,9 +482,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     paddingHorizontal: 15,
-    paddingBottom: 10,
-    borderBottomWidth: 6,
-    borderBottomColor: Colors.lightBorderColor
+    paddingBottom: 10
   },
   baseInfo: {
     justifyContent: "space-between",
@@ -511,8 +510,8 @@ const styles = StyleSheet.create({
     marginTop: -25
   },
   userAvatar: {
-    width: 76,
-    height: 76,
+    width: 80,
+    height: 80,
     borderWidth: 2,
     borderRadius: 40,
     borderColor: "#fff"

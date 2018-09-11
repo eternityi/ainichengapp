@@ -30,15 +30,13 @@ class AllCategoiesScreen extends React.Component {
 					<Query query={topCategoriesQuery}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
-							if (!(data && data.categories)) return null;
+							if (!(data && data.categories)) return <SpinnerLoading />;
 
 							return (
 								<FlatList
-									ref={scrollview => {
-										this.scrollview = scrollview;
-									}}
+									contentContainerStyle={{ paddingTop: 15 }}
 									data={data.categories}
-									keyExtractor={(item, index) => (item.key ? item.key : index.toString())}
+									keyExtractor={(item, index) => index.toString()}
 									renderItem={this._renderCategoryItem}
 									refreshing={loading}
 									onRefresh={() => {
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
 	},
 	categoryCardWrap: {
 		marginHorizontal: 15,
-		marginTop: 15
+		marginBottom: 15
 	},
 	followCategory: {
 		flex: 1,

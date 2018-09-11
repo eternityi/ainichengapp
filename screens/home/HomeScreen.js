@@ -100,7 +100,17 @@ class HomeScreen extends React.Component {
                           offset: data.articles.length
                         },
                         updateQuery: (prev, { fetchMoreResult }) => {
-                          if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                          console.log("prev", prev);
+
+                          console.log("fetchMoreResult", fetchMoreResult);
+                          if (
+                            !(
+                              fetchMoreResult &&
+                              fetchMoreResult.articles &&
+                              fetchMoreResult.articles instanceof Array &&
+                              fetchMoreResult.articles.length > 0
+                            )
+                          ) {
                             this.setState({
                               fetchingMore: false
                             });

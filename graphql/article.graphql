@@ -239,7 +239,7 @@ query topArticleWithImagesQuery {
 }
 
 query hotArticlesQuery($offset: Int) {
-	articles(offset: $offset) {
+	articles(offset: $offset, order: HOT) {
 		id
 		type
 		title
@@ -267,7 +267,7 @@ query hotArticlesQuery($offset: Int) {
 }
 
 query recommendArticlesQuery($offset: Int, $limit: Int) {
-	articles(offset: $offset, limit: $limit) {
+	articles(offset: $offset, limit: $limit, order: LATEST) {
 		id
 		type
 		title

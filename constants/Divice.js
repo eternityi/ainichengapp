@@ -16,7 +16,6 @@ const wp = widthPercent => {
 
 const hp = heightPercent => {
 	const elemHeight = parseFloat(heightPercent);
-
 	return PixelRatio.roundToNearestPixel((height * elemHeight) / 100);
 };
 

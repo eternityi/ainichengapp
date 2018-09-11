@@ -24,7 +24,6 @@ class Carousel extends Component {
 						if (!(data && data.articles)) return null;
 						return (
 							<Swiper
-								style={styles.wrapper}
 								autoplay={true}
 								autoplayTimeout={5}
 								paginationStyle={styles.paginationStyle}
@@ -57,8 +56,7 @@ class Carousel extends Component {
 
 const styles = StyleSheet.create({
 	swiperContainer: {
-		marginVertical: 10,
-		height: Divice.wp("46%")
+		height: Divice.wp("44%")
 	},
 	paginationStyle: {
 		bottom: 6
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
 	posterImage: {
 		marginHorizontal: 10,
 		width: Divice.wp("100%") - 20,
-		height: Divice.wp("46%"),
+		height: Divice.wp("44%"),
 		resizeMode: "cover",
 		borderRadius: 6
 	}

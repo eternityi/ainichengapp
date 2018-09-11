@@ -14,6 +14,7 @@ query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilte
 # 用户个人资源统计
 query userResourceCountQuery($id: Int!) {
     user(id: $id) {
+        id
         count_likes
         count_articles
         count_follows
@@ -718,12 +719,13 @@ query queryArticleRequestCenter($id: Int) {
 #keyword:搜索的关键字
 #type   :VIDEO代表视频，ARTICLE代表文章.默认查询查询所有
 #order  :文章排序规则。 HOT：按热度排序 ，默认是按照时间排序
-query SearchResaultQueries($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
+query SearchResultQueries($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
     articles(keyword: $keyword, type: $type, order: $order, offset: $offset, limit: 10) {
         id
         title
         type
         user {
+            id
             name
         }
         description

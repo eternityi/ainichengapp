@@ -11,7 +11,7 @@ import CategoryItem from "./CategoryItem";
 
 import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
-import { SearchResaultQueries, hotSearchAndLogsQuery } from "../../graphql/user.graphql";
+import { SearchResultQueries, hotSearchAndLogsQuery } from "../../graphql/user.graphql";
 
 const { width, height } = Dimensions.get("window");
 
@@ -31,7 +31,7 @@ class SearchResult extends Component {
 		let { keywords, navigation, selectCategory, selectCategories } = this.props;
 		return (
 			<View style={styles.container}>
-				<Query query={SearchResaultQueries} variables={{ keyword: keywords, order: order }}>
+				<Query query={SearchResultQueries} variables={{ keyword: keywords, order: order }}>
 					{({ loading, error, data, fetchMore, refetch, client }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
 						if (!(data && data.categories)) return <SpinnerLoading />;

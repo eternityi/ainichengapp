@@ -18,6 +18,7 @@ const weixinColor = "#42c02e";
 const weiboColor = "#E54438";
 const qqColor = "#407FCF";
 const qqzoneColor = "#FFC706";
+const orange = "#F3AA47";
 const linkColor = "#2B89CA";
 const skyBlue = "#00CCFF";
 const nattierBlue = "#CAD4FF";
@@ -54,6 +55,7 @@ export default {
   weiboColor,
   qqColor,
   qqzoneColor,
+  orange,
   linkColor,
   skyBlue,
   nattierBlue,

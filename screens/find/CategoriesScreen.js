@@ -2,10 +2,10 @@ import React from "react";
 import { FlatList, StyleSheet, ScrollView, Text, View, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
 
 import Screen from "../Screen";
+import Carousel from "./Carousel";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import CategoryCard from "../../components/Card/CategoryCard";
+import { Colors, Methods } from "../../constants";
+import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import OfficialCategories from "./OfficialCategories";
 import RecommendCategory from "./RecommendCategory";
 
@@ -65,13 +65,26 @@ class CategoriesScreen extends React.Component {
                 }}
                 data={categories}
                 ListHeaderComponent={() => (
-                  <View>
-                    <OfficialCategories navigation={navigation} />
-                    {categories.length > 0 && (
-                      <View style={{ marginTop: 15, marginLeft: 15 }}>
-                        <Text style={{ fontSize: 14 }}>关注的专题</Text>
-                      </View>
-                    )}
+                  <View style={styles.listHeader}>
+                    <Carousel navigation={navigation} />
+                    <View style={styles.flexRowCenter}>
+                      <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
+                        <View style={styles.entry}>
+                          <View style={[styles.entryLabel, styles.center, { backgroundColor: Colors.themeColor }]}>
+                            <Iconfont name="category" size={22} color="#fff" style={{ marginLeft: 2, marginTop: 2 }} />
+                          </View>
+                          <Text style={styles.entryName}>全部专题</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                      <TouchableWithoutFeedback onPress={() => this.navigateMiddlewear("新建专题")}>
+                        <View style={styles.entry}>
+                          <View style={[styles.entryLabel, styles.center]}>
+                            <Iconfont name="write" size={22} color="#fff" />
+                          </View>
+                          <Text style={styles.entryName}>创建专题</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    </View>
                   </View>
                 )}
                 keyExtractor={(item, index) => index.toString()}
@@ -104,13 +117,16 @@ class CategoriesScreen extends React.Component {
                     });
                   }
                 }}
-                ListEmptyComponent={() => <RecommendCategory />}
+                ListEmptyComponent={() => <RecommendCategory navigation={navigation} />}
                 ListFooterComponent={() => {
                   if (categories.length > 0) {
+                    if (this.state.fetchingMore) {
+                      return <LoadingMore />;
+                    }
                     return (
-                      <TouchableWithoutFeedback onPress={() => navigation.navigate("全部专题")}>
+                      <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
                         <View style={styles.refresh}>
-                          <Iconfont name="fresh" size={14} color={Colors.themeColor} />
+                          <Iconfont name="fresh" size={15} color={Colors.themeColor} />
                           <Text style={styles.refreshText}>关注更多专题</Text>
                         </View>
                       </TouchableWithoutFeedback>
@@ -128,11 +144,29 @@ class CategoriesScreen extends React.Component {
   }
 
   _renderCategoryItem = ({ item, index }) => {
+    let category = item;
+    let { navigation } = this.props;
     return (
-      <View style={styles.categoryCardWrap}>
-        <CategoryCard category={item} />
-      </View>
+      <TouchableWithoutFeedback onPress={() => Methods.goContentScreen(navigation, { ...category, type: "category" })}>
+        <View style={styles.recommendItem}>
+          <Avatar size={50} type="category" uri={category.logo} />
+          <View style={styles.followInfo}>
+            <Text numberOfLines={1} style={styles.drakText}>
+              {category.name}
+            </Text>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     );
+  };
+
+  navigateMiddlewear = routeName => {
+    let { navigation, login } = this.props;
+    if (login) {
+      Methods.navigationDispatch(navigation, { routeName, key: routeName });
+    } else {
+      Methods.navigationDispatch(navigation, { routeName: "登录注册", key: "登录注册", params: { login: true } });
+    }
   };
 
   _scrollToTop = () => {
@@ -151,26 +185,57 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.skinColor
   },
-  categoryCardWrap: {
-    marginHorizontal: 15,
-    marginTop: 15
+  center: {
+    alignItems: "center",
+    justifyContent: "center"
   },
-  followCategory: {
-    flex: 1,
-    padding: 10,
+  flexRowCenter: {
     flexDirection: "row",
     alignItems: "center"
   },
-  categoryListWrap: {
+  listHeader: {
+    borderBottomWidth: 6,
+    borderBottomColor: Colors.lightBorderColor
+  },
+  entry: {
     flex: 1,
-    paddingLeft: 15,
-    paddingVertical: 15
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60
+  },
+  entryLabel: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.orange
+  },
+  entryName: {
+    fontSize: 15,
+    color: Colors.darkFontColor,
+    marginLeft: 15
+  },
+  recommendItem: {
+    height: 74,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightBorderColor
+  },
+  followInfo: {
+    marginHorizontal: 15,
+    flex: 1
+  },
+  drakText: {
+    fontSize: 15,
+    color: Colors.darkFontColor
   },
   refresh: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginVertical: 10,
     paddingVertical: 10
   },
   refreshText: {
@@ -182,5 +247,5 @@ const styles = StyleSheet.create({
 
 export default compose(
   withApollo,
-  connect(store => ({ categories: store.categories, user: store.users.user }))
+  connect(store => ({ categories: store.categories, user: store.users.user, login: store.users.login }))
 )(CategoriesScreen);

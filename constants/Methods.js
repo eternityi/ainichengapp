@@ -16,6 +16,11 @@ function navigationAction({ routeName, params = null, action = null, key = param
 	});
 }
 
+// 导航操作
+function navigationDispatch(navigation, route) {
+	navigation.dispatch(navigationAction(route));
+}
+
 //需要登录验证的操作
 function userOperationMiddleware({ login, action, navigation }) {
 	if (login) {
@@ -204,4 +209,4 @@ function toast(message, timeout = 2000) {
 	}, timeout);
 }
 
-export { navigationAction, userOperationMiddleware, goContentScreen, numberFormat, formatTime, imageSize, imgsLayoutSize, toast };
+export { navigationAction, navigationDispatch, userOperationMiddleware, goContentScreen, numberFormat, formatTime, imageSize, imgsLayoutSize, toast };

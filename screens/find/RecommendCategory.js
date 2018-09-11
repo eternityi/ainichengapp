@@ -4,9 +4,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
-import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import CategoryCard from "../../components/Card/CategoryCard";
+import { Colors, Methods } from "../../constants";
+import { FollowButton } from "../../components/Button";
+import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 
 import { connect } from "react-redux";
 import { topCategoriesQuery } from "../../graphql/category.graphql";
@@ -32,7 +32,7 @@ class RecommendCategory extends React.Component {
 								<Text style={styles.emptyText}>你还没关注任何专题哦，快去关注一下吧！</Text>
 							</View>
 							<View>
-								{data.categories.map((elem, index) => {
+								{data.categories.slice(0, 3).map((elem, index) => {
 									return this._renderCategoryItem({
 										item: elem,
 										index
@@ -61,7 +61,7 @@ class RecommendCategory extends React.Component {
 								}}
 							>
 								<View style={[styles.refresh, styles.flexRow]}>
-									<Iconfont name="fresh" size={14} color={Colors.themeColor} />
+									<Iconfont name="fresh" size={15} color={Colors.themeColor} />
 									<Text style={styles.refreshText}>换一批</Text>
 								</View>
 							</TouchableWithoutFeedback>
@@ -73,10 +73,30 @@ class RecommendCategory extends React.Component {
 	}
 
 	_renderCategoryItem = ({ item, index }) => {
+		let category = item;
+		let { navigation } = this.props;
 		return (
-			<View style={styles.categoryCardWrap} key={index}>
-				<CategoryCard category={item} />
-			</View>
+			<TouchableWithoutFeedback key={index} onPress={() => Methods.goContentScreen(navigation, { ...category, type: "category" })}>
+				<View style={styles.recommendItem}>
+					<Avatar size={60} type="category" uri={category.logo} />
+					<View style={styles.followInfo}>
+						<Text numberOfLines={1} style={styles.drakText}>
+							{category.name}
+						</Text>
+						<Text numberOfLines={1} style={styles.tintText}>
+							{category.description ? `${category.description}` : `${category.count_articles}条精选内容`}
+						</Text>
+					</View>
+					<FollowButton
+						type="category"
+						id={category.id}
+						status={category.followed}
+						customStyle={styles.followWrap}
+						theme={Colors.themeColor}
+						fontSize={13}
+					/>
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	};
 }
@@ -88,23 +108,49 @@ const styles = StyleSheet.create({
 	},
 	flexRow: {
 		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center"
+		alignItems: "center"
 	},
 	emptyText: {
 		fontSize: 14,
 		color: Colors.darkFontColor,
+		marginLeft: 15,
 		marginBottom: 15
 	},
-	refresh: {
+	recommendItem: {
+		height: 90,
+		marginHorizontal: 15,
 		flexDirection: "row",
 		alignItems: "center",
+		borderBottomWidth: 1,
+		borderBottomColor: Colors.lightBorderColor
+	},
+	followInfo: {
+		marginHorizontal: 15,
+		flex: 1
+	},
+	drakText: {
+		fontSize: 15,
+		fontWeight: "500",
+		color: Colors.darkFontColor
+	},
+	tintText: {
+		marginTop: 8,
+		fontSize: 12,
+		color: Colors.tintFontColor
+	},
+	followWrap: {
+		width: 58,
+		height: 26,
+		borderRadius: 13
+	},
+	refresh: {
+		justifyContent: "center",
 		paddingVertical: 10
 	},
 	refreshText: {
 		fontSize: 14,
 		color: Colors.themeColor,
-		marginLeft: 4
+		marginLeft: 5
 	}
 });
 

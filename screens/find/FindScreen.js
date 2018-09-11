@@ -2,13 +2,13 @@ import React from "react";
 import { Colors, Divice } from "../../constants";
 import { TabNavigator, TabBarTop } from "react-navigation";
 
-import RecommendScreen from "./RecommendScreen";
+import FollowedScreen from "./FollowedScreen";
 import CategoriesScreen from "./CategoriesScreen";
 
 export default TabNavigator(
   {
-    推荐: {
-      screen: RecommendScreen
+    关注: {
+      screen: FollowedScreen
     },
     专题: {
       screen: CategoriesScreen
@@ -29,6 +29,7 @@ export default TabNavigator(
         elevation: 0,
         shadowColor: "transparent",
         paddingTop: Divice.STATUSBAR_HEIGHT,
+        paddingBottom: 6,
         paddingLeft: Divice.width / 2 - 60
       },
       indicatorStyle: {
@@ -36,7 +37,8 @@ export default TabNavigator(
         width: 20,
         marginHorizontal: 20,
         backgroundColor: Colors.themeColor,
-        left: Divice.width / 2 - 60
+        left: Divice.width / 2 - 60,
+        bottom: 6
       },
       labelStyle: {
         fontSize: 17,
