@@ -227,7 +227,6 @@ export default {
   编辑列表: {
     screen: CategoryEditorsScreen
   },
-
   编辑个人资料: {
     screen: EditProfileScreen
   },

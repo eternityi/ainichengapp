@@ -51,7 +51,7 @@ class BeSelectedCategory extends Component {
               keyExtractor={item => item.id.toString()}
               renderItem={({ item }) => (
                 <View style={styles.categoryItem}>
-                  <CategoryGroup category={item} />
+                  <CategoryGroup category={item} onPress={this.toggleVisible} />
                 </View>
               )}
               ListFooterComponent={() => <ContentEnd />}

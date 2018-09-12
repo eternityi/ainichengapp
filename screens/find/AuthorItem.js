@@ -40,6 +40,7 @@ class AuthorItem extends Component {
 const styles = StyleSheet.create({
 	cardWrap: {
 		flex: 1,
+		paddingHorizontal: 10,
 		alignItems: "center",
 		justifyContent: "center"
 	},
@@ -51,8 +52,8 @@ const styles = StyleSheet.create({
 	followWrap: {
 		width: "auto",
 		paddingHorizontal: 12,
-		height: 26,
-		borderRadius: 13
+		height: 24,
+		borderRadius: 12
 	}
 });
 

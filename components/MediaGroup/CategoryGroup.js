@@ -8,10 +8,15 @@ import Colors from "../../constants/Colors";
 
 class CategoryGroup extends Component {
   render() {
-    const { category = {}, customStyle = {}, plain = false, hideButton = false, navigation } = this.props;
+    const { category = {}, customStyle = {}, plain = false, hideButton = false, navigation, onPress } = this.props;
     let { logo = 48, nameSize = 15, mateSize = 13 } = customStyle;
     return (
-      <TouchableWithoutFeedback onPress={() => navigation.navigate("专题详情", { user })}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          onPress && onPress();
+          navigation.navigate("专题详情", { category });
+        }}
+      >
         <View style={styles.groupWrap}>
           <Avatar type="category" size={logo} uri={category.logo} />
           <View style={styles.categoryInfo}>
