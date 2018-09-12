@@ -19,7 +19,8 @@ class HomeScreen extends React.Component {
     super(props);
     this.toggleModalVisible = this.toggleModalVisible.bind(this);
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      Counts: props.user
     };
   }
 
@@ -37,7 +38,8 @@ class HomeScreen extends React.Component {
             fetchPolicy: "network-only"
           })
           .then(({ data }) => {
-            dispatch(actions.updateUserResource(data.user));
+            this.setState({ Counts: data.user });
+            // dispatch(actions.updateUserResource(data.user));
           })
           .catch(error => {
             console.log("error", error);
@@ -51,7 +53,7 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    let { modalVisible } = this.state;
+    let { modalVisible, Counts } = this.state;
     const { navigation, user, login } = this.props;
     return (
       <Screen header customStyle={{ paddingTop: Divice.STATUSBAR_HEIGHT }}>
@@ -60,15 +62,15 @@ class HomeScreen extends React.Component {
           <View style={styles.itemContainer}>
             <View style={styles.columnContainer}>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("我的发布", { user })}>
-                <Text style={styles.countFont}>{user.count_production || 0}</Text>
+                <Text style={styles.countFont}>{Counts.count_production || 0}</Text>
                 <Text style={styles.rowsType1}>发布</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("全部关注", { user })}>
-                <Text style={styles.countFont}>{user.count_followings + user.count_follows || 0}</Text>
+                <Text style={styles.countFont}>{Counts.count_followings + Counts.count_follows || 0}</Text>
                 <Text style={styles.rowsType1}>关注</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("粉丝", { user })}>
-                <Text style={styles.countFont}>{user.count_followers || 0}</Text>
+                <Text style={styles.countFont}>{Counts.count_followers || 0}</Text>
                 <Text style={styles.rowsType1}>粉丝</Text>
               </TouchableOpacity>
             </View>

@@ -11,11 +11,33 @@ function codepush(){
 	app=$1
 	echo -e "\n${yel}开始热更新 ${app}...${end}"
 	cd /data/app/$app
+		
+	if [ -z $2 ]; then
+		push_ios $app
+		push_android $app
+	fi
+	echo $2
+	if [ "$2" == "android" ]; then
+		push_android $app
+	fi
+
+	if [ "$2" == "ios" ]; then
+		push_ios $app
+	fi 
+	
+	echo -e "${grn}完成热更新 ${app}...${end}"
+}
+
+function push_android(){
+	app=$1
 	echo -e "${blu}android 热更新 ${app}...${end}"
 	code-push release-react haxibiao/${app}apk android
+}
+
+function push_ios(){
+	app=$1
 	echo -e "${blu}ios 热更新 ${app}...${end}"
 	code-push release-react haxibiao/$app ios --plistFile=ios/$app/Info.plist
-	echo -e "${grn}完成热更新 ${app}...${end}"
 }
 
 if [ -z $1 ]; then
@@ -28,5 +50,5 @@ if [ -z $1 ]; then
 	codepush "dianmoge"
 	codepush "youjianqi"
 else
-	codepush $1
+	codepush $1 $2
 fi

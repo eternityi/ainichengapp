@@ -33,7 +33,8 @@ class HomeScreen extends React.Component {
   // 更新通知badge
   updateUnreads = unreads => {
     let count;
-    let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_tips", "unread_others"];
+    //TODO: unread_tips 隐藏了
+    let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_others"];
     keys.reduce((result, elem) => {
       let number = unreads[elem] ? unreads[elem] : 0;
       count = result + parseInt(number);
