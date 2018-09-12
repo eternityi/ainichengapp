@@ -29,17 +29,13 @@ class CustomMainTab extends React.Component {
                 key={route.key}
                 style={styles.tabItem}
                 onPress={() => {
-                    if (getLabel(scene) == "通知" && !login) {
-                        navigation.navigate("登录注册");
-                    } else {
-                        onPress
-                            ? onPress({
-                                  previousScene,
-                                  scene,
-                                  jumpToIndex
-                              })
-                            : jumpToIndex(index);
-                    }
+                    onPress
+                        ? onPress({
+                              previousScene,
+                              scene,
+                              jumpToIndex
+                          })
+                        : jumpToIndex(index);
                 }}
             >
                 <View style={styles.tabItem}>

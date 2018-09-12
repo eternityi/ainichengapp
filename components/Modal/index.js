@@ -11,6 +11,7 @@ import RewardModal from "./RewardModal";
 import SearchUserModal from "./SearchUserModal";
 import ShareModal from "./ShareModal";
 import WriteModal from "./WriteModal";
+import ImageView from "./ImageView";
 
 export {
 	AddCommentModal,
@@ -25,5 +26,6 @@ export {
 	RewardModal,
 	SearchUserModal,
 	ShareModal,
-	WriteModal
+	WriteModal,
+	ImageView
 };

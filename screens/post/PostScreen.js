@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar, BackHandler, Animated } from "react-native";
-import ImageViewer from "react-native-image-zoom-viewer";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, StatusBar, BackHandler, Animated } from "react-native";
 import Orientation from "react-native-orientation";
 
 import PostHeader from "./PostHeader";
@@ -11,7 +10,7 @@ import Comments from "../article/comment/Comments";
 import Screen from "../Screen";
 import { Colors, Divice, Methods } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
-import { RewardModal, ShareModal } from "../../components/Modal";
+import { RewardModal, ShareModal, ImageView } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
@@ -37,7 +36,7 @@ class PostScreen extends Component {
 			rewardVisible: false,
 			addCommentVisible: false,
 			shareModalVisible: false,
-			imageViewerVisible: false,
+			imageViewVisible: false,
 			initImage: 0, //图片预览模式下首先打开的图片索引
 			offsetTop: new Animated.Value(0)
 		};
@@ -82,7 +81,7 @@ class PostScreen extends Component {
 			rewardVisible,
 			addCommentVisible,
 			shareModalVisible,
-			imageViewerVisible,
+			imageViewVisible,
 			initImage,
 			offsetTop
 		} = this.state;
@@ -123,7 +122,7 @@ class PostScreen extends Component {
 						});
 						return (
 							<View style={styles.container} onLayout={event => this._onLayout(post, event)}>
-								{type !== "video" && <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />}
+								{type !== "video" && <StatusBar backgroundColor={imageViewVisible ? "#000" : "#fff"} barStyle={"dark-content"} />}
 								{!isFullScreen &&
 									!this.isPortrait && (
 										<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
@@ -222,14 +221,12 @@ class PostScreen extends Component {
 					}}
 				</Query>
 				{/*点击图片预览**/}
-				<Modal visible={imageViewerVisible} transparent={true} onRequestClose={() => this.setState({ imageViewerVisible: false })}>
-					<ImageViewer
-						onClick={() => this.setState({ imageViewerVisible: false })}
-						onSwipeDown={() => this.setState({ imageViewerVisible: false })}
-						imageUrls={this.pictures}
-						index={initImage}
-					/>
-				</Modal>
+				<ImageView
+					visible={imageViewVisible}
+					handleVisible={() => this.setState({ imageViewVisible: false })}
+					imageUrls={this.pictures}
+					initImage={initImage}
+				/>
 				<ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
 			</Screen>
 		);
@@ -246,7 +243,7 @@ class PostScreen extends Component {
 					style={imgWidth < (Divice.width * 2) / 3 ? { marginLeft: 15 } : { alignItems: "center" }}
 					onPress={() => {
 						this.setState({
-							imageViewerVisible: true,
+							imageViewVisible: true,
 							initImage: 0
 						});
 					}}
@@ -265,7 +262,7 @@ class PostScreen extends Component {
 								key={i}
 								onPress={() => {
 									this.setState({
-										imageViewerVisible: true,
+										imageViewVisible: true,
 										initImage: i
 									});
 								}}

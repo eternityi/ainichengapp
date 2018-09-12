@@ -1,9 +1,8 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
+import { ScrollView, FlatList, StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl } from "react-native";
 
 import { Iconfont } from "../../utils/Fonts";
 import { Colors, Divice } from "../../constants";
-import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Avatar, DivisionLine, ContentEnd, Badge, LoadingError, SpinnerLoading, Diving } from "../../components/Pure";
 import Screen from "../Screen";
@@ -33,7 +32,7 @@ class HomeScreen extends React.Component {
   // 更新通知badge
   updateUnreads = unreads => {
     let count;
-    //TODO: unread_tips 隐藏了
+    // Todo: unread_tips隐藏了
     let keys = ["unread_comments", "unread_likes", "unread_follows", "unread_requests", "unread_others"];
     keys.reduce((result, elem) => {
       let number = unreads[elem] ? unreads[elem] : 0;
@@ -46,7 +45,7 @@ class HomeScreen extends React.Component {
 
   render() {
     let { refreshing } = this.state;
-    const { navigation, user } = this.props;
+    const { navigation, login, user } = this.props;
 
     return (
       <Screen header customStyle={{ paddingTop: Divice.STATUSBAR_HEIGHT }}>
@@ -58,11 +57,14 @@ class HomeScreen extends React.Component {
           <View style={styles.menuWrap}>
             <Query query={unreadsQuery} pollInterval={10000}>
               {({ loading, error, data, stopPolling }) => {
+                if (!login) {
+                  stopPolling();
+                }
                 if (!(data && data.user)) {
                   data = {};
                   data.user = {};
                 }
-                if (data && data.user) {
+                if (data && data.user && login) {
                   this.updateUnreads(data.user);
                 }
                 return (
@@ -114,14 +116,36 @@ class HomeScreen extends React.Component {
           <DivisionLine height={18} />
           <View style={styles.chatsTitle}>
             <Text style={styles.chatsTitleText}>消息</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("新消息")}>
+            <TouchableOpacity
+              onPress={() => {
+                if (login) {
+                  navigation.navigate("新消息");
+                } else {
+                  navigation.navigate("登录注册");
+                }
+              }}
+            >
               <Text style={[styles.chatsTitleText, { color: Colors.themeColor }]}>新消息</Text>
             </TouchableOpacity>
           </View>
           <Query query={chatsQuery} pollInterval={10000}>
             {({ loading, error, data, refetch, stopPolling }) => {
+              if (!login) {
+                stopPolling();
+              }
+              if (!login)
+                return (
+                  <View style={{ height: Divice.height - 300 }}>
+                    <Diving description="还没有消息哦，快找小伙伴聊天吧" />
+                  </View>
+                );
               if (error) return <LoadingError reload={() => refetch()} />;
-              if (!(data && data.user && data.user.chats && data.user.chats.length > 0)) return this._emptyComponent();
+              if (!(data && data.user && data.user.chats && data.user.chats.length > 0))
+                return (
+                  <View style={{ height: Divice.height - 300 }}>
+                    <Diving description="还没有消息哦，快找小伙伴聊天吧" />
+                  </View>
+                );
               return (
                 <View>
                   {data.user.chats.map((elem, index) => {
@@ -152,12 +176,23 @@ class HomeScreen extends React.Component {
       });
   };
 
+  _keyExtractor = (item, index) => (item.key ? item.key : index.toString());
+
   _renderMessageMenu = item => {
-    let { user } = this.props;
+    let { user, login } = this.props;
     const { navigate } = this.props.navigation;
     return (
       <View style={{ width: (width - 30) / 3 }}>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigate(item.name, { user })}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => {
+            if (login) {
+              navigate(item.name, { user });
+            } else {
+              navigate("登录注册");
+            }
+          }}
+        >
           <View style={{ position: "relative" }}>
             <Iconfont name={item.iconName} size={24} color={Colors.themeColor} style={{ marginBottom: 6 }} />
             <View style={styles.badge}>
@@ -192,19 +227,6 @@ class HomeScreen extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
-      </View>
-    );
-  };
-
-  _emptyComponent = () => {
-    return (
-      <View style={styles.emptyWrap}>
-        <View style={styles.divingWrap}>
-          <Iconfont name="diving" size={50} color="#fff" />
-        </View>
-        <View>
-          <Text style={styles.emptyText}>聊天列表为空，快去找朋友聊天</Text>
-        </View>
       </View>
     );
   };
@@ -290,27 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 8,
     color: Colors.tintFontColor
-  },
-  emptyWrap: {
-    marginTop: 30,
-    flex: 1,
-    backgroundColor: Colors.skinColor,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  divingWrap: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: Colors.darkGray,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  emptyText: {
-    fontSize: 15,
-    color: Colors.tintFontColor,
-    marginTop: 30
   }
 });
 
-export default connect(store => ({ user: store.users.user }))(withApollo(HomeScreen));
+export default connect(store => ({ user: store.users.user, login: store.users.login }))(withApollo(HomeScreen));

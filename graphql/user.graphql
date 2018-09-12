@@ -1,3 +1,13 @@
+#APP-创建意见反馈
+#content：反馈内容
+#contact：联系方式
+#image_urls:图片补充
+mutation createFeedbackMutation($content: String!, $contact: String, $image_urls: [String]) {
+    createFeedback(content: $content, contact: $contact, image_urls: $image_urls) {
+        id
+    }
+}
+
 # 用户关注
 query userFollows($user_id: Int, $limit: Int, $offset: Int, $filter: FollowFilter) {
     follows(user_id: $user_id, filter: $filter, offset: $offset, limit: $limit) {

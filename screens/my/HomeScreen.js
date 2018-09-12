@@ -101,6 +101,12 @@ class HomeScreen extends React.Component {
                 <Text style={styles.columnType}>浏览记录</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateMiddlewear("意见反馈")}>
+              <View style={styles.columnItem}>
+                <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Text style={styles.columnType}>意见反馈</Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("设置")}>
               <View style={styles.columnItem}>
                 <Iconfont name={"fill-setting"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
@@ -108,12 +114,6 @@ class HomeScreen extends React.Component {
               </View>
             </TouchableOpacity>
             {
-              // <TouchableOpacity onPress={() => navigation.navigate("意见反馈")}>
-              //   <View style={styles.columnItem}>
-              //     <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
-              //     <Text style={styles.columnType}>意见反馈</Text>
-              //   </View>
-              // </TouchableOpacity>
               // <TouchableOpacity onPress={() => this.navigateMiddlewear("我的钱包")}>
               //   <View style={styles.columnItem}>
               //     <Iconfont name={"wallet"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />

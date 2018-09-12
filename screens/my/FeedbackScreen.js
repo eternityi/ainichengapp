@@ -1,32 +1,37 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, Image, View, Text, TextInput, TouchableOpacity, Platform } from "react-native";
+import ImageViewer from "react-native-image-zoom-viewer";
 import ImagePicker from "react-native-image-crop-picker";
 import KeyboardSpacer from "react-native-keyboard-spacer";
+import Toast from "react-native-root-toast";
 
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
-import Colors from "../../constants/Colors";
+import { Colors, Config } from "../../constants";
 import { Button } from "../../components/Button";
-import { Header } from "../../components/Header";
+import { ImageView } from "../../components/Modal";
 
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import { createFeedbackMutation } from "../../graphql/user.graphql";
+import { Mutation } from "react-apollo";
+import { connect } from "react-redux";
 
 class FeedbackScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.selectImage = this.selectImage.bind(this);
 		this.deleteImage = this.deleteImage.bind(this);
-		this.submitFeddBack = this.submitFeddBack.bind(this);
+		this.img_path = "";
+		this.feedbackImages = "";
 		this.state = {
-			images_path: [],
+			selectImages: [],
 			body: "",
-			contact: ""
+			contact: "",
+			imageViewVisible: false
 		};
 	}
 
 	render() {
-		let { images_path, body, contact } = this.state;
+		let { selectImages, body, contact, imageViewVisible } = this.state;
 		let { navigation } = this.props;
 		return (
 			<Screen>
@@ -52,22 +57,32 @@ class FeedbackScreen extends Component {
 							<Text style={styles.formTitle}>
 								<Text>图片（选填，提供问题截图）</Text>
 								<Text>
-									{images_path.length}
-									/4
+									{selectImages.length}
+									/3
 								</Text>
 							</Text>
 						</View>
 						<ScrollView horizontal>
 							<View style={styles.imagesWrap}>
-								{images_path &&
-									images_path.map((elem, index) => {
+								{selectImages &&
+									selectImages.map((elem, index) => {
 										return (
-											<TouchableOpacity key={index} style={styles.addImage} onPress={() => this.deleteImage(elem)}>
-												<Image style={styles.image} source={{ uri: elem.uri }} />
+											<TouchableOpacity
+												key={index}
+												style={styles.imageWrap}
+												onPress={() => {
+													this.img_path = elem.path;
+													this.toggleImageView();
+												}}
+											>
+												<Image style={styles.image} source={{ uri: elem.path }} />
+												<TouchableOpacity key={index} style={styles.chacha} onPress={() => this.deleteImage(index)}>
+													<Iconfont name="chacha" size={15} color="#fff" />
+												</TouchableOpacity>
 											</TouchableOpacity>
 										);
 									})}
-								{images_path.length < 4 && (
+								{selectImages.length < 3 && (
 									<TouchableOpacity onPress={this.selectImage} style={styles.addImage}>
 										<Iconfont name={"add"} size={60} color={Colors.lightFontColor} />
 									</TouchableOpacity>
@@ -89,49 +104,132 @@ class FeedbackScreen extends Component {
 								value={contact + ""}
 							/>
 						</View>
-						<View style={styles.buttonWrap}>
-							<Button disabled={body.length < 1 ? true : false} handler={this.submitFeddBack} name="提交反馈" />
-						</View>
+						<Mutation mutation={createFeedbackMutation}>
+							{createFeedback => {
+								return (
+									<View style={styles.buttonWrap}>
+										<Button
+											name="提交反馈"
+											disabled={body.length < 3 ? true : false}
+											handler={() => {
+												if (selectImages.length > 0) {
+													this.saveImage(selectImages);
+												}
+												createFeedback({
+													variables: {
+														content: body,
+														contact,
+														image_urls: this.feedbackImages
+													},
+													update: (cache, { data }) => {
+														this.toast();
+													}
+												});
+											}}
+										/>
+									</View>
+								);
+							}}
+						</Mutation>
 					</ScrollView>
+					<ImageView
+						visible={imageViewVisible}
+						handleVisible={this.toggleImageView}
+						imageUrls={[
+							{
+								url: this.img_path
+							}
+						]}
+					/>
 					{Platform.OS == "ios" && <KeyboardSpacer />}
 				</View>
 			</Screen>
 		);
 	}
 
+	toggleImageView = () => {
+		this.setState(prevState => ({
+			imageViewVisible: !prevState.imageViewVisible
+		}));
+	};
+
 	selectImage() {
-		let { images_path } = this.state;
+		let { selectImages } = this.state;
 		ImagePicker.openPicker({
 			multiple: true,
-			width: 400,
-			height: 400,
 			cropping: true
 		})
 			.then(images => {
-				// Array.prototype.push.apply(images,images_path);
-				if (images.length > 4) {
-					images.splice(4);
-				}
+				let { selectImages } = this.state;
+				let count_images = selectImages.length;
+				images.map(image => {
+					selectImages.push({ path: image.path });
+				});
+				selectImages = selectImages.slice(0, 3);
 				this.setState({
-					images_path: images.map(i => {
-						return {
-							uri: i.path,
-							width: i.width,
-							height: i.height
-						};
-					})
+					selectImages
 				});
 			})
 			.catch(error => {});
 	}
 
-	deleteImage() {
-		return null;
+	saveImage = images => {
+		const { token } = this.props.user;
+		var data = new FormData();
+		images.map((elem, index) => {
+			data.append("photo[]", {
+				uri: elem.path,
+				name: "image.jpg",
+				type: "image/jpg"
+			});
+		});
+		const config = {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "multipart/form-data"
+			},
+			body: data
+		};
+		let uri = Config.ServerRoot + "/api/image?api_token=" + token;
+		fetch(uri, config)
+			.then(response => {
+				console.log("response", response);
+				response.text();
+			})
+			.then(photo => {
+				console.log("photo", photo);
+				this.feedbackImages = JSON.parse(photo);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	};
+
+	deleteImage(index) {
+		this.setState(prevState => {
+			prevState.selectImages.splice(index, 1);
+			return {
+				selectImages: prevState.selectImages
+			};
+		});
 	}
 
-	submitFeddBack() {
-		return null;
-	}
+	toast = () => {
+		let toast = Toast.show("反馈成功，感谢您的建议", {
+			duration: Toast.durations.LONG,
+			position: 70,
+			shadow: true,
+			animation: true,
+			hideOnPress: true,
+			delay: 100,
+			backgroundColor: Colors.nightColor
+		});
+		setTimeout(function() {
+			Toast.hide(toast);
+		}, 2000);
+		this.props.navigation.goBack();
+	};
 }
 
 const styles = StyleSheet.create({
@@ -169,19 +267,33 @@ const styles = StyleSheet.create({
 		paddingLeft: 15,
 		paddingRight: 9
 	},
+	chacha: {
+		position: "absolute",
+		right: 4,
+		top: 4,
+		width: 18,
+		height: 18,
+		borderRadius: 8,
+		backgroundColor: "rgba(0, 0, 0, 0.6)",
+		justifyContent: "center",
+		alignItems: "center"
+	},
 	addImage: {
 		width: 100,
 		height: 100,
-		borderRadius: 3,
+		borderRadius: 4,
 		borderWidth: 1,
 		borderColor: Colors.lightBorderColor,
 		justifyContent: "center",
-		alignItems: "center",
-		marginRight: 6
+		alignItems: "center"
+	},
+	imageWrap: {
+		borderRadius: 4,
+		marginRight: 8
 	},
 	image: {
-		width: 92,
-		height: 92,
+		width: 98,
+		height: 98,
 		resizeMode: "cover"
 	},
 	buttonWrap: {
@@ -191,4 +303,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default FeedbackScreen;
+export default connect(store => ({ user: store.users.user }))(FeedbackScreen);

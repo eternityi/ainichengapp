@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, Modal, StatusBar } from "react-native";
-import ImageViewer from "react-native-image-zoom-viewer";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, StatusBar } from "react-native";
 import HTML from "react-native-render-html";
 
 import Screen from "../Screen";
@@ -13,7 +12,7 @@ import RewardPanel from "../post/RewardPanel";
 import ArticleBottomTools from "./ArticleBottomTools";
 import Comments from "./comment/Comments";
 import AuthorCard from "../../components/Card/AuthorCard";
-import { RewardModal, ShareModal } from "../../components/Modal";
+import { RewardModal, ShareModal, ImageView } from "../../components/Modal";
 import { LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 
 import { connect } from "react-redux";
@@ -186,14 +185,12 @@ class DetailScreen extends Component {
           }}
         </Query>
         {/*点击图片预览**/}
-        <Modal visible={imageViewerVisible} transparent={true} onRequestClose={() => this.setState({ imageViewerVisible: false })}>
-          <ImageViewer
-            onClick={() => this.setState({ imageViewerVisible: false })}
-            onSwipeDown={() => this.setState({ imageViewerVisible: false })}
-            imageUrls={this.pictures}
-            index={initImage}
-          />
-        </Modal>
+        <ImageView
+          visible={imageViewerVisible}
+          handleVisible={() => this.setState({ imageViewerVisible: false })}
+          imageUrls={this.pictures}
+          index={initImage}
+        />
         <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
     );
