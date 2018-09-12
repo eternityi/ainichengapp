@@ -78,7 +78,7 @@ class HistoryScreen extends Component {
 		return (
 			<TouchableOpacity style={styles.historyItem} onPress={() => goContentScreen(navigation, { ...item.visited, type: item.type })}>
 				<View style={{ flex: 1, marginRight: 20 }}>
-					<Text style={styles.title} numberOflines={2}>
+					<Text style={styles.title} numberOfLines={3}>
 						{item.visited.title ? item.visited.title : item.visited.description}
 					</Text>
 				</View>

@@ -19,29 +19,9 @@ const sliderWidth = width;
 const itemWidth = width - 40;
 
 class FollowedScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      //当前tab页，点击tabbar跳转到顶部并刷新页面
-      tabBarOnPress: ({ scene, jumpToIndex }) => {
-        let scrollToTop = navigation.getParam("scrollToTop", null);
-        if (scene.focused && scrollToTop) {
-          scrollToTop();
-        } else {
-          jumpToIndex(scene.index);
-        }
-      }
-    };
-  };
-
   constructor(props) {
     super(props);
     this.state = { fetchingMore: true };
-  }
-
-  componentWillMount() {
-    this.props.navigation.setParams({
-      scrollToTop: this._scrollToTop
-    });
   }
 
   render() {
@@ -56,9 +36,6 @@ class FollowedScreen extends React.Component {
             let articles = [];
             return (
               <FlatList
-                ref={scrollview => {
-                  this.scrollview = scrollview;
-                }}
                 ListHeaderComponent={() => {
                   if (articles.length < 1) {
                     return (
@@ -112,15 +89,6 @@ class FollowedScreen extends React.Component {
       </View>
     );
   }
-  _scrollToTop = () => {
-    if (this.scrollview) {
-      this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
-      this.props.client.query({
-        query: recommendArticlesQuery,
-        fetchPolicy: "network-only"
-      });
-    }
-  };
 }
 
 const styles = StyleSheet.create({

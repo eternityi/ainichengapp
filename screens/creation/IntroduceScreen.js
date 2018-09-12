@@ -9,7 +9,7 @@ class IntroduceScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<View style={styles.cover}>
 						<View style={{ marginTop: 20 }}>

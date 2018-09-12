@@ -6,7 +6,6 @@ import Carousel from "./Carousel";
 import { Iconfont } from "../../utils/Fonts";
 import { Colors, Methods } from "../../constants";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
-import OfficialCategories from "./OfficialCategories";
 import RecommendCategory from "./RecommendCategory";
 
 import { connect } from "react-redux";
@@ -49,99 +48,107 @@ class CategoriesScreen extends React.Component {
     let { navigation, user } = this.props;
     return (
       <View style={styles.container}>
-        <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
-          {({ loading, error, data, fetchMore, refetch }) => {
-            let categories;
-            if (error || !(data && data.categories) || data.categories.length < 1) {
-              categories = [];
-            }
-            if (data && data.categories) {
-              categories = data.categories;
-            }
-            return (
-              <FlatList
-                ref={scrollview => {
-                  this.scrollview = scrollview;
-                }}
-                data={categories}
-                ListHeaderComponent={() => (
-                  <View style={styles.listHeader}>
-                    <Carousel navigation={navigation} />
-                    <View style={styles.flexRowCenter}>
-                      <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
-                        <View style={styles.entry}>
-                          <View style={[styles.entryLabel, styles.center, { backgroundColor: Colors.themeColor }]}>
-                            <Iconfont name="category" size={22} color="#fff" style={{ marginLeft: 2, marginTop: 2 }} />
-                          </View>
-                          <Text style={styles.entryName}>全部专题</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback onPress={() => this.navigateMiddlewear("新建专题")}>
-                        <View style={styles.entry}>
-                          <View style={[styles.entryLabel, styles.center]}>
-                            <Iconfont name="write" size={22} color="#fff" />
-                          </View>
-                          <Text style={styles.entryName}>创建专题</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </View>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={this._renderCategoryItem}
-                refreshing={loading}
-                onRefresh={() => {
-                  refetch();
-                }}
-                onEndReached={() => {
-                  if (data.categories) {
-                    fetchMore({
-                      variables: {
-                        offset: data.categories.length
-                      },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
-                          this.setState({
-                            fetchingMore: false
+        {user.id ? (
+          <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
+            {({ loading, error, data, fetchMore, refetch }) => {
+              let categories;
+              if (error || !(data && data.categories) || data.categories.length < 1) {
+                categories = [];
+              }
+              if (data && data.categories) {
+                categories = data.categories;
+              }
+              return (
+                <FlatList
+                  ref={scrollview => {
+                    this.scrollview = scrollview;
+                  }}
+                  data={categories}
+                  ListHeaderComponent={() => this._renderListHeader(navigation)}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={this._renderCategoryItem}
+                  refreshing={loading}
+                  onRefresh={() => {
+                    refetch();
+                  }}
+                  onEndReached={() => {
+                    if (data.categories) {
+                      fetchMore({
+                        variables: {
+                          offset: data.categories.length
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+                            this.setState({
+                              fetchingMore: false
+                            });
+                            return prev;
+                          }
+                          return Object.assign({}, prev, {
+                            categories: [...prev.categories, ...fetchMoreResult.categories]
                           });
-                          return prev;
                         }
-                        return Object.assign({}, prev, {
-                          categories: [...prev.categories, ...fetchMoreResult.categories]
-                        });
-                      }
-                    });
-                  } else {
-                    this.setState({
-                      fetchingMore: false
-                    });
-                  }
-                }}
-                ListEmptyComponent={() => <RecommendCategory navigation={navigation} />}
-                ListFooterComponent={() => {
-                  if (categories.length > 0) {
-                    if (this.state.fetchingMore) {
-                      return <LoadingMore />;
+                      });
+                    } else {
+                      this.setState({
+                        fetchingMore: false
+                      });
                     }
-                    return (
-                      <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
-                        <View style={styles.refresh}>
-                          <Iconfont name="fresh" size={15} color={Colors.themeColor} />
-                          <Text style={styles.refreshText}>关注更多专题</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  } else {
-                    return <View />;
-                  }
-                }}
-              />
-            );
-          }}
-        </Query>
+                  }}
+                  ListEmptyComponent={() => <RecommendCategory navigation={navigation} />}
+                  ListFooterComponent={() => {
+                    if (categories.length > 0) {
+                      if (this.state.fetchingMore) {
+                        return <LoadingMore />;
+                      }
+                      return (
+                        <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
+                          <View style={styles.refresh}>
+                            <Iconfont name="fresh" size={15} color={Colors.themeColor} />
+                            <Text style={styles.refreshText}>关注更多专题</Text>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      );
+                    } else {
+                      return <View />;
+                    }
+                  }}
+                />
+              );
+            }}
+          </Query>
+        ) : (
+          this._renderEmpty(navigation)
+        )}
       </View>
     );
   }
+
+  _renderListHeader = navigation => {
+    return (
+      <View style={styles.listHeader}>
+        <Carousel navigation={navigation} />
+        <View style={styles.flexRowCenter}>
+          <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
+            <View style={styles.entry}>
+              <View style={[styles.entryLabel, styles.center, { backgroundColor: Colors.themeColor }]}>
+                <Iconfont name="category" size={22} color="#fff" style={{ marginLeft: 2, marginTop: 2 }} />
+              </View>
+              <Text style={styles.entryName}>全部专题</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => this.navigateMiddlewear("新建专题")}>
+            <View style={styles.entry}>
+              <View style={[styles.entryLabel, styles.center]}>
+                <Iconfont name="write" size={22} color="#fff" />
+              </View>
+              <Text style={styles.entryName}>创建专题</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    );
+  };
 
   _renderCategoryItem = ({ item, index }) => {
     let category = item;
@@ -157,6 +164,15 @@ class CategoriesScreen extends React.Component {
           </View>
         </View>
       </TouchableWithoutFeedback>
+    );
+  };
+
+  _renderEmpty = navigation => {
+    return (
+      <ScrollView>
+        {this._renderListHeader(navigation)}
+        <RecommendCategory navigation={navigation} />
+      </ScrollView>
     );
   };
 

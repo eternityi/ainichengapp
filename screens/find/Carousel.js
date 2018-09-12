@@ -9,6 +9,13 @@ import { Query, withApollo } from "react-apollo";
 import { topArticleWithImagesQuery } from "../../graphql/article.graphql";
 
 class Carousel extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {};
+		console.log("constructor");
+	}
+
 	componentDidMount() {
 		Divice.listenOrientationChange(this);
 	}

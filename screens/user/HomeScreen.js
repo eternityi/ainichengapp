@@ -347,7 +347,7 @@ class HomeScreen extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    return <PostItem post={item} toggleShareModal={this.handleSlideShareMenu} />;
+    return <PostItem post={item} toggleShareModal={this.handleSlideShareMenu} popover={false} />;
   };
 
   _onScroll(event) {

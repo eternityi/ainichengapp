@@ -13,7 +13,7 @@ const COVER_WIDTH = Divice.width;
 
 class PostItem extends PureComponent {
 	render() {
-		const { post, navigation, toggleShareModal, options = ["不感兴趣"], popoverHandler = () => null } = this.props;
+		const { post, navigation, toggleShareModal, popover = true, options = ["不感兴趣"], popoverHandler = () => null } = this.props;
 		let { type, user, time_ago, title, description, has_image, images, cover, category, hits, count_likes, count_replies } = post;
 		return (
 			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => Methods.goContentScreen(navigation, post)}>
@@ -28,12 +28,14 @@ class PostItem extends PureComponent {
 								<Text style={styles.timeAgo}>{time_ago}</Text>
 							</View>
 						</View>
-						<CustomPopoverMenu
-							width={110}
-							selectHandler={popoverHandler}
-							triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
-							options={options}
-						/>
+						{popover && (
+							<CustomPopoverMenu
+								width={110}
+								selectHandler={popoverHandler}
+								triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
+								options={options}
+							/>
+						)}
 					</View>
 					{this.renderContent(type, title, description)}
 					{has_image && <View style={{ marginTop: 10 }}>{this.renderImage(type, images, cover)}</View>}

@@ -10,7 +10,7 @@ import actions from "../store/actions";
 
 class CustomMainTab extends React.Component {
     renderItem = (route, index) => {
-        const { navigation, jumpToIndex, getOnPress, getLabel, client } = this.props;
+        const { navigation, jumpToIndex, getOnPress, getLabel, client, login } = this.props;
         const focused = index === navigation.state.index;
         const color = focused ? this.props.activeTintColor : this.props.inactiveTintColor;
         const scene = {
@@ -29,13 +29,17 @@ class CustomMainTab extends React.Component {
                 key={route.key}
                 style={styles.tabItem}
                 onPress={() => {
-                    onPress
-                        ? onPress({
-                              previousScene,
-                              scene,
-                              jumpToIndex
-                          })
-                        : jumpToIndex(index);
+                    if (getLabel(scene) == "通知" && !login) {
+                        navigation.navigate("登录注册");
+                    } else {
+                        onPress
+                            ? onPress({
+                                  previousScene,
+                                  scene,
+                                  jumpToIndex
+                              })
+                            : jumpToIndex(index);
+                    }
                 }}
             >
                 <View style={styles.tabItem}>

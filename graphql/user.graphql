@@ -680,6 +680,7 @@ query recommendFollowCategoriesQuery($recommend_for_user_id: Int!, $offset: Int)
 # 文章投稿管理
 query querySubmitedArticles($offset: Int, $limit: Int) {
     user {
+        id
         submitedArticles(offset: $offset, limit: $limit) {
             id
             title
