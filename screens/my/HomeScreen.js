@@ -1,5 +1,15 @@
 import React from "react";
-import { ScrollView, FlatList, StyleSheet, Text, View, Button, TouchableOpacity, TouchableHighlight, Image } from "react-native";
+import {
+  ScrollView,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  TouchableHighlight,
+  Image
+} from "react-native";
 
 import { Colors, Config, Divice } from "../../constants";
 import { Iconfont } from "../../utils/Fonts";
@@ -66,7 +76,7 @@ class HomeScreen extends React.Component {
                 <Text style={styles.rowsType1}>发布</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("全部关注", { user })}>
-                <Text style={styles.countFont}>{Counts.count_followings + Counts.count_follows || 0}</Text>
+                <Text style={styles.countFont}>{Counts.count_followings || 0}</Text>
                 <Text style={styles.rowsType1}>关注</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.rowsItem} onPress={() => this.navigateMiddlewear("粉丝", { user })}>
@@ -91,25 +101,45 @@ class HomeScreen extends React.Component {
             <DivisionLine style={{ height: 15, marginTop: -1, marginHorizontal: -15 }} />
             <TouchableOpacity onPress={() => this.navigateMiddlewear("个人专题", { user })}>
               <View style={styles.columnItem}>
-                <Iconfont name={"category"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Iconfont
+                  name={"category"}
+                  size={19}
+                  style={{ width: 20, height: 20, textAlign: "center" }}
+                  color={Colors.tintFontColor}
+                />
                 <Text style={styles.columnType}>我的专题</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.navigateMiddlewear("浏览记录")}>
               <View style={styles.columnItem}>
-                <Iconfont name={"time"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Iconfont
+                  name={"time"}
+                  size={19}
+                  style={{ width: 20, height: 20, textAlign: "center" }}
+                  color={Colors.tintFontColor}
+                />
                 <Text style={styles.columnType}>浏览记录</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.navigateMiddlewear("意见反馈")}>
               <View style={styles.columnItem}>
-                <Iconfont name={"feedback"} size={18} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Iconfont
+                  name={"feedback"}
+                  size={18}
+                  style={{ width: 20, height: 20, textAlign: "center" }}
+                  color={Colors.tintFontColor}
+                />
                 <Text style={styles.columnType}>意见反馈</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("设置")}>
               <View style={styles.columnItem}>
-                <Iconfont name={"fill-setting"} size={19} style={{ width: 20, height: 20, textAlign: "center" }} color={Colors.tintFontColor} />
+                <Iconfont
+                  name={"fill-setting"}
+                  size={19}
+                  style={{ width: 20, height: 20, textAlign: "center" }}
+                  color={Colors.tintFontColor}
+                />
                 <Text style={styles.columnType}>设置</Text>
               </View>
             </TouchableOpacity>

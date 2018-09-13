@@ -132,20 +132,12 @@ class HomeScreen extends React.Component {
             {({ loading, error, data, refetch, stopPolling }) => {
               if (!login) {
                 stopPolling();
+                return this._emptyComponent();
               }
-              if (!login)
-                return (
-                  <View style={{ height: Divice.height - 300 }}>
-                    <Diving description="还没有消息哦，快找小伙伴聊天吧" />
-                  </View>
-                );
               if (error) return <LoadingError reload={() => refetch()} />;
-              if (!(data && data.user && data.user.chats && data.user.chats.length > 0))
-                return (
-                  <View style={{ height: Divice.height - 300 }}>
-                    <Diving description="还没有消息哦，快找小伙伴聊天吧" />
-                  </View>
-                );
+              if (!(data && data.user && data.user.chats && data.user.chats.length > 0)) {
+                return this._emptyComponent();
+              }
               return (
                 <View>
                   {data.user.chats.map((elem, index) => {
@@ -227,6 +219,19 @@ class HomeScreen extends React.Component {
             </Text>
           </View>
         </TouchableOpacity>
+      </View>
+    );
+  };
+
+  _emptyComponent = () => {
+    return (
+      <View style={styles.emptyWrap}>
+        <View style={styles.divingWrap}>
+          <Iconfont name="diving" size={50} color="#fff" />
+        </View>
+        <View>
+          <Text style={styles.emptyText}>还没有消息哦，快去找朋友聊天吧</Text>
+        </View>
       </View>
     );
   };
@@ -312,6 +317,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 8,
     color: Colors.tintFontColor
+  },
+  emptyWrap: {
+    marginTop: 30,
+    flex: 1,
+    backgroundColor: Colors.skinColor,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  divingWrap: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: Colors.darkGray,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  emptyText: {
+    fontSize: 15,
+    color: Colors.tintFontColor,
+    marginTop: 30
   }
 });
 

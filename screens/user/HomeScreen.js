@@ -259,7 +259,7 @@ class HomeScreen extends Component {
                 style={[{ flexDirection: "row", alignItems: "baseline" }, styles.metaLine]}
                 onPress={() => navigation.navigate("全部关注", { user })}
               >
-                <Text style={styles.darkText15}>{user.count_followings + user.count_follows || 0}</Text>
+                <Text style={styles.darkText15}>{user.count_followings || 0}</Text>
                 <Text style={styles.tintText12}>关注</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flexDirection: "row", alignItems: "baseline" }} onPress={() => navigation.navigate("粉丝", { user })}>

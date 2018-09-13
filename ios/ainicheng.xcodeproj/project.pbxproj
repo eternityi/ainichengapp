@@ -2101,7 +2101,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng.staging;
 				PRODUCT_NAME = ainicheng;
 				PROVISIONING_PROFILE = "aa852161-383a-4b12-afc1-ea364094c773";
 				PROVISIONING_PROFILE_SPECIFIER = ainicheng_test;
@@ -2146,7 +2146,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng.staging;
 				PRODUCT_NAME = ainicheng;
 				PROVISIONING_PROFILE = "9dafeb0a-3692-4a47-bc27-8693be481a77";
 				PROVISIONING_PROFILE_SPECIFIER = ainicheng;
@@ -2228,9 +2228,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ainicheng.staging;
 				PRODUCT_NAME = ainicheng;
-				PROVISIONING_PROFILE = "71e02415-0a99-48dd-9407-9d9be57362ee";
+				PROVISIONING_PROFILE = "fe5072fb-15ec-4355-a7f8-78115bd51e60";
 				PROVISIONING_PROFILE_SPECIFIER = ainicheng_test;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

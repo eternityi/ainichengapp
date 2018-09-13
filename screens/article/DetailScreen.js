@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList, StatusBar } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Text, TouchableOpacity, FlatList } from "react-native";
 import HTML from "react-native-render-html";
 
 import Screen from "../Screen";
@@ -58,7 +58,6 @@ class DetailScreen extends Component {
             this.imgKey = 0; //初始化imgkey，同时也是防止重复render所以在此清空
             return (
               <View style={styles.container}>
-                <StatusBar backgroundColor={imageViewerVisible ? "#000" : "#fff"} barStyle={"dark-content"} />
                 <PostHeader navigation={navigation} post={article} share={this.handleSlideShareMenu} login={login} />
                 <ScrollView
                   style={styles.container}

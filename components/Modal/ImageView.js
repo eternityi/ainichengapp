@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { View, Modal } from "react-native";
+import { View, Modal, StatusBar } from "react-native";
 
 import ImageViewer from "react-native-image-zoom-viewer";
 
@@ -11,6 +11,7 @@ class ImageView extends Component {
 		const { visible, handleVisible = () => null, imageUrls, onSwipeDown = handleVisible, onClick = handleVisible, initImage = 0 } = this.props;
 		return (
 			<View>
+				<StatusBar backgroundColor={visible ? "#000" : "#fff"} barStyle={"dark-content"} />
 				<Modal visible={visible} transparent={true} onRequestClose={handleVisible}>
 					<ImageViewer onClick={onClick} onSwipeDown={onSwipeDown} imageUrls={imageUrls} index={initImage} enableSwipeDown />
 				</Modal>

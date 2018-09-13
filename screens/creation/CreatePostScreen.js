@@ -1,6 +1,18 @@
 import React from "react";
 import ReactNative from "react-native";
-import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform, Keyboard } from "react-native";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  Button,
+  View,
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight,
+  Image,
+  Platform,
+  Keyboard
+} from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -55,7 +67,18 @@ class CreatePostScreen extends React.Component {
   }
 
   render() {
-    let { covers, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible, body } = this.state;
+    let {
+      covers,
+      completed,
+      progress,
+      uploadId,
+      uploadType,
+      uri,
+      selectCategories,
+      category_ids,
+      waitingVisible,
+      body
+    } = this.state;
     const { navigation } = this.props;
     return (
       <Screen header>
@@ -155,6 +178,7 @@ class CreatePostScreen extends React.Component {
         this.setState({
           waitingVisible: false
         });
+        this.toast("出错啦，请检查网络是否正常");
       });
   };
 
@@ -336,7 +360,7 @@ class CreatePostScreen extends React.Component {
   toast(message = "内容不能为空哦~") {
     let toast = Toast.show(message, {
       duration: Toast.durations.LONG,
-      position: -70,
+      position: 100,
       shadow: true,
       animation: true,
       hideOnPress: true,

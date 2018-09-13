@@ -1,5 +1,16 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, Platform, Dimensions, View, TouchableOpacity, YellowBox, BackHandler, Keyboard } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  Platform,
+  Dimensions,
+  View,
+  TouchableOpacity,
+  YellowBox,
+  BackHandler,
+  Keyboard
+} from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { RichTextEditor, RichTextToolbar } from "react-native-zss-rich-text-editor";
 import KeyboardSpacer from "react-native-keyboard-spacer";
@@ -164,8 +175,8 @@ class CreationScreen extends React.Component {
         //TODO:: server return photo.width/height
         this.richtext.insertImage({
           src: photo,
-          width: width,
-          height: 200,
+          width: imagePath.width,
+          height: imagePath.height,
           resizeMode: "cover"
         });
       })
@@ -300,6 +311,7 @@ class CreationScreen extends React.Component {
               }
             })
             .catch(error => {
+              this.toast("出错啦，请检查网络设置");
               this.setState({
                 waitingVisible: false
               });
@@ -322,6 +334,7 @@ class CreationScreen extends React.Component {
               navigation.replace("发布分享", { article: data.createArticle });
             })
             .catch(error => {
+              this.toast("出错啦，请检查网络设置");
               this.setState({
                 waitingVisible: false
               });
@@ -334,10 +347,10 @@ class CreationScreen extends React.Component {
       });
   };
 
-  toast() {
-    let toast = Toast.show("标题或者内容不能为空哦~", {
+  toast(message = "标题或者内容不能为空哦") {
+    let toast = Toast.show(message, {
       duration: Toast.durations.LONG,
-      position: 70,
+      position: 100,
       shadow: true,
       animation: true,
       hideOnPress: true,

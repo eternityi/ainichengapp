@@ -20,8 +20,8 @@ class FeedbackScreen extends Component {
 		super(props);
 		this.selectImage = this.selectImage.bind(this);
 		this.deleteImage = this.deleteImage.bind(this);
-		this.img_path = "";
 		this.feedbackImages = "";
+		this.initImage = 0;
 		this.state = {
 			selectImages: [],
 			body: "",
@@ -71,12 +71,16 @@ class FeedbackScreen extends Component {
 												key={index}
 												style={styles.imageWrap}
 												onPress={() => {
-													this.img_path = elem.path;
+													this.initImage = index;
 													this.toggleImageView();
 												}}
 											>
-												<Image style={styles.image} source={{ uri: elem.path }} />
-												<TouchableOpacity key={index} style={styles.chacha} onPress={() => this.deleteImage(index)}>
+												<Image style={styles.image} source={{ uri: elem.url }} />
+												<TouchableOpacity
+													key={index}
+													style={styles.chacha}
+													onPress={() => this.deleteImage(index)}
+												>
 													<Iconfont name="chacha" size={15} color="#fff" />
 												</TouchableOpacity>
 											</TouchableOpacity>
@@ -105,15 +109,18 @@ class FeedbackScreen extends Component {
 							/>
 						</View>
 						<Mutation mutation={createFeedbackMutation}>
-							{createFeedback => {
+							{(createFeedback, { loading, error }) => {
+								if (error) {
+									this.toast({ message: "提交失败，(ಥ﹏ಥ)" });
+								}
 								return (
 									<View style={styles.buttonWrap}>
 										<Button
 											name="提交反馈"
-											disabled={body.length < 3 ? true : false}
-											handler={() => {
+											disabled={body.length < 3 || loading ? true : false}
+											handler={async () => {
 												if (selectImages.length > 0) {
-													this.saveImage(selectImages);
+													await this.saveImage(selectImages);
 												}
 												createFeedback({
 													variables: {
@@ -122,7 +129,7 @@ class FeedbackScreen extends Component {
 														image_urls: this.feedbackImages
 													},
 													update: (cache, { data }) => {
-														this.toast();
+														this.toast({ message: "反馈成功，感谢您的建议", goBack: true });
 													}
 												});
 											}}
@@ -135,11 +142,8 @@ class FeedbackScreen extends Component {
 					<ImageView
 						visible={imageViewVisible}
 						handleVisible={this.toggleImageView}
-						imageUrls={[
-							{
-								url: this.img_path
-							}
-						]}
+						imageUrls={selectImages}
+						initImage={this.initImage}
 					/>
 					{Platform.OS == "ios" && <KeyboardSpacer />}
 				</View>
@@ -163,7 +167,7 @@ class FeedbackScreen extends Component {
 				let { selectImages } = this.state;
 				let count_images = selectImages.length;
 				images.map(image => {
-					selectImages.push({ path: image.path });
+					selectImages.push({ url: image.path });
 				});
 				selectImages = selectImages.slice(0, 3);
 				this.setState({
@@ -173,12 +177,12 @@ class FeedbackScreen extends Component {
 			.catch(error => {});
 	}
 
-	saveImage = images => {
+	saveImage = async images => {
 		const { token } = this.props.user;
 		var data = new FormData();
 		images.map((elem, index) => {
 			data.append("photo[]", {
-				uri: elem.path,
+				uri: elem.url,
 				name: "image.jpg",
 				type: "image/jpg"
 			});
@@ -192,7 +196,7 @@ class FeedbackScreen extends Component {
 			body: data
 		};
 		let uri = Config.ServerRoot + "/api/image?api_token=" + token;
-		fetch(uri, config)
+		await fetch(uri, config)
 			.then(response => {
 				console.log("response", response);
 				response.text();
@@ -215,10 +219,10 @@ class FeedbackScreen extends Component {
 		});
 	}
 
-	toast = () => {
-		let toast = Toast.show("反馈成功，感谢您的建议", {
+	toast = ({ message, goBack }) => {
+		let toast = Toast.show(message, {
 			duration: Toast.durations.LONG,
-			position: 70,
+			position: 100,
 			shadow: true,
 			animation: true,
 			hideOnPress: true,
@@ -228,7 +232,9 @@ class FeedbackScreen extends Component {
 		setTimeout(function() {
 			Toast.hide(toast);
 		}, 2000);
-		this.props.navigation.goBack();
+		if (goBack) {
+			this.props.navigation.goBack();
+		}
 	};
 }
 

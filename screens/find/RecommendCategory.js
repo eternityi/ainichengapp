@@ -17,7 +17,6 @@ class RecommendCategory extends React.Component {
 	constructor(props) {
 		super(props);
 		this.refreshing = false;
-		console.log("constructor");
 	}
 
 	render() {
