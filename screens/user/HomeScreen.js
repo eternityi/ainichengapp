@@ -23,7 +23,15 @@ import { FollowButton, Button } from "../../components/Button";
 import { Header, HeaderLeft, HeaderRight } from "../../components/Header";
 import { RewardModal, OperationModal, ReportModal, ShareModal } from "../../components/Modal";
 
-import { DivisionLine, Avatar, BlankContent, LoadingError, SpinnerLoading, LoadingMore, ContentEnd } from "../../components/Pure";
+import {
+  DivisionLine,
+  Avatar,
+  BlankContent,
+  LoadingError,
+  SpinnerLoading,
+  LoadingMore,
+  ContentEnd
+} from "../../components/Pure";
 
 import { connect } from "react-redux";
 import { Query, Mutation, graphql, compose } from "react-apollo";
@@ -51,7 +59,14 @@ class HomeScreen extends Component {
     const { navigation, personal, login } = this.props;
     const user = navigation.getParam("user", {});
     const self = user.id == personal.id;
-    let { fetchingMore, backdropVisible, reportVisible, avatarViewerVisible, shareModalVisible, offsetTop } = this.state;
+    let {
+      fetchingMore,
+      backdropVisible,
+      reportVisible,
+      avatarViewerVisible,
+      shareModalVisible,
+      offsetTop
+    } = this.state;
     let headerTransparence = offsetTop.interpolate({
       inputRange: [0, Divice.HEADER_HEIGHT * 2],
       outputRange: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
@@ -69,7 +84,7 @@ class HomeScreen extends Component {
     });
     return (
       <Screen header>
-        <Query query={userDetailQuery} variables={{ id: user.id }}>
+        <Query query={userDetailQuery} variables={{ id: user.id }} fetchPolicy="network-only">
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.user && data.articles)) return <SpinnerLoading />;
@@ -124,7 +139,13 @@ class HomeScreen extends Component {
                     return fetchingMore ? <LoadingMore /> : <ContentEnd />;
                   }}
                 />
-                <Animated.View style={[styles.header, { backgroundColor: headerTransparence }, avatarViewerVisible && { backgroundColor: "#000" }]}>
+                <Animated.View
+                  style={[
+                    styles.header,
+                    { backgroundColor: headerTransparence },
+                    avatarViewerVisible && { backgroundColor: "#000" }
+                  ]}
+                >
                   <Animated.View style={[styles.header, { opacity: lightHeaderOpacity }]}>
                     <Header lightBar routeName rightComponent={this._headerRight(user, self, "#fff")} />
                   </Animated.View>
@@ -136,7 +157,12 @@ class HomeScreen extends Component {
                           <View style={styles.layoutFlexRow}>
                             <Avatar size={28} uri={user.avatar} />
                             <Text style={[styles.tintText14, { marginLeft: 5 }]}>{user.name}</Text>
-                            <FollowButton id={user.id} type={"user"} customStyle={styles.followButton} status={user.followed_status} />
+                            <FollowButton
+                              id={user.id}
+                              type={"user"}
+                              customStyle={styles.followButton}
+                              status={user.followed_status}
+                            />
                           </View>
                         </HeaderLeft>
                       }
@@ -213,7 +239,10 @@ class HomeScreen extends Component {
         </TouchableWithoutFeedback>
         <View style={styles.userInfo}>
           <View style={[styles.layoutFlexRow, styles.baseInfo]}>
-            <TouchableOpacity style={styles.userAvatarWrap} onPress={() => this.setState({ avatarViewerVisible: true })}>
+            <TouchableOpacity
+              style={styles.userAvatarWrap}
+              onPress={() => this.setState({ avatarViewerVisible: true })}
+            >
               <Image
                 style={styles.userAvatar}
                 source={{
@@ -243,7 +272,11 @@ class HomeScreen extends Component {
               <Text numberOfLines={1} style={styles.name}>
                 {user.name}
               </Text>
-              <Iconfont name={user.gender == 1 ? "girl" : "boy"} size={17} color={user.gender == 1 ? Colors.softPink : Colors.skyBlue} />
+              <Iconfont
+                name={user.gender == 1 ? "girl" : "boy"}
+                size={17}
+                color={user.gender == 1 ? Colors.softPink : Colors.skyBlue}
+              />
             </View>
             <View style={styles.userIntroduce}>
               <Text numberOfLines={2} style={styles.introduceText}>
@@ -262,7 +295,10 @@ class HomeScreen extends Component {
                 <Text style={styles.darkText15}>{user.count_followings || 0}</Text>
                 <Text style={styles.tintText12}>关注</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flexDirection: "row", alignItems: "baseline" }} onPress={() => navigation.navigate("粉丝", { user })}>
+              <TouchableOpacity
+                style={{ flexDirection: "row", alignItems: "baseline" }}
+                onPress={() => navigation.navigate("粉丝", { user })}
+              >
                 <Text style={styles.darkText15}>{user.count_follows || 0}</Text>
                 <Text style={styles.tintText12}>粉丝</Text>
               </TouchableOpacity>
@@ -328,7 +364,11 @@ class HomeScreen extends Component {
           //   </TouchableOpacity>
           // </View>
         }
-        <Modal visible={avatarViewerVisible} transparent={true} onRequestClose={() => this.setState({ avatarViewerVisible: false })}>
+        <Modal
+          visible={avatarViewerVisible}
+          transparent={true}
+          onRequestClose={() => this.setState({ avatarViewerVisible: false })}
+        >
           <ImageViewer
             onClick={() => this.setState({ avatarViewerVisible: false })}
             onSwipeDown={() => this.setState({ avatarViewerVisible: false })}

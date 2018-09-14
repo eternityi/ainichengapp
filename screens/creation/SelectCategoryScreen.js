@@ -7,10 +7,11 @@ import Screen from "../Screen";
 import SearchResult from "./SearchResult";
 
 import Toast from "react-native-root-toast";
-import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
-import EmitInput from "../../components/Native/EmitInput";
+import { Input } from "../../components/elements";
+
 import CategoryItem from "./CategoryItem";
 
 import { connect } from "react-redux";
@@ -28,32 +29,16 @@ class SeleceCategoryScreen extends React.Component {
 		let selectCategories = props.navigation.getParam("selectCategories", []);
 		selectCategories = [...selectCategories];
 		this.state = {
-			name: "keywords",
-			placeholder: "搜索专题",
-			fetchingMore: true,
-			keywords: "",
-			collection: "收录",
-			submission: "投稿",
 			selectCategories,
-			none_keywords: true,
+			switchResult: true,
 			fetchMore: true
 		};
 	}
 
-	onEmitterReady = emitter => {
-		this.thingEmitter = emitter;
-		this.thingEmitter.addListener("keywordsChanged", text => {
-			this.keywords = text;
-			if (this.keywords.length < 1) {
-				this.setState({ none_keywords: true });
-			}
-		});
-	};
 	render() {
 		let { navigation, user, hot_search, deleteQuery, login } = this.props;
-		let { none_keywords, name, placeholder } = this.state;
 		const callback = navigation.getParam("callback", {});
-		let { fetchingMore, keywords, collection, submission, selectCategories } = this.state;
+		let { switchResult, selectCategories } = this.state;
 		return (
 			<Screen header>
 				<View style={styles.container}>
@@ -62,17 +47,22 @@ class SeleceCategoryScreen extends React.Component {
 						leftComponent
 						centerComponent={
 							<View style={styles.searchWrap}>
-								<EmitInput
+								<Input
 									words={false}
-									name={name}
 									style={styles.textInput}
-									autoFocus={true}
-									placeholder={placeholder}
-									onEmitterReady={this.onEmitterReady}
-									ref={ref => (this.inputText = ref)}
+									placeholder="搜索专题"
+									onChangeText={this.onChangeText}
 								/>
-								<TouchableOpacity style={styles.searchIcon} onPress={this.handleSearch}>
-									<Iconfont name={"search"} size={22} color={Colors.tintFontColor} style={{ marginRight: 8 }} />
+								<TouchableOpacity
+									style={styles.searchIcon}
+									onPress={() => this.handleSearch(this.keywords)}
+								>
+									<Iconfont
+										name={"search"}
+										size={22}
+										color={Colors.tintFontColor}
+										style={{ marginRight: 8 }}
+									/>
 								</TouchableOpacity>
 							</View>
 						}
@@ -102,7 +92,7 @@ class SeleceCategoryScreen extends React.Component {
 							</TouchableOpacity>
 						}
 					/>
-					{none_keywords ? (
+					{switchResult ? (
 						<Query query={hotSearchAndLogsQuery}>
 							{({ loading, error, data, fetchMore, refetch }) => {
 								let histories = [];
@@ -137,7 +127,9 @@ class SeleceCategoryScreen extends React.Component {
 														}
 													>
 														<View style={[styles.searchItem, { justifyContent: "center" }]}>
-															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
+															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>
+																清除搜索记录
+															</Text>
 														</View>
 													</TouchableOpacity>
 												</View>
@@ -167,7 +159,12 @@ class SeleceCategoryScreen extends React.Component {
 				<TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.query)}>
 					<View style={styles.searchItem}>
 						<View style={styles.verticalCenter}>
-							<Iconfont name={"time-outline"} size={21} color={Colors.lightFontColor} style={{ marginRight: 20 }} />
+							<Iconfont
+								name={"time-outline"}
+								size={21}
+								color={Colors.lightFontColor}
+								style={{ marginRight: 20 }}
+							/>
 							{elem.query && <Text style={{ fontSize: 16, color: "#666" }}>{elem.query}</Text>}
 						</View>
 						<TouchableOpacity
@@ -210,14 +207,19 @@ class SeleceCategoryScreen extends React.Component {
 		return <View>{histories}</View>;
 	};
 
-	handleSearch(keywords) {
-		if (keywords.length > 0) {
-			this.changeKeywords(keywords);
-		}
+	handleSearch = keywords => {
+		this.keywords = keywords;
 		if (this.keywords.length > 0) {
-			this.setState({ none_keywords: false });
+			this.setState({ switchResult: false });
 		}
-	}
+	};
+
+	onChangeText = value => {
+		this.keywords = value;
+		if (this.keywords.length < 1) {
+			this.setState({ switchResult: true });
+		}
+	};
 
 	closeHistory(id) {
 		this.setState(prevState => {
@@ -236,11 +238,6 @@ class SeleceCategoryScreen extends React.Component {
 			id;
 		}
 	}
-
-	changeKeywords = keywords => {
-		this.keywords = keywords;
-		this.inputText.changeText(this.keywords);
-	};
 
 	selectCategory = (category, check) => {
 		let { selectCategories } = this.state;

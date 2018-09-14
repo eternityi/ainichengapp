@@ -4,7 +4,15 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, FlatList, Di
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import {
+	SearchTypeBar,
+	Avatar,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { CategoryContributeGroup } from "../../components/MediaGroup";
 
@@ -78,7 +86,7 @@ class ContributeScreen extends React.Component {
 		const article = navigation.getParam("article", {});
 		let { fetchingMore, keywords, collection, submission } = this.state;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
 					<Query query={queryArticleRequesRecommend}>
@@ -93,7 +101,12 @@ class ContributeScreen extends React.Component {
 									data={categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryContributeGroup article={article} category={item} navigation={navigation} category={item} />
+										<CategoryContributeGroup
+											article={article}
+											category={item}
+											navigation={navigation}
+											category={item}
+										/>
 									)}
 									refreshing={loading}
 									onRefresh={() => {
@@ -107,7 +120,13 @@ class ContributeScreen extends React.Component {
 													offset: categories.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.categories &&
+															fetchMoreResult.categories.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});
@@ -152,7 +171,9 @@ class ContributeScreen extends React.Component {
 									<View>
 										<Text style={styles.listHeaderText}>我管理的专题</Text>
 									</View>
-									<TouchableOpacity onPress={() => navigation.navigate("全部专题投稿", { type: "admin" })}>
+									<TouchableOpacity
+										onPress={() => navigation.navigate("全部专题投稿", { type: "admin" })}
+									>
 										<Text style={styles.listHeaderText}>查看全部</Text>
 									</TouchableOpacity>
 								</View>
@@ -162,7 +183,12 @@ class ContributeScreen extends React.Component {
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryItem article={article} category={item} navigation={navigation} status={collection} />
+										<CategoryItem
+											article={article}
+											category={item}
+											navigation={navigation}
+											status={collection}
+										/>
 									)}
 								/>
 							</View>
@@ -180,7 +206,9 @@ class ContributeScreen extends React.Component {
 									<View>
 										<Text style={styles.listHeaderText}>最近投稿</Text>
 									</View>
-									<TouchableOpacity onPress={() => navigation.navigate("全部专题投稿", { type: "contribute" })}>
+									<TouchableOpacity
+										onPress={() => navigation.navigate("全部专题投稿", { type: "contribute" })}
+									>
 										<Text style={styles.listHeaderText}>查看全部</Text>
 									</TouchableOpacity>
 								</View>
@@ -190,7 +218,12 @@ class ContributeScreen extends React.Component {
 									data={categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryItem article={article} category={item} navigation={navigation} status={submission} />
+										<CategoryItem
+											article={article}
+											category={item}
+											navigation={navigation}
+											status={submission}
+										/>
 									)}
 								/>
 							</View>

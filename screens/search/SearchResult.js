@@ -5,7 +5,15 @@ import { NavigationActions } from "react-navigation";
 import Screen from "../Screen";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { Avatar, DivisionLine, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import {
+	Avatar,
+	DivisionLine,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../components/Pure";
 import SearchArticleItem from "../../components/Article/SearchArticleItem";
 
 import { connect } from "react-redux";
@@ -37,11 +45,9 @@ class SearchResult extends Component {
 			<View style={styles.container}>
 				<Query query={SearchResultQueries} variables={{ keyword: keywords, order: order }}>
 					{({ loading, error, data, fetchMore, refetch, client }) => {
-						console.log("keywords", keywords);
-						console.log("error", error);
 						if (error) return <LoadingError reload={() => refetch()} />;
-						if (!(data && data.articles && data.users && data.categories && data.collections)) return <SpinnerLoading />;
-						if (data.articles.length < 1 && data.users.length < 1 && data.categories.length < 1 && data.collections.length < 1)
+						if (!(data && data.articles && data.users && data.categories)) return <SpinnerLoading />;
+						if (data.articles.length < 1 && data.users.length < 1 && data.categories.length < 1)
 							return <BlankContent />;
 						client.query({ query: hotSearchAndLogsQuery, fetchPolicy: "network-only" });
 						return (
@@ -58,7 +64,13 @@ class SearchResult extends Component {
 												offset: data.articles.length
 											},
 											updateQuery: (prev, { fetchMoreResult }) => {
-												if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+												if (
+													!(
+														fetchMoreResult &&
+														fetchMoreResult.articles &&
+														fetchMoreResult.articles.length > 0
+													)
+												) {
 													this.setState({
 														fetchingMore: false
 													});
@@ -77,7 +89,13 @@ class SearchResult extends Component {
 								}}
 								ListEmptyComponent={() => <BlankContent />}
 								ListFooterComponent={() => {
-									return data.articles.length > 0 ? fetchingMore ? <LoadingMore /> : <ContentEnd /> : null;
+									return data.articles.length > 0 ? (
+										fetchingMore ? (
+											<LoadingMore />
+										) : (
+											<ContentEnd />
+										)
+									) : null;
 								}}
 							/>
 						);
@@ -90,7 +108,11 @@ class SearchResult extends Component {
 	_renderRelatedUserItem(item, index) {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity style={styles.relatedItem} key={index} onPress={() => navigation.navigate("用户详情", { user: item })}>
+			<TouchableOpacity
+				style={styles.relatedItem}
+				key={index}
+				onPress={() => navigation.navigate("用户详情", { user: item })}
+			>
 				<Avatar uri={item.avatar} size={40} />
 				<View style={{ flex: 1 }}>
 					<Text style={styles.relatedItemName} numberOfLines={1}>
@@ -104,7 +126,11 @@ class SearchResult extends Component {
 	_renderRelatedCategoryItem(item, index) {
 		let { navigation } = this.props;
 		return (
-			<TouchableOpacity style={styles.relatedItem} key={index} onPress={() => navigation.navigate("专题详情", { category: item })}>
+			<TouchableOpacity
+				style={styles.relatedItem}
+				key={index}
+				onPress={() => navigation.navigate("专题详情", { category: item })}
+			>
 				<Avatar uri={item.logo} type={"category"} size={40} />
 				<View style={{ flex: 1 }}>
 					<Text style={styles.relatedItemName} numberOfLines={1}>
@@ -115,14 +141,17 @@ class SearchResult extends Component {
 		);
 	}
 
-	_renderSearchHeader({ articles, users, categories, collections }) {
+	_renderSearchHeader({ articles, users, categories }) {
 		let { order } = this.state;
 		let { navigation, keywords } = this.props;
 		return (
 			<View>
 				{users.length > 0 && (
 					<View>
-						<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关用户", { users })}>
+						<TouchableOpacity
+							style={styles.relatedType}
+							onPress={() => navigation.navigate("相关用户", { users })}
+						>
 							<Text style={styles.relatedTypeText}>相关用户</Text>
 							<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
 						</TouchableOpacity>
@@ -136,7 +165,10 @@ class SearchResult extends Component {
 				)}
 				{categories.length > 0 && (
 					<View>
-						<TouchableOpacity style={styles.relatedType} onPress={() => navigation.navigate("相关专题", { categories })}>
+						<TouchableOpacity
+							style={styles.relatedType}
+							onPress={() => navigation.navigate("相关专题", { categories })}
+						>
 							<Text style={styles.relatedTypeText}>相关专题</Text>
 							<Iconfont name={"right"} color={Colors.tintFontColor} size={16} />
 						</TouchableOpacity>
@@ -150,11 +182,17 @@ class SearchResult extends Component {
 				)}
 				{articles.length > 0 && (
 					<View style={styles.orderArticleHeader}>
-						<Text style={[styles.relatedTypeText, order == "" ? styles.focused : {}]} onPress={() => this.articleOrder("")}>
+						<Text
+							style={[styles.relatedTypeText, order == "" ? styles.focused : {}]}
+							onPress={() => this.articleOrder("")}
+						>
 							按时间
 						</Text>
 						<View style={styles.divisionLine} />
-						<Text style={[styles.relatedTypeText, order == "HOT" ? styles.focused : {}]} onPress={() => this.articleOrder("HOT")}>
+						<Text
+							style={[styles.relatedTypeText, order == "HOT" ? styles.focused : {}]}
+							onPress={() => this.articleOrder("HOT")}
+						>
 							按热度
 						</Text>
 					</View>

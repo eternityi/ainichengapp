@@ -4,7 +4,15 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, FlatList, Di
 import Screen from "../Screen";
 import Colors from "../../constants/Colors";
 import { Iconfont } from "../../utils/Fonts";
-import { SearchTypeBar, Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
+import {
+	SearchTypeBar,
+	Avatar,
+	ContentEnd,
+	LoadingMore,
+	LoadingError,
+	SpinnerLoading,
+	BlankContent
+} from "../../components/Pure";
 import { CategoryContributeGroup } from "../../components/MediaGroup";
 
 import { connect } from "react-redux";
@@ -30,10 +38,13 @@ class CategoryListScreen extends React.Component {
 		const article = navigation.getParam("article", {});
 		let { fetchingMore, keywords } = this.state;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
-					<Query query={type == "admin" ? userAdminCategoriesQuery : topCategoriesQuery} variables={{ user_id: user.id }}>
+					<Query
+						query={type == "admin" ? userAdminCategoriesQuery : topCategoriesQuery}
+						variables={{ user_id: user.id }}
+					>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.categories)) return <SpinnerLoading />;
@@ -44,7 +55,9 @@ class CategoryListScreen extends React.Component {
 										return (
 											<View>
 												<View style={styles.listHeader}>
-													<Text style={styles.listHeaderText}>{type == "admin" ? "我管理的专题" : "最近投稿"}</Text>
+													<Text style={styles.listHeaderText}>
+														{type == "admin" ? "我管理的专题" : "最近投稿"}
+													</Text>
 												</View>
 											</View>
 										);
@@ -52,7 +65,11 @@ class CategoryListScreen extends React.Component {
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryContributeGroup article={article} category={item} navigation={navigation} />
+										<CategoryContributeGroup
+											article={article}
+											category={item}
+											navigation={navigation}
+										/>
 									)}
 									refreshing={loading}
 									onRefresh={() => {
@@ -66,7 +83,13 @@ class CategoryListScreen extends React.Component {
 													offset: data.categories.length
 												},
 												updateQuery: (prev, { fetchMoreResult }) => {
-													if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+													if (
+														!(
+															fetchMoreResult &&
+															fetchMoreResult.categories &&
+															fetchMoreResult.categories.length > 0
+														)
+													) {
 														this.setState({
 															fetchingMore: false
 														});

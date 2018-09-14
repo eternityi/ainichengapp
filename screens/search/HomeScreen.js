@@ -19,41 +19,29 @@ class HomeScreen extends Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.closeHistory = this.closeHistory.bind(this);
     this.deleteHistories = this.deleteHistories.bind(this);
-    this.keywords = "";
     this.hotsearchs = 0;
+    this.keywords = "";
     this.state = {
-      none_keywords: true,
+      switchResult: true,
       order: "LATEST",
       fetchMore: true
     };
   }
 
-  onEmitterReady = emitter => {
-    this.thingEmitter = emitter;
-    this.thingEmitter.addListener("keywordsChanged", text => {
-      this.keywords = text;
-      if (this.keywords.length < 1) {
-        this.setState({ none_keywords: true });
-      }
-    });
-  };
-
   render() {
-    let { none_keywords } = this.state;
+    let { switchResult } = this.state;
     let { navigation, hot_search, deleteQuery, login } = this.props;
     // 未登录没有搜索记录，所以要排除该条件检测
     return (
       <Screen header>
         <View style={styles.container}>
           <SearchHeader
-            changeKeywords={this.onEmitterReady}
-            handleSearch={this.handleSearch}
+            onChangeText={this.onChangeText}
+            handleSearch={() => this.handleSearch(this.keywords)}
             headerRef={ref => (this.inputText = ref)}
             navigation={navigation}
-            name="keywords"
-            placeholder={"搜索专题"}
           />
-          {none_keywords ? (
+          {switchResult ? (
             <Query query={hotSearchAndLogsQuery}>
               {({ loading, error, data, fetchMore, refetch }) => {
                 let histories = [];
@@ -69,9 +57,14 @@ class HomeScreen extends Component {
                 return (
                   <ScrollView style={styles.container} bounces={false}>
                     <View style={{ paddingHorizontal: 15 }}>
-                      <TouchableOpacity style={styles.searchItem} onPress={() => navigation.navigate("推荐专题")}>
+                      <TouchableOpacity style={styles.searchItem} onPress={() => navigation.navigate("全部专题")}>
                         <View style={styles.verticalCenter}>
-                          <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
+                          <Iconfont
+                            name={"category-rotate"}
+                            size={19}
+                            color={Colors.themeColor}
+                            style={{ marginRight: 8 }}
+                          />
                           <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
                         </View>
                         <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
@@ -96,7 +89,13 @@ class HomeScreen extends Component {
                                     offset: this.hotsearchs
                                   },
                                   updateQuery: (prev, { fetchMoreResult }) => {
-                                    if (!(fetchMoreResult && fetchMoreResult.queries && fetchMoreResult.queries.length > 0)) {
+                                    if (
+                                      !(
+                                        fetchMoreResult &&
+                                        fetchMoreResult.queries &&
+                                        fetchMoreResult.queries.length > 0
+                                      )
+                                    ) {
                                       return prev;
                                     }
                                     return Object.assign({}, prev, {
@@ -211,14 +210,19 @@ class HomeScreen extends Component {
     return <View>{histories}</View>;
   };
 
-  handleSearch(keywords) {
-    if (keywords.length > 0) {
-      this.changeKeywords(keywords);
-    }
+  handleSearch = keywords => {
+    this.keywords = keywords;
     if (this.keywords.length > 0) {
-      this.setState({ none_keywords: false });
+      this.setState({ switchResult: false });
     }
-  }
+  };
+
+  onChangeText = value => {
+    this.keywords = value;
+    if (this.keywords.length < 1) {
+      this.setState({ switchResult: true });
+    }
+  };
 
   closeHistory(id) {
     this.setState(prevState => {
@@ -237,11 +241,6 @@ class HomeScreen extends Component {
       id;
     }
   }
-
-  changeKeywords = keywords => {
-    this.keywords = keywords;
-    this.inputText.changeText(this.keywords);
-  };
 }
 
 const styles = StyleSheet.create({

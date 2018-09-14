@@ -7,17 +7,18 @@ import Colors from "../../constants/Colors";
 import { SearchTypeHeader } from "../../components/Header";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { CategoryContributeGroup } from "../../components/MediaGroup";
+import SearchResult from "./SearchResult";
 
 import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
-import { topCategoriesQuery } from "../../graphql/category.graphql";
+import { SearchResultQueries } from "../../graphql/user.graphql";
 
 //搜索专题 给文章投稿
 class CategoriesScreen extends Component {
 	constructor(props) {
 		super(props);
+		this.keywords = "";
 		this.state = {
-			keywords: "",
 			fetching: false,
 			fetchingMore: true
 		};
@@ -25,19 +26,19 @@ class CategoriesScreen extends Component {
 
 	render() {
 		let { renderItem, search_detail, navigation } = this.props;
-		let { keywords, fetching, fetchingMore } = this.state;
+		let { fetching, fetchingMore } = this.state;
 		const article = navigation.getParam("article", {});
 		return (
 			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeHeader
 						placeholder={"搜索专题"}
-						keywords={keywords}
+						keywords={this.keywords}
 						changeKeywords={this.changeKeywords.bind(this)}
-						handleSearch={this.handleSearch.bind(this)}
+						handleSearch={() => this.handleSearch(this.keywords)}
 					/>
 					{fetching && (
-						<Query query={topCategoriesQuery}>
+						<Query query={SearchResultQueries} variables={{ keyword: this.keywords }}>
 							{({ loading, error, data, refetch, fetchMore }) => {
 								if (error) return <LoadingError reload={() => refetch()} />;
 								if (!(data && data.categories)) return <SpinnerLoading />;
@@ -47,7 +48,11 @@ class CategoriesScreen extends Component {
 										data={data.categories}
 										keyExtractor={(item, index) => index.toString()}
 										renderItem={({ item }) => (
-											<CategoryContributeGroup article={article} category={item} navigation={navigation} />
+											<CategoryContributeGroup
+												article={article}
+												category={item}
+												navigation={navigation}
+											/>
 										)}
 										onEndReachedThreshold={0.3}
 										onEndReached={() => {
@@ -58,7 +63,11 @@ class CategoriesScreen extends Component {
 													},
 													updateQuery: (prev, { fetchMoreResult }) => {
 														if (
-															!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)
+															!(
+																fetchMoreResult &&
+																fetchMoreResult.categories &&
+																fetchMoreResult.categories.length > 0
+															)
 														) {
 															this.setState({
 																fetchingMore: false
@@ -66,7 +75,10 @@ class CategoriesScreen extends Component {
 															return prev;
 														}
 														return Object.assign({}, prev, {
-															categories: [...prev.categories, ...fetchMoreResult.categories]
+															categories: [
+																...prev.categories,
+																...fetchMoreResult.categories
+															]
 														});
 													}
 												});
@@ -90,15 +102,19 @@ class CategoriesScreen extends Component {
 	}
 
 	changeKeywords(keywords) {
-		this.setState({
-			keywords
-		});
+		this.keywords = keywords;
+		if (this.keywords.length < 1) {
+			this.setState({ fetching: false });
+		}
 	}
 
-	handleSearch() {
-		this.setState({
-			fetching: true
-		});
+	handleSearch(keywords) {
+		this.keywords = keywords;
+		if (this.keywords.length > 0) {
+			this.setState({
+				fetching: true
+			});
+		}
 	}
 }
 

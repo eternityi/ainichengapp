@@ -15,17 +15,21 @@ class ResetPasswordScreen extends Component {
 			<Screen>
 				<View style={styles.container}>
 					<View style={styles.hint}>
-						<Text style={{ fontSize: 15, color: Colors.themeColor }}>为了你的账户安全，请选择以下方式进行身份验证</Text>
+						<Text style={{ fontSize: 15, color: Colors.themeColor }}>
+							为了你的账户安全，请选择以下方式进行身份验证
+						</Text>
 					</View>
 					<TouchableOpacity onPress={() => navigation.navigate("密码验证")}>
 						<SettingItem itemName="使用当前密码验证" />
 					</TouchableOpacity>
-					<TouchableOpacity onPress={() => navigation.navigate("密码验证")}>
-						<SettingItem itemName="使用手机号验证" explain="158****1314" />
-					</TouchableOpacity>
-					<TouchableOpacity onPress={() => navigation.navigate("密码验证")}>
-						<SettingItem itemName="使用邮箱验证" />
-					</TouchableOpacity>
+					{
+						// <TouchableOpacity onPress={() => navigation.navigate("密码验证")}>
+						// 	<SettingItem itemName="使用手机号验证" explain="158****1314" />
+						//</TouchableOpacity>
+						//<TouchableOpacity onPress={() => navigation.navigate("密码验证")}>
+						//	<SettingItem itemName="使用邮箱验证" />
+						//</TouchableOpacity>
+					}
 				</View>
 			</Screen>
 		);

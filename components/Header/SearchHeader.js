@@ -2,26 +2,23 @@ import React, { Component } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 
 import Header from "./Header";
-import EmitInput from "../Native/EmitInput";
+import { Input } from "../elements";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
 class SearchHeader extends Component {
   render() {
-    let { name, handleSearch = () => null, changeKeywords = () => null, placeholder = "搜索文章、专题、用户、文集", headerRef } = this.props;
+    let {
+      name,
+      handleSearch = () => null,
+      onChangeText = () => null,
+      placeholder = "搜索文章、专题、用户"
+    } = this.props;
     return (
       <Header
         centerComponent={
           <View style={styles.searchWrap}>
-            <EmitInput
-              words={false}
-              name={name}
-              style={styles.textInput}
-              autoFocus={true}
-              placeholder={placeholder}
-              onEmitterReady={changeKeywords}
-              ref={headerRef}
-            />
+            <Input words={false} style={styles.textInput} placeholder={placeholder} onChangeText={onChangeText} />
             <TouchableOpacity style={styles.searchIcon} onPress={handleSearch}>
               <Iconfont name={"search"} size={22} color={Colors.tintFontColor} style={{ marginRight: 8 }} />
             </TouchableOpacity>

@@ -12,7 +12,7 @@ class SearchTypeBar extends Component {
 			<Header
 				routeName={true}
 				navigation={navigation}
-				rightComponent={
+				centerComponent={
 					<TouchableWithoutFeedback onPress={() => navigation.navigate(type)}>
 						<View style={styles.searchBar}>
 							<Text style={styles.placeholder}>{placeholder}</Text>
@@ -30,8 +30,9 @@ class SearchTypeBar extends Component {
 const styles = StyleSheet.create({
 	searchBar: {
 		flex: 1,
+		marginLeft: 40,
 		paddingLeft: 10,
-		height: 33,
+		height: 30,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",

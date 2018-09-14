@@ -7,7 +7,7 @@ class Input extends Component {
 	render() {
 		let {
 			inputRef,
-			changeText,
+			onChangeText,
 			onFocus,
 			value,
 			style = {},
@@ -31,7 +31,7 @@ class Input extends Component {
 				autoFocus={autoFocus}
 				onFocus={onFocus}
 				style={style}
-				onChangeText={changeText}
+				onChangeText={onChangeText}
 				value={value}
 				ref={inputRef}
 			/>

@@ -119,9 +119,12 @@ class FeedbackScreen extends Component {
 											name="提交反馈"
 											disabled={body.length < 3 || loading ? true : false}
 											handler={async () => {
+												console.log("handler");
+
 												if (selectImages.length > 0) {
 													await this.saveImage(selectImages);
 												}
+												console.log("this.feedbackImages", this.feedbackImages);
 												createFeedback({
 													variables: {
 														content: body,
@@ -178,6 +181,7 @@ class FeedbackScreen extends Component {
 	}
 
 	saveImage = async images => {
+		console.log("saveImage");
 		const { token } = this.props.user;
 		var data = new FormData();
 		images.map((elem, index) => {
@@ -195,15 +199,11 @@ class FeedbackScreen extends Component {
 			},
 			body: data
 		};
-		let uri = Config.ServerRoot + "/api/image?api_token=" + token;
+		let uri = Config.ServerRoot + "/api/image/save?api_token=" + token;
 		await fetch(uri, config)
-			.then(response => {
-				console.log("response", response);
-				response.text();
-			})
-			.then(photo => {
-				console.log("photo", photo);
-				this.feedbackImages = JSON.parse(photo);
+			.then(response => response.json())
+			.then(urls => {
+				this.feedbackImages = urls;
 			})
 			.catch(err => {
 				console.log(err);
