@@ -19,16 +19,24 @@ import { CategoryContributeGroup } from "../../components/MediaGroup";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, graphql } from "react-apollo";
-import { topCategoriesQuery } from "../../graphql/category.graphql";
-import { submitArticleMutation, userAdminCategoriesQuery, queryArticleRequestCenter } from "../../graphql/user.graphql";
+import { submitArticleMutation, userAdminCategoriesQuery } from "../../graphql/user.graphql";
 import { queryArticleRequesRecommend } from "../../graphql/article.graphql";
 
 const { width, height } = Dimensions.get("window");
 
 class CategoryItem extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			submitted: false
+		};
+	}
+
 	render() {
 		let { article, category, navigation, status } = this.props;
 		let { submit_status = "收录" } = category;
+		let { submitted } = this.state;
 		return (
 			<TouchableOpacity style={{ marginRight: 25 }} onPress={() => navigation.navigate("专题详情", { category })}>
 				<View style={{ position: "relative" }}>
@@ -45,18 +53,17 @@ class CategoryItem extends React.Component {
 							return (
 								<Button
 									outline
-									name={status}
+									name={submitted ? "移除" : "收录"}
 									fontSize={12}
-									theme={
-										submit_status.indexOf("投稿") !== -1 || submit_status.indexOf("收录") !== -1
-											? "rgba(66,192,46,0.9)"
-											: Colors.themeColor
-									}
+									theme={submitted ? Colors.tintFontColor : Colors.themeColor}
 									handler={() => {
 										submitArticle({
 											variables: {
 												category_id: category.id,
 												article_id: article.id
+											},
+											update: (cache, { data }) => {
+												this.setState(prevState => ({ submitted: !prevState.submitted }));
 											}
 										});
 									}}
@@ -74,21 +81,23 @@ class ContributeScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fetchingMore: true,
-			keywords: "",
-			collection: "收录",
-			submission: "投稿"
+			fetchingMore: true
 		};
 	}
 
 	render() {
 		const { navigation, user } = this.props;
 		const article = navigation.getParam("article", {});
-		let { fetchingMore, keywords, collection, submission } = this.state;
+		let { fetchingMore } = this.state;
 		return (
 			<Screen header>
 				<View style={styles.container}>
-					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
+					<SearchTypeBar
+						navigation={navigation}
+						placeholder={"搜索专题"}
+						routeName={"搜索专题投稿"}
+						params={{ article }}
+					/>
 					<Query query={queryArticleRequesRecommend}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -103,7 +112,6 @@ class ContributeScreen extends React.Component {
 									renderItem={({ item, index }) => (
 										<CategoryContributeGroup
 											article={article}
-											category={item}
 											navigation={navigation}
 											category={item}
 										/>
@@ -171,11 +179,6 @@ class ContributeScreen extends React.Component {
 									<View>
 										<Text style={styles.listHeaderText}>我管理的专题</Text>
 									</View>
-									<TouchableOpacity
-										onPress={() => navigation.navigate("全部专题投稿", { type: "admin" })}
-									>
-										<Text style={styles.listHeaderText}>查看全部</Text>
-									</TouchableOpacity>
 								</View>
 								<FlatList
 									style={{ paddingVertical: 10, paddingLeft: 15 }}
@@ -183,47 +186,7 @@ class ContributeScreen extends React.Component {
 									data={data.categories}
 									keyExtractor={(item, index) => index.toString()}
 									renderItem={({ item, index }) => (
-										<CategoryItem
-											article={article}
-											category={item}
-											navigation={navigation}
-											status={collection}
-										/>
-									)}
-								/>
-							</View>
-						);
-					}}
-				</Query>
-				<Query query={queryArticleRequestCenter}>
-					{({ loading, error, data, fetchMore, refetch }) => {
-						if (error) return null;
-						if (!(data && data.user && data.user.categories)) return null;
-						let { categories } = data.user;
-						return (
-							<View>
-								<View style={[styles.listHeader, styles.hListHeader]}>
-									<View>
-										<Text style={styles.listHeaderText}>最近投稿</Text>
-									</View>
-									<TouchableOpacity
-										onPress={() => navigation.navigate("全部专题投稿", { type: "contribute" })}
-									>
-										<Text style={styles.listHeaderText}>查看全部</Text>
-									</TouchableOpacity>
-								</View>
-								<FlatList
-									style={{ paddingVertical: 10, paddingLeft: 15 }}
-									horizontal={true}
-									data={categories}
-									keyExtractor={(item, index) => index.toString()}
-									renderItem={({ item, index }) => (
-										<CategoryItem
-											article={article}
-											category={item}
-											navigation={navigation}
-											status={submission}
-										/>
+										<CategoryItem article={article} category={item} navigation={navigation} />
 									)}
 								/>
 							</View>
@@ -235,12 +198,6 @@ class ContributeScreen extends React.Component {
 				</View>
 			</View>
 		);
-	}
-
-	changeKeywords(keywords) {
-		this.setState({
-			keywords
-		});
 	}
 }
 

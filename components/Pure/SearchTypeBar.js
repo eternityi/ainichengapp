@@ -7,13 +7,13 @@ import { Header } from "../Header";
 
 class SearchTypeBar extends Component {
 	render() {
-		let { placeholder, navigation, type } = this.props;
+		let { placeholder, navigation, routeName, params = {} } = this.props;
 		return (
 			<Header
 				routeName={true}
 				navigation={navigation}
 				centerComponent={
-					<TouchableWithoutFeedback onPress={() => navigation.navigate(type)}>
+					<TouchableWithoutFeedback onPress={() => navigation.navigate(routeName, { ...params })}>
 						<View style={styles.searchBar}>
 							<Text style={styles.placeholder}>{placeholder}</Text>
 							<View style={styles.searchButton}>

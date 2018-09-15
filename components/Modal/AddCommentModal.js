@@ -30,15 +30,7 @@ class AddCommentModal extends Component {
 	}
 
 	render() {
-		const {
-			visible,
-			toggleCommentModal,
-			article,
-			replyingComment,
-			order = "LATEST_FIRST",
-			filter = "ALL",
-			navigation
-		} = this.props;
+		const { visible, toggleCommentModal, article, replyingComment, order = "LATEST_FIRST", filter = "ALL", navigation } = this.props;
 		let { value, aiteModalVisible } = this.state;
 		return (
 			<Mutation mutation={addCommentMutation}>
@@ -62,29 +54,12 @@ class AddCommentModal extends Component {
 									autoFocus
 									multiline
 									onFocus={this._inputFocus.bind(this)}
-									changeText={this.changeText}
+									onChangeText={this.changeText}
 								/>
 								<View style={styles.textBottom}>
 									<View style={styles.textBottom}>
 										<TouchableOpacity onPress={this.toggleVisible}>
-											<Iconfont
-												name="aite"
-												size={22}
-												color={Colors.lightFontColor}
-												style={{ marginHorizontal: 10 }}
-											/>
-										</TouchableOpacity>
-										<TouchableOpacity
-											onPress={() => {
-												this.changeText(value + "😊");
-											}}
-										>
-											<Iconfont
-												name="smile"
-												size={22}
-												color={Colors.lightFontColor}
-												style={{ marginHorizontal: 10 }}
-											/>
+											<Iconfont name="aite" size={22} color={Colors.lightFontColor} style={{ marginHorizontal: 10 }} />
 										</TouchableOpacity>
 									</View>
 									<TouchableOpacity
@@ -123,7 +98,7 @@ class AddCommentModal extends Component {
 												}
 											});
 											this.changeText("");
-											Methods.toast("回复成功");
+											Methods.toast("发表成功");
 										}}
 										style={styles.publishComment}
 									>

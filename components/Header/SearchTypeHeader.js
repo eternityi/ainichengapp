@@ -24,7 +24,7 @@ class SearchTypeHeader extends Component {
 							placeholder={placeholder}
 							placeholderText={Colors.tintFontColor}
 							onChangeText={changeKeywords}
-							value={keywords}
+							defaultValue={keywords}
 						/>
 						<TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
 							<Iconfont name={"search"} size={22} color={Colors.tintFontColor} />

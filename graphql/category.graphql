@@ -1,11 +1,12 @@
 #最近逛过的专题
-query visitCategoryQuery($offset: Int, $limit: Int) {
-	visits(offset: $offset, limit: $limit, type: CATEGORY) {
+query visitCategoryQuery($offset: Int) {
+	visits(offset: $offset, limit: 10, type: CATEGORY) {
 		id
 		visited {
 			id
 			title
 			logo
+			description
 			dynamic_msg
 		}
 	}
@@ -138,8 +139,22 @@ mutation createCategoryMutation(
 	}
 }
 
-mutation editCategoryMutation($id: Int!, $name: String!, $logo: String!, $description: String!, $allow_submit: Boolean!, $need_approve: Boolean!) {
-	editCategory(id: $id, name: $name, logo: $logo, description: $description, allow_submit: $allow_submit, need_approve: $need_approve) {
+mutation editCategoryMutation(
+	$id: Int!
+	$name: String!
+	$logo: String!
+	$description: String!
+	$allow_submit: Boolean!
+	$need_approve: Boolean!
+) {
+	editCategory(
+		id: $id
+		name: $name
+		logo: $logo
+		description: $description
+		allow_submit: $allow_submit
+		need_approve: $need_approve
+	) {
 		id
 		name
 		name_en

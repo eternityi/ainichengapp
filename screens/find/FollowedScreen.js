@@ -53,7 +53,7 @@ class FollowedScreen extends React.Component {
                 }}
                 data={articles}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => <NoteItem post={item} popoverMenu options={["不感兴趣"]} popoverHandler={() => null} />}
+                renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
                 onEndReached={() => {
                   if (data.articles) {
                     fetchMore({

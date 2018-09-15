@@ -51,7 +51,7 @@ class CommentDetailScreen extends Component {
 										<Input
 											style={styles.commentInput}
 											value={value}
-											changeText={this.changeText}
+											onChangeText={this.changeText}
 											onFocus={this._inputFocus.bind(this)}
 											inputRef={ref => (this.inputRef = ref)}
 										/>

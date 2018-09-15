@@ -1,23 +1,23 @@
 import React, { Component } from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import Toast from "react-native-root-toast";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
-import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import Screen from "../Screen";
 
+import CategoryItem from "./CategoryItem";
 import SearchResult from "./SearchResult";
 
-import Toast from "react-native-root-toast";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../components/Pure";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Input } from "../../components/elements";
 
-import CategoryItem from "./CategoryItem";
-
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, graphql, compose, withApollo } from "react-apollo";
 import { hotSearchAndLogsQuery, deleteQueryLogMutation } from "../../graphql/user.graphql";
+import { visitCategoryQuery } from "../../graphql/category.graphql";
 
 class SeleceCategoryScreen extends React.Component {
 	constructor(props) {
@@ -47,22 +47,9 @@ class SeleceCategoryScreen extends React.Component {
 						leftComponent
 						centerComponent={
 							<View style={styles.searchWrap}>
-								<Input
-									words={false}
-									style={styles.textInput}
-									placeholder="搜索专题"
-									onChangeText={this.onChangeText}
-								/>
-								<TouchableOpacity
-									style={styles.searchIcon}
-									onPress={() => this.handleSearch(this.keywords)}
-								>
-									<Iconfont
-										name={"search"}
-										size={22}
-										color={Colors.tintFontColor}
-										style={{ marginRight: 8 }}
-									/>
+								<Input words={false} style={styles.textInput} placeholder="搜索专题" onChangeText={this.onChangeText} />
+								<TouchableOpacity style={styles.searchIcon} onPress={() => this.handleSearch(this.keywords)}>
+									<Iconfont name={"search"} size={22} color={Colors.tintFontColor} style={{ marginRight: 8 }} />
 								</TouchableOpacity>
 							</View>
 						}
@@ -93,21 +80,55 @@ class SeleceCategoryScreen extends React.Component {
 						}
 					/>
 					{switchResult ? (
-						<Query query={hotSearchAndLogsQuery}>
-							{({ loading, error, data, fetchMore, refetch }) => {
-								let histories = [];
-								if (error) return <LoadingError reload={() => refetch()} />;
-								if (login) {
-									if (!(data && data.queries && data.queryLogs)) return <SpinnerLoading />;
-									histories = data.queryLogs;
-								} else {
-									if (!(data && data.queries)) return <SpinnerLoading />;
-								}
-								let hotsearch = data.queries;
-								this.hotsearchs += hotsearch.length;
-								return (
-									<ScrollView style={styles.container} bounces={false}>
-										<View style={{ paddingHorizontal: 15 }}>
+						<ScrollView style={styles.container} bounces={false}>
+							<Query query={visitCategoryQuery} fetchPolicy="network-only">
+								{({ loading, error, data, refetch, fetchMore }) => {
+									if (!(data && data.visits && data.visits.length > 0)) return null;
+									return (
+										<View style={styles.officialColumnWarp}>
+											<View style={styles.visits}>
+												<Iconfont name="browse-outline" size={17} color={Colors.themeColor} />
+												<Text style={styles.tintText}>最近逛的专题</Text>
+											</View>
+											<FlatList
+												data={data.visits}
+												keyExtractor={(item, index) => index.toString()}
+												renderItem={({ item, index }) => (
+													<CategoryItem
+														selectCategory={this.selectCategory}
+														category={{ ...item.visited, name: item.visited.title }}
+														navigation={navigation}
+														selectCategories={selectCategories}
+														metaInfo={
+															<Text numberOfLines={1} style={styles.metaInfo}>
+																{item.visited.description || "这个专题还没有freestyle"}
+															</Text>
+														}
+													/>
+												)}
+											/>
+										</View>
+									);
+								}}
+							</Query>
+							<Query query={hotSearchAndLogsQuery}>
+								{({ loading, error, data, fetchMore, refetch }) => {
+									let histories = [];
+									if (error) return <LoadingError reload={() => refetch()} />;
+									if (login) {
+										if (!(data && data.queries && data.queryLogs)) return <SpinnerLoading />;
+										histories = data.queryLogs;
+									} else {
+										if (!(data && data.queries)) return <SpinnerLoading />;
+									}
+									let hotsearch = data.queries;
+									this.hotsearchs += hotsearch.length;
+									return (
+										<View>
+											<View style={styles.visits}>
+												<Iconfont name="search" size={17} color={Colors.themeColor} />
+												<Text style={styles.tintText}>搜索记录</Text>
+											</View>
 											{histories.length > 0 && (
 												<View style={styles.historyWrap}>
 													{this._renderHistories(histories)}
@@ -127,18 +148,16 @@ class SeleceCategoryScreen extends React.Component {
 														}
 													>
 														<View style={[styles.searchItem, { justifyContent: "center" }]}>
-															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>
-																清除搜索记录
-															</Text>
+															<Text style={{ fontSize: 16, color: Colors.tintFontColor }}>清除搜索记录</Text>
 														</View>
 													</TouchableOpacity>
 												</View>
 											)}
 										</View>
-									</ScrollView>
-								);
-							}}
-						</Query>
+									);
+								}}
+							</Query>
+						</ScrollView>
 					) : (
 						<SearchResult
 							keywords={this.keywords}
@@ -159,12 +178,7 @@ class SeleceCategoryScreen extends React.Component {
 				<TouchableOpacity key={elem.id} onPress={() => this.handleSearch(elem.query)}>
 					<View style={styles.searchItem}>
 						<View style={styles.verticalCenter}>
-							<Iconfont
-								name={"time-outline"}
-								size={21}
-								color={Colors.lightFontColor}
-								style={{ marginRight: 20 }}
-							/>
+							<Iconfont name={"time-outline"} size={21} color={Colors.lightFontColor} style={{ marginRight: 20 }} />
 							{elem.query && <Text style={{ fontSize: 16, color: "#666" }}>{elem.query}</Text>}
 						</View>
 						<TouchableOpacity
@@ -257,27 +271,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colors.skinColor
 	},
-	listHeader: {
-		paddingHorizontal: 15,
-		paddingVertical: 20,
-		backgroundColor: Colors.lightGray
-	},
-	hListHeader: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center"
-	},
-	categoryName: {
-		position: "absolute",
-		bottom: 0,
-		left: 0,
-		width: 70,
-		padding: 6
-	},
-	listHeaderText: {
-		fontSize: 14,
-		color: Colors.tintFontColor
-	},
 	searchWrap: {
 		flex: 1,
 		height: 32,
@@ -300,6 +293,26 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		borderLeftWidth: 1,
 		borderLeftColor: Colors.lightBorderColor
+	},
+	visits: {
+		flexDirection: "row",
+		alignItems: "center",
+		padding: 15,
+		borderBottomWidth: 1,
+		borderBottomColor: Colors.lightBorderColor
+	},
+	tintText: {
+		marginLeft: 8,
+		fontSize: 14,
+		color: Colors.tintFontColor
+	},
+	metaInfo: {
+		marginTop: 6,
+		fontSize: 13,
+		color: Colors.tintFontColor
+	},
+	historyWrap: {
+		paddingHorizontal: 15
 	},
 	searchItem: {
 		height: 50,

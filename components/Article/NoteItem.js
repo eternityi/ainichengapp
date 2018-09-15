@@ -13,7 +13,7 @@ const COVER_WIDTH = Divice.width - 30;
 
 class NoteItem extends Component {
 	render() {
-		const { post, navigation, compress, longPress = () => null, onPress, popoverMenu, options, popoverHandler = () => null } = this.props;
+		const { post, navigation, compress, longPress = () => null, onPress, popoverOptions, popoverHandler = () => null } = this.props;
 		let { type, user, time_ago, title, description, category, has_image, images, cover, hits, count_likes, count_replies } = post;
 		return (
 			<TouchableHighlight
@@ -36,12 +36,12 @@ class NoteItem extends Component {
 								<Text style={styles.userName}>{user.name}</Text>
 							</View>
 						)}
-						{popoverMenu && (
+						{popoverOptions && (
 							<CustomPopoverMenu
 								width={110}
 								selectHandler={popoverHandler}
 								triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
-								options={options}
+								options={popoverOptions}
 							/>
 						)}
 					</View>

@@ -34,17 +34,13 @@ class CategoryListScreen extends React.Component {
 
 	render() {
 		const { navigation, user } = this.props;
-		const type = navigation.getParam("type", "admin");
 		const article = navigation.getParam("article", {});
 		let { fetchingMore, keywords } = this.state;
 		return (
 			<Screen header>
 				<View style={styles.container}>
 					<SearchTypeBar navigation={navigation} placeholder={"搜索专题"} type={"搜索专题"} />
-					<Query
-						query={type == "admin" ? userAdminCategoriesQuery : topCategoriesQuery}
-						variables={{ user_id: user.id }}
-					>
+					<Query query={userAdminCategoriesQuery} variables={{ user_id: user.id }}>
 						{({ loading, error, data, fetchMore, refetch }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.categories)) return <SpinnerLoading />;
@@ -55,9 +51,7 @@ class CategoryListScreen extends React.Component {
 										return (
 											<View>
 												<View style={styles.listHeader}>
-													<Text style={styles.listHeaderText}>
-														{type == "admin" ? "我管理的专题" : "最近投稿"}
-													</Text>
+													<Text style={styles.listHeaderText}>我管理的专题</Text>
 												</View>
 											</View>
 										);

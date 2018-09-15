@@ -11,7 +11,7 @@ import SearchResult from "./SearchResult";
 
 import { connect } from "react-redux";
 import { graphql, Query } from "react-apollo";
-import { SearchResultQueries } from "../../graphql/user.graphql";
+import { SearchCategoriesQuery } from "../../graphql/user.graphql";
 
 //搜索专题 给文章投稿
 class CategoriesScreen extends Component {
@@ -38,7 +38,7 @@ class CategoriesScreen extends Component {
 						handleSearch={() => this.handleSearch(this.keywords)}
 					/>
 					{fetching && (
-						<Query query={SearchResultQueries} variables={{ keyword: this.keywords }}>
+						<Query query={SearchCategoriesQuery} variables={{ keyword: this.keywords }}>
 							{({ loading, error, data, refetch, fetchMore }) => {
 								if (error) return <LoadingError reload={() => refetch()} />;
 								if (!(data && data.categories)) return <SpinnerLoading />;
@@ -48,11 +48,7 @@ class CategoriesScreen extends Component {
 										data={data.categories}
 										keyExtractor={(item, index) => index.toString()}
 										renderItem={({ item }) => (
-											<CategoryContributeGroup
-												article={article}
-												category={item}
-												navigation={navigation}
-											/>
+											<CategoryContributeGroup article={article} category={item} navigation={navigation} />
 										)}
 										onEndReachedThreshold={0.3}
 										onEndReached={() => {
@@ -63,11 +59,7 @@ class CategoriesScreen extends Component {
 													},
 													updateQuery: (prev, { fetchMoreResult }) => {
 														if (
-															!(
-																fetchMoreResult &&
-																fetchMoreResult.categories &&
-																fetchMoreResult.categories.length > 0
-															)
+															!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)
 														) {
 															this.setState({
 																fetchingMore: false
@@ -75,10 +67,7 @@ class CategoriesScreen extends Component {
 															return prev;
 														}
 														return Object.assign({}, prev, {
-															categories: [
-																...prev.categories,
-																...fetchMoreResult.categories
-															]
+															categories: [...prev.categories, ...fetchMoreResult.categories]
 														});
 													}
 												});

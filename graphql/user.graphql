@@ -338,6 +338,7 @@ query removedArticlesQuery {
     }
 }
 
+# 收藏的文章
 query favoritedArticlesQuery($offset: Int) {
     user {
         id
@@ -581,7 +582,7 @@ query userActionsQuery($offset: Int, $user_id: Int!) {
     }
 }
 
-# 专题投稿
+# 用户向某个专题投稿对应的所有文章状态
 query userArticlesSubmitStatusQuery($category_id: Int!) {
     user {
         id
@@ -720,8 +721,31 @@ query queryArticleRequestCenter($id: Int) {
             name
             count_articles
             count_follows
-            submit_status
             logo
+        }
+    }
+}
+
+# 搜索用户
+query SearchUsersQuery($keyword: String!, $offset: Int) {
+    users(keyword: $keyword, offset: $offset, limit: 10) {
+        id
+        name
+        avatar
+    }
+}
+
+query SearchCategoriesQuery($keyword: String!, $offset: Int) {
+    categories(keyword: $keyword, offset: $offset, limit: 10) {
+        id
+        name
+        logo
+        count_articles
+        count_follows
+        followed
+        user {
+            id
+            name
         }
     }
 }
@@ -748,18 +772,6 @@ query SearchResultQueries($keyword: String!, $type: ArticleType, $order: Article
         avatar
     }
     categories(keyword: $keyword, offset: $offset, limit: 4) {
-        id
-        name
-        logo
-        count_articles
-        count_follows
-        followed
-        user {
-            id
-            name
-        }
-    }
-    collections(keyword: $keyword, offset: $offset, limit: 4) {
         id
         name
         logo

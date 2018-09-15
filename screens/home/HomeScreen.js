@@ -75,7 +75,12 @@ class HomeScreen extends React.Component {
             leftComponent={<RecommendUser navigation={navigation} />}
             centerComponent={
               <View style={{ flex: 1 }}>
-                <SearchBar navigation={navigation} height={30} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
+                <SearchBar
+                  navigation={navigation}
+                  height={30}
+                  iconSize={18}
+                  textStyle={{ marginLeft: 10, fontSize: 15 }}
+                />
               </View>
             }
           />
@@ -91,7 +96,7 @@ class HomeScreen extends React.Component {
                   refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                   data={data.articles}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item, index }) => <PostItem post={item} />}
+                  renderItem={({ item, index }) => <PostItem post={item} recommend />}
                   onEndReachedThreshold={0.3}
                   onEndReached={() => {
                     if (data.articles) {

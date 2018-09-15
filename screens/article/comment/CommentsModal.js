@@ -91,7 +91,7 @@ class CommentsModal extends Component {
 												<Input
 													style={styles.commentInput}
 													value={value}
-													changeText={this.changeText}
+													onChangeText={this.changeText}
 													onFocus={this._focusHandler.bind(this)}
 													inputRef={ref => (this.inputRef = ref)}
 												/>

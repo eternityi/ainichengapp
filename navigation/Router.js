@@ -9,7 +9,6 @@ import CreationScreen from "../screens/creation/CreationScreen";
 import CreationIntroduceScreen from "../screens/creation/IntroduceScreen";
 import PublishedScreen from "../screens/creation/PublishedScreen";
 import ContributeArticleScreen from "../screens/creation/ContributeScreen";
-import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
 import CreatePostScreen from "../screens/creation/CreatePostScreen";
 import SelectCategoryScreen from "../screens/creation/SelectCategoryScreen";
 
@@ -127,9 +126,6 @@ export default {
   选择专题: {
     screen: SelectCategoryScreen
   },
-  全部专题投稿: {
-    screen: ContributeCategoryListScreen
-  },
   设置: {
     screen: SettingsScreen
   },
@@ -181,7 +177,7 @@ export default {
   搜索文章: {
     screen: SearchArticlesScreen
   },
-  搜索专题: {
+  搜索专题投稿: {
     screen: SearchCategoriesScreen
   },
   相关用户: {
@@ -316,7 +312,11 @@ export default {
 // import AboutUsScreen from "../screens/my/settings/AboutUsScreen";
 // import FollowedBooksScreen from "../screens/user/follows/FollowedBooksScreen";
 // import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
+// import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
 
+// 专题投稿查看全部: {
+//   screen: ContributeCategoryListScreen
+// },
 // 选择文集: {
 //     screen: MoveArticleScreen
 //   },

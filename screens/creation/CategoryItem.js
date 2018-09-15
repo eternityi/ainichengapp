@@ -25,7 +25,7 @@ class CategoryItem extends React.Component {
 	}
 
 	render() {
-		let { category, navigation } = this.props;
+		let { category, navigation, metaInfo } = this.props;
 		let { check, disabled } = this.state;
 		return (
 			<TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate("专题详情", { category })}>
@@ -38,9 +38,16 @@ class CategoryItem extends React.Component {
 							<Text style={styles.categoryItemTitle}>{category.name}</Text>
 						</View>
 						<View>
-							<Text numberOfLines={1} style={styles.categoryItemMeta}>
-								{category.count_articles + "篇文章  " + category.count_follows + "人关注" || ""}
-							</Text>
+							{metaInfo ? (
+								metaInfo
+							) : (
+								<Text numberOfLines={1} style={styles.categoryItemMeta}>
+									{category.count_articles || 0}
+									{"个内容  "}
+									{category.count_follows || 0}
+									{"人关注 "}
+								</Text>
+							)}
 						</View>
 						<View>
 							<Text numberOfLines={1} style={styles.categoryItemMeta}>
@@ -48,13 +55,7 @@ class CategoryItem extends React.Component {
 							</Text>
 						</View>
 					</View>
-					<View style={{ width: 60, height: 32 }}>
-						<CheckBox
-							style={{ flex: 1, padding: 10 }}
-							onClick={() => this.onClick(category)}
-							isChecked={check}
-						/>
-					</View>
+					<CheckBox style={{ padding: 10 }} onClick={() => this.onClick(category)} isChecked={check} />
 				</View>
 			</TouchableOpacity>
 		);
