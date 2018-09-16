@@ -8,5 +8,6 @@ import SearchHeader from "./SearchHeader";
 import Setting from "./Setting";
 import SearchTypeHeader from "./SearchTypeHeader";
 import User from "./User";
+import CustomTabBar from "./CustomTabBar";
 
-export { Header, HeaderLeft, HeaderRight, NotificationSetting, RecommendUser, Search, SearchHeader, Setting, SearchTypeHeader, User };
+export { Header, HeaderLeft, HeaderRight, NotificationSetting, RecommendUser, Search, SearchHeader, Setting, SearchTypeHeader, User, CustomTabBar };

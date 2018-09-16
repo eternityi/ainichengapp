@@ -3,7 +3,6 @@ import Badge from "./Badge";
 import BlankContent from "./BlankContent";
 import TextContainer from "./TextContainer";
 import ContentEnd from "./ContentEnd";
-import CustomScrollTabBar from "./CustomScrollTabBar";
 import Dashed from "./Dashed";
 import Diving from "./Diving";
 import DivisionLine from "./DivisionLine";
@@ -27,7 +26,6 @@ export {
 	BlankContent,
 	TextContainer,
 	ContentEnd,
-	CustomScrollTabBar,
 	Dashed,
 	Diving,
 	DivisionLine,
