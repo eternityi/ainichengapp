@@ -91,15 +91,7 @@ class LoginScreen extends Component {
 
   _saveUserData = user => {
     this.props.dispatch(actions.signIn(user));
-    // 登录成功 navigateAction
-    let navigateAction = NavigationActions.replace({
-      key: this.props.navigation.state.key,
-      routeName: "主页",
-      params: {},
-      action: NavigationActions.navigate({ routeName: "个人" })
-    });
-
-    this.props.navigation.dispatch(navigateAction);
+    this.props.navigation.goBack();
   };
 
   toast(message) {

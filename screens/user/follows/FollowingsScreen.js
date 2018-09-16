@@ -27,7 +27,6 @@ class FollowingsScreen extends Component {
 									tabUnderlineScaleX={3} // default 3
 									activeColor={Colors.darkFontColor}
 									inactiveColor={Colors.tintFontColor}
-									textStyle={{ fontSize: 16 }}
 									{...props}
 									containerWidth={160}
 									style={{ height: 40, width: 160, borderWidth: 0 }}

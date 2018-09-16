@@ -9,7 +9,7 @@ export default class CustomTabBar extends Component {
 	}
 
 	_renderTab(name, page, isTabActive, onPressHandler) {
-		const { textStyle, activeColor, inactiveColor, tabStyle = { flex: 1 } } = this.props;
+		const { activeColor, inactiveColor, tabStyle = { flex: 1 } } = this.props;
 		const textColor = isTabActive ? activeColor : inactiveColor;
 
 		const Button = Platform.OS == "ios" ? ButtonIos : ButtonAndroid;
@@ -24,7 +24,7 @@ export default class CustomTabBar extends Component {
 				onPress={() => onPressHandler(page)}
 			>
 				<View style={styles.tab}>
-					<Text style={[{ color: textColor }, textStyle]}>{name}</Text>
+					<Text style={[{ color: textColor, fontSize: 17 }]}>{name}</Text>
 				</View>
 			</Button>
 		);

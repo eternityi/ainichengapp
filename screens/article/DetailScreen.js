@@ -32,18 +32,18 @@ class DetailScreen extends Component {
     this.footOffsetY = Divice.height;
     this.commentsOffsetY = 0;
     this.commentsHeight = 0;
+    this.initImage = 0; //图片预览模式下首先打开的图片索引
     this.state = {
       showWrite: false,
       addCommentVisible: false,
       rewardVisible: false,
       shareModalVisible: false,
-      imageViewerVisible: false,
-      initImage: 0 //图片预览模式下首先打开的图片索引
+      imageViewerVisible: false
     };
   }
 
   render() {
-    let { showWrite, rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible, initImage } = this.state;
+    let { showWrite, rewardVisible, addCommentVisible, shareModalVisible, imageViewerVisible } = this.state;
     let { navigation, login } = this.props;
     const article = navigation.getParam("article", {});
     return (
@@ -105,9 +105,9 @@ class DetailScreen extends Component {
                               activeOpacity={1}
                               key={index}
                               onPress={() => {
+                                this.initImage = index;
                                 this.setState({
-                                  imageViewerVisible: true,
-                                  initImage: index
+                                  imageViewerVisible: true
                                 });
                               }}
                               style={{ alignItems: "center" }}
@@ -188,7 +188,7 @@ class DetailScreen extends Component {
           visible={imageViewerVisible}
           handleVisible={() => this.setState({ imageViewerVisible: false })}
           imageUrls={this.pictures}
-          index={initImage}
+          initImage={this.initImage}
         />
         <ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
       </Screen>
