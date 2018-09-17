@@ -6,7 +6,7 @@ import { Iconfont } from "../../../utils/Fonts";
 import { Header } from "../../../components/Header";
 import { UserMetaGroup } from "../../../components/MediaGroup";
 import { SearchUserModal } from "../../../components/Modal";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query, Mutation, graphql } from "react-apollo";

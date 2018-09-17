@@ -9,7 +9,7 @@ export default class CustomTabBar extends Component {
 	}
 
 	_renderTab(name, page, isTabActive, onPressHandler) {
-		const { activeColor, inactiveColor, tabStyle = { flex: 1 } } = this.props;
+		const { activeColor = Colors.darkFontColor, inactiveColor = Colors.tintFontColor, tabStyle = { flex: 1 } } = this.props;
 		const textColor = isTabActive ? activeColor : inactiveColor;
 
 		const Button = Platform.OS == "ios" ? ButtonIos : ButtonAndroid;

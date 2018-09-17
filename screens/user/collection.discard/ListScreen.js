@@ -6,7 +6,7 @@ import Colors from "../../../constants/Colors";
 import { Header, HeaderLeft } from "../../../components/Header";
 import { CollectionGroup } from "../../../components/MediaGroup";
 import { WriteModal, OperationModal } from "../../../components/Modal";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
 import Screen from "../../Screen";
 
 import { Query, Mutation } from "react-apollo";

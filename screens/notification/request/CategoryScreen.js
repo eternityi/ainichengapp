@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import Colors from "../../../constants/Colors";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
-import { Header } from "../../../components/Header";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { Header, CustomTabBar } from "../../../components/Header";
 import NotificationItem from "./NotificationItem";
 import Screen from "../../Screen";
 
@@ -29,16 +29,8 @@ class CategoryScreen extends Component {
 		return (
 			<Screen header={<Header routeName={category.name} />}>
 				<View style={styles.container}>
-					<ScrollableTabView
-						renderTabBar={() => (
-							<CustomScrollTabBar
-								tabNames={["全部", "未处理"]}
-								tabBarStyle={{ borderTopColor: "transparent" }}
-								tabItemWrapStyle={{ width: 90 }}
-							/>
-						)}
-					>
-						<View style={styles.container}>
+					<ScrollableTabView renderTabBar={() => <CustomTabBar tabUnderlineWidth={40} />}>
+						<View style={styles.container} tabLabel="全部">
 							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "ALL" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
@@ -57,7 +49,7 @@ class CategoryScreen extends Component {
 								}}
 							</Query>
 						</View>
-						<View style={styles.container}>
+						<View style={styles.container} tabLabel="未处理">
 							{/*PEDING（pending） 后端参数单词错误**/}
 							<Query query={categoryPendingArticlesQuery} variables={{ category_id: category.id, filter: "PEDING" }}>
 								{({ loading, error, data, refetch, fetchMore }) => {

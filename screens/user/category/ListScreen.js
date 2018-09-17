@@ -3,8 +3,8 @@ import { StyleSheet, View, TouchableOpacity, FlatList, Text, Dimensions } from "
 import ScrollableTabView from "react-native-scrollable-tab-view";
 
 import Colors from "../../../constants/Colors";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
-import { Header, HeaderLeft } from "../../../components/Header";
+import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent } from "../../../components/Pure";
+import { Header, HeaderLeft, CustomTabBar } from "../../../components/Header";
 import { CategoryGroup } from "../../../components/MediaGroup";
 import { OperationModal } from "../../../components/Modal";
 import Screen from "../../Screen";
@@ -38,19 +38,8 @@ class ListScreen extends Component {
 		return (
 			<Screen header={this.renderHeader(is_self)}>
 				<View style={styles.container}>
-					<ScrollableTabView
-						renderTabBar={() => (
-							<CustomScrollTabBar
-								tabNames={is_self ? ["我创建的", "我管理的"] : ["他创建的", "他管理的"]}
-								tabBarStyle={{ borderTopColor: "transparent" }}
-								tabItemWrapStyle={{
-									paddingHorizontal: 10,
-									marginHorizontal: 20
-								}}
-							/>
-						)}
-					>
-						<View tabLabel="创建的" style={{ flex: 1 }}>
+					<ScrollableTabView renderTabBar={() => <CustomTabBar tabUnderlineWidth={40} />}>
+						<View tabLabel={is_self ? "我创建的" : "他创建的"} style={{ flex: 1 }}>
 							<Query query={userCategoriesQuery} variables={{ user_id: user.id }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;
@@ -86,7 +75,7 @@ class ListScreen extends Component {
 								}}
 							</Query>
 						</View>
-						<View tabLabel="管理的" style={{ flex: 1 }}>
+						<View tabLabel={is_self ? "我管理的" : "他管理的"} style={{ flex: 1 }}>
 							<Query query={userAdminCategoriesQuery} variables={{ user_id: user.id }}>
 								{({ loading, error, data, refetch, fetchMore }) => {
 									if (error) return <LoadingError reload={() => refetch()} />;

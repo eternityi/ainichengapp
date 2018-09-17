@@ -4,7 +4,7 @@
 
 // import Colors from "../../constants/Colors";
 // import Config from "../../constants/Config";
-// import { CustomScrollTabBar, ContentEnd, LoadingMore } from "../../components/Pure";
+// import { ContentEnd, LoadingMore } from "../../components/Pure";
 // import { Header, HeaderLeft } from "../../components/Header";
 // import Screen from "../Screen";
 

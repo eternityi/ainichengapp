@@ -22,7 +22,6 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
-import { Avatar, CustomScrollTabBar, LoadingError, SpinnerLoading } from "../../components/Pure";
 import { RewardModal, OperationModal, ReportModal } from "../../components/Modal";
 import { Header, HeaderLeft, HeaderRight, Search } from "../../components/Header";
 import { FollowButton, Button } from "../../components/Button";
@@ -230,11 +229,7 @@ class HomeScreen extends Component {
                       !scrollEnabled ? { position: "absolute", top: mainTopHeight } : null
                     ]}
                   >
-                    <ScrollableTabView
-                      initialPage={1}
-                      renderTabBar={() => <CustomScrollTabBar tabNames={tabNames} tabItemWrapStyle={{ width: 80 }} />}
-                      onChangeTab={this._changeTab}
-                    >
+                    <ScrollableTabView initialPage={1} onChangeTab={this._changeTab}>
                       <ActionsTab
                         tabLabel="动态"
                         scrollEnabled={!scrollEnabled}

@@ -4,8 +4,8 @@ import ScrollableTabView from "react-native-scrollable-tab-view";
 
 import Colors from "../../constants/Colors";
 import { goContentScreen } from "../../constants/Methods";
-import { Header } from "../../components/Header";
-import { CustomScrollTabBar, ContentEnd, LoadingMore, LoadingError, BlankContent, SpinnerLoading } from "../../components/Pure";
+import { Header, TabBarHeader } from "../../components/Header";
+import { ContentEnd, LoadingMore, LoadingError, BlankContent, SpinnerLoading } from "../../components/Pure";
 
 import Screen from "../Screen";
 
@@ -19,20 +19,9 @@ class HistoryScreen extends Component {
 	render() {
 		let { today, earlier, navigation } = this.props;
 		return (
-			<Screen>
+			<Screen header>
 				<View style={styles.container}>
-					<ScrollableTabView
-						renderTabBar={() => (
-							<CustomScrollTabBar
-								tabNames={["今日", "更早"]}
-								tabBarStyle={{ borderTopColor: "transparent" }}
-								tabItemWrapStyle={{
-									paddingHorizontal: 10,
-									marginHorizontal: 20
-								}}
-							/>
-						)}
-					>
+					<ScrollableTabView renderTabBar={props => <TabBarHeader {...props} width={160} />}>
 						<View tabLabel="今日" style={{ flex: 1 }}>
 							<Query query={visitsQuery} variables={{ visit: "TODAY" }}>
 								{({ error, loading, data, fetchMore, refetch }) => {
