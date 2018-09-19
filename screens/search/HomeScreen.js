@@ -59,12 +59,7 @@ class HomeScreen extends Component {
                     <View style={{ paddingHorizontal: 15 }}>
                       <TouchableOpacity style={styles.searchItem} onPress={() => navigation.navigate("全部专题")}>
                         <View style={styles.verticalCenter}>
-                          <Iconfont
-                            name={"category-rotate"}
-                            size={19}
-                            color={Colors.themeColor}
-                            style={{ marginRight: 8 }}
-                          />
+                          <Iconfont name={"category-rotate"} size={19} color={Colors.themeColor} style={{ marginRight: 8 }} />
                           <Text style={{ fontSize: 16, color: "#666" }}>热门专题</Text>
                         </View>
                         <Iconfont name={"right"} size={20} color={Colors.primaryFontColor} style={{ marginRight: 8 }} />
@@ -89,13 +84,7 @@ class HomeScreen extends Component {
                                     offset: this.hotsearchs
                                   },
                                   updateQuery: (prev, { fetchMoreResult }) => {
-                                    if (
-                                      !(
-                                        fetchMoreResult &&
-                                        fetchMoreResult.queries &&
-                                        fetchMoreResult.queries.length > 0
-                                      )
-                                    ) {
+                                    if (!(fetchMoreResult && fetchMoreResult.queries && fetchMoreResult.queries.length > 0)) {
                                       return prev;
                                     }
                                     return Object.assign({}, prev, {
@@ -119,10 +108,10 @@ class HomeScreen extends Component {
                                   let { queries } = cache.readQuery({
                                     query: hotSearchAndLogsQuery
                                   });
-                                  // cache.writeQuery({
-                                  //   query: hotSearchAndLogsQuery,
-                                  //   data: { queries, queryLogs: [] }
-                                  // });
+                                  cache.writeQuery({
+                                    query: hotSearchAndLogsQuery,
+                                    data: { queries, queryLogs: [] }
+                                  });
                                 }
                               })
                             }
@@ -183,11 +172,10 @@ class HomeScreen extends Component {
                     queryLogs = queryLogs.filter((query, index) => {
                       return query.id !== elem.id;
                     });
-                    console.log(queryLogs);
-                    // cache.writeQuery({
-                    //   query: hotSearchAndLogsQuery,
-                    //   data: { queries, queryLogs }
-                    // });
+                    cache.writeQuery({
+                      query: hotSearchAndLogsQuery,
+                      data: { queries, queryLogs }
+                    });
                   }
                 })
               }
