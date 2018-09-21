@@ -31,7 +31,7 @@ class Comments extends Component {
     let filter = onlyAuthor ? "ONLY_AUTHOR" : "ALL";
     return (
       <View onLayout={onLayout}>
-        <Query query={commentsQuery} variables={{ article_id: article.id, order, filter }}>
+        <Query query={commentsQuery} variables={{ article_id: article.id, order, filter }} fetchPolicy="network-only">
           {({ laoding, error, data, refetch }) => {
             if (!(data && data.comments)) return <Diving />;
             let { comments } = data;

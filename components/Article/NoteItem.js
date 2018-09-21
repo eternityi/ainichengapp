@@ -105,7 +105,7 @@ class NoteItem extends Component {
 	renderImage = (type, images, cover) => {
 		if (type == "video") {
 			return <VideoCover width={COVER_WIDTH} height={(COVER_WIDTH * 9) / 16} cover={cover} />;
-		} else if (images.length > 1) {
+		} else if (images.length >= 1) {
 			return (
 				<View style={[styles.gridView, styles.layoutFlexRow]}>
 					{images.slice(0, 3).map(function(img, i) {

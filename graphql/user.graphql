@@ -636,20 +636,9 @@ query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
             avatar
             introduction
             followed_status
-            articles(limit: 2) {
-                id
-                title
-            }
-        }
-        category {
-            id
-            name
-            logo
-            description
             count_articles
-            count_follows
-            followed
-            articles(filter: ALL, limit: 2) {
+            count_likes
+            articles(limit: 2) {
                 id
                 title
             }
@@ -661,17 +650,6 @@ query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
 query recommendFollowCategoriesQuery($recommend_for_user_id: Int!, $offset: Int) {
     follows(recommend_for_user_id: $recommend_for_user_id, filter: CATEGORY, offset: $offset) {
         id
-        user {
-            id
-            name
-            avatar
-            introduction
-            followed_status
-            articles(limit: 2) {
-                id
-                title
-            }
-        }
         category {
             id
             name
@@ -766,12 +744,12 @@ query SearchResultQueries($keyword: String!, $type: ArticleType, $order: Article
         description
         cover
     }
-    users(keyword: $keyword, offset: $offset, limit: 4) {
+    users(keyword: $keyword, offset: $offset, limit: 10) {
         id
         name
         avatar
     }
-    categories(keyword: $keyword, offset: $offset, limit: 4) {
+    categories(keyword: $keyword, offset: $offset, limit: 10) {
         id
         name
         logo
