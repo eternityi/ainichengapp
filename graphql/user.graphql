@@ -646,26 +646,6 @@ query recommendFollowUsersQuery($recommend_for_user_id: Int!, $offset: Int) {
     }
 }
 
-# 推荐关注的专题
-query recommendFollowCategoriesQuery($recommend_for_user_id: Int!, $offset: Int) {
-    follows(recommend_for_user_id: $recommend_for_user_id, filter: CATEGORY, offset: $offset) {
-        id
-        category {
-            id
-            name
-            logo
-            description
-            count_articles
-            count_follows
-            followed
-            articles(filter: ALL, limit: 2) {
-                id
-                title
-            }
-        }
-    }
-}
-
 # 文章投稿管理
 query querySubmitedArticles($offset: Int, $limit: Int) {
     user {

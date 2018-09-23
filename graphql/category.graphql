@@ -1,3 +1,16 @@
+#专题推荐
+#user_id：用户ID
+#offset:偏移量
+query recommandCategoriesQuery($user_id: Int, $offset: Int) {
+	categories(user_id: $user_id, limit: 3, filter: RECOMMEND, offset: $offset) {
+		id
+		name
+		logo
+		description
+		followed
+	}
+}
+
 #最近逛过的专题
 query visitCategoryQuery($offset: Int) {
 	visits(offset: $offset, limit: 10, type: CATEGORY) {
@@ -28,6 +41,7 @@ query specialCategoriesQuery {
 	}
 }
 
+# 全部专题
 query topCategoriesQuery($offset: Int) {
 	categories(offset: $offset, limit: 10) {
 		id
@@ -139,22 +153,8 @@ mutation createCategoryMutation(
 	}
 }
 
-mutation editCategoryMutation(
-	$id: Int!
-	$name: String!
-	$logo: String!
-	$description: String!
-	$allow_submit: Boolean!
-	$need_approve: Boolean!
-) {
-	editCategory(
-		id: $id
-		name: $name
-		logo: $logo
-		description: $description
-		allow_submit: $allow_submit
-		need_approve: $need_approve
-	) {
+mutation editCategoryMutation($id: Int!, $name: String!, $logo: String!, $description: String!, $allow_submit: Boolean!, $need_approve: Boolean!) {
+	editCategory(id: $id, name: $name, logo: $logo, description: $description, allow_submit: $allow_submit, need_approve: $need_approve) {
 		id
 		name
 		name_en

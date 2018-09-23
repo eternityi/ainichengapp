@@ -10,8 +10,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { recommendAuthors } from "./graphql/user.graphql";
 import { unreadsQuery } from "./graphql/notification.graphql";
 import { chatsQuery } from "./graphql/chat.graphql";
-import { recommendArticlesQuery, topArticleWithImagesQuery, hotArticlesQuery } from "./graphql/article.graphql";
-import { topCategoriesQuery, visitCategoryQuery } from "./graphql/category.graphql";
+import { recommendArticlesQuery, topArticleWithImagesQuery, hotArticlesQuery, recommandDynamicQuery } from "./graphql/article.graphql";
 
 class ApolloApp extends Component {
 	_makeClient(user) {
@@ -33,18 +32,17 @@ class ApolloApp extends Component {
 		let { user = {} } = this.props;
 		this.timer = setTimeout(() => {
 			this.props.onReady();
-		}, 6000);
+		}, 5000);
 		this._makeClient(user);
 		let { query } = this.client;
 		let promises = [
 			query({ query: hotArticlesQuery }),
 			query({ query: recommendArticlesQuery }),
 			query({ query: topArticleWithImagesQuery }),
-			query({ query: recommendAuthors }),
-			query({ query: topCategoriesQuery })
+			query({ query: recommendAuthors })
 		];
 		if (user.token) {
-			promises.concat([query({ query: unreadsQuery }), query({ query: chatsQuery }), query({ query: visitCategoryQuery })]);
+			promises.concat([query({ query: unreadsQuery }), query({ query: chatsQuery }), query({ query: recommandDynamicQuery })]);
 		}
 		Promise.all(promises)
 			.then(fulfilled => {

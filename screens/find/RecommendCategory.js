@@ -9,7 +9,7 @@ import { FollowButton } from "../../components/Button";
 import { Avatar, ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 
 import { connect } from "react-redux";
-import { topCategoriesQuery } from "../../graphql/category.graphql";
+import { recommandCategoriesQuery } from "../../graphql/category.graphql";
 import { Query } from "react-apollo";
 
 let page = 1;
@@ -21,7 +21,7 @@ class RecommendCategory extends React.Component {
 
 	render() {
 		return (
-			<Query query={topCategoriesQuery}>
+			<Query query={recommandCategoriesQuery}>
 				{({ loading, error, data, refetch, fetchMore }) => {
 					if (error) return <LoadingError reload={() => refetch()} />;
 					if (!(data && data.categories)) return null;
@@ -31,7 +31,7 @@ class RecommendCategory extends React.Component {
 								<Text style={styles.emptyText}>你还没关注任何专题哦，快去关注一下吧！</Text>
 							</View>
 							<View>
-								{data.categories.slice(0, 3).map((elem, index) => {
+								{data.categories.map((elem, index) => {
 									return this._renderCategoryItem({
 										item: elem,
 										index

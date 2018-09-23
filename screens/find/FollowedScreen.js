@@ -25,67 +25,61 @@ class FollowedScreen extends React.Component {
   }
 
   render() {
-    let { navigation } = this.props;
+    let { navigation, user } = this.props;
     return (
       <View style={styles.container}>
-        <Query query={recommendArticlesQuery}>
-          {({ loading, error, data, refetch, fetchMore }) => {
-            if (error) return <LoadingError reload={() => refetch()} />;
-            if (!(data && data.articles)) return <SpinnerLoading />;
-            // let articles = data.articles;
-            let articles = [];
-            return (
-              <FlatList
-                ListHeaderComponent={() => {
-                  if (articles.length < 1) {
-                    return (
-                      <View>
-                        <Image style={styles.banner} source={require("../../assets/images/plane.png")} />
-                      </View>
-                    );
-                  } else {
-                    return <View />;
-                  }
-                }}
-                refreshing={loading}
-                onRefresh={() => {
-                  refetch();
-                }}
-                data={articles}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
-                onEndReached={() => {
-                  if (data.articles) {
-                    fetchMore({
-                      variables: {
-                        offset: data.articles.length
-                      },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
-                          this.setState({
-                            fetchingMore: false
+        {user.id ? (
+          <Query query={recommendArticlesQuery} vaviables={{ user_id: user.id }}>
+            {({ loading, error, data, refetch, fetchMore }) => {
+              if (error) return <LoadingError reload={() => refetch()} />;
+              if (!(data && data.articles)) return <SpinnerLoading />;
+              let articles = data.articles;
+              return (
+                <FlatList
+                  refreshing={loading}
+                  onRefresh={() => {
+                    refetch();
+                  }}
+                  data={articles}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
+                  onEndReached={() => {
+                    if (data.articles) {
+                      fetchMore({
+                        variables: {
+                          offset: data.articles.length
+                        },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                            this.setState({
+                              fetchingMore: false
+                            });
+                            return prev;
+                          }
+                          return Object.assign({}, prev, {
+                            articles: [...prev.articles, ...fetchMoreResult.articles]
                           });
-                          return prev;
                         }
-                        return Object.assign({}, prev, {
-                          articles: [...prev.articles, ...fetchMoreResult.articles]
-                        });
-                      }
-                    });
-                  } else {
-                    this.setState({
-                      fetchingMore: false
-                    });
-                  }
-                }}
-                ListEmptyComponent={() => <RecommendAuthors navigation={navigation} />}
-                ListFooterComponent={() => {
-                  return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
-                }}
-              />
-            );
-          }}
-        </Query>
+                      });
+                    } else {
+                      this.setState({
+                        fetchingMore: false
+                      });
+                    }
+                  }}
+                  ListFooterComponent={() => {
+                    return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
+                  }}
+                />
+              );
+            }}
+          </Query>
+        ) : (
+          <ScrollView>
+            <Image style={styles.banner} source={require("../../assets/images/plane.png")} />
+            <RecommendAuthors navigation={navigation} />
+          </ScrollView>
+        )}
       </View>
     );
   }
@@ -101,5 +95,5 @@ const styles = StyleSheet.create({
 
 export default compose(
   withApollo,
-  connect(store => ({ articles: store.articles.articles }))
+  connect(store => ({ user: store.users.user }))
 )(FollowedScreen);

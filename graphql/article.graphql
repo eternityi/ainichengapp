@@ -1,3 +1,32 @@
+# 关注动态
+query recommandDynamicQuery($user_id: Int, $offset: Int) {
+	articles(user_id: $user_id, offset: $offset, filter: RECOMMEND) {
+		id
+		type
+		title
+		has_image
+		images
+		cover
+		description
+		time_ago
+		liked
+		user {
+			id
+			name
+			avatar
+		}
+		category {
+			id
+			name
+			logo
+		}
+		hits
+		count_likes
+		count_replies
+		count_tips
+	}
+}
+
 #功能：发布动态,video_id与image_urls不能共存
 #参数说明：
 # body           : 动态的内容,或视频的描述
