@@ -237,19 +237,21 @@ class PostScreen extends Component {
 		// 单张图片计算比例自适应
 		if (images_length == 1) {
 			let { width: imgWidth, height: imgHeight } = Methods.imageSize({ width: images[0].width, height: images[0].height }, Divice.width);
+			console.log(images[0], "test", imgWidth, imgHeight, (Divice.width * 2) / 3);
 			return (
-				<TouchableOpacity
-					activeOpacity={1}
-					style={imgWidth < (Divice.width * 2) / 3 ? { marginLeft: 15 } : { alignItems: "center" }}
-					onPress={() => {
-						this.setState({
-							imageViewVisible: true,
-							initImage: 0
-						});
-					}}
-				>
-					<Image source={{ uri: images[0].url }} style={[{ width: imgWidth, height: imgHeight }, styles.singleImage]} />
-				</TouchableOpacity>
+				<View style={imgWidth < (Divice.width * 2) / 3 ? { paddingLeft: 15 } : { flex: 1, flexDirection: "row", justifyContent: "center" }}>
+					<TouchableOpacity
+						activeOpacity={1}
+						onPress={() => {
+							this.setState({
+								imageViewVisible: true,
+								initImage: 0
+							});
+						}}
+					>
+						<Image source={{ uri: images[0].url }} style={[{ width: imgWidth, height: imgHeight }, styles.singleImage]} />
+					</TouchableOpacity>
+				</View>
 			);
 		} else {
 			let sizeArr = Methods.imgsLayoutSize(images_length, IMG_SPACE);

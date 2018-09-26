@@ -10,7 +10,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { recommendAuthors } from "./graphql/user.graphql";
 import { unreadsQuery } from "./graphql/notification.graphql";
 import { chatsQuery } from "./graphql/chat.graphql";
-import { recommendArticlesQuery, topArticleWithImagesQuery, hotArticlesQuery, recommandDynamicQuery } from "./graphql/article.graphql";
+import { recommendArticlesQuery, topArticleWithImagesQuery, recommandDynamicQuery } from "./graphql/article.graphql";
 
 class ApolloApp extends Component {
 	_makeClient(user) {
@@ -35,14 +35,13 @@ class ApolloApp extends Component {
 		}, 5000);
 		this._makeClient(user);
 		let { query } = this.client;
-		let promises = [
-			query({ query: hotArticlesQuery }),
-			query({ query: recommendArticlesQuery }),
-			query({ query: topArticleWithImagesQuery }),
-			query({ query: recommendAuthors })
-		];
+		let promises = [query({ query: recommendArticlesQuery }), query({ query: topArticleWithImagesQuery }), query({ query: recommendAuthors })];
 		if (user.token) {
-			promises.concat([query({ query: unreadsQuery }), query({ query: chatsQuery }), query({ query: recommandDynamicQuery })]);
+			promises.concat([
+				query({ query: unreadsQuery }),
+				query({ query: chatsQuery }),
+				query({ query: recommandDynamicQuery, variables: { user_id: user.id } })
+			]);
 		}
 		Promise.all(promises)
 			.then(fulfilled => {

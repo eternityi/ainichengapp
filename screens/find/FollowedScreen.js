@@ -8,7 +8,7 @@ import NoteItem from "../../components/Article/NoteItem";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading } from "../../components/Pure";
 import Screen from "../Screen";
 
-import { recommendArticlesQuery } from "../../graphql/article.graphql";
+import { recommandDynamicQuery } from "../../graphql/article.graphql";
 import { Mutation, Query, compose, withApollo } from "react-apollo";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
@@ -29,7 +29,7 @@ class FollowedScreen extends React.Component {
     return (
       <View style={styles.container}>
         {user.id ? (
-          <Query query={recommendArticlesQuery} vaviables={{ user_id: user.id }}>
+          <Query query={recommandDynamicQuery} variables={{ user_id: user.id }}>
             {({ loading, error, data, refetch, fetchMore }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.articles)) return <SpinnerLoading />;
@@ -76,7 +76,7 @@ class FollowedScreen extends React.Component {
           </Query>
         ) : (
           <ScrollView>
-            <Image style={styles.banner} source={require("../../assets/images/plane.png")} />
+            <Image style={styles.banner} source={require("../../assets/images/planebg.png")} />
             <RecommendAuthors navigation={navigation} />
           </ScrollView>
         )}

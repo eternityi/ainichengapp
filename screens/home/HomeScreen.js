@@ -13,7 +13,7 @@ import ListHeader from "./ListHeader";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import { Query, Mutation, withApollo } from "react-apollo";
-import { hotArticlesQuery } from "../../graphql/article.graphql";
+import { recommendArticlesQuery } from "../../graphql/article.graphql";
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -75,16 +75,11 @@ class HomeScreen extends React.Component {
             leftComponent={<RecommendUser navigation={navigation} />}
             centerComponent={
               <View style={{ flex: 1 }}>
-                <SearchBar
-                  navigation={navigation}
-                  height={30}
-                  iconSize={18}
-                  textStyle={{ marginLeft: 10, fontSize: 15 }}
-                />
+                <SearchBar navigation={navigation} height={30} iconSize={18} textStyle={{ marginLeft: 10, fontSize: 15 }} />
               </View>
             }
           />
-          <Query query={hotArticlesQuery}>
+          <Query query={recommendArticlesQuery}>
             {({ loading, error, data, refetch, fetchMore }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.articles)) return <SpinnerLoading />;
@@ -145,7 +140,7 @@ class HomeScreen extends React.Component {
     if (this.scrollview) {
       this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
       this.props.client.query({
-        query: hotArticlesQuery,
+        query: recommendArticlesQuery,
         fetchPolicy: "network-only"
       });
     }

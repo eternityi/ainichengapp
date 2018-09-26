@@ -8,17 +8,12 @@ import Colors from "../../constants/Colors";
 
 class SearchHeader extends Component {
   render() {
-    let {
-      name,
-      handleSearch = () => null,
-      onChangeText = () => null,
-      placeholder = "搜索文章、专题、用户"
-    } = this.props;
+    let { name, handleSearch = () => null, onChangeText = () => null, placeholder = "搜索文章、专题、用户" } = this.props;
     return (
       <Header
         centerComponent={
           <View style={styles.searchWrap}>
-            <Input words={false} style={styles.textInput} placeholder={placeholder} onChangeText={onChangeText} />
+            <Input words={false} style={styles.textInput} placeholder={placeholder} onChangeText={onChangeText} autoFocus />
             <TouchableOpacity style={styles.searchIcon} onPress={handleSearch}>
               <Iconfont name={"search"} size={22} color={Colors.tintFontColor} style={{ marginRight: 8 }} />
             </TouchableOpacity>

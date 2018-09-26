@@ -193,6 +193,7 @@ query articleQuery($id: Int!) {
 			info {
 				height
 				width
+				rotate
 			}
 		}
 		video_url
@@ -268,7 +269,7 @@ query topArticleWithImagesQuery {
 }
 
 query hotArticlesQuery($offset: Int) {
-	articles(offset: $offset, in_days: 15, order: HOT) {
+	articles(offset: $offset, in_days: 21, order: HOT) {
 		id
 		type
 		title
