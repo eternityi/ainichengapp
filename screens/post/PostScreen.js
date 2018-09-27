@@ -120,9 +120,10 @@ class PostScreen extends Component {
 						this.pictures = pictures.map((elem, index) => {
 							return { url: elem.url };
 						});
+						console.log("this.isPortrait", this.isPortrait);
 						return (
 							<View style={styles.container} onLayout={event => this._onLayout(post, event)}>
-								{type !== "video" && <StatusBar backgroundColor={imageViewVisible ? "#000" : "#fff"} barStyle={"dark-content"} />}
+								{this.isPortrait && <StatusBar backgroundColor="#000" barStyle={"dark-content"} />}
 								{!isFullScreen &&
 									!this.isPortrait && (
 										<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />
@@ -220,13 +221,15 @@ class PostScreen extends Component {
 						);
 					}}
 				</Query>
-				{/*点击图片预览**/}
-				<ImageView
-					visible={imageViewVisible}
-					handleVisible={() => this.setState({ imageViewVisible: false })}
-					imageUrls={this.pictures}
-					initImage={initImage}
-				/>
+				{/*点击图片预览**/
+				!this.videoPlayer && (
+					<ImageView
+						visible={imageViewVisible}
+						handleVisible={() => this.setState({ imageViewVisible: false })}
+						imageUrls={this.pictures}
+						initImage={initImage}
+					/>
+				)}
 				<ShareModal visible={shareModalVisible} toggleVisible={this.handleSlideShareMenu} />
 			</Screen>
 		);

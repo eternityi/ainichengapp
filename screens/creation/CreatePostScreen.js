@@ -1,18 +1,6 @@
 import React from "react";
 import ReactNative from "react-native";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  Button,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableHighlight,
-  Image,
-  Platform,
-  Keyboard
-} from "react-native";
+import { ScrollView, Text, StyleSheet, Button, View, TouchableOpacity, Modal, TouchableHighlight, Image, Platform, Keyboard } from "react-native";
 
 import Screen from "../Screen";
 import UploadBody from "./UploadBody";
@@ -36,7 +24,7 @@ import { Waiting } from "../../components/Pure";
 
 import { withApollo, compose, graphql, Query } from "react-apollo";
 import { Mutation } from "react-apollo";
-import { draftsQuery } from "../../graphql/user.graphql";
+import { draftsQuery, userArticlesQuery } from "../../graphql/user.graphql";
 import { createPostMutation } from "../../graphql/article.graphql";
 
 const selectedArr = ["图片", "视频"];
@@ -67,18 +55,7 @@ class CreatePostScreen extends React.Component {
   }
 
   render() {
-    let {
-      covers,
-      completed,
-      progress,
-      uploadId,
-      uploadType,
-      uri,
-      selectCategories,
-      category_ids,
-      waitingVisible,
-      body
-    } = this.state;
+    let { covers, completed, progress, uploadId, uploadType, uri, selectCategories, category_ids, waitingVisible, body } = this.state;
     const { navigation } = this.props;
     return (
       <Screen header>
@@ -137,7 +114,7 @@ class CreatePostScreen extends React.Component {
   };
 
   publish = () => {
-    let { navigation, createPost } = this.props;
+    let { navigation, createPost, user } = this.props;
     let { uploadType, video_id, selectCategories } = this.state;
     let category_ids = selectCategories.map((elem, i) => {
       return elem.id;
@@ -154,14 +131,22 @@ class CreatePostScreen extends React.Component {
 
     //TODO:这里找后端核实下，这个统一的发布动态接口应该是可以兼容所有发布动态的场景的，前端也应该简化选择上传内容那的操作，
     //简化到和朋友圈一样，和雷坤做的web发布动态一样，无需用户选择图片还是视频这个模态框，直接选择了发布，或者是拍摄。
+    console.log("createPost", category_ids);
     createPost({
       variables: {
         body: this.state.body,
         image_urls: this.image_urls,
         a_cids: category_ids,
         video_id: video_id
-      }
-      // category_ids //TODO:: 选择专题，支持可以多选专
+      },
+      refetchQueries: addComment => [
+        {
+          query: userArticlesQuery,
+          variables: {
+            user_id: user.id
+          }
+        }
+      ]
     })
       .then(({ data }) => {
         console.log("published");
@@ -243,7 +228,7 @@ class CreatePostScreen extends React.Component {
   };
 
   startUploadImage = imagePath => {
-    const { token } = this.props.users.user;
+    const { token } = this.props.user;
     var data = new FormData();
     data.append("photo", {
       uri: imagePath,
@@ -331,7 +316,7 @@ class CreatePostScreen extends React.Component {
             console.log(data.videoUrl); //云上的视频url
 
             let ___this = __this;
-            const { token } = __this.props.users.user;
+            const { token } = __this.props.user;
             fetch(Config.ServerRoot + "/api/video/save?from=qcvod&api_token=" + token, {
               method: "POST",
               headers: {
@@ -381,6 +366,6 @@ const styles = StyleSheet.create({
 });
 export default compose(
   withApollo,
-  connect(store => store),
+  connect(store => ({ user: store.users.user, login: store.users.login })),
   graphql(createPostMutation, { name: "createPost" })
 )(CreatePostScreen);
