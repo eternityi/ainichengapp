@@ -6,12 +6,13 @@ import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
 import { followUserMutation, followCollectionMutation, followCategoryMutation } from "../../graphql/user.graphql";
+import { recommandDynamicQuery } from "../../graphql/article.graphql";
 import { graphql, compose } from "react-apollo";
 import { connect } from "react-redux";
 
 class Follow extends Component {
 	handleFollow() {
-		let { type, id, status, followUser, followCollection, followCategory, login, navigation } = this.props;
+		let { type, id, status, followUser, followCollection, followCategory, login, navigation, personal } = this.props;
 		if (login) {
 			switch (type) {
 				case "user":
@@ -19,7 +20,15 @@ class Follow extends Component {
 						variables: {
 							user_id: id,
 							undo: status
-						}
+						},
+						refetchQueries: addComment => [
+							{
+								query: recommandDynamicQuery,
+								variables: {
+									user_id: personal.id
+								}
+							}
+						]
 					});
 					break;
 				case "collection":

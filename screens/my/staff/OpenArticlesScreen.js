@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import Colors from "../../../constants/Colors";
 import { Header } from "../../../components/Header";
 import NoteItem from "../../../components/Article/NoteItem";
@@ -36,6 +36,7 @@ class OpenArticlesScreen extends Component {
 						variables={{
 							user_id: user.id
 						}}
+						fetchPolicy="network-only"
 					>
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
@@ -46,6 +47,7 @@ class OpenArticlesScreen extends Component {
 									<FlatList
 										data={data.articles}
 										keyExtractor={(item, index) => index.toString()}
+										refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
 										renderItem={({ item, index }) => (
 											<NoteItem
 												post={item}

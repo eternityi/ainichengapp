@@ -46,63 +46,72 @@ class FollowedScreen extends React.Component {
 
   render() {
     let { navigation, user } = this.props;
+    if (!user.id) {
+      return (
+        <ScrollView>
+          <Image style={styles.banner} source={require("../../assets/images/planebg.png")} />
+          <RecommendAuthors navigation={navigation} />
+        </ScrollView>
+      );
+    }
     return (
       <View style={styles.container}>
-        {user.id ? (
-          <Query query={recommandDynamicQuery} variables={{ user_id: user.id }}>
-            {({ loading, error, data, refetch, fetchMore }) => {
-              if (error) return <LoadingError reload={() => refetch()} />;
-              if (!(data && data.articles)) return <SpinnerLoading />;
-              let articles = data.articles;
+        <Query query={recommandDynamicQuery} variables={{ user_id: user.id }}>
+          {({ loading, error, data, refetch, fetchMore }) => {
+            if (error) return <LoadingError reload={() => refetch()} />;
+            if (!(data && data.articles)) return <SpinnerLoading />;
+            let articles = data.articles;
+            if (articles.length < 1) {
               return (
-                <FlatList
-                  ref={scrollview => {
-                    this.scrollview = scrollview;
-                  }}
-                  refreshing={loading}
-                  onRefresh={() => {
-                    refetch();
-                  }}
-                  data={articles}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
-                  onEndReached={() => {
-                    if (data.articles) {
-                      fetchMore({
-                        variables: {
-                          offset: data.articles.length
-                        },
-                        updateQuery: (prev, { fetchMoreResult }) => {
-                          if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
-                            this.setState({
-                              fetchingMore: false
-                            });
-                            return prev;
-                          }
-                          return Object.assign({}, prev, {
-                            articles: [...prev.articles, ...fetchMoreResult.articles]
-                          });
-                        }
-                      });
-                    } else {
-                      this.setState({
-                        fetchingMore: false
-                      });
-                    }
-                  }}
-                  ListFooterComponent={() => {
-                    return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
-                  }}
-                />
+                <ScrollView>
+                  <Image style={styles.banner} source={require("../../assets/images/planebg.png")} />
+                  <RecommendAuthors navigation={navigation} />
+                </ScrollView>
               );
-            }}
-          </Query>
-        ) : (
-          <ScrollView>
-            <Image style={styles.banner} source={require("../../assets/images/planebg.png")} />
-            <RecommendAuthors navigation={navigation} />
-          </ScrollView>
-        )}
+            }
+            return (
+              <FlatList
+                ref={scrollview => {
+                  this.scrollview = scrollview;
+                }}
+                refreshing={loading}
+                onRefresh={() => {
+                  refetch();
+                }}
+                data={articles}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
+                onEndReached={() => {
+                  if (data.articles) {
+                    fetchMore({
+                      variables: {
+                        offset: data.articles.length
+                      },
+                      updateQuery: (prev, { fetchMoreResult }) => {
+                        if (!(fetchMoreResult && fetchMoreResult.articles && fetchMoreResult.articles.length > 0)) {
+                          this.setState({
+                            fetchingMore: false
+                          });
+                          return prev;
+                        }
+                        return Object.assign({}, prev, {
+                          articles: [...prev.articles, ...fetchMoreResult.articles]
+                        });
+                      }
+                    });
+                  } else {
+                    this.setState({
+                      fetchingMore: false
+                    });
+                  }
+                }}
+                ListFooterComponent={() => {
+                  return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
+                }}
+              />
+            );
+          }}
+        </Query>
       </View>
     );
   }

@@ -5,8 +5,8 @@ import { Colors, Divice } from "../../../constants";
 import { Iconfont } from "../../../utils/Fonts";
 
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import FollowedUserScreen from "./FollowedUserScreen";
-import FollowedCategoryScreen from "./FollowedCategoryScreen";
+import FollowedUser from "./FollowedUser";
+import FollowedCategory from "./FollowedCategory";
 import { HeaderLeft, TabBarHeader } from "../../../components/Header";
 import Screen from "../../Screen";
 
@@ -17,8 +17,8 @@ class FollowingsScreen extends Component {
 			<Screen header>
 				<View style={styles.container}>
 					<ScrollableTabView renderTabBar={props => <TabBarHeader {...props} width={160} />}>
-						<FollowedUserScreen tabLabel="用户" navigation={navigation} />
-						<FollowedCategoryScreen tabLabel="专题" navigation={navigation} />
+						<FollowedUser tabLabel="用户" navigation={navigation} />
+						<FollowedCategory tabLabel="专题" navigation={navigation} />
 					</ScrollableTabView>
 				</View>
 			</Screen>
@@ -38,10 +38,10 @@ export default FollowingsScreen;
 // export default TabNavigator(
 // 	{
 // 		用户: {
-// 			screen: FollowedUserScreen
+// 			screen: FollowedUser
 // 		},
 // 		专题: {
-// 			screen: FollowedCategoryScreen
+// 			screen: FollowedCategory
 // 		}
 // 	},
 // 	{

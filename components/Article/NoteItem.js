@@ -31,9 +31,12 @@ class NoteItem extends Component {
 									activeOpacity={0.5}
 									onPress={() => navigation.dispatch(Methods.navigationAction({ routeName: "用户详情", params: { user } }))}
 								>
-									<Avatar size={28} uri={user.avatar} />
+									<Avatar size={34} uri={user.avatar} />
 								</TouchableOpacity>
-								<Text style={styles.userName}>{user.name}</Text>
+								<View style={{ marginLeft: 10 }}>
+									<Text style={styles.userName}>{user.name}</Text>
+									<Text style={styles.timeAgo}>{time_ago}</Text>
+								</View>
 							</View>
 						)}
 						{popoverOptions && (
@@ -51,14 +54,14 @@ class NoteItem extends Component {
 								{title}
 							</Text>
 							{description ? (
-								<Text numberOfLines={2} style={styles.description}>
+								<Text numberOfLines={3} style={styles.description}>
 									{description}
 								</Text>
 							) : null}
 						</View>
 					) : (
 						<View style={styles.abstract}>
-							<Text numberOfLines={2} style={styles.title}>
+							<Text numberOfLines={3} style={styles.title}>
 								{title ? title : description}
 							</Text>
 						</View>
@@ -137,8 +140,12 @@ const styles = StyleSheet.create({
 	},
 	userName: {
 		fontSize: 14,
-		color: Colors.primaryFontColor,
-		marginLeft: 6
+		color: Colors.primaryFontColor
+	},
+	timeAgo: {
+		fontSize: 12,
+		marginTop: 6,
+		color: Colors.tintFontColor
 	},
 	cover: {
 		width: COVER_WIDTH,

@@ -27,7 +27,7 @@ class FollowersScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Query query={userFollowersQuery} variables={{ user_id: user.id }}>
+					<Query query={userFollowersQuery} variables={{ user_id: user.id }} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.users)) return <SpinnerLoading />;

@@ -120,10 +120,8 @@ class PostScreen extends Component {
 						this.pictures = pictures.map((elem, index) => {
 							return { url: elem.url };
 						});
-						console.log("this.isPortrait", this.isPortrait);
 						return (
 							<View style={styles.container} onLayout={event => this._onLayout(post, event)}>
-								{this.isPortrait && <StatusBar backgroundColor="#000" barStyle={"dark-content"} />}
 								{!isFullScreen &&
 									!this.isPortrait && (
 										<PostHeader navigation={navigation} post={post} share={this.handleSlideShareMenu} login={login} />

@@ -11,7 +11,7 @@ class ImageView extends Component {
 		const { visible, handleVisible = () => null, imageUrls, onSwipeDown = handleVisible, onClick = handleVisible, initImage = 0 } = this.props;
 		return (
 			<View>
-				<StatusBar backgroundColor={visible ? "#000" : "#fff"} barStyle={"dark-content"} />
+				<StatusBar backgroundColor={visible ? "#000" : "transparent"} barStyle={"dark-content"} />
 				<Modal visible={visible} transparent={true} onRequestClose={handleVisible}>
 					<ImageViewer onClick={onClick} onSwipeDown={onSwipeDown} imageUrls={imageUrls} index={initImage} enableSwipeDown />
 				</Modal>

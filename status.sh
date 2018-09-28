@@ -12,27 +12,22 @@ cd ../dongmeiwei
 git config core.filemode false
 git status
 
-# echo -e "${grn}dongdianyao status ...${end}"
-# cd ../dongdianyao
-# git config core.filemode false
-# git status
-
-# echo -e "${grn}dongdianyi status ...${end}"
-# cd ../dongdianyi
-# git config core.filemode false
-# git status
-
-# echo -e "${grn}qunyige status ...${end}"
-# cd ../qunyige
-# git config core.filemode false
-# git status
-
-# echo -e "${grn}youjianqi status ...${end}"
-# cd ../youjianqi
-# git config core.filemode false
-# git status
-
 echo -e "${grn}dianmoge status ...${end}"
 cd ../dianmoge
+git config core.filemode false
+git status
+
+echo -e "${grn}jucheshe status ...${end}"
+cd ../jucheshe
+git config core.filemode false
+git status
+
+echo -e "${grn}youwangfa status ...${end}"
+cd ../youwangfa
+git config core.filemode false
+git status
+
+echo -e "${grn}jinlinle status ...${end}"
+cd ../jinlinle
 git config core.filemode false
 git status

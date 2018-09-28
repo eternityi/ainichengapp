@@ -29,7 +29,7 @@ class DraftsScreen extends Component {
 		return (
 			<Screen>
 				<View style={styles.container}>
-					<Query query={draftsQuery}>
+					<Query query={draftsQuery} fetchPolicy="network-only">
 						{({ loading, error, data, refetch, fetchMore }) => {
 							if (error) return <LoadingError reload={() => refetch()} />;
 							if (!(data && data.user && data.user.articles)) return <SpinnerLoading />;

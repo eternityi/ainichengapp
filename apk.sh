@@ -26,9 +26,9 @@ else
 	echo "gen all apks ..."
 	genapk "ainicheng"
 	genapk "dongmeiwei"
-	genapk "dongdianyi"
-	genapk "dongdianyao"
-	genapk "qunyige"
+	# genapk "dongdianyi"
+	# genapk "dongdianyao"
+	# genapk "qunyige"
 	genapk "dianmoge"
-	genapk "youjianqi"
+	# genapk "youjianqi"
 fi

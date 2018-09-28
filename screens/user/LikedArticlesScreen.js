@@ -36,7 +36,7 @@ class LikedArticlesScreen extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <Query query={userLikedArticlesQuery} variables={{ user_id: user.id }}>
+          <Query query={userLikedArticlesQuery} variables={{ user_id: user.id }} fetchPolicy="network-only">
             {({ loading, error, data, refetch, fetchMore }) => {
               if (error) return <LoadingError reload={() => refetch()} />;
               if (!(data && data.articles)) return <SpinnerLoading />;

@@ -44,11 +44,10 @@ if [ -z $1 ]; then
 	echo "开始热更新全部app,需要单个更新，请传入一个appname"
 	codepush "ainicheng"
 	codepush "dongmeiwei"
-	# codepush "dongdianyi"
-	# codepush "dongdianyao"
-	# codepush "qunyige"
 	codepush "dianmoge"
-	# codepush "youjianqi"
+	codepush "jucheshe"
+	codepush "youwangfa"
+	codepush "jinlinle"
 else
 	codepush $1 $2
 fi

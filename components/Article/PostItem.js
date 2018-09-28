@@ -1,14 +1,5 @@
 import React, { PureComponent } from "react";
-import {
-	StyleSheet,
-	View,
-	Image,
-	Text,
-	FlatList,
-	TouchableHighlight,
-	TouchableWithoutFeedback,
-	TouchableOpacity
-} from "react-native";
+import { StyleSheet, View, Image, Text, FlatList, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import PostToolBar from "./PostToolBar";
@@ -22,41 +13,14 @@ const COVER_WIDTH = Divice.width;
 
 class PostItem extends PureComponent {
 	render() {
-		const {
-			post,
-			navigation,
-			toggleShareModal,
-			recommend,
-			popover = true,
-			options = ["不感兴趣"],
-			popoverHandler = () => null
-		} = this.props;
-		let {
-			type,
-			user,
-			time_ago,
-			title,
-			description,
-			has_image,
-			images,
-			cover,
-			category,
-			hits,
-			count_likes,
-			count_replies
-		} = post;
+		const { post, navigation, toggleShareModal, recommend, popover = true, options = ["不感兴趣"], popoverHandler = () => null } = this.props;
+		let { type, user, time_ago, title, description, has_image, images, cover, category, hits, count_likes, count_replies } = post;
 		return (
-			<TouchableHighlight
-				underlayColor={Colors.tintGray}
-				onPress={() => Methods.goContentScreen(navigation, post)}
-			>
+			<TouchableHighlight underlayColor={Colors.tintGray} onPress={() => Methods.goContentScreen(navigation, post)}>
 				<View style={styles.postContainer}>
 					<View style={styles.postHeader}>
 						<View style={styles.layoutFlexRow}>
-							<TouchableOpacity
-								activeOpacity={0.5}
-								onPress={() => navigation.navigate("用户详情", { user })}
-							>
+							<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("用户详情", { user })}>
 								<Avatar size={38} uri={user.avatar} />
 							</TouchableOpacity>
 							{recommend ? (
@@ -74,9 +38,7 @@ class PostItem extends PureComponent {
 							<CustomPopoverMenu
 								width={110}
 								selectHandler={popoverHandler}
-								triggerComponent={
-									<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />
-								}
+								triggerComponent={<Iconfont name={"more-vertical"} size={19} color={Colors.lightFontColor} />}
 								options={options}
 							/>
 						)}
@@ -97,11 +59,7 @@ class PostItem extends PureComponent {
 					<View style={styles.footer}>
 						{category ? (
 							<TouchableWithoutFeedback
-								onPress={() =>
-									navigation.dispatch(
-										Methods.navigationAction({ routeName: "专题详情", params: { category } })
-									)
-								}
+								onPress={() => navigation.dispatch(Methods.navigationAction({ routeName: "专题详情", params: { category } }))}
 							>
 								<View>
 									<Text style={styles.categoryName}>#{category.name}</Text>
@@ -142,7 +100,7 @@ class PostItem extends PureComponent {
 						{title}
 					</Text>
 					{description ? (
-						<Text numberOfLines={2} style={styles.description}>
+						<Text numberOfLines={3} style={styles.description}>
 							{description}
 						</Text>
 					) : null}
@@ -151,7 +109,7 @@ class PostItem extends PureComponent {
 		} else {
 			return (
 				<View style={styles.abstract}>
-					<Text numberOfLines={2} style={styles.title}>
+					<Text numberOfLines={3} style={styles.title}>
 						{title ? title : description}
 					</Text>
 				</View>

@@ -4,14 +4,14 @@ import React, { Component } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import Colors from "../../../constants/Colors";
-import { UserMetaGroup } from "../../../components/MediaGroup";
+import { CategoryGroup } from "../../../components/MediaGroup";
 import { ContentEnd, LoadingMore, LoadingError, SpinnerLoading, BlankContent, Find } from "../../../components/Pure";
 
 import { Query } from "react-apollo";
-import { userFollowingsQuery } from "../../../graphql/user.graphql";
+import { userFollowedCategoriesQuery } from "../../../graphql/user.graphql";
 import { connect } from "react-redux";
 
-class FollowedUserScreen extends Component {
+class FollowedCategory extends Component {
 	state = {
 		fetchingMore: true
 	};
@@ -21,35 +21,35 @@ class FollowedUserScreen extends Component {
 		let user = navigation.getParam("user", {});
 		return (
 			<View style={styles.container}>
-				<Query query={userFollowingsQuery} variables={{ user_id: user.id }}>
+				<Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }} fetchPolicy="network-only">
 					{({ loading, error, data, refetch, fetchMore }) => {
 						if (error) return <LoadingError reload={() => refetch()} />;
-						if (!(data && data.users)) return <SpinnerLoading />;
-						if (data.users.length < 1) return <BlankContent />;
+						if (!(data && data.categories)) return <SpinnerLoading />;
+						if (data.categories.length < 1) return <BlankContent />;
 						return (
 							<FlatList
-								data={data.users}
+								data={data.categories}
 								keyExtractor={(item, index) => index.toString()}
 								renderItem={({ item }) => (
-									<View style={styles.userItem}>
-										<UserMetaGroup user={item} />
+									<View style={styles.categoryItem}>
+										<CategoryGroup category={item} />
 									</View>
 								)}
 								onEndReached={() => {
-									if (data.users) {
+									if (data.categories) {
 										fetchMore({
 											variables: {
-												offset: data.users.length
+												offset: data.categories.length
 											},
 											updateQuery: (prev, { fetchMoreResult }) => {
-												if (!(fetchMoreResult && fetchMoreResult.users && fetchMoreResult.users.length > 0)) {
+												if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
 													this.setState({
 														fetchingMore: false
 													});
 													return prev;
 												}
 												return Object.assign({}, prev, {
-													users: [...prev.users, ...fetchMoreResult.users]
+													categories: [...prev.categories, ...fetchMoreResult.categories]
 												});
 											}
 										});
@@ -74,10 +74,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: Colors.skinColor
 	},
-	userItem: {
+	categoryItem: {
 		marginHorizontal: 15,
 		paddingVertical: 10
 	}
 });
 
-export default FollowedUserScreen;
+export default FollowedCategory;

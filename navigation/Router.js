@@ -54,7 +54,6 @@ import PrivacyPolicyScreen from "../screens/my/settings/PrivacyPolicyScreen";
 import PrivacyArticle from "../screens/my/staff/DraftsScreen";
 import OpenArticlesScreen from "../screens/my/staff/OpenArticlesScreen";
 import FavoritedArticlesScreen from "../screens/my/staff/FavoritedArticlesScreen";
-import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
 import MoveArticleScreen from "../screens/my/staff/MoveArticleScreen";
 import ContributeManageScreen from "../screens/my/staff/ContributeManageScreen";
 
@@ -247,9 +246,6 @@ export default {
   我的收藏: {
     screen: FavoritedArticlesScreen
   },
-  已购内容: {
-    screen: PaidContentScreen
-  },
   我的钱包: {
     screen: WalletScreen
   },
@@ -300,6 +296,7 @@ export default {
   }
 };
 
+// import PaidContentScreen from "../screens/my/staff/PaidContentScreen";
 // import CollectionHomeScreen from "../screens/user/collection/HomeScreen";
 // import CollectionsScreen from "../screens/user/collection/ListScreen";
 // import CollectionEditScreen from "../screens/user/collection/EditScreen";
@@ -314,6 +311,9 @@ export default {
 // import AllFollowsScreen from "../screens/my/staff/AllFollowsScreen";
 // import ContributeCategoryListScreen from "../screens/creation/CategoryListScreen";
 
+// 已购内容: {
+//   screen: PaidContentScreen
+// },
 // 专题投稿查看全部: {
 //   screen: ContributeCategoryListScreen
 // },
