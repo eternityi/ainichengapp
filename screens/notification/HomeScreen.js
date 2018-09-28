@@ -19,10 +19,15 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: false
+      refreshing: false,
+      sign_out: false
     };
     this.count_unreads = 0;
   }
+
+  clearBadge = () => {
+    this.setState({ sign_out: true });
+  };
 
   syncUnreads = () => {
     const { dispatch } = this.props;
@@ -43,6 +48,13 @@ class HomeScreen extends React.Component {
     setTimeout(this.syncUnreads, 0);
   };
 
+  componentWillUpdate(nextProps, nextState) {
+    this.props.client.query({
+      query: unreadsQuery,
+      fetchPolicy: "network-only"
+    });
+  }
+
   render() {
     let { refreshing } = this.state;
     const { navigation, login, user } = this.props;
@@ -57,12 +69,12 @@ class HomeScreen extends React.Component {
           <View style={styles.menuWrap}>
             <Query query={unreadsQuery} pollInterval={10000}>
               {({ loading, error, data, stopPolling }) => {
-                if (!login) {
-                  stopPolling();
-                }
-                if (!(data && data.user)) {
+                if (error || !data || !data.user || !login) {
                   data = {};
                   data.user = {};
+                }
+                if (!login) {
+                  stopPolling();
                 }
                 if (data && data.user && login) {
                   this.updateUnreads(data.user);

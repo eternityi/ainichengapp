@@ -45,9 +45,9 @@ if [ -z $1 ]; then
 	codepush "ainicheng"
 	codepush "dongmeiwei"
 	codepush "dianmoge"
-	codepush "jucheshe"
-	codepush "youwangfa"
-	codepush "jinlinle"
+	# codepush "jucheshe"
+	# codepush "youwangfa"
+	# codepush "jinlinle"
 else
 	codepush $1 $2
 fi

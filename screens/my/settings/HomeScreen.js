@@ -18,6 +18,8 @@ import { Storage } from "../../../store/localStorage";
 import { NavigationActions } from "react-navigation";
 import { withApollo } from "react-apollo";
 
+import { unreadsQuery } from "../../../graphql/notification.graphql";
+
 const { width, height } = Dimensions.get("window");
 
 // 退出账号 navigateAction
@@ -44,7 +46,7 @@ class HomeScreen extends Component {
 
 	render() {
 		let { promotModalVisible, fontModalVisible, dialog, storageSize, wordSize, checkedWordSize } = this.state;
-		const { navigation, users, client } = this.props;
+		const { navigation, users, client, dispatch } = this.props;
 		const { login } = users;
 		return (
 			<Screen>
@@ -127,8 +129,9 @@ class HomeScreen extends Component {
 					handleVisible={this.handlePromotModalVisible}
 					confirm={() => {
 						if (dialog == "确定退出当前账号？") {
-							this.props.dispatch(actions.signOut());
-							this.props.navigation.dispatch(navigateAction);
+							dispatch(actions.signOut());
+							dispatch(actions.updateUnreads(0));
+							navigation.dispatch(navigateAction);
 							this.handlePromotModalVisible();
 						} else if (dialog == "确认清除缓存内容吗？") {
 							this.clearCache();
