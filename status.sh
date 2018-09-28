@@ -17,17 +17,17 @@ cd ../dianmoge
 git config core.filemode false
 git status
 
-echo -e "${grn}jucheshe status ...${end}"
-cd ../jucheshe
-git config core.filemode false
-git status
+# echo -e "${grn}jucheshe status ...${end}"
+# cd ../jucheshe
+# git config core.filemode false
+# git status
 
-echo -e "${grn}youwangfa status ...${end}"
-cd ../youwangfa
-git config core.filemode false
-git status
+# echo -e "${grn}youwangfa status ...${end}"
+# cd ../youwangfa
+# git config core.filemode false
+# git status
 
-echo -e "${grn}jinlinle status ...${end}"
-cd ../jinlinle
-git config core.filemode false
-git status
+# echo -e "${grn}jinlinle status ...${end}"
+# cd ../jinlinle
+# git config core.filemode false
+# git status
