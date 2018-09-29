@@ -5,7 +5,7 @@ import { withNavigation } from "react-navigation";
 import { Iconfont } from "../../utils/Fonts";
 import Colors from "../../constants/Colors";
 
-import { followUserMutation, followCollectionMutation, followCategoryMutation } from "../../graphql/user.graphql";
+import { followUserMutation, followCollectionMutation, followCategoryMutation, userFollowedCategoriesQuery } from "../../graphql/user.graphql";
 import { recommandDynamicQuery } from "../../graphql/article.graphql";
 import { graphql, compose } from "react-apollo";
 import { connect } from "react-redux";
@@ -21,7 +21,7 @@ class Follow extends Component {
 							user_id: id,
 							undo: status
 						},
-						refetchQueries: addComment => [
+						refetchQueries: result => [
 							{
 								query: recommandDynamicQuery,
 								variables: {
@@ -44,7 +44,15 @@ class Follow extends Component {
 						variables: {
 							category_id: id,
 							undo: status
-						}
+						},
+						refetchQueries: result => [
+							{
+								query: userFollowedCategoriesQuery,
+								variables: {
+									user_id: personal.id
+								}
+							}
+						]
 					});
 					break;
 			}

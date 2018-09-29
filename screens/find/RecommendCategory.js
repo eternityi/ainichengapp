@@ -83,7 +83,7 @@ class RecommendCategory extends React.Component {
 							{category.name}
 						</Text>
 						<Text numberOfLines={1} style={styles.tintText}>
-							{category.description ? `${category.description}` : `${category.count_articles}条精选内容`}
+							{category.description ? category.description : "这个专题还没有freestyle"}
 						</Text>
 					</View>
 					<FollowButton

@@ -36,6 +36,7 @@ class CategoriesScreen extends React.Component {
     this.state = {
       fetchingMore: true
     };
+    this.valve = true;
   }
 
   componentWillMount() {
@@ -46,80 +47,79 @@ class CategoriesScreen extends React.Component {
 
   render() {
     let { navigation, user } = this.props;
+    if (!user.id) {
+      return this._renderEmpty(navigation);
+    }
     return (
       <View style={styles.container}>
-        {user.id ? (
-          <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
-            {({ loading, error, data, fetchMore, refetch }) => {
-              let categories;
-              if (error || !(data && data.categories) || data.categories.length < 1) {
-                categories = [];
-              }
-              if (data && data.categories) {
-                categories = data.categories;
-              }
-              return (
-                <FlatList
-                  ref={scrollview => {
-                    this.scrollview = scrollview;
-                  }}
-                  data={categories}
-                  ListHeaderComponent={() => this._renderListHeader(navigation)}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={this._renderCategoryItem}
-                  refreshing={loading}
-                  onRefresh={() => {
-                    refetch();
-                  }}
-                  onEndReached={() => {
-                    if (data.categories) {
-                      fetchMore({
-                        variables: {
-                          offset: data.categories.length
-                        },
-                        updateQuery: (prev, { fetchMoreResult }) => {
-                          if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
-                            this.setState({
-                              fetchingMore: false
-                            });
-                            return prev;
-                          }
-                          return Object.assign({}, prev, {
-                            categories: [...prev.categories, ...fetchMoreResult.categories]
+        <Query query={userFollowedCategoriesQuery} variables={{ user_id: user.id }}>
+          {({ loading, error, data, fetchMore, refetch }) => {
+            let categories;
+            if (error || !(data && data.categories) || data.categories.length < 1) {
+              categories = [];
+            }
+            if (data && data.categories) {
+              categories = data.categories;
+            }
+            if (categories.length < 1) {
+              return this._renderEmpty(navigation);
+            }
+            return (
+              <FlatList
+                ref={scrollview => {
+                  this.scrollview = scrollview;
+                }}
+                data={categories}
+                ListHeaderComponent={() => this._renderListHeader(navigation)}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={this._renderCategoryItem}
+                refreshing={loading}
+                onRefresh={() => {
+                  refetch();
+                }}
+                onEndReached={() => {
+                  if (categories && this.valve) {
+                    this.valve = false;
+                    fetchMore({
+                      variables: {
+                        offset: categories.length
+                      },
+                      updateQuery: (prev, { fetchMoreResult }) => {
+                        this.valve = true;
+                        if (!(fetchMoreResult && fetchMoreResult.categories && fetchMoreResult.categories.length > 0)) {
+                          this.setState({
+                            fetchingMore: false
                           });
+                          return prev;
                         }
-                      });
-                    } else {
-                      this.setState({
-                        fetchingMore: false
-                      });
-                    }
-                  }}
-                  ListEmptyComponent={() => <RecommendCategory navigation={navigation} />}
-                  ListFooterComponent={() => {
-                    if (categories.length > 0) {
-                      if (this.state.fetchingMore) {
-                        return <LoadingMore />;
+                        return Object.assign({}, prev, {
+                          categories: [...prev.categories, ...fetchMoreResult.categories]
+                        });
                       }
-                      return (
-                        <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
-                          <View style={styles.refresh}>
-                            <Iconfont name="fresh" size={15} color={Colors.themeColor} />
-                            <Text style={styles.refreshText}>关注更多专题</Text>
-                          </View>
-                        </TouchableWithoutFeedback>
-                      );
-                    } else {
-                      return <View />;
-                    }
-                  }}
-                />
-              );
-            }}
-          </Query>
-        ) : (
-          this._renderEmpty(navigation)
-        )}
+                    });
+                  } else {
+                    this.setState({
+                      fetchingMore: false
+                    });
+                  }
+                }}
+                ListFooterComponent={() => {
+                  if (this.state.fetchingMore) {
+                    return <LoadingMore />;
+                  }
+                  return (
+                    <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
+                      <View style={styles.refresh}>
+                        <Iconfont name="fresh" size={15} color={Colors.themeColor} />
+                        <Text style={styles.refreshText}>关注更多专题</Text>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  );
+                }}
+              />
+            );
+          }}
+        </Query>
       </View>
     );
   }

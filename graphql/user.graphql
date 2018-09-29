@@ -258,7 +258,7 @@ query userDetailQuery($id: Int!, $offset: Int) {
 
 # 用户公开文章
 query userArticlesQuery($offset: Int, $user_id: Int!) {
-    articles(offset: $offset, user_id: $user_id) {
+    articles(offset: $offset, user_id: $user_id, order: LATEST) {
         id
         type
         title

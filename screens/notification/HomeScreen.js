@@ -19,15 +19,10 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: false,
-      sign_out: false
+      refreshing: false
     };
     this.count_unreads = 0;
   }
-
-  clearBadge = () => {
-    this.setState({ sign_out: true });
-  };
 
   syncUnreads = () => {
     const { dispatch } = this.props;
