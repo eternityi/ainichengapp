@@ -190,6 +190,7 @@ query articleQuery($id: Int!) {
 		}
 		cover
 		video {
+			id
 			info {
 				height
 				width
