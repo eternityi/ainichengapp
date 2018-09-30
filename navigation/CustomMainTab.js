@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button, FlatList } from "react-native";
 
-import Color from "../constants/Colors";
+import { Colors, Divice } from "../constants";
 import { Iconfont } from "../utils/Fonts";
 import { Badge } from "../components/Pure";
 
@@ -60,7 +60,7 @@ class CustomMainTab extends React.Component {
                 onLongPress={() => navigation.navigate(login ? "创作" : "登录注册")}
             >
                 <View>
-                    <Iconfont name={"fill-add"} size={38} color={Color.themeColor} />
+                    <Iconfont name={"fill-add"} size={38} color={Colors.themeColor} />
                 </View>
             </TouchableOpacity>
         );
@@ -81,10 +81,11 @@ const styles = {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-around",
-        height: 50,
+        height: Divice.HAS_HOME_INDICATOR ? 70 : 50,
+        paddingBottom: Divice.HAS_HOME_INDICATOR ? 15 : 0,
         borderTopWidth: 1, //在大屏幕上0.5会显示异常，比如iphone 8 plus上
-        borderTopColor: Color.tintBorderColor,
-        backgroundColor: Color.skinColor
+        borderTopColor: Colors.tintBorderColor,
+        backgroundColor: Colors.skinColor
     },
     tabItem: {
         alignItems: "center",

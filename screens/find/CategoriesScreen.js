@@ -131,18 +131,15 @@ class CategoriesScreen extends React.Component {
         <View style={styles.flexRowCenter}>
           <TouchableWithoutFeedback onPress={() => Methods.navigationDispatch(navigation, { routeName: "全部专题", key: "全部专题" })}>
             <View style={styles.entry}>
-              <View style={[styles.entryLabel, styles.center, { backgroundColor: Colors.themeColor }]}>
-                <Iconfont name="category" size={22} color="#fff" style={{ marginLeft: 2, marginTop: 2 }} />
+              <View style={styles.flexRowCenter}>
+                <View style={[styles.entryLabel, styles.center, { backgroundColor: Colors.themeColor }]}>
+                  <Iconfont name="category" size={22} color="#fff" style={{ marginLeft: 2, marginTop: 2 }} />
+                </View>
+                <Text style={styles.entryName}>全部专题</Text>
               </View>
-              <Text style={styles.entryName}>全部专题</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => this.navigateMiddlewear("新建专题")}>
-            <View style={styles.entry}>
-              <View style={[styles.entryLabel, styles.center]}>
-                <Iconfont name="write" size={22} color="#fff" />
+              <View>
+                <Iconfont name="right" size={22} color={Colors.tintFontColor} />
               </View>
-              <Text style={styles.entryName}>创建专题</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -169,7 +166,7 @@ class CategoriesScreen extends React.Component {
 
   _renderEmpty = navigation => {
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         {this._renderListHeader(navigation)}
         <RecommendCategory navigation={navigation} />
       </ScrollView>
@@ -217,8 +214,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    height: 60
+    justifyContent: "space-between",
+    height: 60,
+    paddingHorizontal: 15
   },
   entryLabel: {
     width: 36,

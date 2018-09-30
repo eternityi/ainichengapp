@@ -20,17 +20,17 @@ cd /data/app/dianmoge
 git add -A
 git commit -m "$1"
 
-# echo "提交 jucheshe"
-# cd /data/app/jucheshe
-# git add -A
-# git commit -m "$1"
+echo "提交 jucheshe"
+cd /data/app/jucheshe
+git add -A
+git commit -m "$1"
 
-# echo "提交 youwangfa"
-# cd /data/app/youwangfa
-# git add -A
-# git commit -m "$1"
+echo "提交 youwangfa"
+cd /data/app/youwangfa
+git add -A
+git commit -m "$1"
 
-# echo "提交 jinlinle"
-# cd /data/app/jinlinle
-# git add -A
-# git commit -m "$1"
+echo "提交 jinlinle"
+cd /data/app/jinlinle
+git add -A
+git commit -m "$1"
