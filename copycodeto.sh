@@ -44,6 +44,21 @@ if [ $to == "youjianqi" ];then
 	codepush_key_ios_staging_to="wAeIso_xMmUw20vg2x9lCnalgzPHHkun8DZU7"
 	codepush_key_ios_production_to="8gK428EzV6D-c31DHQXMnaweErFcry_3Uv-UX"
 fi
+if [ $to == "jucheshe" ];then
+	appname_to="聚车社"
+	codepush_key_ios_staging_to="nA9Va2IiizIQbgcLO7PkNHtJVpunHJsZqJ0_m"
+	codepush_key_ios_production_to="fhbkg67IH08anOoSO0FkQD5YTGkbHyn-9k0_m"
+fi
+if [ $to == "youwangfa" ];then
+	appname_to="有王法"
+	codepush_key_ios_staging_to="YZHghb8IrRNzsS84AnB3egg6v7isS1lp3k0_7"
+	codepush_key_ios_production_to="MQvJkeAo2Yx4bWUYXv4Zo0zqUO6wryZTn10O7"
+fi
+if [ $to == "jinlinle" ];then
+	appname_to="近邻乐"
+	codepush_key_ios_staging_to="yID_E9oqQIWqg2Yp6x8XVGie_SRYBkKFakCdX"
+	codepush_key_ios_production_to="eh9WXFFWphMQLScghVzwUPXiDcDQSk9Y6yR_m"
+fi
 
 red=$'\e[1;31m'
 grn=$'\e[1;32m'
