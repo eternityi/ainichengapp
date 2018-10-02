@@ -84,6 +84,7 @@ class CreatePostScreen extends React.Component {
             body={this.body}
             selectCategories={selectCategories}
             selectCategory={this.selectCategory}
+            removeMedia={this.removeMedia}
             category_ids={category_ids}
           />
           <CreatePostBottom
@@ -342,6 +343,18 @@ class CreatePostScreen extends React.Component {
         });
     });
   };
+
+  removeMedia = i => {
+    let { uploadType, video_id, covers } = this.state;
+    covers.splice(i, 1);
+    this.setState({ covers });
+    if (uploadType > 0) {
+      this.image_urls.splice(i, 1);
+    } else {
+      this.setState({ video_id: null });
+    }
+  };
+
   toast(message = "内容不能为空哦~") {
     let toast = Toast.show(message, {
       duration: Toast.durations.LONG,

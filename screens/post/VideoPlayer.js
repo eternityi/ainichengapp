@@ -11,6 +11,7 @@ import { Iconfont } from "../../utils/Fonts";
 class VideoPlayer extends Component {
 	constructor(props) {
 		super(props);
+		this.slidingComplete = true;
 		this.state = {
 			status: "loading", //视频播放状态
 			controlVisible: false, //控制器
@@ -53,6 +54,7 @@ class VideoPlayer extends Component {
 						isPortrait={isPortrait}
 						isFullScreen={isFullScreen}
 						playButtonHandler={this.playButtonHandler}
+						onSlidingComplete={this.onSlidingComplete}
 						onSliderValueChanged={this.onSliderValueChanged}
 						onSwitchLayout={this.onSwitchLayout}
 					/>
@@ -71,7 +73,7 @@ class VideoPlayer extends Component {
 	};
 
 	_onLoaded = data => {
-		// console.log("_onProgressChanged");
+		// console.log("_onLoaded");
 		this.setState({
 			duration: data.duration,
 			paused: false,
@@ -81,10 +83,13 @@ class VideoPlayer extends Component {
 
 	_onProgressChanged = data => {
 		// console.log("_onProgressChanged");
-		if (!this.state.paused) {
-			this.setState({
-				currentTime: data.currentTime
-			});
+		if (this.slidingComplete) {
+			// console.log("_onProgressChanged", data.currentTime);
+			if (!this.state.paused) {
+				this.setState({
+					currentTime: data.currentTime
+				});
+			}
 		}
 	};
 
@@ -157,15 +162,23 @@ class VideoPlayer extends Component {
 
 	// 进度条值改变
 	onSliderValueChanged = currentTime => {
+		// console.log("onSliderValueChanged", currentTime);
+		this.slidingComplete = false;
 		this.controlIntervel && clearInterval(this.controlIntervel);
-		this.videoRef.seek(currentTime);
-		this.setState(
-			{
-				currentTime,
+		this.setState({ currentTime });
+		if (!this.state.controlVisible) {
+			this.setState({
 				controlVisible: true
-			},
-			this.setControlInterval
-		);
+			});
+		}
+	};
+
+	// 拖拽结束
+	onSlidingComplete = currentTime => {
+		// console.log("onSlidingComplete", currentTime);
+		this.slidingComplete = true;
+		this.videoRef.seek(currentTime);
+		this.setControlInterval();
 	};
 
 	// 进度条定时器

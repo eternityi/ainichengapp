@@ -15,6 +15,7 @@ class VideoControl extends Component {
 			paused,
 			isPortrait,
 			isFullScreen,
+			onSlidingComplete,
 			onSliderValueChanged,
 			playButtonHandler,
 			onSwitchLayout
@@ -42,6 +43,7 @@ class VideoControl extends Component {
 						value={currentTime}
 						minimumValue={0}
 						maximumValue={Number(duration)}
+						onSlidingComplete={onSlidingComplete}
 						onValueChange={onSliderValueChanged}
 					/>
 					<Text style={styles.timeText}>{Methods.formatTime(duration)}</Text>

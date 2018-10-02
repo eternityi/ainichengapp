@@ -22,7 +22,8 @@ class UploadBody extends Component {
 			changeBody,
 			body,
 			selectCategories,
-			selectCategory
+			selectCategory,
+			removeMedia
 		} = this.props;
 		return (
 			<View style={{ backgroundColor: Colors.lightGray, flex: 1, marginTop: 30 }}>
@@ -67,7 +68,12 @@ class UploadBody extends Component {
 					>
 						{Platform.OS == "android"
 							? covers.map((cover, index) => (
-									<Image key={index} style={styles.picture} source={{ uri: cover }} />
+									<View key={index} style={styles.imageWrap}>
+										<Image style={styles.picture} source={{ uri: cover }} />
+										<TouchableOpacity style={styles.chacha} onPress={() => removeMedia(index)}>
+											<Iconfont name="chacha" size={15} color="#fff" />
+										</TouchableOpacity>
+									</View>
 							  ))
 							: uploadType < 0
 								? covers.map((cover, index) => (
@@ -83,7 +89,12 @@ class UploadBody extends Component {
 										/>
 								  ))
 								: covers.map((cover, index) => (
-										<Image key={index} style={styles.picture} source={{ uri: cover }} />
+										<View key={index} style={styles.imageWrap}>
+											<Image style={styles.picture} source={{ uri: cover }} />
+											<TouchableOpacity style={styles.chacha} onPress={() => removeMedia(index)}>
+												<Iconfont name="chacha" size={15} color="#fff" />
+											</TouchableOpacity>
+										</View>
 								  ))}
 
 						{
@@ -121,9 +132,7 @@ class UploadBody extends Component {
 								}}
 								key={index}
 							>
-								<Text style={{ fontSize: 9, color: Colors.themeColor, paddingVertical: 3 }}>
-									{elem.name}
-								</Text>
+								<Text style={{ fontSize: 9, color: Colors.themeColor, paddingVertical: 3 }}>{elem.name}</Text>
 								<TouchableOpacity
 									onPress={() => {
 										selectCategories = selectCategories.filter((query, index) => {
@@ -132,12 +141,7 @@ class UploadBody extends Component {
 										selectCategory(selectCategories);
 									}}
 								>
-									<Iconfont
-										name={"chacha"}
-										size={11}
-										color={Colors.themeColor}
-										style={{ marginLeft: 5, padding: 3 }}
-									/>
+									<Iconfont name={"chacha"} size={11} color={Colors.themeColor} style={{ marginLeft: 5, padding: 3 }} />
 								</TouchableOpacity>
 							</View>
 						))}
@@ -192,11 +196,24 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: Colors.lightGray
 	},
-	picture: {
-		height: 100,
-		width: 100,
+	imageWrap: {
 		marginHorizontal: 4,
 		marginTop: 8
+	},
+	chacha: {
+		position: "absolute",
+		right: 4,
+		top: 4,
+		width: 18,
+		height: 18,
+		borderRadius: 8,
+		backgroundColor: "rgba(0, 0, 0, 0.6)",
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	picture: {
+		height: 100,
+		width: 100
 	},
 	nocomplete: {
 		position: "absolute",
