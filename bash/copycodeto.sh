@@ -1,3 +1,5 @@
+#!/bin/bash
+
 from='ainicheng';
 to=$1
 if [ -z $1 ]; then
