@@ -59,6 +59,9 @@ class App extends React.Component {
               <View style={styles.appSlogan}>
                 <Text style={styles.slogan}>{Config.AppSlogan}</Text>
               </View>
+              <View style={styles.appVersion}>
+                <Text style={styles.version}>{Config.AppVersion}</Text>
+              </View>
             </View>
           </View>
         )}
@@ -123,7 +126,11 @@ const styles = StyleSheet.create({
   appSlogan: {
     marginTop: 10
   },
-  slogan: { fontSize: 15, lineHeight: 20, color: Colors.tintFontColor }
+  slogan: { fontSize: 15, lineHeight: 20, color: Colors.tintFontColor },
+  appVersion: {
+    marginTop: 10
+  },
+  version: { fontSize: 10, lineHeight: 20, color: Colors.lightFontColor }
 });
 
 let codePushOptions = {
