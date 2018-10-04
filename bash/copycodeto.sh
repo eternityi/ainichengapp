@@ -1,4 +1,3 @@
-
 from='ainicheng';
 to=$1
 if [ -z $1 ]; then
@@ -73,10 +72,10 @@ if [ -z $appname_to ]; then
 	exit
 fi
 
-cd /data/app/$from
+echo " == sync RN js code ..."
+sudo cd /data/app/$from
 
 /bin/cp -rf ./package.json ../$to/
-/bin/cp -rf ./appVersion.json ../$to/
 /bin/cp -rf ./App.js ../$to/
 /bin/cp -rf ./ApolloApp.js ../$to/
 
@@ -93,18 +92,25 @@ cd /data/app/$from
 /bin/cp -rf ./store ../$to/
 /bin/cp -rf ./utils ../$to/
 
-echo " == fix native projects ..."
-/bin/cp -rf ./fix_npm.sh ../$to/
+echo " == sync native code ..."
 
-echo "  - fix android ..."
+echo "  - sync bash ..."
+[ ! -d ../$to/bash/ ] && mkdir -p ../$to/bash/
+chmod -R 777 ../$to/bash/
+/bin/cp -rf ./bash/fix_npm.sh ../$to/bash/
+/bin/cp -rf ./bash/clean_babel.sh ../$to/bash/
+/bin/cp -rf ./bash/bundle_android.sh ../$to/bash/
+
+echo "  - sync android ..."
 /bin/cp -rf ./android/settings.gradle ../$to/android
 /bin/cp -rf ./android/gradle.properties ../$to/android
 /bin/cp -rf ./android/app/build.gradle ../$to/android/app
 /bin/cp -rf ./android/app/versionCode.gradle ../$to/android/app
+/bin/cp -rf ./android/app/src/main/res/.gitignore ../$to/android/app/src/main/res/
 /bin/cp -rf ./android/app/src/main/java/com/$from/MainApplication.java ../$to/android/app/src/main/java/com/$to/
 sed -i -e "s/$from/$to/g" "../$to/android/app/src/main/java/com/$to/MainApplication.java"
 
-echo "  - fix ios ..."
+echo "  - sync ios ..."
 /bin/cp -rf ./ios/Podfile ../$to/ios/
 sed -i -e "s/$from/$to/g" "../$to/ios/Podfile"
 /bin/cp -rf ./ios/$from/Info.plist ../$to/ios/$to/

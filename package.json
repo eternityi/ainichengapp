@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "bash ./fix_npm.sh && rimraf ./node_modules/.cache/babel-loader && node node_modules/react-native/local-cli/cli.js start",
+    "start": "./bash/clean_babel.sh && ./bash/bundle_android.sh && node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
@@ -56,9 +56,7 @@
     "react-test-renderer": "16.4.1"
   },
   "rnpm": {
-    "assets": [
-      "./assets/fonts/"
-    ]
+    "assets": ["./assets/fonts/"]
   },
   "jest": {
     "preset": "react-native",
