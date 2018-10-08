@@ -1,8 +1,8 @@
 {
-	"ServerRoot": "https://ainicheng.com",
+	"ServerRoot": "http://staging.ainicheng.com",
 	"name": "ainicheng",
 	"displayName": "爱你城",
 	"Spinner": "9CubeGrid",
-	"version": "1.0.0(build4)",
+	"version": "1.0.0(build5)",
 	"AppSlogan": "最暖心的年轻人短视频互动社区"
 }
