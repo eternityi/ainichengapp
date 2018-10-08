@@ -139,15 +139,7 @@ class CreatePostScreen extends React.Component {
         image_urls: this.image_urls,
         a_cids: category_ids,
         video_id: video_id
-      },
-      refetchQueries: addComment => [
-        {
-          query: userArticlesQuery,
-          variables: {
-            user_id: user.id
-          }
-        }
-      ]
+      }
     })
       .then(({ data }) => {
         console.log("published");

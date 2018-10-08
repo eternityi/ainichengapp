@@ -60,8 +60,7 @@ class FollowedScreen extends React.Component {
           {({ loading, error, data, refetch, fetchMore }) => {
             if (error) return <LoadingError reload={() => refetch()} />;
             if (!(data && data.articles)) return <SpinnerLoading />;
-            let articles = data.articles;
-            if (articles.length < 1) {
+            if (data.articles.length < 1) {
               return (
                 <ScrollView>
                   <Image style={styles.banner} source={require("../../assets/images/planebg.png")} />
@@ -78,7 +77,7 @@ class FollowedScreen extends React.Component {
                 onRefresh={() => {
                   refetch();
                 }}
-                data={articles}
+                data={data.articles}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => <NoteItem post={item} popoverHandler={() => null} />}
                 onEndReached={() => {
@@ -106,7 +105,7 @@ class FollowedScreen extends React.Component {
                   }
                 }}
                 ListFooterComponent={() => {
-                  return articles.length > 0 ? this.state.fetchingMore ? <LoadingMore /> : <ContentEnd /> : <View />;
+                  return this.state.fetchingMore ? <LoadingMore /> : <ContentEnd />;
                 }}
               />
             );
@@ -117,12 +116,14 @@ class FollowedScreen extends React.Component {
   }
 
   _scrollToTop = () => {
+    let { client, user } = this.props;
     if (this.scrollview) {
       this.scrollview.scrollToOffset({ x: 0, y: 0, animated: true });
-      // this.props.client.query({
-      //   query: topCategoriesQuery,
-      //   fetchPolicy: "network-only"
-      // });
+      client.query({
+        query: recommandDynamicQuery,
+        variables: { user_id: user.id },
+        fetchPolicy: "network-only"
+      });
     }
   };
 }
